@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+:root {
+  --salin-bg: #0b0908;
+  --salin-bg-elevated: #161210;
+  --salin-bg-card: #1a1512;
+  --salin-fg: #f3ece1;
+  --salin-fg-muted: #a99c8b;
+  --salin-red: #7a1f2b;
+  --salin-red-bright: #b8303f;
+  --salin-line: #2c241f;
+}
+
+@theme inline {
+  --color-background: var(--salin-bg);
+  --color-foreground: var(--salin-fg);
+  --color-salin-bg: var(--salin-bg);
+  --color-salin-bg-elevated: var(--salin-bg-elevated);
+  --color-salin-bg-card: var(--salin-bg-card);
+  --color-salin-fg: var(--salin-fg);
+  --color-salin-fg-muted: var(--salin-fg-muted);
+  --color-salin-red: var(--salin-red);
+  --color-salin-red-bright: var(--salin-red-bright);
+  --color-salin-line: var(--salin-line);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--salin-bg);
+  color: var(--salin-fg);
+  font-family: var(--font-body), Arial, Helvetica, sans-serif;
+}
+
+::selection {
+  background: var(--salin-red);
+  color: var(--salin-fg);
+}
+
+.font-display {
+  font-family: var(--font-display), Georgia, serif;
+}
+
+.text-gradient-red {
+  background: linear-gradient(120deg, #f3ece1 0%, #d98a94 45%, #7a1f2b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
