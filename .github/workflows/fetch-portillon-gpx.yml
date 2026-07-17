@@ -1,0 +1,131 @@
+name: Fetch detailed Portillon GPX
+
+on:
+  push:
+    paths:
+      - '.github/workflows/fetch-portillon-gpx.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  build-gpx:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download source GPX tracks
+        run: |
+          set -euxo pipefail
+          mkdir -p tmp
+          curl -fL --retry 3 --connect-timeout 20 \
+            'https://www.mc2rando.fr/hautegaronne/gpx/649portillon.gpx' \
+            -o /tmp/ascent.gpx
+          curl -fL --retry 3 --connect-timeout 20 \
+            'https://www.mc2rando.fr/hautegaronne/gpx/651montarque.gpx' \
+            -o /tmp/descent.gpx \
+          || curl -fL --retry 3 --connect-timeout 20 \
+            'https://www.mc2rando.fr/hautegaronne/gpx/652montarque.gpx' \
+            -o /tmp/descent.gpx
+          head -c 100 /tmp/ascent.gpx
+          head -c 100 /tmp/descent.gpx
+
+      - name: Combine tracks into one detailed Komoot GPX
+        run: |
+          python - <<'PY'
+          import math
+          import xml.etree.ElementTree as ET
+          from copy import deepcopy
+          from pathlib import Path
+
+          inputs = [Path('/tmp/ascent.gpx'), Path('/tmp/descent.gpx')]
+
+          def local(tag):
+              return tag.rsplit('}', 1)[-1]
+
+          def get_points(path):
+              root = ET.parse(path).getroot()
+              pts = []
+              for elem in root.iter():
+                  if local(elem.tag) == 'trkpt':
+                      pts.append(deepcopy(elem))
+              if not pts:
+                  for elem in root.iter():
+                      if local(elem.tag) == 'rtept':
+                          pts.append(deepcopy(elem))
+              if not pts:
+                  raise RuntimeError(f'No track points found in {path}')
+              return pts
+
+          def coords(pt):
+              return float(pt.attrib['lat']), float(pt.attrib['lon'])
+
+          def hav(a, b):
+              lat1, lon1 = map(math.radians, coords(a))
+              lat2, lon2 = map(math.radians, coords(b))
+              dlat, dlon = lat2-lat1, lon2-lon1
+              h = math.sin(dlat/2)**2 + math.cos(lat1)*math.cos(lat2)*math.sin(dlon/2)**2
+              return 6371000 * 2 * math.asin(math.sqrt(h))
+
+          p1 = get_points(inputs[0])
+          p2 = get_points(inputs[1])
+
+          # Ensure the second source starts near the refuge/end of ascent.
+          d_start = hav(p1[-1], p2[0])
+          d_end = hav(p1[-1], p2[-1])
+          if d_end < d_start:
+              p2.reverse()
+
+          # Remove duplicate seam point(s).
+          while p2 and hav(p1[-1], p2[0]) < 15:
+              p2.pop(0)
+
+          allpts = p1 + p2
+
+          ns = 'http://www.topografix.com/GPX/1/1'
+          ET.register_namespace('', ns)
+          ET.register_namespace('xsi', 'http://www.w3.org/2001/XMLSchema-instance')
+          gpx = ET.Element(f'{{{ns}}}gpx', {
+              'version': '1.1',
+              'creator': 'MC2Rando sources combined for Komoot',
+              '{http://www.w3.org/2001/XMLSchema-instance}schemaLocation':
+                  'http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd'
+          })
+          meta = ET.SubElement(gpx, f'{{{ns}}}metadata')
+          ET.SubElement(meta, f'{{{ns}}}name').text = "Granges d'Astau - Portillon - Tusse de Montarqué - retour"
+          ET.SubElement(meta, f'{{{ns}}}desc').text = (
+              'Trace détaillée combinée : montée Astau-Portillon puis Portillon-Tusse-Astau. '
+              'Sources MC2Rando 649 et 651/652.'
+          )
+          trk = ET.SubElement(gpx, f'{{{ns}}}trk')
+          ET.SubElement(trk, f'{{{ns}}}name').text = 'Portillon + Tusse de Montarqué — trace complète'
+          seg = ET.SubElement(trk, f'{{{ns}}}trkseg')
+
+          # Rebuild points in GPX 1.1 namespace, preserving elevation and time.
+          for old in allpts:
+              new = ET.SubElement(seg, f'{{{ns}}}trkpt', {
+                  'lat': old.attrib['lat'], 'lon': old.attrib['lon']
+              })
+              for child in old:
+                  key = local(child.tag)
+                  if key in {'ele', 'time', 'name', 'sym', 'type'}:
+                      ET.SubElement(new, f'{{{ns}}}{key}').text = child.text
+
+          out = Path('tmp/portillon_tusse_detailed.gpx')
+          ET.ElementTree(gpx).write(out, encoding='utf-8', xml_declaration=True)
+
+          dist = sum(hav(allpts[i-1], allpts[i]) for i in range(1, len(allpts))) / 1000
+          print(f'points={len(allpts)} distance_km={dist:.2f} seam_m={d_start:.1f}')
+          if len(allpts) < 500:
+              raise RuntimeError(f'Not detailed enough: only {len(allpts)} points')
+          if not 20 <= dist <= 35:
+              raise RuntimeError(f'Unexpected route distance: {dist:.2f} km')
+          PY
+
+      - name: Commit generated GPX
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add tmp/portillon_tusse_detailed.gpx
+          git commit -m 'Generate detailed Portillon Komoot GPX'
+          git push
