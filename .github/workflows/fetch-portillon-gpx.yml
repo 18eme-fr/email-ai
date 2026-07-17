@@ -27,8 +27,6 @@ jobs:
           || curl -fL --retry 3 --connect-timeout 20 \
             'https://www.mc2rando.fr/hautegaronne/gpx/652montarque.gpx' \
             -o /tmp/descent.gpx
-          head -c 100 /tmp/ascent.gpx
-          head -c 100 /tmp/descent.gpx
 
       - name: Combine tracks into one detailed Komoot GPX
         run: |
@@ -38,21 +36,14 @@ jobs:
           from copy import deepcopy
           from pathlib import Path
 
-          inputs = [Path('/tmp/ascent.gpx'), Path('/tmp/descent.gpx')]
-
           def local(tag):
               return tag.rsplit('}', 1)[-1]
 
           def get_points(path):
               root = ET.parse(path).getroot()
-              pts = []
-              for elem in root.iter():
-                  if local(elem.tag) == 'trkpt':
-                      pts.append(deepcopy(elem))
+              pts = [deepcopy(e) for e in root.iter() if local(e.tag) == 'trkpt']
               if not pts:
-                  for elem in root.iter():
-                      if local(elem.tag) == 'rtept':
-                          pts.append(deepcopy(elem))
+                  pts = [deepcopy(e) for e in root.iter() if local(e.tag) == 'rtept']
               if not pts:
                   raise RuntimeError(f'No track points found in {path}')
               return pts
@@ -67,28 +58,24 @@ jobs:
               h = math.sin(dlat/2)**2 + math.cos(lat1)*math.cos(lat2)*math.sin(dlon/2)**2
               return 6371000 * 2 * math.asin(math.sqrt(h))
 
-          p1 = get_points(inputs[0])
-          p2 = get_points(inputs[1])
-
-          # Ensure the second source starts near the refuge/end of ascent.
+          p1 = get_points('/tmp/ascent.gpx')
+          p2 = get_points('/tmp/descent.gpx')
           d_start = hav(p1[-1], p2[0])
           d_end = hav(p1[-1], p2[-1])
           if d_end < d_start:
               p2.reverse()
-
-          # Remove duplicate seam point(s).
           while p2 and hav(p1[-1], p2[0]) < 15:
               p2.pop(0)
-
           allpts = p1 + p2
 
           ns = 'http://www.topografix.com/GPX/1/1'
+          xsi = 'http://www.w3.org/2001/XMLSchema-instance'
           ET.register_namespace('', ns)
-          ET.register_namespace('xsi', 'http://www.w3.org/2001/XMLSchema-instance')
+          ET.register_namespace('xsi', xsi)
           gpx = ET.Element(f'{{{ns}}}gpx', {
               'version': '1.1',
               'creator': 'MC2Rando sources combined for Komoot',
-              '{http://www.w3.org/2001/XMLSchema-instance}schemaLocation':
+              f'{{{xsi}}}schemaLocation':
                   'http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd'
           })
           meta = ET.SubElement(gpx, f'{{{ns}}}metadata')
@@ -100,8 +87,6 @@ jobs:
           trk = ET.SubElement(gpx, f'{{{ns}}}trk')
           ET.SubElement(trk, f'{{{ns}}}name').text = 'Portillon + Tusse de Montarqué — trace complète'
           seg = ET.SubElement(trk, f'{{{ns}}}trkseg')
-
-          # Rebuild points in GPX 1.1 namespace, preserving elevation and time.
           for old in allpts:
               new = ET.SubElement(seg, f'{{{ns}}}trkpt', {
                   'lat': old.attrib['lat'], 'lon': old.attrib['lon']
@@ -111,6 +96,7 @@ jobs:
                   if key in {'ele', 'time', 'name', 'sym', 'type'}:
                       ET.SubElement(new, f'{{{ns}}}{key}').text = child.text
 
+          ET.indent(gpx, space='  ')
           out = Path('tmp/portillon_tusse_detailed.gpx')
           ET.ElementTree(gpx).write(out, encoding='utf-8', xml_declaration=True)
 
@@ -127,5 +113,5 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add tmp/portillon_tusse_detailed.gpx
-          git commit -m 'Generate detailed Portillon Komoot GPX'
+          git commit -m 'Regenerate detailed Portillon Komoot GPX'
           git push
