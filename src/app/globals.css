@@ -1,0 +1,103 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #0b0a0f;
+  --panel: #12111a;
+  --panel-2: #1a1826;
+  --border: #2a2738;
+  --text: #ece9f5;
+  --muted: #9c96b3;
+}
+
+:root[data-theme="light"] {
+  --bg: #f6f4ef;
+  --panel: #ffffff;
+  --panel-2: #f0ece4;
+  --border: #e0d9cd;
+  --text: #1c1a24;
+  --muted: #6b6577;
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+body {
+  font-feature-settings: "cv11", "ss01";
+  min-height: 100vh;
+}
+
+/* Rideau décoratif discret en haut de page */
+.curtain-top {
+  background: repeating-linear-gradient(
+    90deg,
+    #6a1420 0px,
+    #8f1d2d 14px,
+    #6a1420 28px
+  );
+  height: 6px;
+  width: 100%;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+}
+.panel-2 {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+}
+.muted {
+  color: var(--muted);
+}
+
+.spotlight-ring {
+  background: conic-gradient(from 180deg, #e9b949, #b8283c, #3a7bd5, #e9b949);
+}
+
+input,
+select,
+textarea {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  width: 100%;
+  font-size: 0.9rem;
+}
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid rgba(233, 185, 73, 0.5);
+  outline-offset: 1px;
+}
+label {
+  font-size: 0.8rem;
+  color: var(--muted);
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 6px;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+    color: #000;
+  }
+}

@@ -1,0 +1,330 @@
+// Backstage Path — schéma de base de données
+// Provider par défaut : SQLite (zéro installation). Pour PostgreSQL/Supabase,
+// remplacez provider par "postgresql" et adaptez DATABASE_URL dans .env.
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ------------------------------------------------------------------
+// Authentification & profil
+// ------------------------------------------------------------------
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+
+  profile            Profile?
+  sessions           Session[]
+  opportunities      Opportunity[]
+  savedOpportunities SavedOpportunity[]
+  searchQueries      SearchQuery[]
+  sources            Source[]
+  projects           Project[]
+  courseProgress     CourseProgress[]
+  applications       Application[]
+  portfolioItems     PortfolioItem[]
+  psychEntries       PsychEntry[]
+  notifications      Notification[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+// Toutes les listes structurées sont stockées en JSON (String) pour rester
+// compatibles SQLite. Un helper (lib/json.ts) encapsule le parse/stringify.
+model Profile {
+  id               String  @id @default(cuid())
+  userId           String  @unique
+  user             User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fullName         String?
+  nationality      String? @default("Française")
+  age              Int?
+  countryResidence String? @default("France")
+  languages        String? @default("[]") // [{code,label,level}]
+  degrees          String? @default("[]") // [{title,field,year,level}]
+  experiences      String? @default("[]") // [{title,org,kind,nature,months,description}]
+  budget           Int?
+  mobility         String? @default("Europe") // Locale | France | Europe | International
+  durationWish     String?
+  preferredCountries String? @default("[]")
+  excludedCountries  String? @default("[]")
+  availability     String?
+  drivingLicense   Boolean @default(false)
+  wantsHousing     Boolean @default(false)
+  acceptedContracts String? @default("[]")
+  minSalary        Int?
+  professionalProject String?
+  skills           String? @default("[]") // [{name,level}]  level: acquis|en cours|objectif
+  documents        String? @default("[]") // [{name,type,ready}]
+  // Auto-évaluation (0-100) alimentant les sous-scores non déductibles des données
+  selfAssess       String? @default("{}")
+  theme            String  @default("dark")
+  updatedAt        DateTime @updatedAt
+}
+
+// ------------------------------------------------------------------
+// Levier 1 — Opportunités
+// ------------------------------------------------------------------
+// ownerId null  => catalogue de démonstration partagé (isDemo = true)
+// ownerId défini => opportunité importée par l'utilisateur (CSV / manuel / source)
+model Opportunity {
+  id                String  @id @default(cuid())
+  ownerId           String?
+  owner             User?   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  isDemo            Boolean @default(true)
+
+  structureName     String
+  country           String
+  city              String?
+  structureType     String
+  missionTitle      String
+  duration          String?
+  startDate         String?
+  deadline          String?
+  contractType      String?
+  compensation      String?
+  housingProvided   Boolean?
+  mealsOrTransport  String?
+  languagesRequired String? @default("[]")
+  experienceLevel   String?
+  degreeRequired    String?
+  visaRequired      Boolean?
+  eligibleFrench    Boolean?
+  adminTasks        String? @default("[]") // tags de missions administratives présentes
+  officialLink      String?
+  lastChecked       String?
+  source            String?
+  reliability       String? @default("supposé") // vérifié | supposé | à vérifier
+  lat               Float?
+  lng               Float?
+  keywords          String?
+  createdAt         DateTime @default(now())
+
+  savedBy           SavedOpportunity[]
+
+  @@index([ownerId])
+}
+
+model SavedOpportunity {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  opportunityId  String
+  opportunity    Opportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  status         String   @default("saved") // saved|to_apply|applied|interview|waitlist|accepted|rejected|followup
+  category       String?
+  note           String?
+  appliedAt      String?
+  responseStatus String?
+  followUpDate   String?
+  contactName    String?
+  contactEmail   String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@unique([userId, opportunityId])
+  @@index([userId])
+}
+
+model SearchQuery {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name           String
+  keywords       String?
+  countries      String?  @default("[]")
+  structureTypes String?  @default("[]")
+  contractTypes  String?  @default("[]")
+  languages      String?  @default("[]")
+  frequency      String   @default("weekly") // daily|weekly
+  lastRun        DateTime?
+  createdAt      DateTime @default(now())
+}
+
+model Source {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  url       String?
+  type      String   @default("site") // site|rss|api|newsletter
+  status    String   @default("pending") // pending|connected|error
+  note      String?
+  createdAt DateTime @default(now())
+}
+
+// ------------------------------------------------------------------
+// Levier 2 — Projet culturel
+// ------------------------------------------------------------------
+model Project {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  type      String?  @default("concert")
+  concept   String?
+  status    String   @default("draft") // draft|active|done
+  steps     String   @default("{}") // {stepKey:{done,notes}}
+  data      String   @default("{}") // champs libres de l'assistant
+  partners  String   @default("[]")
+  risks     String   @default("[]")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  budgetLines BudgetLine[]
+  tasks       Task[]
+
+  @@index([userId])
+}
+
+model BudgetLine {
+  id        String  @id @default(cuid())
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  kind      String  @default("expense") // expense|income
+  category  String
+  label     String?
+  amount    Float   @default(0)
+  note      String?
+
+  @@index([projectId])
+}
+
+model Task {
+  id        String   @id @default(cuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  title     String
+  phase     String?  @default("Préparation")
+  owner     String?
+  dueDate   String?
+  done      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([projectId])
+}
+
+// ------------------------------------------------------------------
+// Levier 3 — Formations
+// ------------------------------------------------------------------
+model CourseProgress {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courseKey   String   // référence une ressource du catalogue statique
+  status      String   @default("not_started") // not_started|in_progress|done
+  timeSpentMin Int     @default(0)
+  rating      Int?
+  notes       String?
+  badgeEarned Boolean  @default(false)
+  updatedAt   DateTime @updatedAt
+
+  @@unique([userId, courseKey])
+  @@index([userId])
+}
+
+// ------------------------------------------------------------------
+// Levier 4 — Portfolio
+// ------------------------------------------------------------------
+model PortfolioItem {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  kind      String   @default("experience") // experience|project|venue_study|skill|recommendation|document
+  section   String?
+  title     String
+  content   String?
+  status    String   @default("en cours") // acquis|en cours|objectif
+  evidence  String?  // lien/preuve
+  data      String   @default("{}") // structuré (ex: étude de salle)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+// ------------------------------------------------------------------
+// Levier 5 — Psychologie
+// ------------------------------------------------------------------
+model PsychEntry {
+  id                 String   @id @default(cuid())
+  userId             String
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  inputExperience    String
+  nature             String   @default("exercée") // exercée|observée
+  transferableSkills String   @default("[]")
+  culturalSkills     String   @default("[]")
+  cvPhrase           String?
+  letterPhrase       String?
+  interviewPhrase    String?
+  limits             String?
+  evidenceNeeded     String?
+  createdAt          DateTime @default(now())
+
+  @@index([userId])
+}
+
+// ------------------------------------------------------------------
+// Levier 6 — Candidatures (masters)
+// ------------------------------------------------------------------
+model Application {
+  id               String   @id @default(cuid())
+  userId           String
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  university       String
+  city             String?
+  programName      String
+  capacity         String?
+  expectations     String?
+  commonDegrees    String?  @default("[]")
+  skillsRequired   String?  @default("[]")
+  hasAlternance    Boolean  @default(false)
+  hasInternship    Boolean  @default(false)
+  courses          String?
+  outcomes         String?
+  selectivity      String?  // faible|moyenne|forte
+  requiredDocuments String? @default("[]")
+  keyDates         String?
+  officialLink     String?
+  status           String   @default("to_study") // to_study|priority|preparing|sent|interview|waitlist|accepted|rejected|followup
+  priority         Int      @default(2) // 1 haute, 3 basse
+  note             String?
+  contactName      String?
+  gap              String   @default("{}") // {have:[],missing:[],actions:[]}
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([userId])
+}
+
+// ------------------------------------------------------------------
+// Automatisations — notifications
+// ------------------------------------------------------------------
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String   @default("info") // info|deadline|followup|action|report
+  title     String
+  body      String?
+  link      String?
+  dueDate   String?
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}

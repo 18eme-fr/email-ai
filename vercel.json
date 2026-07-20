@@ -1,0 +1,6 @@
+{
+  "crons": [
+    { "path": "/api/cron?monthly=0", "schedule": "0 7 * * *" },
+    { "path": "/api/cron?monthly=1&links=1", "schedule": "0 6 1 * *" }
+  ]
+}
