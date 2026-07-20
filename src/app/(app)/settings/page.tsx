@@ -1,4 +1,4 @@
-import { getCurrentUser } from "@/lib/auth";
+import { requireAuth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { parseJson } from "@/lib/json";
 import { TopBar } from "@/components/topbar";
@@ -7,7 +7,7 @@ import { Collapsible } from "@/components/collapsible";
 import { updateProfile, addExperience, removeExperience, deleteAccount } from "@/app/actions/profile";
 
 export default async function SettingsPage() {
-  const user = (await getCurrentUser())!;
+  const user = await requireAuth();
   const profile = await prisma.profile.findUnique({ where: { userId: user.id } });
 
   const languages = parseJson<{ label?: string; level?: string }[]>(profile?.languages, []);

@@ -1,4 +1,4 @@
-import { getCurrentUser } from "@/lib/auth";
+import { requireAuth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { parseJson } from "@/lib/json";
 import { TopBar } from "@/components/topbar";
@@ -16,7 +16,7 @@ const STATUS_TONE: Record<string, string> = {
 };
 
 export default async function ApplicationsPage() {
-  const user = (await getCurrentUser())!;
+  const user = await requireAuth();
   const applications = await prisma.application.findMany({ where: { userId: user.id }, orderBy: [{ priority: "asc" }, { createdAt: "desc" }] });
 
   return (

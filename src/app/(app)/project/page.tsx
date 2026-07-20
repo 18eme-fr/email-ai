@@ -1,4 +1,4 @@
-import { getCurrentUser } from "@/lib/auth";
+import { requireAuth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { parseJson } from "@/lib/json";
 import { TopBar } from "@/components/topbar";
@@ -10,7 +10,7 @@ import {
 } from "@/app/actions/project";
 
 export default async function ProjectPage({ searchParams }: { searchParams: { p?: string } }) {
-  const user = (await getCurrentUser())!;
+  const user = await requireAuth();
   const projects = await prisma.project.findMany({ where: { userId: user.id }, orderBy: { createdAt: "desc" } });
   const selectedId = searchParams.p || projects[0]?.id;
   const project = selectedId ? projects.find((p) => p.id === selectedId) : undefined;

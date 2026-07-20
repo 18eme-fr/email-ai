@@ -1,4 +1,4 @@
-import { getCurrentUser } from "@/lib/auth";
+import { requireAuth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { parseJson } from "@/lib/json";
 import { computeCompatibility, ProfileForScore } from "@/lib/scoring";
@@ -13,7 +13,7 @@ import {
 import { STRUCTURE_TYPES, OPPORTUNITY_TYPES, JOB_KEYWORDS, SEARCH_LANGUAGES } from "@/lib/reference";
 
 export default async function OpportunitiesPage() {
-  const user = (await getCurrentUser())!;
+  const user = await requireAuth();
   const [profile, opps, saved, searches, sources] = await Promise.all([
     prisma.profile.findUnique({ where: { userId: user.id } }),
     prisma.opportunity.findMany({ where: { OR: [{ isDemo: true }, { ownerId: user.id }] }, orderBy: { createdAt: "desc" } }),

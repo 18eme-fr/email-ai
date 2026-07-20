@@ -1,5 +1,6 @@
 import "server-only";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { randomBytes } from "crypto";
 import bcrypt from "bcryptjs";
 import { prisma } from "./db";
@@ -59,4 +60,12 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
     return null;
   }
   return { id: session.user.id, email: session.user.email };
+}
+
+// Garde d'authentification pour les pages protégées : redirige vers /login
+// si la session est absente/expirée, sinon renvoie l'utilisateur (non-null).
+export async function requireAuth(): Promise<CurrentUser> {
+  const user = await getCurrentUser();
+  if (!user) redirect("/login");
+  return user;
 }

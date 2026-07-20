@@ -1,4 +1,4 @@
-import { getCurrentUser } from "@/lib/auth";
+import { requireAuth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { parseJson } from "@/lib/json";
 import { TopBar } from "@/components/topbar";
@@ -14,7 +14,7 @@ const BLOCK_LABEL: Record<string, string> = {
 };
 
 export default async function SkillsPage() {
-  const user = (await getCurrentUser())!;
+  const user = await requireAuth();
   const [profile, progress] = await Promise.all([
     prisma.profile.findUnique({ where: { userId: user.id } }),
     prisma.courseProgress.findMany({ where: { userId: user.id } }),

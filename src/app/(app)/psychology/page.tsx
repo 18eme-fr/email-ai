@@ -1,4 +1,4 @@
-import { getCurrentUser } from "@/lib/auth";
+import { requireAuth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { parseJson } from "@/lib/json";
 import { TopBar } from "@/components/topbar";
@@ -7,7 +7,7 @@ import { PSYCH_MATRIX } from "@/lib/reference";
 import { generateReformulation, deletePsychEntry, pushReformulationToPortfolio } from "@/app/actions/psychology";
 
 export default async function PsychologyPage() {
-  const user = (await getCurrentUser())!;
+  const user = await requireAuth();
   const entries = await prisma.psychEntry.findMany({ where: { userId: user.id }, orderBy: { createdAt: "desc" } });
 
   return (

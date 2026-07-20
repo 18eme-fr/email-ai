@@ -1,4 +1,4 @@
-import { getCurrentUser } from "@/lib/auth";
+import { requireAuth } from "@/lib/auth";
 import { getDashboardData } from "@/lib/metrics";
 import { prisma } from "@/lib/db";
 import { TopBar } from "@/components/topbar";
@@ -7,7 +7,7 @@ import { NotificationsPanel } from "@/components/notifications-panel";
 import { bandFor } from "@/lib/reference";
 
 export default async function DashboardPage() {
-  const user = (await getCurrentUser())!;
+  const user = await requireAuth();
   const data = await getDashboardData(user.id);
   const notifications = await prisma.notification.findMany({
     where: { userId: user.id },

@@ -1,4 +1,4 @@
-import { getCurrentUser } from "@/lib/auth";
+import { requireAuth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { parseJson } from "@/lib/json";
 import { TopBar } from "@/components/topbar";
@@ -11,7 +11,7 @@ import { addPortfolioItem, deletePortfolioItem, updatePortfolioItem, saveVenueSt
 const STATUS_TONE: Record<string, string> = { acquis: "good", "en cours": "info", objectif: "warn" };
 
 export default async function PortfolioPage() {
-  const user = (await getCurrentUser())!;
+  const user = await requireAuth();
   const items = await prisma.portfolioItem.findMany({ where: { userId: user.id }, orderBy: { createdAt: "desc" } });
   const bySection = new Map<string, typeof items>();
   for (const it of items) {
