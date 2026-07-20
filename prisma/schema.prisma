@@ -1,12 +1,14 @@
 // Backstage Path — schéma de base de données
-// Provider par défaut : SQLite (zéro installation). Pour PostgreSQL/Supabase,
-// remplacez provider par "postgresql" et adaptez DATABASE_URL dans .env.
+// Provider : PostgreSQL (compatible Vercel / Neon / Supabase — déploiement en ligne).
+// Pour un dev LOCAL sans base externe, remplacez provider par "sqlite" et mettez
+// DATABASE_URL="file:./dev.db" dans .env (les champs JSON sont des String, compatibles).
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 

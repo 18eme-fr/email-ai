@@ -77,30 +77,30 @@ Ouvrez **http://localhost:3000**, cliquez sur **Créer un compte**.
 
 ---
 
-## 🌍 Déploiement
+## 🌍 Déploiement en ligne (Vercel + Neon) — pas à pas
 
-### Option A — Vercel (recommandé)
+Le code est **déjà configuré pour PostgreSQL** : les tables et les données de démo se
+créent automatiquement au déploiement (le script `build` exécute `prisma db push` puis
+le seed). Vous n'avez **aucune ligne à modifier**. Étapes (≈ 10 min, comptes gratuits) :
 
-1. Poussez le repo sur GitHub.
-2. Importez le projet dans Vercel.
-3. **Base de données** : SQLite ne convient pas en serverless. Utilisez PostgreSQL
-   (Supabase, Neon, Vercel Postgres) :
-   - Dans `prisma/schema.prisma`, mettez `provider = "postgresql"`.
-   - Définissez `DATABASE_URL` dans les variables d'environnement Vercel.
-   - `npx prisma db push` puis `npm run db:seed` (une fois).
-4. Ajoutez `SESSION_SECRET` et (optionnel) `CRON_SECRET`.
-5. **Cron** (`vercel.json`) :
-   ```json
-   { "crons": [{ "path": "/api/cron?monthly=0", "schedule": "0 7 * * *" }] }
-   ```
+1. **Base de données (Neon)** — https://neon.tech → créez un compte → « Create project ».
+   Copiez la *Connection string* (commence par `postgresql://…`, cochez « Pooled connection »).
+2. **Vercel** — https://vercel.com → connectez-vous avec GitHub → « Add New… › Project » →
+   importez le dépôt **`18eme-fr/email-ai`**, branche **`claude/backstage-path-app-6ih8ky`**.
+3. **Variables d'environnement** (écran d'import Vercel → *Environment Variables*) :
+   - `DATABASE_URL` = la connection string Neon de l'étape 1
+   - `SESSION_SECRET` = une longue chaîne aléatoire (n'importe quelle suite de caractères)
+   - *(optionnel)* `CRON_SECRET` = une autre chaîne aléatoire (pour protéger `/api/cron`)
+4. Cliquez **Deploy**. Au premier build, les tables + les 14 offres de démo sont créées.
+5. Ouvrez l'URL fournie (`https://…vercel.app`) → **Créer un compte**. C'est en ligne 🎉
 
-### Option B — Serveur / conteneur
+> **Cron** : `vercel.json` planifie déjà les tâches automatiques. Si le plan gratuit
+> refuse plusieurs crons, gardez-en un seul ou supprimez `vercel.json`.
 
-`npm run build && npm start` derrière un reverse-proxy (Nginx/Caddy) en HTTPS.
-Planifiez le cron avec crontab :
-```
-0 7 * * * curl -H "Authorization: Bearer $CRON_SECRET" https://votre-domaine/api/cron
-```
+### Dev local (optionnel, sans base externe)
+Pour revenir à SQLite en local : dans `prisma/schema.prisma`, remettez
+`provider = "sqlite"`, mettez `DATABASE_URL="file:./dev.db"` dans `.env`, puis
+`npm run setup && npm run dev`.
 
 Détails et schéma complet : **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)**.
 
