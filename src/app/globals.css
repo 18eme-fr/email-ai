@@ -1,0 +1,116 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --radius: 0.9rem;
+
+  --background: 250 40% 98%;
+  --foreground: 240 25% 12%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 240 25% 12%;
+
+  --primary: 258 82% 60%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 250 30% 94%;
+  --secondary-foreground: 240 25% 20%;
+
+  --muted: 250 25% 94%;
+  --muted-foreground: 240 10% 42%;
+
+  --accent: 320 70% 60%;
+  --accent-foreground: 0 0% 100%;
+
+  --success: 152 62% 40%;
+  --success-foreground: 0 0% 100%;
+
+  --warning: 35 92% 45%;
+  --warning-foreground: 0 0% 100%;
+
+  --danger: 356 72% 54%;
+  --danger-foreground: 0 0% 100%;
+
+  --border: 250 20% 88%;
+  --input: 250 20% 88%;
+  --ring: 258 82% 60%;
+
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+.dark {
+  --background: 245 30% 8%;
+  --foreground: 250 30% 96%;
+
+  --card: 245 26% 12%;
+  --card-foreground: 250 30% 96%;
+
+  --primary: 258 85% 68%;
+  --primary-foreground: 245 40% 10%;
+
+  --secondary: 245 22% 18%;
+  --secondary-foreground: 250 30% 92%;
+
+  --muted: 245 20% 18%;
+  --muted-foreground: 245 12% 65%;
+
+  --accent: 320 70% 62%;
+  --accent-foreground: 245 40% 10%;
+
+  --success: 152 55% 48%;
+  --success-foreground: 245 40% 10%;
+
+  --warning: 38 92% 55%;
+  --warning-foreground: 245 40% 10%;
+
+  --danger: 356 74% 62%;
+  --danger-foreground: 245 40% 10%;
+
+  --border: 245 18% 24%;
+  --input: 245 18% 24%;
+  --ring: 258 85% 68%;
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100dvh;
+}
+
+/* Barre de défilement discrète */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.35);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Champs de formulaire cohérents avec le thème */
+input,
+textarea,
+select {
+  color: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
