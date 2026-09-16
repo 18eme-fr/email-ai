@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agencement 3D — Établissement culturel</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <!-- Résolution du module 'three' vers la copie locale (fonctionne hors-ligne). -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "./vendor/three.module.js",
+      "three/addons/OrbitControls.js": "./vendor/OrbitControls.js"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div id="app">
+    <!-- Barre supérieure -->
+    <header id="topbar">
+      <div class="tb-group tb-title">
+        <input id="project-name" type="text" title="Nom du projet (variante active)" />
+      </div>
+
+      <div class="tb-group" title="Bibliothèque de variantes — chaque projet est une hypothèse d'agencement">
+        <span class="tb-label">Projet</span>
+        <select id="project-select"></select>
+        <button id="project-new" class="btn" title="Nouveau projet vierge">Nouveau</button>
+        <button id="project-dup" class="btn" title="Dupliquer ce projet pour tester une variante">Dupliquer</button>
+        <button id="project-del" class="btn btn-danger" title="Supprimer ce projet">Suppr.</button>
+      </div>
+
+      <div class="tb-group" title="Niveau actif — l'édition se fait sur ce niveau">
+        <span class="tb-label">Niveau</span>
+        <select id="level-select"></select>
+        <input id="level-name" type="text" class="w-narrow" title="Nom du niveau" />
+        <label class="tb-mini">alt. <input id="level-elev" type="number" step="0.1" class="w-tiny" title="Altitude (m)" /></label>
+        <label class="tb-mini">haut. <input id="level-height" type="number" step="0.1" class="w-tiny" title="Hauteur (m)" /></label>
+        <button id="level-add" class="btn" title="Ajouter un niveau au-dessus">+ Niveau</button>
+        <button id="level-del" class="btn" title="Supprimer le niveau actif">Suppr.</button>
+      </div>
+
+      <div class="tb-group">
+        <label class="tb-mini" title="Pas de la grille (m)">
+          grille <input id="grid-step" type="number" step="0.05" min="0" class="w-tiny" />
+        </label>
+        <button id="snap-toggle" class="btn" title="Activer/désactiver l'aimantation">Aimant.</button>
+        <button id="wall-display" class="btn" title="Murs : entiers / abaissés / masqués">Murs : entiers</button>
+      </div>
+
+      <div class="tb-group tb-right">
+        <span id="save-state" class="save-state" title="Sauvegarde automatique locale">—</span>
+        <button id="undo" class="btn" title="Annuler (Ctrl+Z)">↶</button>
+        <button id="redo" class="btn" title="Rétablir (Ctrl+Y)">↷</button>
+        <button id="view-frame" class="btn" title="Vue 3D par défaut">Vue 3D</button>
+        <button id="view-top" class="btn" title="Vue de dessus">Dessus</button>
+        <button id="export" class="btn" title="Exporter le projet (JSON versionné)">Exporter</button>
+        <button id="import-btn" class="btn" title="Importer un projet (nouvelle variante)">Importer</button>
+        <input id="import-file" type="file" accept="application/json,.json" hidden />
+        <button id="seed" class="btn" title="Ajouter l'exemple comme nouvelle variante">Exemple</button>
+      </div>
+    </header>
+
+    <!-- Barre d'outils -->
+    <aside id="toolbar">
+      <button class="tool" data-tool="select" title="Sélectionner / déplacer (V)"><span>⤢</span>Sélection</button>
+      <button class="tool" data-tool="wall" title="Tracer un mur (M)"><span>▭</span>Mur</button>
+      <button class="tool" data-tool="door" title="Poser une porte sur un mur (P)"><span>🚪</span>Porte</button>
+      <button class="tool" data-tool="window" title="Poser une fenêtre sur un mur (F)"><span>🪟</span>Fenêtre</button>
+      <button class="tool" data-tool="zone" title="Tracer une zone au sol (Z)"><span>▧</span>Zone</button>
+
+      <div id="zone-type-wrap">
+        <label class="tb-mini">Type de zone</label>
+        <select id="zone-type"></select>
+      </div>
+    </aside>
+
+    <!-- Vue 3D -->
+    <main id="viewport"></main>
+
+    <!-- Panneau latéral -->
+    <aside id="sidebar">
+      <section id="panel-selection" class="panel"></section>
+      <section id="panel-filter" class="panel"></section>
+      <section id="panel-recap" class="panel"></section>
+    </aside>
+
+    <!-- Bandeau d'aide contextuelle -->
+    <footer id="hint"></footer>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
