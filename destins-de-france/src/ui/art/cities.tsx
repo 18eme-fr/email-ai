@@ -309,7 +309,7 @@ function buildParis(rnd: Rng): CityLayers {
   const st = 108;
   L.back.push(
     <g key="butte">
-      <path d={`M660 ${GY}Q770 ${GY - 120} ${sx} ${st + 10}Q1030 ${GY - 120} 1140 ${GY}Z`} />
+      <path d={`M770 ${GY}Q820 ${GY - 96} ${sx - 40} ${st + 14}Q${sx} ${st + 4} ${sx + 40} ${st + 14}Q980 ${GY - 96} 1030 ${GY}Z`} />
       <rect x={sx - 24} y={st - 16} width={48} height={28} />
       <path d={`M${sx - 15} ${st - 16}A15 24 0 0 1 ${sx + 15} ${st - 16}Z`} />
       <rect x={sx - 2} y={st - 48} width={4} height={10} />
@@ -324,7 +324,7 @@ function buildParis(rnd: Rng): CityLayers {
     const h = 30 + rnd() * 50;
     L.far.push(<rect key={`f${i}`} x={r1(x)} y={r1(HZ + 4 - h)} width={r1(14 + rnd() * 18)} height={r1(h)} />);
   }
-  row(L, rnd, { x0: -12, x1: 1220, w: [72, 108], floors: [5, 5], fh: 12.5, roof: 'mansard', roofColor: '#8e9bb0', gap: 0 }, 'h');
+  row(L, rnd, { x0: -12, x1: 1220, w: [72, 108], floors: [4, 6], fh: 12.5, roof: 'mansard', roofColor: '#8e9bb0', gap: 0 }, 'h');
   L.riverTop = 286;
   L.groundPath = `M-20 ${GY - 1}H1220V${H}H-20Z`;
   // Pont de pierre sur la Seine
@@ -357,9 +357,9 @@ function buildMarseille(rnd: Rng): CityLayers {
     cliff.push([x, SEA - 40 * Math.sin(t * Math.PI) - 18 * Math.sin(t * 9) * (1 - t) - rnd() * 6]);
   }
   cliff.push([360, SEA + 12]);
-  L.backColor.push(<polygon key="calanques" points={pts(cliff)} style={paint('#efe9dc')} opacity={0.92} />);
+  L.backColor.push(<polygon key="calanques" points={pts(cliff)} style={paint('#f3eee2')} />);
   for (let x = 20, i = 0; x < 320; x += 34 + rnd() * 20, i++) {
-    L.backColor.push(<path key={`cr${i}`} d={`M${r1(x)} ${SEA - 30 + rnd() * 10}l${r1(4 - rnd() * 8)} 30`} stroke="#b9ae98" strokeWidth={1.2} fill="none" />);
+    L.backColor.push(<path key={`cr${i}`} d={`M${r1(x)} ${SEA - 30 + rnd() * 10}l${r1(4 - rnd() * 8)} 30`} stroke="#a99c82" strokeWidth={2} fill="none" />);
   }
   L.far.push(<path key="frioul" d={`M1010 ${SEA + 1}Q1060 ${SEA - 12} 1110 ${SEA - 4}Q1150 ${SEA - 14} 1190 ${SEA + 1}Z`} />);
   // Colline et Notre-Dame-de-la-Garde
@@ -367,7 +367,7 @@ function buildMarseille(rnd: Rng): CityLayers {
   const gt = 116;
   L.back.push(
     <g key="garde">
-      <path d={`M640 ${GY}Q700 ${GY - 70} 790 ${gt + 40}Q850 ${gt + 2} ${gx} ${gt}Q980 ${gt + 6} 1030 ${gt + 50}Q1090 ${GY - 60} 1160 ${GY}Z`} />
+      <path d={`M730 ${GY}L790 ${gt + 64}L828 ${gt + 40}L846 ${gt + 44}L874 ${gt + 10}H${gx + 36}L978 ${gt + 30}L1004 ${gt + 26}L1046 ${gt + 70}L1110 ${GY}Z`} />
       <rect x={gx - 30} y={gt - 22} width={56} height={24} />
       <path d={`M${gx - 26} ${gt - 22}A10 12 0 0 1 ${gx - 6} ${gt - 22}Z`} />
       <rect x={gx + 4} y={gt - 70} width={16} height={50} />
@@ -446,7 +446,7 @@ function buildLyon(rnd: Rng): CityLayers {
   const ft = 118;
   L.back.push(
     <g key="fourviere">
-      <path d={`M-40 ${GY}Q60 ${ft + 30} ${fx} ${ft}Q520 ${ft + 20} 640 ${GY}Z`} />
+      <path d={`M40 ${GY}Q150 ${ft + 24} ${fx} ${ft}Q470 ${ft + 18} 580 ${GY}Z`} />
       <rect x={fx - 32} y={ft - 22} width={64} height={24} />
       <polygon points={pts([[fx - 14, ft - 22], [fx, ft - 34], [fx + 14, ft - 22]])} />
       {[fx - 34, fx + 24].map((x) => (
@@ -564,8 +564,8 @@ function buildNice(rnd: Rng): CityLayers {
       <path d={`M880 ${GY}Q930 ${GY - 110} 1040 ${GY - 118}Q1140 ${GY - 110} 1220 ${GY - 60}V${GY}Z`} />
       {[960, 1010, 1070, 1120].map((x, i) => (
         <g key={x}>
-          <rect x={x - 1} y={GY - 128 - (i % 2) * 6} width={2} height={14} />
-          <ellipse cx={x} cy={GY - 130 - (i % 2) * 6} rx={13} ry={5} />
+          <rect x={x - 1} y={GY - 116 + (i % 2) * 4} width={2} height={14} />
+          <ellipse cx={x} cy={GY - 118 + (i % 2) * 4} rx={13} ry={5} />
         </g>
       ))}
     </g>,
@@ -804,10 +804,10 @@ function buildBordeaux(rnd: Rng): CityLayers {
   const L = emptyLayers();
   // Coteaux de vignes au loin
   const vine = hills(HZ - 22, 12, 0.006, 0.8);
-  L.backColor.push(<polygon key="coteaux" points={pts(vine)} style={paint('#86a173')} opacity={0.55} />);
+  L.backColor.push(<polygon key="coteaux" points={pts(vine)} style={paint('#7f9a68')} opacity={0.85} />);
   const rows: string[] = [];
   for (let x = 0; x < W; x += 11) rows.push(`M${x} ${HZ - 14}l${r1(14 - x * 0.012)} 22`);
-  L.backColor.push(<path key="rangs" d={rows.join('')} stroke="#5f7d4f" strokeWidth={1} opacity={0.5} fill="none" />);
+  L.backColor.push(<path key="rangs" d={rows.join('')} stroke="#566f45" strokeWidth={1.2} opacity={0.7} fill="none" />);
   // Façades classiques en pierre blonde
   row(
     L,
@@ -935,8 +935,24 @@ function buildSaintDenis(rnd: Rng): CityLayers {
   const L = emptyLayers();
   L.seaTop = SEA;
   // Remparts des cirques : crêtes vertes très escarpées
-  const steep = (base: number, peaks: number, minH: number, maxH: number): Pt[] =>
-    ridge(rnd, base, peaks, minH, maxH).map(([x, y]) => [x * 0.72 - 10, y] as Pt);
+  // Pentes raides qui retombent vers l'océan à l'est
+  const steep = (base: number, peaks: number, minH: number, maxH: number): Pt[] => {
+    const xEnd = 760;
+    const list = Array.from({ length: peaks }, (_, i) => ({
+      c: -40 + ((xEnd + 40) * (i + 0.15 + rnd() * 0.7)) / peaks,
+      h: minH + rnd() * (maxH - minH),
+      s: 1.1 + rnd() * 0.9,
+    }));
+    const out: Pt[] = [[-20, H]];
+    for (let x = -20; x <= xEnd + 260; x += 8) {
+      let y = 0;
+      for (const p of list) y = Math.max(y, p.h - Math.abs(x - p.c) * p.s);
+      const fall = x > xEnd ? Math.max(0, 1 - (x - xEnd) / 260) : 1;
+      out.push([x, base - (y * fall + rnd() * 5 * fall)]);
+    }
+    out.push([xEnd + 260, H]);
+    return out;
+  };
   const far = steep(SEA + 4, 6, 110, 176);
   const near = steep(SEA + 8, 7, 50, 110);
   L.backColor.push(
@@ -958,9 +974,9 @@ function buildSaintDenis(rnd: Rng): CityLayers {
     {
       x0: -10,
       x1: 780,
-      w: [42, 62],
+      w: [50, 74],
       floors: [1, 1],
-      fh: 20,
+      fh: 26,
       roof: 'creole',
       palette: ['#e9a5a0', '#8cc7b5', '#f2d06b', '#9db9e3', '#f4f1e8', '#c7a3d6'],
       roofPalette: ['#b5483a', '#4f7f8f', '#b5483a', '#7a5a8f'],

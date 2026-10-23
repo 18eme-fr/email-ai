@@ -662,8 +662,16 @@ export function SceneCanvas(props: SceneCanvasProps): JSX.Element {
           </linearGradient>
         ))}
         <radialGradient id={`${uid}-glow`}>
-          <stop offset="0" className="art-scene__glow-0" />
-          <stop offset="1" className="art-scene__glow-1" />
+          {/* Décroissance douce, sans bord visible */}
+          {[
+            [0, 0.55],
+            [0.3, 0.32],
+            [0.6, 0.12],
+            [0.82, 0.03],
+            [1, 0],
+          ].map(([o, a]) => (
+            <stop key={o} offset={o} stopOpacity={a} className="art-scene__glow-stop" />
+          ))}
         </radialGradient>
         <linearGradient id={`${uid}-beam`} x1="1" y1="0" x2="0" y2="0">
           <stop offset="0" className="art-scene__beam-0" />

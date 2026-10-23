@@ -330,6 +330,7 @@
   fill: var(--art-silhouette);
 }
 .art-scene__stroke {
+  fill: none;
   stroke: var(--art-silhouette);
 }
 
@@ -344,14 +345,14 @@
   transition: opacity 2.2s ease;
   opacity: 0.75;
 }
-.art-scene__glow-0 {
-  stop-color: var(--art-sun-aube);
-  stop-opacity: 0.55;
-  transition: stop-color 2.2s ease;
-}
-.art-scene__glow-1 {
-  stop-color: var(--art-sun-aube);
-  stop-opacity: 0;
+.art-scene { --art-sun-now: var(--art-sun-aube); }
+.art-scene--matin { --art-sun-now: var(--art-sun-matin); }
+.art-scene--jour { --art-sun-now: var(--art-sun-jour); }
+.art-scene--dore { --art-sun-now: var(--art-sun-dore); }
+.art-scene--crepuscule { --art-sun-now: var(--art-sun-crepuscule); }
+.art-scene--nuit { --art-sun-now: var(--art-sun-nuit); }
+.art-scene__glow-stop {
+  stop-color: var(--art-sun-now);
   transition: stop-color 2.2s ease;
 }
 .art-scene__moon {
@@ -463,23 +464,17 @@
 /* Réglages par moment de la journée de vie */
 .art-scene--matin .art-scene__sun,
 .art-scene--matin .art-scene__glint { fill: var(--art-sun-matin); }
-.art-scene--matin .art-scene__glow-0,
-.art-scene--matin .art-scene__glow-1 { stop-color: var(--art-sun-matin); }
 .art-scene--matin .art-scene__cloud { fill: var(--art-cloud-matin); }
 .art-scene--matin .art-scene__sea { fill: var(--art-sea-matin); }
 
 .art-scene--jour .art-scene__sun,
 .art-scene--jour .art-scene__glint { fill: var(--art-sun-jour); }
-.art-scene--jour .art-scene__glow-0,
-.art-scene--jour .art-scene__glow-1 { stop-color: var(--art-sun-jour); }
 .art-scene--jour .art-scene__cloud { fill: var(--art-cloud-jour); }
 .art-scene--jour .art-scene__sea { fill: var(--art-sea-jour); }
 .art-scene--jour .art-scene__glint-wrap { opacity: 0.6; }
 
 .art-scene--dore .art-scene__sun,
 .art-scene--dore .art-scene__glint { fill: var(--art-sun-dore); }
-.art-scene--dore .art-scene__glow-0,
-.art-scene--dore .art-scene__glow-1 { stop-color: var(--art-sun-dore); }
 .art-scene--dore .art-scene__cloud { fill: var(--art-cloud-dore); }
 .art-scene--dore .art-scene__sea { fill: var(--art-sea-dore); }
 .art-scene--dore .art-scene__glow { opacity: 0.95; }
@@ -487,8 +482,6 @@
 
 .art-scene--crepuscule .art-scene__sun,
 .art-scene--crepuscule .art-scene__glint { fill: var(--art-sun-crepuscule); }
-.art-scene--crepuscule .art-scene__glow-0,
-.art-scene--crepuscule .art-scene__glow-1 { stop-color: var(--art-sun-crepuscule); }
 .art-scene--crepuscule .art-scene__cloud { fill: var(--art-cloud-crepuscule); }
 .art-scene--crepuscule .art-scene__sea { fill: var(--art-sea-crepuscule); }
 .art-scene--crepuscule .art-scene__glow { opacity: 1; }
@@ -616,6 +609,207 @@
   .art-scene *,
   .art-emblem *,
   .art-portrait {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ——— Villes ——— */
+
+:root {
+  --art-dark-k: 1;
+  --art-haze: #ffffff;
+  --art-rain: #6f7d92;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --art-dark-k: 0.74;
+    --art-haze: #8d99b4;
+    --art-rain: #9aa8c2;
+  }
+}
+:root[data-theme='dark'] {
+  --art-dark-k: 0.74;
+  --art-haze: #8d99b4;
+  --art-rain: #9aa8c2;
+}
+
+/* Couleurs propres aux villes : assombries avec l'heure et en thème sombre */
+.art-scene {
+  --art-tint-b: 1;
+  --art-tint-s: 1;
+  --art-tint-w: 0;
+}
+.art-scene--aube { --art-tint-b: 0.9; --art-tint-s: 0.85; --art-tint-w: 0.12; }
+.art-scene--dore { --art-tint-b: 0.96; --art-tint-w: 0.28; }
+.art-scene--crepuscule { --art-tint-b: 0.58; --art-tint-s: 0.8; --art-tint-w: 0.2; }
+.art-scene--nuit { --art-tint-b: 0.3; --art-tint-s: 0.6; }
+.art-scene__tinted {
+  filter: brightness(calc(var(--art-tint-b) * var(--art-dark-k))) saturate(var(--art-tint-s)) sepia(var(--art-tint-w));
+  transition: filter 2.2s ease;
+}
+.art-scene__tinted--far {
+  opacity: 0.88;
+}
+.art-scene__tint {
+  transition: opacity 2.2s ease;
+}
+.art-scene--crepuscule .art-scene__tint { opacity: 0.08; }
+.art-scene--nuit .art-scene__tint { opacity: 0.05; }
+
+.art-scene__boat {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: art-rock 5s ease-in-out infinite alternate;
+}
+.art-scene__barge {
+  animation: art-barge 70s ease-in-out infinite alternate;
+}
+.art-scene__tram {
+  transform: translateX(560px);
+  animation: art-tram 34s linear infinite;
+}
+.art-scene__plane {
+  transform: translateX(760px);
+  animation: art-plane 80s linear infinite;
+}
+.art-scene__contrail {
+  fill: var(--art-haze);
+  opacity: 0.45;
+}
+.art-scene--nuit .art-scene__contrail { opacity: 0.1; }
+.art-scene__mist-band {
+  fill: var(--art-haze);
+  opacity: 0.22;
+  animation: art-drift 60s ease-in-out infinite alternate;
+}
+.art-scene--nuit .art-scene__mist-band { opacity: 0.08; }
+.art-scene__rain path {
+  fill: none;
+  stroke: var(--art-rain);
+  stroke-width: 1;
+  stroke-linecap: round;
+  opacity: 0.45;
+}
+.art-scene__rain--drizzle path {
+  opacity: 0.3;
+  stroke-width: 0.8;
+}
+.art-scene__rain-fall {
+  animation: art-rain 1.1s linear infinite;
+}
+.art-scene__rain--drizzle .art-scene__rain-fall {
+  animation-duration: 2.6s;
+}
+
+@keyframes art-rock {
+  from { transform: rotate(-1.6deg); }
+  to { transform: rotate(1.6deg); }
+}
+@keyframes art-barge {
+  from { transform: translateX(0); }
+  to { transform: translateX(250px); }
+}
+@keyframes art-tram {
+  from { transform: translateX(-260px); }
+  to { transform: translateX(1460px); }
+}
+@keyframes art-plane {
+  from { transform: translateX(-80px); }
+  to { transform: translateX(1500px); }
+}
+@keyframes art-rain {
+  from { transform: translate(0, 0); }
+  to { transform: translate(-20px, 160px); }
+}
+
+/* ——— Carte postale de ville ——— */
+
+.art-card {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  padding: 6px 6px 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--ink) 12%, transparent);
+}
+.art-card__picture {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 3px;
+}
+.art-card__scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100% !important;
+}
+.art-card__overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.art-card__postmark {
+  fill: none;
+  stroke: var(--ink);
+  stroke-opacity: 0.32;
+  stroke-width: 1.4;
+}
+.art-card__name {
+  display: block;
+  padding: 3px 4px 5px;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 1.05em;
+  line-height: 1.1;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.art-card--locked .art-card__scene {
+  filter: grayscale(1) contrast(0.8) brightness(1.05);
+  opacity: 0.55;
+}
+.art-card--locked .art-card__name {
+  color: var(--ink-soft);
+}
+.art-card__lock {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 40%;
+  height: 40%;
+  transform: translate(-50%, -50%);
+}
+.art-card__lock-disc {
+  fill: var(--surface);
+  fill-opacity: 0.85;
+  stroke: var(--line);
+}
+.art-card__lock-shackle {
+  fill: none;
+  stroke: var(--ink-soft);
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+.art-card__lock-body {
+  fill: var(--ink-soft);
+}
+.art-card__lock-hole {
+  fill: var(--surface);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .art-card * {
     animation: none !important;
     transition: none !important;
   }
