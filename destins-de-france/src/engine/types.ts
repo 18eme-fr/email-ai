@@ -321,6 +321,8 @@ export interface Settings {
   format: 'rapide' | 'standard' | 'immersif';
   softMode: boolean;
   autoMode: boolean;
+  /** Scènes d'exploration pixel art proposées (absent dans les anciennes sauvegardes = activé). */
+  explore?: boolean;
 }
 
 /** Une partie complète. Entièrement sérialisable. */

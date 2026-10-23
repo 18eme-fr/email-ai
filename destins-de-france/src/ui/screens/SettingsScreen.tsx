@@ -44,6 +44,13 @@ export function SettingsScreen({ settings, storageOk, exportText, onChange, onIm
             </span>
           </label>
           <label className="toggle">
+            <input id="explore-mode" type="checkbox" checked={settings.explore !== false} onChange={(e) => onChange({ explore: e.target.checked })} />
+            <span>
+              <b>Scènes à explorer.</b> À certains moments clés, une courte scène en pixel art (1 à 3 minutes) permet d'incarner le personnage. On peut
+              toujours la passer.
+            </span>
+          </label>
+          <label className="toggle">
             <input id="auto-mode" type="checkbox" checked={settings.autoMode} onChange={(e) => onChange({ autoMode: e.target.checked })} />
             <span>
               <b>Mode automatique.</b> Le moteur prend les décisions à votre place, par un tirage reproductible. Vous pouvez reprendre la main à

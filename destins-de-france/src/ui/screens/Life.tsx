@@ -4,6 +4,9 @@ import { getCity, type CityId } from '../../data/cities';
 import { getRegion, TERRITORY_LABELS } from '../../data/regions';
 import { childrenAtHome } from '../../engine/economy';
 import type { LifeDomain, LifeTimelineEntry, SimulationRun } from '../../engine/types';
+import { ExploreView } from '../../explore/ExploreView';
+import { sceneForEvent } from '../../explore/scenes';
+import type { EventConsequence } from '../../engine/narrative-types';
 import { Portrait } from '../art/Portrait';
 import { Scene } from '../art/Scene';
 import { euros, HelpBox, Meter, qualitative, SourceLinks, StatusBadge } from '../components/common';
@@ -19,6 +22,9 @@ interface Props {
   onSource: (id: string) => void;
   onHome: () => void;
   onToggleAuto: () => void;
+  exploring: boolean;
+  onExplore: (open: boolean) => void;
+  onInteraction: (key: string, consequence: EventConsequence, journal: { title: string; text: string }) => void;
 }
 
 export function lifeStage(age: number): string {
@@ -156,8 +162,9 @@ function Sidebar({ run }: { run: SimulationRun }) {
   );
 }
 
-function EventCard({ run, onChoose, onSource }: { run: SimulationRun; onChoose: (id: string) => void; onSource: (id: string) => void }) {
+function EventCard({ run, onChoose, onSource, onExplore }: { run: SimulationRun; onChoose: (id: string) => void; onSource: (id: string) => void; onExplore: () => void }) {
   const ev = run.pending!;
+  const scene = run.settings.explore !== false && !run.settings.autoMode ? sceneForEvent(ev.eventId) : undefined;
   return (
     <section className="card event-card" aria-live="polite" aria-labelledby="ev-title">
       <div className="event-meta">
@@ -169,9 +176,20 @@ function EventCard({ run, onChoose, onSource }: { run: SimulationRun; onChoose: 
       <h2 id="ev-title">{ev.title}</h2>
       <p className="event-text">{ev.text}</p>
       {ev.sensitive && <HelpBox />}
+      {scene && (
+        <div className="scene-offer">
+          <p>
+            <b>Vivre ce moment.</b> Une courte scène à explorer ({scene.duration}) : parler aux personnes présentes, puis décider sur place. Les décisions
+            ci-dessous restent possibles directement.
+          </p>
+          <button className="btn btn-primary btn-small" onClick={onExplore} autoFocus>
+            Entrer dans la scène
+          </button>
+        </div>
+      )}
       <div className="choices" role="group" aria-label="Décisions possibles">
         {ev.choices.map((c, i) => (
-          <button key={c.id} className="choice" onClick={() => onChoose(c.id)} autoFocus={i === 0}>
+          <button key={c.id} className="choice" onClick={() => onChoose(c.id)} autoFocus={i === 0 && !scene}>
             <b>{c.label}</b>
             {c.hint && <small>{c.hint}</small>}
           </button>
@@ -231,7 +249,7 @@ function Journal({ run, onPick }: { run: SimulationRun; onPick: (e: LifeTimeline
   );
 }
 
-export function Life({ run, speed, storageOk, onSpeed, onChoose, onSource, onHome, onToggleAuto }: Props) {
+export function Life({ run, speed, storageOk, onSpeed, onChoose, onSource, onHome, onToggleAuto, exploring, onExplore, onInteraction }: Props) {
   const [picked, setPicked] = useState<LifeTimelineEntry | null>(null);
   const region = getRegion(run.citizen.regionId);
   const recent = run.timeline.slice(-5).reverse();
@@ -290,12 +308,25 @@ export function Life({ run, speed, storageOk, onSpeed, onChoose, onSource, onHom
         </div>
       </div>
 
+      {exploring && run.pending && sceneForEvent(run.pending.eventId) && (
+        <ExploreView
+          run={run}
+          scene={sceneForEvent(run.pending.eventId)!}
+          onInteraction={onInteraction}
+          onChoose={(id) => {
+            onExplore(false);
+            onChoose(id);
+          }}
+          onLeave={() => onExplore(false)}
+        />
+      )}
+
       <div className="life-grid">
         <Sidebar run={run} />
         <div className="story">
           <p className="chapter">{lifeStage(run.age)}</p>
           {run.pending ? (
-            <EventCard run={run} onChoose={onChoose} onSource={onSource} />
+            <EventCard run={run} onChoose={onChoose} onSource={onSource} onExplore={() => onExplore(true)} />
           ) : speed === 0 ? (
             <div className="card panel" style={{ textAlign: 'center' }}>
               <p>Le temps est suspendu. Relisez, consultez le journal, puis reprenez quand vous voulez.</p>

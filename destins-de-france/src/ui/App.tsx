@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { exportSave, importSave, loadSave, resetSave, storageAvailable, writeSave } from '../engine/save';
-import { autoChoose, choose, createRun, DEFAULT_SETTINGS, step, updateSettings } from '../engine/simulation';
+import { applyInteraction, autoChoose, choose, createRun, DEFAULT_SETTINGS, step, updateSettings } from '../engine/simulation';
 import { toLifeRecord } from '../engine/summary';
 import type { LifeRecord, Settings, SimulationRun } from '../engine/types';
 import { SourceSheet } from './components/common';
@@ -35,6 +35,7 @@ export function App() {
   const [speed, setSpeed] = useState<Speed>(0);
   const [sourceId, setSourceId] = useState<string | null>(null);
   const [flash, setFlash] = useState<string | null>(null);
+  const [exploring, setExploring] = useState(false);
   const storageOk = storageAvailable();
   const lastSaveYear = useRef(0);
 
@@ -57,10 +58,10 @@ export function App() {
 
   // Mode automatique : laisse le temps de lire avant de choisir.
   useEffect(() => {
-    if (screen !== 'life' || !run?.pending || !run.settings.autoMode || speed === 0) return;
+    if (screen !== 'life' || !run?.pending || !run.settings.autoMode || speed === 0 || exploring) return;
     const t = window.setTimeout(() => setRun((r) => (r ? autoChoose(r) : r)), speed === 3 ? 1500 : 3500);
     return () => window.clearTimeout(t);
-  }, [screen, run, speed]);
+  }, [screen, run, speed, exploring]);
 
   // Transition de chapitre de vie.
   const prevStage = useRef<string | null>(null);
@@ -89,13 +90,13 @@ export function App() {
   // Barre d'espace : pause / reprise.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (screen !== 'life' || e.code !== 'Space' || (e.target as HTMLElement)?.closest('button, input, textarea')) return;
+      if (screen !== 'life' || exploring || e.code !== 'Space' || (e.target as HTMLElement)?.closest('button, input, textarea')) return;
       e.preventDefault();
       setSpeed((s) => (s === 0 ? DEFAULT_SPEED[prefs.format] : 0));
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [screen, prefs.format]);
+  }, [screen, prefs.format, exploring]);
 
   const go = (s: Screen) => {
     setBack(screen === 'library' || screen === 'history' || screen === 'settings' || screen === 'cities' ? back : screen);
@@ -105,6 +106,7 @@ export function App() {
 
   const newBirth = useCallback((cityId?: CityId) => {
     setRun(createRun(freshSeed(), prefs, { cityId }));
+    setExploring(false);
     prevStage.current = null;
     setSpeed(0);
     setScreen('birth');
@@ -164,10 +166,17 @@ export function App() {
           onSource={setSourceId}
           onHome={() => {
             setSpeed(0);
+            setExploring(false);
             writeSave(run.alive ? run : null, lives, unlocked);
             setScreen('home');
           }}
           onToggleAuto={() => changeSettings({ autoMode: !run.settings.autoMode })}
+          exploring={exploring}
+          onExplore={(open) => {
+            setExploring(open);
+            window.scrollTo({ top: 0 });
+          }}
+          onInteraction={(key, consequence, journal) => setRun((r) => (r ? applyInteraction(r, key, consequence, journal) : r))}
         />
       )}
       {screen === 'summary' && run && (

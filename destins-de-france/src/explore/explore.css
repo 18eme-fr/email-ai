@@ -1,0 +1,39 @@
+/* Scène d'exploration : canvas pixel art agrandi sans lissage, dialogues en surimpression. */
+.explore { padding: clamp(14px, 2.4vw, 22px); display: grid; gap: 12px; border-top: 4px solid var(--accent); animation: rise 0.4s ease; }
+.explore-head { display: flex; justify-content: space-between; gap: 12px; align-items: start; flex-wrap: wrap; }
+.explore-head > div { display: grid; gap: 4px; min-width: 0; flex: 1 1 280px; }
+.explore-head h2 { font-size: clamp(1.5rem, 3vw, 1.9rem); }
+.explore-stage { position: relative; border-radius: 8px; overflow: hidden; background: #141a2b; }
+.explore-canvas { display: block; width: 100%; height: auto; aspect-ratio: 400 / 240; image-rendering: pixelated; image-rendering: crisp-edges; cursor: pointer; touch-action: none; }
+.explore-hint {
+  position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%);
+  background: rgb(14 19 34 / 0.86); color: #f4f1e8; padding: 6px 12px; border-radius: 6px;
+  font-size: 0.88rem; max-width: calc(100% - 24px); text-align: center;
+}
+.explore-hint kbd, .explore-foot kbd {
+  font-family: var(--font-mono); font-size: 0.75rem; border: 1px solid currentColor; border-bottom-width: 2px;
+  border-radius: 4px; padding: 0 5px; margin-right: 4px;
+}
+.explore-dialogue {
+  position: absolute; left: 10px; right: 10px; bottom: 10px; max-height: calc(100% - 20px); overflow: auto;
+  background: var(--surface); color: var(--ink); border: 2px solid var(--ink); border-radius: 8px;
+  padding: 12px 14px; display: grid; gap: 8px; box-shadow: 0 6px 0 rgb(0 0 0 / 0.25);
+  animation: rise 0.2s ease;
+}
+.dlg-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.dlg-head b { font-family: var(--font-display); font-size: 1.25rem; }
+.dlg-options { display: grid; gap: 6px; }
+.dlg-options .choice { padding: 8px 12px; }
+.dlg-options .choice.is-decision { border-color: var(--memory); }
+.explore-foot { display: grid; gap: 8px; }
+.explore-people { display: flex; gap: 6px; flex-wrap: wrap; }
+.explore-pad { display: none; position: absolute; right: 10px; top: 10px; width: 120px; height: 120px; grid-template: repeat(3, 1fr) / repeat(3, 1fr); gap: 4px; opacity: 0.85; }
+.explore-pad button { border: none; border-radius: 8px; background: rgb(244 241 232 / 0.85); color: #141a2b; font-size: 1rem; touch-action: none; }
+.explore-pad .pad-up { grid-area: 1 / 2; }
+.explore-pad .pad-left { grid-area: 2 / 1; }
+.explore-pad .pad-right { grid-area: 2 / 3; }
+.explore-pad .pad-down { grid-area: 3 / 2; }
+@media (pointer: coarse) { .explore-pad { display: grid; } }
+@media (max-width: 600px) { .explore-dialogue { position: static; border-radius: 0; border-width: 2px 0 0; } }
+.scene-offer { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; padding: 10px 12px; border: 1px dashed var(--accent); border-radius: var(--radius); }
+.scene-offer p { flex: 1 1 220px; font-size: 0.92rem; }

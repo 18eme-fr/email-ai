@@ -5,7 +5,7 @@ import { drawBirth } from './demography';
 import { economyYear } from './economy';
 import { deathProbability } from './mortality';
 import { addTimeline, applyConsequence, buildPending, clamp, eventWeight, isEligible, makeContext, mergeConsequences, renderText } from './narrative';
-import type { NarrativeEvent } from './narrative-types';
+import type { EventConsequence, NarrativeEvent } from './narrative-types';
 import { Rng } from './rng';
 import type { Settings, SimulationRun } from './types';
 
@@ -18,7 +18,7 @@ import type { Settings, SimulationRun } from './types';
  */
 
 export const ENGINE_VERSION = '0.1.0';
-export const DEFAULT_SETTINGS: Settings = { format: 'standard', softMode: false, autoMode: false };
+export const DEFAULT_SETTINGS: Settings = { format: 'standard', softMode: false, autoMode: false, explore: true };
 
 /** Probabilité qu'une année « ordinaire » contienne un événement aléatoire (rythme de jeu). */
 const RANDOM_EVENT_RATE: Record<Settings['format'], number> = { rapide: 0.3, standard: 0.48, immersif: 0.68 };
@@ -419,4 +419,32 @@ export function autoChoose(run: SimulationRun): SimulationRun {
 
 export function updateSettings(run: SimulationRun, settings: Partial<Settings>): SimulationRun {
   return { ...run, settings: { ...run.settings, ...settings } };
+}
+
+/**
+ * Conséquence d'une interaction dans une scène d'exploration. Passe par le
+ * même système de conséquences et le même journal que les événements ; chaque
+ * clé ne s'applique qu'une fois par partie, et le temps n'avance pas.
+ */
+export function applyInteraction(
+  input: SimulationRun,
+  key: string,
+  consequence: EventConsequence,
+  journal: { title: string; text: string },
+): SimulationRun {
+  const flag = `scene:${key}`;
+  if (!input.alive || input.flags[flag] !== undefined) return input;
+  const run = clone(input);
+  const rng = new Rng(run.rngState);
+  const outcome = applyConsequence(run, { ...consequence, setFlags: [...(consequence.setFlags ?? []), flag] }, rng);
+  addTimeline(run, {
+    title: journal.title,
+    text: outcome ? `${journal.text} ${outcome}` : journal.text,
+    domain: run.pending?.domain ?? 'relations',
+    status: 'fictif',
+    sourceIds: [],
+    memorable: false,
+  });
+  run.rngState = rng.current;
+  return run;
 }
