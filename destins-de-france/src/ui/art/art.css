@@ -1,0 +1,622 @@
+/* ——— Destins de France · illustrations (préfixe art-) ——— */
+
+/* Jetons propres aux illustrations : thème clair */
+:root {
+  --art-silhouette: var(--ink, #1a2238);
+  --art-window: #f4c46a;
+  --art-pane: var(--paper, #edf0f2);
+  --art-detail: var(--paper, #edf0f2);
+  --art-moon: #f6f1da;
+  --art-star: #ffffff;
+  --art-snow: #ffffff;
+  --art-road: var(--surface, #f8f9fa);
+  --art-wave: #ffffff;
+  --art-beam: #fff0bf;
+
+  --art-sky-aube-0: #b7b3d6;
+  --art-sky-aube-1: #eac2c6;
+  --art-sky-aube-2: #f8e0cc;
+  --art-sky-matin-0: #9cc3e0;
+  --art-sky-matin-1: #cfe3ee;
+  --art-sky-matin-2: #f2f1e5;
+  --art-sky-jour-0: #6ea6d4;
+  --art-sky-jour-1: #a9cde6;
+  --art-sky-jour-2: #ddebf1;
+  --art-sky-dore-0: #8da5c3;
+  --art-sky-dore-1: #e8c690;
+  --art-sky-dore-2: #f1a65e;
+  --art-sky-crepuscule-0: #2b3563;
+  --art-sky-crepuscule-1: #7e5a8c;
+  --art-sky-crepuscule-2: #e3876a;
+  --art-sky-nuit-0: #0a1030;
+  --art-sky-nuit-1: #18234e;
+  --art-sky-nuit-2: #2c386c;
+
+  --art-sun-aube: #f7b49c;
+  --art-sun-matin: #fff3cf;
+  --art-sun-jour: #fffbea;
+  --art-sun-dore: #ffd27a;
+  --art-sun-crepuscule: #f27a4e;
+  --art-sun-nuit: #f27a4e;
+
+  --art-cloud-aube: #f8dcd8;
+  --art-cloud-matin: #ffffff;
+  --art-cloud-jour: #ffffff;
+  --art-cloud-dore: #f7dcb0;
+  --art-cloud-crepuscule: #b27a8c;
+  --art-cloud-nuit: #3a4470;
+
+  --art-sea-aube: #b9b6cf;
+  --art-sea-matin: #8fb5ca;
+  --art-sea-jour: #6d9fba;
+  --art-sea-dore: #b39d80;
+  --art-sea-crepuscule: #514a70;
+  --art-sea-nuit: #151d40;
+
+  /* Portrait : une seule encre neutre déclinée, jamais de « couleur de peau » */
+  --art-skin: color-mix(in srgb, var(--ink, #1a2238) 13%, var(--surface, #f8f9fa));
+  --art-skin-shade: color-mix(in srgb, var(--ink, #1a2238) 24%, var(--surface, #f8f9fa));
+  --art-hair: color-mix(in srgb, var(--ink, #1a2238) 90%, var(--surface, #f8f9fa));
+  --art-hair-salt: color-mix(in srgb, var(--ink, #1a2238) 62%, var(--surface, #f8f9fa));
+  --art-hair-gray: color-mix(in srgb, var(--ink, #1a2238) 40%, var(--surface, #f8f9fa));
+  --art-hair-white: color-mix(in srgb, var(--ink, #1a2238) 6%, #ffffff);
+  --art-feature: color-mix(in srgb, var(--ink, #1a2238) 85%, var(--surface, #f8f9fa));
+  --art-portrait-bg-l: 85%;
+  --art-portrait-halo-l: 92%;
+  --art-portrait-cloth-l: 42%;
+  --art-portrait-cloth-dark-l: 31%;
+}
+
+/* Thème sombre : jetons redéfinis (préférence système puis choix explicite) */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --art-silhouette: #02040b;
+    --art-window: #e9b85c;
+    --art-pane: #b9c4da;
+    --art-detail: #9aa6c0;
+    --art-moon: #ebe5c6;
+    --art-star: #e6e9f0;
+    --art-snow: #c9d2e3;
+    --art-road: #6d7690;
+    --art-wave: #c9d6e8;
+    --art-beam: #f2dc9a;
+
+    --art-sky-aube-0: #2b2a4a;
+    --art-sky-aube-1: #5a4458;
+    --art-sky-aube-2: #8c6662;
+    --art-sky-matin-0: #22395a;
+    --art-sky-matin-1: #3f5c79;
+    --art-sky-matin-2: #6c8698;
+    --art-sky-jour-0: #1d3d66;
+    --art-sky-jour-1: #33608a;
+    --art-sky-jour-2: #5f87a5;
+    --art-sky-dore-0: #2a3550;
+    --art-sky-dore-1: #7a6040;
+    --art-sky-dore-2: #a8703c;
+    --art-sky-crepuscule-0: #121836;
+    --art-sky-crepuscule-1: #3e2e4e;
+    --art-sky-crepuscule-2: #7e4a44;
+    --art-sky-nuit-0: #04070f;
+    --art-sky-nuit-1: #0a1026;
+    --art-sky-nuit-2: #151e3c;
+
+    --art-sun-aube: #e3957f;
+    --art-sun-matin: #f2e3b8;
+    --art-sun-jour: #f4ebcb;
+    --art-sun-dore: #f0b860;
+    --art-sun-crepuscule: #d86a44;
+    --art-sun-nuit: #d86a44;
+
+    --art-cloud-aube: #6e5a6a;
+    --art-cloud-matin: #8a9aab;
+    --art-cloud-jour: #95a8bc;
+    --art-cloud-dore: #8a6e50;
+    --art-cloud-crepuscule: #4e3a4e;
+    --art-cloud-nuit: #1c2340;
+
+    --art-sea-aube: #2e3048;
+    --art-sea-matin: #203b51;
+    --art-sea-jour: #1c3e59;
+    --art-sea-dore: #3a3328;
+    --art-sea-crepuscule: #1f1a31;
+    --art-sea-nuit: #070c1e;
+
+    --art-skin: color-mix(in srgb, var(--ink, #e6e9f0) 60%, var(--surface, #161c2e));
+    --art-skin-shade: color-mix(in srgb, var(--ink, #e6e9f0) 46%, var(--surface, #161c2e));
+    --art-hair: #0a0d18;
+    --art-hair-salt: #4a5168;
+    --art-hair-gray: #8c93a8;
+    --art-hair-white: #e6e9f0;
+    --art-feature: #0e1322;
+    --art-portrait-bg-l: 18%;
+    --art-portrait-halo-l: 27%;
+    --art-portrait-cloth-l: 40%;
+    --art-portrait-cloth-dark-l: 29%;
+  }
+}
+
+:root[data-theme='dark'] {
+  --art-silhouette: #02040b;
+  --art-window: #e9b85c;
+  --art-pane: #b9c4da;
+  --art-detail: #9aa6c0;
+  --art-moon: #ebe5c6;
+  --art-star: #e6e9f0;
+  --art-snow: #c9d2e3;
+  --art-road: #6d7690;
+  --art-wave: #c9d6e8;
+  --art-beam: #f2dc9a;
+
+  --art-sky-aube-0: #2b2a4a;
+  --art-sky-aube-1: #5a4458;
+  --art-sky-aube-2: #8c6662;
+  --art-sky-matin-0: #22395a;
+  --art-sky-matin-1: #3f5c79;
+  --art-sky-matin-2: #6c8698;
+  --art-sky-jour-0: #1d3d66;
+  --art-sky-jour-1: #33608a;
+  --art-sky-jour-2: #5f87a5;
+  --art-sky-dore-0: #2a3550;
+  --art-sky-dore-1: #7a6040;
+  --art-sky-dore-2: #a8703c;
+  --art-sky-crepuscule-0: #121836;
+  --art-sky-crepuscule-1: #3e2e4e;
+  --art-sky-crepuscule-2: #7e4a44;
+  --art-sky-nuit-0: #04070f;
+  --art-sky-nuit-1: #0a1026;
+  --art-sky-nuit-2: #151e3c;
+
+  --art-sun-aube: #e3957f;
+  --art-sun-matin: #f2e3b8;
+  --art-sun-jour: #f4ebcb;
+  --art-sun-dore: #f0b860;
+  --art-sun-crepuscule: #d86a44;
+  --art-sun-nuit: #d86a44;
+
+  --art-cloud-aube: #6e5a6a;
+  --art-cloud-matin: #8a9aab;
+  --art-cloud-jour: #95a8bc;
+  --art-cloud-dore: #8a6e50;
+  --art-cloud-crepuscule: #4e3a4e;
+  --art-cloud-nuit: #1c2340;
+
+  --art-sea-aube: #2e3048;
+  --art-sea-matin: #203b51;
+  --art-sea-jour: #1c3e59;
+  --art-sea-dore: #3a3328;
+  --art-sea-crepuscule: #1f1a31;
+  --art-sea-nuit: #070c1e;
+
+  --art-skin: color-mix(in srgb, var(--ink, #e6e9f0) 60%, var(--surface, #161c2e));
+  --art-skin-shade: color-mix(in srgb, var(--ink, #e6e9f0) 46%, var(--surface, #161c2e));
+  --art-hair: #0a0d18;
+  --art-hair-salt: #4a5168;
+  --art-hair-gray: #8c93a8;
+  --art-hair-white: #e6e9f0;
+  --art-feature: #0e1322;
+  --art-portrait-bg-l: 18%;
+  --art-portrait-halo-l: 27%;
+  --art-portrait-cloth-l: 40%;
+  --art-portrait-cloth-dark-l: 29%;
+}
+
+/* ——— Portrait ——— */
+
+.art-portrait {
+  display: block;
+  flex: none;
+  border-radius: 8px;
+  transition: filter 1.2s ease;
+}
+.art-portrait__bg {
+  fill: hsl(var(--art-hue) 26% var(--art-portrait-bg-l));
+}
+.art-portrait__halo {
+  fill: hsl(var(--art-hue) 34% var(--art-portrait-halo-l));
+}
+.art-portrait__hatch line {
+  stroke: var(--ink);
+  stroke-opacity: 0.06;
+  stroke-width: 0.6;
+}
+.art-portrait__ring {
+  fill: none;
+  stroke: var(--ink);
+  stroke-opacity: 0.16;
+  stroke-width: 0.5;
+  stroke-dasharray: 1.2 2.2;
+}
+.art-portrait__shadow {
+  flood-color: var(--ink);
+  flood-opacity: 0.28;
+}
+.art-portrait__cloth {
+  fill: hsl(var(--art-hue) 30% var(--art-portrait-cloth-l));
+}
+.art-portrait__cloth-dark {
+  fill: hsl(var(--art-hue) 32% var(--art-portrait-cloth-dark-l));
+}
+.art-portrait__collar {
+  fill: var(--surface);
+}
+.art-portrait__seam {
+  fill: none;
+  stroke: hsl(var(--art-hue) 34% var(--art-portrait-cloth-dark-l));
+  stroke-width: 0.9;
+  stroke-linecap: round;
+}
+.art-portrait__seam-dot {
+  fill: hsl(var(--art-hue) 34% var(--art-portrait-cloth-dark-l));
+}
+.art-portrait__skin {
+  fill: var(--art-skin);
+}
+.art-portrait__shade {
+  fill: var(--art-skin-shade);
+}
+.art-portrait__hair {
+  fill: var(--art-hair);
+}
+.art-portrait__hair--salt {
+  fill: var(--art-hair-salt);
+}
+.art-portrait__hair--white {
+  fill: var(--art-hair-white);
+  stroke: var(--art-hair-gray);
+  stroke-width: 0.5;
+}
+.art-portrait__stroke {
+  fill: none;
+  stroke: var(--art-hair);
+}
+.art-portrait__sheen {
+  fill: none;
+  stroke: var(--art-skin);
+  stroke-opacity: 0.35;
+  stroke-width: 0.8;
+  stroke-linecap: round;
+}
+.art-portrait__eye {
+  fill: var(--art-feature);
+}
+.art-portrait__line {
+  fill: none;
+  stroke: var(--art-feature);
+  stroke-width: 0.95;
+  stroke-linecap: round;
+}
+.art-portrait__line--soft {
+  stroke-opacity: 0.5;
+  stroke-width: 0.8;
+}
+.art-portrait__glasses {
+  fill: none;
+  stroke: var(--art-feature);
+  stroke-width: 0.8;
+  stroke-opacity: 0.85;
+}
+
+/* Défunt : photo souvenir sépia, légèrement passée */
+.art-portrait--memory {
+  filter: sepia(0.78) saturate(0.55) contrast(0.9) brightness(1.03);
+}
+.art-portrait__vig-0 {
+  stop-color: var(--memory);
+  stop-opacity: 0;
+}
+.art-portrait__vig-1 {
+  stop-color: var(--memory);
+  stop-opacity: 0.35;
+}
+.art-portrait__photo-edge {
+  fill: none;
+  stroke: var(--surface);
+  stroke-opacity: 0.7;
+  stroke-width: 1.4;
+}
+
+/* ——— Scène ——— */
+
+.art-scene {
+  display: block;
+  overflow: hidden;
+  background: var(--paper);
+}
+.art-scene__sky {
+  transition: opacity 2.2s ease;
+}
+.art-scene__silhouette,
+.art-scene__silhouette * {
+  fill: var(--art-silhouette);
+}
+.art-scene__stroke {
+  stroke: var(--art-silhouette);
+}
+
+.art-scene__celestial {
+  transition: transform 2.6s cubic-bezier(0.45, 0, 0.25, 1);
+}
+.art-scene__sun {
+  fill: var(--art-sun-aube);
+  transition: fill 2.2s ease;
+}
+.art-scene__glow {
+  transition: opacity 2.2s ease;
+  opacity: 0.75;
+}
+.art-scene__glow-0 {
+  stop-color: var(--art-sun-aube);
+  stop-opacity: 0.55;
+  transition: stop-color 2.2s ease;
+}
+.art-scene__glow-1 {
+  stop-color: var(--art-sun-aube);
+  stop-opacity: 0;
+  transition: stop-color 2.2s ease;
+}
+.art-scene__moon {
+  fill: var(--art-moon);
+  opacity: 0;
+  transition: opacity 2.4s ease;
+}
+.art-scene__stars {
+  opacity: 0;
+  transition: opacity 2.4s ease;
+}
+.art-scene__star {
+  fill: var(--art-star);
+}
+.art-scene__clouds {
+  opacity: 0.85;
+  transition: opacity 2.2s ease;
+}
+.art-scene__cloud {
+  fill: var(--art-cloud-aube);
+  transition: fill 2.2s ease;
+  animation: art-drift 80s ease-in-out infinite alternate;
+}
+
+.art-scene__sea {
+  fill: var(--art-sea-aube);
+  transition: fill 2.2s ease;
+}
+.art-scene__sea-line {
+  fill: var(--art-wave);
+  opacity: 0.35;
+}
+.art-scene__wave {
+  fill: none;
+  stroke: var(--art-wave);
+  stroke-linecap: round;
+  opacity: 0.32;
+  animation: art-wave 7s ease-in-out infinite alternate;
+}
+.art-scene__glint-wrap {
+  transition:
+    transform 2.6s cubic-bezier(0.45, 0, 0.25, 1),
+    opacity 2.2s ease;
+}
+.art-scene__glint {
+  fill: var(--art-sun-aube);
+  opacity: 0.55;
+  transition: fill 2.2s ease;
+}
+.art-scene__snow {
+  fill: var(--art-snow);
+  opacity: 0.5;
+}
+.art-scene__smoke {
+  fill: var(--art-silhouette);
+  opacity: 0.08;
+  animation: art-smoke 14s ease-in-out infinite alternate;
+}
+.art-scene__band {
+  fill: var(--art-detail);
+  opacity: 0.55;
+}
+.art-scene__beam {
+  opacity: 0;
+  transform-origin: 1092px 131px;
+  transition: opacity 2.4s ease;
+}
+.art-scene__beam-0 {
+  stop-color: var(--art-beam);
+  stop-opacity: 0.55;
+}
+.art-scene__beam-1 {
+  stop-color: var(--art-beam);
+  stop-opacity: 0;
+}
+
+.art-scene__details {
+  fill: var(--art-detail);
+  opacity: 0.2;
+}
+.art-scene__furrows {
+  stroke: var(--art-silhouette);
+  opacity: 0.16;
+}
+.art-scene__furrow {
+  stroke-width: 0.8;
+}
+.art-scene__road {
+  fill: var(--art-road);
+  opacity: 0.55;
+}
+.art-scene__panes {
+  fill: var(--art-pane);
+  opacity: 0.32;
+  transition: opacity 2.2s ease;
+}
+.art-scene__light {
+  fill: var(--art-window);
+  opacity: 0;
+  transition: opacity 1.4s ease;
+}
+.art-scene__light--blink {
+  animation: art-blink 11s steps(1, end) infinite;
+}
+.art-scene__train {
+  animation: art-train 46s linear infinite;
+}
+
+/* Réglages par moment de la journée de vie */
+.art-scene--matin .art-scene__sun,
+.art-scene--matin .art-scene__glint { fill: var(--art-sun-matin); }
+.art-scene--matin .art-scene__glow-0,
+.art-scene--matin .art-scene__glow-1 { stop-color: var(--art-sun-matin); }
+.art-scene--matin .art-scene__cloud { fill: var(--art-cloud-matin); }
+.art-scene--matin .art-scene__sea { fill: var(--art-sea-matin); }
+
+.art-scene--jour .art-scene__sun,
+.art-scene--jour .art-scene__glint { fill: var(--art-sun-jour); }
+.art-scene--jour .art-scene__glow-0,
+.art-scene--jour .art-scene__glow-1 { stop-color: var(--art-sun-jour); }
+.art-scene--jour .art-scene__cloud { fill: var(--art-cloud-jour); }
+.art-scene--jour .art-scene__sea { fill: var(--art-sea-jour); }
+.art-scene--jour .art-scene__glint-wrap { opacity: 0.6; }
+
+.art-scene--dore .art-scene__sun,
+.art-scene--dore .art-scene__glint { fill: var(--art-sun-dore); }
+.art-scene--dore .art-scene__glow-0,
+.art-scene--dore .art-scene__glow-1 { stop-color: var(--art-sun-dore); }
+.art-scene--dore .art-scene__cloud { fill: var(--art-cloud-dore); }
+.art-scene--dore .art-scene__sea { fill: var(--art-sea-dore); }
+.art-scene--dore .art-scene__glow { opacity: 0.95; }
+.art-scene--dore .art-scene__light { opacity: 0.12; }
+
+.art-scene--crepuscule .art-scene__sun,
+.art-scene--crepuscule .art-scene__glint { fill: var(--art-sun-crepuscule); }
+.art-scene--crepuscule .art-scene__glow-0,
+.art-scene--crepuscule .art-scene__glow-1 { stop-color: var(--art-sun-crepuscule); }
+.art-scene--crepuscule .art-scene__cloud { fill: var(--art-cloud-crepuscule); }
+.art-scene--crepuscule .art-scene__sea { fill: var(--art-sea-crepuscule); }
+.art-scene--crepuscule .art-scene__glow { opacity: 1; }
+.art-scene--crepuscule .art-scene__stars { opacity: 0.3; }
+.art-scene--crepuscule .art-scene__moon { opacity: 0.35; }
+.art-scene--crepuscule .art-scene__panes { opacity: 0.12; }
+.art-scene--crepuscule .art-scene__light { opacity: 0.85; }
+.art-scene--crepuscule .art-scene__beam { opacity: 0.5; }
+.art-scene--crepuscule .art-scene__details { opacity: 0.12; }
+
+.art-scene--nuit .art-scene__cloud { fill: var(--art-cloud-nuit); }
+.art-scene--nuit .art-scene__sea { fill: var(--art-sea-nuit); }
+.art-scene--nuit .art-scene__glow,
+.art-scene--nuit .art-scene__glint-wrap { opacity: 0; }
+.art-scene--nuit .art-scene__clouds { opacity: 0.6; }
+.art-scene--nuit .art-scene__stars { opacity: 1; }
+.art-scene--nuit .art-scene__moon { opacity: 1; }
+.art-scene--nuit .art-scene__panes { opacity: 0.05; }
+.art-scene--nuit .art-scene__light { opacity: 1; }
+.art-scene--nuit .art-scene__beam { opacity: 0.85; }
+.art-scene--nuit .art-scene__details { opacity: 0.08; }
+.art-scene--nuit .art-scene__snow { opacity: 0.25; }
+.art-scene--nuit .art-scene__wave { opacity: 0.16; }
+
+/* Les feux du métro et du phare restent visibles, discrets le jour */
+.art-scene .art-scene__light--always { opacity: 0.35; }
+.art-scene--crepuscule .art-scene__light--always,
+.art-scene--nuit .art-scene__light--always { opacity: 1; }
+
+.art-scene__star--twinkle {
+  animation: art-twinkle 4.5s ease-in-out infinite alternate;
+}
+.art-scene--crepuscule .art-scene__beam,
+.art-scene--nuit .art-scene__beam {
+  animation: art-beam 9s ease-in-out infinite;
+}
+
+.art-scene--paused * {
+  animation-play-state: paused !important;
+}
+
+@keyframes art-drift {
+  from { transform: translateX(-50px); }
+  to { transform: translateX(60px); }
+}
+@keyframes art-wave {
+  from { transform: translateX(-8px); }
+  to { transform: translateX(10px); }
+}
+@keyframes art-twinkle {
+  from { opacity: 0.35; }
+  to { opacity: 1; }
+}
+@keyframes art-blink {
+  0%, 62% { fill-opacity: 1; }
+  63%, 100% { fill-opacity: 0.15; }
+}
+@keyframes art-train {
+  from { transform: translateX(-320px); }
+  to { transform: translateX(1520px); }
+}
+@keyframes art-smoke {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(14px, -10px) scale(1.15); }
+}
+@keyframes art-beam {
+  0%, 100% { transform: scaleY(0.6); }
+  50% { transform: scaleY(1.1); }
+}
+
+/* ——— Emblème ——— */
+
+.art-emblem {
+  display: block;
+  overflow: visible;
+}
+.art-emblem__hex {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2.2;
+  stroke-linejoin: round;
+}
+.art-emblem__hex--shadow {
+  fill: var(--accent);
+  fill-opacity: 0.07;
+  stroke: var(--line);
+  stroke-width: 7;
+  stroke-opacity: 0.5;
+}
+.art-emblem__thread {
+  fill: none;
+  stroke-linecap: round;
+}
+.art-emblem__thread--accent { stroke: var(--accent); }
+.art-emblem__thread--memory { stroke: var(--memory); }
+.art-emblem__thread--ink { stroke: var(--ink-soft); }
+.art-emblem__dot { animation: art-pop 0.6s ease-out both; transform-box: fill-box; transform-origin: center; }
+.art-emblem__dot--accent { fill: var(--accent); }
+.art-emblem__dot--memory { fill: var(--memory); }
+.art-emblem__dot--ink { fill: var(--ink-soft); }
+.art-emblem__origin { fill: var(--ink); }
+.art-emblem__origin-ring {
+  fill: none;
+  stroke: var(--ink);
+  stroke-opacity: 0.35;
+  stroke-width: 1;
+}
+.art-emblem__draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  animation: art-trace 1.9s cubic-bezier(0.55, 0, 0.2, 1) both;
+}
+
+@keyframes art-trace {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+@keyframes art-pop {
+  from { opacity: 0; transform: scale(0.2); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Mouvement réduit : aucune animation, transitions instantanées */
+@media (prefers-reduced-motion: reduce) {
+  .art-scene *,
+  .art-emblem *,
+  .art-portrait {
+    animation: none !important;
+    transition: none !important;
+  }
+}
