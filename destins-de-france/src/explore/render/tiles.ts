@@ -289,9 +289,20 @@ const SUN: RGBA = [255, 238, 196, 255];
  * plus, au sol devant la face, l'occlusion ambiante et la tache de lumière
  * des fenêtres. Ancre = centre du losange au sol.
  */
-export function wallSprite(kind: WallKind, faces: { left: boolean; right: boolean }, variant: number): Sprite {
+/**
+ * `floorAhead` (facultatif) : présence d'un sol devant chaque face. Absent,
+ * on suppose un sol devant toute face visible.
+ */
+export function wallSprite(
+  kind: WallKind,
+  faces: { left: boolean; right: boolean },
+  variant: number,
+  floorAhead?: { left: boolean; right: boolean },
+): Sprite {
+  const groundL = faces.left && (floorAhead?.left ?? true);
+  const groundR = faces.right && (floorAhead?.right ?? true);
   const v = ((variant % 4) + 4) % 4;
-  return cached(`w:${kind}:${faces.left ? 1 : 0}${faces.right ? 1 : 0}:${v}`, () => {
+  return cached(`w:${kind}:${faces.left ? 1 : 0}${faces.right ? 1 : 0}${groundL ? 1 : 0}${groundR ? 1 : 0}:${v}`, () => {
     const p = new Pix(TILE_W + 2 * MX, TILE_H + WALL_H + MB);
     const painter = facePainter(kind, v);
     const baseL = TILE_H / 2 + WALL_H; // bas de la face gauche en x = 0
@@ -305,8 +316,8 @@ export function wallSprite(kind: WallKind, faces: { left: boolean; right: boolea
         let col = AO;
         const sides: Array<[boolean, number, number]> = [
           // [face visible, position le long de la face, profondeur devant elle]
-          [faces.left, (lx + 2 * ly) / 2, (2 * ly - lx) / 2],
-          [faces.right, (lx - 16 - 2 * (ly - 8)) / 2, (lx - 16 + 2 * (ly - 8)) / 2],
+          [groundL, (lx + 2 * ly) / 2, (2 * ly - lx) / 2],
+          [groundR, (lx - 16 - 2 * (ly - 8)) / 2, (lx - 16 + 2 * (ly - 8)) / 2],
         ];
         for (const [on, i, d] of sides) {
           if (!on || i < 0 || i >= 16 || d < 0) continue;
@@ -317,8 +328,8 @@ export function wallSprite(kind: WallKind, faces: { left: boolean; right: boolea
               col = AO;
             }
           }
-          if (kind === 'mur_fenetre' && i >= 3.5 && i <= 13.5 && Math.abs(i - 8.5) > 0.8 && d >= 8 && d <= 17) {
-            const edge = Math.min(i - 3.5, 13.5 - i, d - 8, 17 - d);
+          if (kind === 'mur_fenetre' && i >= 3.5 && i <= 13.5 && Math.abs(i - 8.5) > 0.8 && d >= 7 && d <= 15) {
+            const edge = Math.min(i - 3.5, 13.5 - i, d - 7, 15 - d);
             const a = edge < 1 ? 0.16 : 0.34;
             if (edge >= 1 || bayer(x, y) < 0.5) {
               alpha = a;

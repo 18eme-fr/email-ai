@@ -52,7 +52,16 @@ export interface Renderer {
    * Bloc de mur sur une case. `faces` indique quelles faces visibles dessiner
    * (sud-ouest = gauche, sud-est = droite) selon les voisins.
    */
-  drawWall(ctx: CanvasRenderingContext2D, kind: WallKind, sx: number, sy: number, faces: { left: boolean; right: boolean }, variant: number): void;
+  drawWall(
+    ctx: CanvasRenderingContext2D,
+    kind: WallKind,
+    sx: number,
+    sy: number,
+    faces: { left: boolean; right: boolean },
+    variant: number,
+    /** Présence d'un sol devant chaque face (ombre de pied de mur, lumière des fenêtres). Absent = sol supposé. */
+    floorAhead?: { left: boolean; right: boolean },
+  ): void;
   /** Objet posé au sol. `accent` = teinte (0-360) pour les stands et kakémonos. */
   drawProp(ctx: CanvasRenderingContext2D, kind: PropKind, sx: number, sy: number, accent: number, variant: number): void;
   /**

@@ -169,7 +169,8 @@ export function ExploreView({ run, scene, onInteraction, onChoose, onLeave }: Pr
           const s = project(x + 0.5, y + 0.5);
           const left = !world.cells[y + 1]?.[x]?.wall;
           const right = !world.cells[y]?.[x + 1]?.wall;
-          R.drawWall(c, cell.wall, ox + s.sx, oy + s.sy, { left, right }, (x + y) % 4);
+          const floorAhead = { left: !!world.cells[y + 1]?.[x]?.floor, right: !!world.cells[y]?.[x + 1]?.floor };
+          R.drawWall(c, cell.wall, ox + s.sx, oy + s.sy, { left, right }, (x + y) % 4, floorAhead);
         }
       // Objets et personnages, triés par profondeur
       type D = { depth: number; draw: () => void };

@@ -56,8 +56,9 @@ export const pixelRenderer: Renderer = {
     blit(ctx, floorSprite(kind, variant), sx, sy);
   },
 
-  drawWall(ctx, kind, sx, sy, faces, variant) {
-    blit(ctx, wallSprite(kind, faces, variant), sx, sy);
+  // `floorAhead` : paramètre facultatif en plus du contrat (voir wallSprite)
+  drawWall(ctx, kind, sx, sy, faces, variant, floorAhead?: { left: boolean; right: boolean }) {
+    blit(ctx, wallSprite(kind, faces, variant, floorAhead), sx, sy);
   },
 
   drawProp(ctx, kind, sx, sy, accent, variant) {
