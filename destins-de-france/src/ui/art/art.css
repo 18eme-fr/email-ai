@@ -728,20 +728,15 @@
 .art-card {
   position: relative;
   box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  padding: 6px 6px 0;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  box-shadow: 0 1px 2px color-mix(in srgb, var(--ink) 12%, transparent);
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--paper);
 }
 .art-card__picture {
-  position: relative;
-  flex: 1;
-  min-height: 0;
-  overflow: hidden;
-  border-radius: 3px;
+  position: absolute;
+  inset: 0;
 }
 .art-card__scene {
   position: absolute;
@@ -762,13 +757,18 @@
   stroke-opacity: 0.32;
   stroke-width: 1.4;
 }
+/* Légende manuscrite posée sur un bandeau de papier en bas de la vignette */
 .art-card__name {
-  display: block;
-  padding: 3px 4px 5px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 14px 10px 6px;
+  background: linear-gradient(to top, color-mix(in srgb, var(--surface) 88%, transparent) 40%, transparent);
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-style: italic;
   font-weight: 600;
-  font-size: 1.05em;
+  font-size: 1.1em;
   line-height: 1.1;
   color: var(--ink);
   white-space: nowrap;

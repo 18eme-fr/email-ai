@@ -7,17 +7,19 @@ import { H, W } from './sceneKit';
 export interface CityCardProps {
   city: CityId;
   locked?: boolean;
+  /** Largeur maximale en pixels (la carte est fluide, ratio 4:3). */
   size?: number;
 }
 
 const CROP_W = Math.round((H * 4) / 3);
 
-/** Vignette « carte postale » d'une ville, en plein jour ; voilée et cadenassée si verrouillée. */
+/** Vignette « carte postale » 4:3 d'une ville, en plein jour ; voilée et cadenassée si verrouillée. */
 export function CityCard(props: CityCardProps): JSX.Element {
-  const { city, locked = false, size = 240 } = props;
+  const { city, locked = false, size } = props;
   const info = CITIES[city];
   const x = Math.min(W - CROP_W, Math.max(0, info.focus - CROP_W / 2));
-  const style: CSSProperties = { width: size, height: Math.round(size * 0.75) };
+  // Fluide : occupe toute la largeur du conteneur ; `size` n'est qu'une largeur maximale
+  const style: CSSProperties | undefined = size ? { maxWidth: size } : undefined;
 
   return (
     <div
