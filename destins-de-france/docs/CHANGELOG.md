@@ -1,5 +1,14 @@
 # Journal des versions
 
+## 0.2.0 — 23 octobre 2026
+
+### Exploration pixel art (module secondaire)
+- Nouveau module `src/explore/` indépendant du moteur de vie, branché sur les mêmes données, le même journal et le même système de conséquences.
+- Scène prototype : le forum des métiers au gymnase du collège (15 ans), rattachée à l'événement d'orientation. Déplacement clavier (flèches, ZQSD), clic ou pavé tactile, collisions, personnes interactives (stands, psychologue de l'Éducation nationale, ami, parent), décisions prises sur place.
+- La scène est facultative (« Passer la scène », Échap, réglage pour la désactiver) et ignorée en mode automatique. Le temps de la vie est suspendu pendant la scène : l'âge n'avance jamais en marchant.
+- Rendu pixel art isométrique original (tuiles, murs, objets, personnages animés qui évoluent avec l'âge ; teinte de peau neutre unique).
+- Tests : collisions, accessibilité de chaque personne, conséquences appliquées une seule fois, cohérence des décisions avec l'événement.
+
 ## 0.1.0 — 23 octobre 2026
 
 ### Fonctionnalités

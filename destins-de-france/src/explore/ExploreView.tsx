@@ -157,7 +157,8 @@ export function ExploreView({ run, scene, onInteraction, onChoose, onLeave }: Pr
           const cell = world.cells[y]![x]!;
           if (!cell.floor) continue;
           const s = project(x + 0.5, y + 0.5);
-          R.drawFloor(c, cell.floor, ox + s.sx, oy + s.sy, (x * 7 + y * 13) % 4);
+          // Lignes de terrain continues : une rangée rouge et une colonne jaune (variantes 1 et 2 du lino).
+          R.drawFloor(c, cell.floor, ox + s.sx, oy + s.sy, cell.floor === 'lino' ? (y === 5 ? 1 : x === 6 ? 2 : 0) : (x * 7 + y * 13) % 4);
         }
       // Murs (fond de la pièce)
       for (let d = 0; d < world.width + world.height; d++)

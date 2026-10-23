@@ -17,7 +17,7 @@ import type { Settings, SimulationRun } from './types';
  * réaffichant, et tout le hasard passe par l'état `rngState`.
  */
 
-export const ENGINE_VERSION = '0.1.0';
+export const ENGINE_VERSION = '0.2.0';
 export const DEFAULT_SETTINGS: Settings = { format: 'standard', softMode: false, autoMode: false, explore: true };
 
 /** Probabilité qu'une année « ordinaire » contienne un événement aléatoire (rythme de jeu). */

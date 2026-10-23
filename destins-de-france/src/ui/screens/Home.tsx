@@ -25,7 +25,7 @@ export function Home({ hasSave, livesCount, format, onFormat, onBirth, onCities,
       <section className="home-hero">
         <Emblem size={150} />
         <div>
-          <p className="eyebrow">Simulateur de vie · prototype 0.1</p>
+          <p className="eyebrow">Simulateur de vie · prototype 0.2</p>
           <h1 className="home-title">
             Destins <em>de</em> France
           </h1>

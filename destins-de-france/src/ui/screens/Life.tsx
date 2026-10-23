@@ -326,7 +326,15 @@ export function Life({ run, speed, storageOk, onSpeed, onChoose, onSource, onHom
         <div className="story">
           <p className="chapter">{lifeStage(run.age)}</p>
           {run.pending ? (
-            <EventCard run={run} onChoose={onChoose} onSource={onSource} onExplore={() => onExplore(true)} />
+            exploring && sceneForEvent(run.pending.eventId) ? (
+              <div className="card panel">
+                <p>
+                  Vous êtes dans la scène « {run.pending.title} ». Le temps de la vie est suspendu jusqu'à votre décision.
+                </p>
+              </div>
+            ) : (
+              <EventCard run={run} onChoose={onChoose} onSource={onSource} onExplore={() => onExplore(true)} />
+            )
           ) : speed === 0 ? (
             <div className="card panel" style={{ textAlign: 'center' }}>
               <p>Le temps est suspendu. Relisez, consultez le journal, puis reprenez quand vous voulez.</p>
