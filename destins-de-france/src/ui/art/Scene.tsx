@@ -1,6 +1,37 @@
 import { useMemo, type ReactNode } from 'react';
 import './art.css';
 import { makeRng, pts, r1, useSvgId, type Pt } from './artUtils';
+import { CITIES, CityScene, type CityId } from './cities';
+import {
+  GY,
+  H,
+  HZ,
+  O_BACK,
+  O_FAR,
+  O_FORE,
+  O_MID,
+  O_NEAR,
+  PHASES,
+  PHASE_LABEL,
+  SEA,
+  W,
+  WaveLines,
+  WindowsLayer,
+  cloud,
+  hills,
+  lamp,
+  makeWaves,
+  palm,
+  phaseFor,
+  poplar,
+  ridge,
+  tree,
+  type Phase,
+  type Rng,
+  type Win,
+} from './sceneKit';
+
+export type { CityId } from './cities';
 
 export type SceneTerritory = 'metropole' | 'ville_moyenne' | 'petite_ville' | 'rural';
 export type SceneLandscape = 'plaine' | 'montagne' | 'littoral' | 'tropical';
@@ -11,33 +42,9 @@ export interface SceneProps {
   age: number;
   paused?: boolean;
   height?: number;
+  /** Mode « Villes » : remplace le décor générique par la silhouette d'une grande ville. */
+  city?: CityId;
 }
-
-type Phase = 'aube' | 'matin' | 'jour' | 'dore' | 'crepuscule' | 'nuit';
-const PHASES: Phase[] = ['aube', 'matin', 'jour', 'dore', 'crepuscule', 'nuit'];
-
-/** L'âge comme heure d'une journée de vie. */
-function phaseFor(age: number): Phase {
-  if (age < 12) return 'aube';
-  if (age < 30) return 'matin';
-  if (age < 50) return 'jour';
-  if (age < 70) return 'dore';
-  if (age < 85) return 'crepuscule';
-  return 'nuit';
-}
-
-const W = 1200;
-const H = 320;
-const HZ = 232; // ligne d'horizon des terres
-const GY = 266; // pied des bâtiments du plan médian
-const SEA = 206; // horizon marin
-
-// Opacités des plans successifs : perspective atmosphérique
-const O_FAR = 0.15;
-const O_BACK = 0.26;
-const O_MID = 0.48;
-const O_NEAR = 0.74;
-const O_FORE = 0.9;
 
 /** Position du soleil (et de la lune la nuit) selon le moment. */
 const SUN: Record<Phase, Pt> = {
@@ -55,30 +62,13 @@ const TERRITORY_LABEL: Record<SceneTerritory, string> = {
   petite_ville: 'Une petite ville',
   rural: 'Un village à la campagne',
 };
+
 const LANDSCAPE_LABEL: Record<SceneLandscape, string> = {
   plaine: 'dans la plaine',
   montagne: 'au pied des montagnes',
   littoral: 'au bord de la mer',
   tropical: "entre volcan et océan Indien",
 };
-const PHASE_LABEL: Record<Phase, string> = {
-  aube: "à l'aube",
-  matin: 'au matin',
-  jour: 'en plein jour',
-  dore: "en fin d'après-midi",
-  crepuscule: 'au crépuscule',
-  nuit: 'sous une nuit étoilée',
-};
-
-interface Win {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  lit: boolean;
-  delay: number;
-  blink: boolean;
-}
 
 interface Built {
   far: ReactNode[];
@@ -92,7 +82,6 @@ interface Built {
   extra: ReactNode[];
 }
 
-type Rng = () => number;
 
 function emptyBuilt(): Built {
   return { far: [], mid: [], details: [], near: [], windows: [], under: [], extra: [] };
@@ -102,42 +91,12 @@ function addWindow(b: Built, rnd: Rng, x: number, y: number, w: number, h: numbe
   b.windows.push({ x, y, w, h, lit: rnd() < litRate, delay: r1(rnd() * 2.4), blink: rnd() < 0.06 });
 }
 
-/** Arbre feuillu : tronc et houppier en grappe de cercles. */
-function tree(key: string, x: number, base: number, size: number, rnd: Rng): ReactNode {
-  const blobs = Array.from({ length: 5 }, (_, i) => {
-    const ang = (i / 5) * Math.PI * 2 + rnd();
-    return (
-      <circle
-        key={i}
-        cx={r1(x + Math.cos(ang) * size * 0.42)}
-        cy={r1(base - size * 1.25 + Math.sin(ang) * size * 0.3)}
-        r={r1(size * (0.42 + rnd() * 0.18))}
-      />
-    );
-  });
-  return (
-    <g key={key}>
-      <rect x={r1(x - size * 0.07)} y={r1(base - size * 0.9)} width={r1(size * 0.14)} height={r1(size * 0.9)} />
-      <circle cx={x} cy={r1(base - size * 1.3)} r={r1(size * 0.55)} />
-      {blobs}
-    </g>
-  );
-}
-
-/** Peuplier / cyprès : silhouette fuselée. */
-function poplar(key: string, x: number, base: number, h: number): ReactNode {
-  return <ellipse key={key} cx={x} cy={r1(base - h / 2)} rx={r1(h * 0.16)} ry={r1(h / 2)} />;
-}
-
-function lamp(key: string, x: number, base: number, b: Built): ReactNode {
-  b.windows.push({ x: x + 1, y: base - 46, w: 5, h: 4, lit: true, delay: 0.2, blink: false });
-  return (
-    <g key={key}>
-      <rect x={x} y={base - 44} width={2} height={44} />
-      <path d={`M${x + 1} ${base - 44}q3-4 7-2`} fill="none" strokeWidth={2} className="art-scene__stroke" />
-      <rect x={x + 3} y={base - 47} width={7} height={3} rx={1} />
-    </g>
-  );
+/** Silhouettes de décor (sans ciel) d'un paysage générique. */
+interface Land {
+  back: ReactNode[];
+  front: ReactNode[];
+  extra: ReactNode[];
+  snowRidge: Pt[] | null;
 }
 
 // —— Territoires ———————————————————————————————————————————————
@@ -216,7 +175,7 @@ function buildMetropole(x0: number, x1: number, rnd: Rng): Built {
     </g>,
   );
   for (let x = x0 + 40, i = 0; x < x1 - 20; x += 120 + rnd() * 60, i++) {
-    b.near.push(i % 2 === 0 ? tree(`tr${i}`, x, GY + 6, 22, rnd) : lamp(`l${i}`, x, GY + 6, b));
+    b.near.push(i % 2 === 0 ? tree(`tr${i}`, x, GY + 6, 22, rnd) : lamp(`l${i}`, x, GY + 6, b.windows));
   }
   return b;
 }
@@ -375,7 +334,7 @@ function buildPetiteVille(x0: number, x1: number, rnd: Rng): Built {
     if (Math.abs(x - hx) < 40) continue;
     b.near.push(tree(`pl${i}`, x, GY + 18, 26 + rnd() * 6, rnd));
   }
-  for (let x = x0 + 20, i = 0; x < x1; x += 180, i++) b.near.push(lamp(`l${i}`, x + 70, GY + 18, b));
+  for (let x = x0 + 20, i = 0; x < x1; x += 180, i++) b.near.push(lamp(`l${i}`, x + 70, GY + 18, b.windows));
   return b;
 }
 
@@ -465,76 +424,196 @@ function buildRural(x0: number, x1: number, rnd: Rng): Built {
 
 // —— Paysages ———————————————————————————————————————————————————
 
-/** Crête montagneuse : enveloppe de pics triangulaires légèrement bruitée. */
-function ridge(rnd: Rng, base: number, peaks: number, minH: number, maxH: number): Pt[] {
-  const list = Array.from({ length: peaks }, (_, i) => ({
-    c: -60 + ((W + 120) * (i + 0.2 + rnd() * 0.6)) / peaks,
-    h: minH + rnd() * (maxH - minH),
-    s: 0.45 + rnd() * 0.5,
-  }));
-  const out: Pt[] = [[-20, H]];
-  for (let x = -20; x <= W + 20; x += 10) {
-    let y = 0;
-    for (const p of list) y = Math.max(y, p.h - Math.abs(x - p.c) * p.s);
-    out.push([x, base - y + rnd() * 3.5]);
+// —— Paysages génériques ————————————————————————————————————————————
+
+function buildLand(landscape: SceneLandscape, uid: string): Land {
+  const rnd = makeRng(landscape.length * 131 + 7);
+  const back: ReactNode[] = [];
+  const front: ReactNode[] = [];
+  const extra: ReactNode[] = [];
+  let snowRidge: Pt[] | null = null;
+  if (landscape === 'montagne') {
+    snowRidge = ridge(rnd, HZ + 10, 7, 70, 160);
+    back.push(<polygon key="r1" points={pts(snowRidge)} opacity={O_FAR} />);
+    front.push(<polygon key="r2" points={pts(ridge(rnd, HZ + 18, 9, 30, 82))} />);
+  } else if (landscape === 'plaine') {
+    back.push(<polygon key="h1" points={pts(hills(HZ - 4, 9, 0.006, 1.2))} opacity={O_FAR} />);
+    front.push(<polygon key="h2" points={pts(hills(HZ + 6, 7, 0.009, 3.1))} />);
+    for (let x = 20, i = 0; x < W; x += 34 + rnd() * 60, i++) {
+      front.push(poplar(`pt${i}`, x, HZ + 8 - rnd() * 6, 12 + rnd() * 10));
+    }
+  } else if (landscape === 'littoral') {
+    back.push(<polygon key="cote" points={pts(hills(SEA + 2, 8, 0.01, 0.4).map(([x, y]) => [x * 0.5, y] as Pt))} opacity={O_FAR} />);
+    // Cap rocheux et phare
+    const lx = 1092;
+    const ly = 214;
+    extra.push(
+      <g key="cap" className="art-scene__silhouette">
+        <path d={`M900 ${H}L940 252Q990 214 1050 ${ly}L1220 210L1220 ${H}Z`} opacity={O_NEAR} />
+        <g opacity={O_NEAR}>
+          <polygon points={pts([[lx - 11, ly], [lx + 11, ly], [lx + 7, ly - 72], [lx - 7, ly - 72]])} />
+          <rect x={lx - 11} y={ly - 76} width={22} height={4} />
+          <rect x={lx - 6} y={ly - 90} width={12} height={14} />
+          <polygon points={pts([[lx - 8, ly - 90], [lx, ly - 99], [lx + 8, ly - 90]])} />
+          <rect x={lx - 34} y={ly - 14} width={22} height={14} />
+          <polygon points={pts([[lx - 36, ly - 14], [lx - 23, ly - 24], [lx - 10, ly - 14]])} />
+        </g>
+        <rect x={lx - 9} y={ly - 54} width={16} height={5} className="art-scene__band" />
+        <rect x={lx - 8} y={ly - 30} width={17} height={5} className="art-scene__band" />
+        <rect x={lx - 4} y={ly - 88} width={8} height={10} className="art-scene__light art-scene__light--always" />
+        <polygon
+          points={pts([[lx, ly - 83], [lx - 420, ly - 130], [lx - 420, ly - 40]])}
+          className="art-scene__beam"
+          style={{ fill: `url(#${uid}-beam)` }}
+        />
+      </g>,
+    );
+  } else {
+    // Volcan au cratère fumant, massif plus lointain
+    back.push(<polygon key="massif" points={pts(ridge(rnd, SEA + 4, 4, 60, 120).map(([x, y]) => [x * 0.6 + 520, y] as Pt))} opacity={O_FAR} />);
+    const vc = 340;
+    const top = 88;
+    const half = 420;
+    const cone: Pt[] = [[vc - half, SEA + 6]];
+    for (let x = vc - half; x <= vc + half; x += 12) {
+      const d = Math.abs(x - vc);
+      const y = d < 26 ? top + 5 - (d / 26) * 5 : top + (SEA + 6 - top) * Math.pow((d - 26) / (half - 26), 0.62);
+      cone.push([x, y]);
+    }
+    cone.push([vc + half, SEA + 6]);
+    front.push(<polygon key="volcan" points={pts(cone)} />);
+    extra.push(
+      <g key="fumee" transform={`translate(${vc} ${top - 4})`}>
+        {[0, 1, 2, 3].map((i) => (
+          <circle key={i} cx={i * 9 - 8} cy={-i * 14} r={8 + i * 5} className="art-scene__smoke" style={{ animationDelay: `${-i * 3}s` }} />
+        ))}
+      </g>,
+    );
+    // Rivage de sable et palmiers
+    extra.push(
+      <g key="rivage" className="art-scene__silhouette">
+        <path d={`M930 ${H}Q1010 280 1220 274L1220 ${H}Z`} opacity={O_NEAR} />
+        <g opacity={O_FORE}>
+          {palm('pa1', 1030, 290, 92, 26)}
+          {palm('pa2', 1112, 286, 118, -18)}
+          {palm('pa3', 1176, 290, 76, 22)}
+        </g>
+      </g>,
+    );
   }
-  out.push([W + 20, H]);
-  return out;
+  return { back, front, extra, snowRidge };
 }
 
-function hills(base: number, amp: number, f: number, phase: number): Pt[] {
-  const out: Pt[] = [[-20, H]];
-  for (let x = -20; x <= W + 20; x += 20) {
-    out.push([x, base - amp * (0.6 * Math.sin(x * f + phase) + 0.4 * Math.sin(x * f * 2.7 + phase * 1.7) + 1)]);
+function buildTerritory(territory: SceneTerritory, landscape: SceneLandscape, coastal: boolean): Built {
+  const x1 = coastal ? 830 : W + 20;
+  const rnd = makeRng(territory.length * 977 + landscape.length * 31);
+  switch (territory) {
+    case 'metropole':
+      return buildMetropole(-10, x1, rnd);
+    case 'ville_moyenne':
+      return buildVilleMoyenne(-10, x1, rnd);
+    case 'petite_ville':
+      return buildPetiteVille(-10, x1, rnd);
+    case 'rural':
+      return buildRural(-10, x1, rnd);
   }
-  out.push([W + 20, H]);
-  return out;
 }
 
-/** Palmier : stipe courbe et palmes en croissants. */
-function palm(key: string, x: number, base: number, h: number, lean: number): ReactNode {
-  const tx = x + lean;
-  const ty = base - h;
-  const fronds = Array.from({ length: 7 }, (_, i) => {
-    const ang = Math.PI * (1.05 + (i / 6) * 0.9);
-    const len = h * (0.42 + (i % 2) * 0.1);
-    const ex = tx + Math.cos(ang) * len;
-    const ey = ty + Math.sin(ang) * len * 0.55 + len * 0.45;
-    const mx = tx + Math.cos(ang) * len * 0.5;
-    const my = ty + Math.sin(ang) * len * 0.6 - 6;
-    return <path key={i} d={`M${r1(tx)} ${r1(ty)}Q${r1(mx)} ${r1(my - 11)} ${r1(ex)} ${r1(ey)}Q${r1(mx)} ${r1(my + 5)} ${r1(tx)} ${r1(ty)}Z`} />;
-  });
-  return (
-    <g key={key}>
-      <path
-        d={`M${x - 3} ${base}Q${r1(x + lean * 0.1)} ${r1(base - h * 0.6)} ${r1(tx - 1.5)} ${r1(ty)}L${r1(tx + 1.5)} ${r1(ty)}Q${r1(x + lean * 0.1 + 4)} ${r1(base - h * 0.6)} ${x + 3} ${base}Z`}
-      />
-      {fronds}
-    </g>
-  );
-}
+/** Décor générique : territoire posé sur son paysage. */
+function GenericLayers(props: { territory: SceneTerritory; landscape: SceneLandscape; uid: string; sunX: number; backing: { fill: string } }): JSX.Element {
+  const { territory, landscape, uid, sunX, backing } = props;
+  const coastal = landscape === 'littoral' || landscape === 'tropical';
+  const rural = territory === 'rural';
+  const land = useMemo(() => buildLand(landscape, uid), [landscape, uid]);
+  const built = useMemo(() => buildTerritory(territory, landscape, coastal), [territory, landscape, coastal]);
+  const waves = useMemo(() => (coastal ? makeWaves(55, SEA, H, 22) : []), [coastal]);
+  const groundPath = coastal
+    ? `M-20 ${GY - 2}L780 ${GY - 2}Q860 ${GY + 4} 900 ${H}L-20 ${H}Z`
+    : `M-20 ${GY - 1}Q300 ${GY - 5} 600 ${GY - 1}T1220 ${GY - 2}L1220 ${H}L-20 ${H}Z`;
 
-// —— Ciel ————————————————————————————————————————————————————————
-
-function cloud(key: string, x: number, y: number, s: number, rnd: Rng, dur: number): ReactNode {
-  const puffs = Array.from({ length: 5 }, (_, i) => (
-    <ellipse key={i} cx={r1((i - 2) * 22 + rnd() * 8)} cy={r1(-Math.abs(i - 2) * -4 - rnd() * 10)} rx={r1(22 + rnd() * 14)} ry={r1(10 + rnd() * 8)} />
-  ));
   return (
-    <g key={key} transform={`translate(${r1(x)} ${r1(y)}) scale(${r1(s * 10) / 10})`}>
-      <g className="art-scene__cloud" style={{ animationDuration: `${dur}s`, animationDelay: `${-r1(dur * rnd())}s` }}>
-        {puffs}
-        <rect x={-62} y={-2} width={124} height={10} rx={5} />
+    <g>
+      <defs>
+        <clipPath id={`${uid}-land`}>
+          <path d={`M-20 ${HZ - 12}L800 ${HZ - 12}Q850 ${GY} 900 ${H}L-20 ${H}Z`} />
+        </clipPath>
+        {land.snowRidge ? (
+          <clipPath id={`${uid}-snow`}>
+            <polygon points={pts(land.snowRidge)} />
+          </clipPath>
+        ) : null}
+      </defs>
+      <g className="art-scene__silhouette">{land.back}</g>
+      {land.snowRidge ? (
+        <g clipPath={`url(#${uid}-snow)`} className="art-scene__snow">
+          <rect x={0} y={0} width={W} height={HZ - 92} />
+        </g>
+      ) : null}
+
+      {coastal ? (
+        <g>
+          <rect x={0} y={SEA} width={W} height={H - SEA} className="art-scene__sea" />
+          <rect x={0} y={SEA} width={W} height={1.4} className="art-scene__sea-line" />
+          <g className="art-scene__glint-wrap" style={{ transform: `translateX(${sunX}px)` }}>
+            {[0, 1, 2, 3, 4, 5].map((i) => (
+              <rect key={i} x={-(30 - i * 3)} y={SEA + 4 + i * 9} width={60 - i * 6} height={1.6} rx={0.8} className="art-scene__glint" />
+            ))}
+          </g>
+          <WaveLines waves={waves} />
+        </g>
+      ) : null}
+
+      {/* Chaque plan translucide repose sur un fond opaque couleur ciel : rien ne transparaît derrière */}
+      <g style={backing}>{land.front}</g>
+      <g className="art-scene__silhouette" opacity={O_BACK}>
+        {land.front}
       </g>
+
+      <g clipPath={rural && coastal ? `url(#${uid}-land)` : undefined}>
+        <g className="art-scene__silhouette" opacity={rural ? 1 : O_FAR + 0.06}>
+          {built.far}
+        </g>
+        {rural ? <g className="art-scene__furrows">{built.details}</g> : null}
+        {built.under}
+      </g>
+      <g style={backing}>{built.mid}</g>
+      <g className="art-scene__silhouette" opacity={O_MID}>
+        {built.mid}
+      </g>
+      {rural ? null : <g className="art-scene__details">{built.details}</g>}
+      <WindowsLayer windows={built.windows} />
+
+      {land.extra}
+
+      {rural ? null : <path d={groundPath} style={backing} />}
+      {rural ? null : <path d={groundPath} className="art-scene__silhouette" opacity={O_NEAR} />}
+      <g className="art-scene__silhouette" opacity={O_FORE}>
+        {built.near}
+      </g>
+      {built.extra}
+      {rural ? null : <rect x={-20} y={H - 14} width={W + 40} height={14} className="art-scene__silhouette" opacity={O_FORE} />}
     </g>
   );
 }
 
-export function Scene(props: SceneProps): JSX.Element {
-  const { territory, landscape, age, paused = false, height = 240 } = props;
+// —— Ciel et composition ————————————————————————————————————————————
+
+/** Position du soleil selon le moment. */
+const SUN_POS: Record<Phase, Pt> = SUN;
+
+export interface SceneCanvasProps extends SceneProps {
+  /** Cadrage particulier (ex. carte postale). */
+  viewBox?: string;
+  /** Illustration purement décorative (l'élément parent porte le libellé). */
+  decorative?: boolean;
+  className?: string;
+}
+
+/** Scène complète ; `Scene` en est la version publique. */
+export function SceneCanvas(props: SceneCanvasProps): JSX.Element {
+  const { territory, landscape, age, paused = false, height = 240, city, viewBox, decorative = false, className } = props;
   const phase = phaseFor(age);
   const uid = useSvgId('sc');
-  const coastal = landscape === 'littoral' || landscape === 'tropical';
 
   const sky = useMemo(() => {
     const rnd = makeRng(91);
@@ -555,129 +634,24 @@ export function Scene(props: SceneProps): JSX.Element {
     return { stars, clouds };
   }, []);
 
-  const land = useMemo(() => {
-    const rnd = makeRng(landscape.length * 131 + 7);
-    const back: ReactNode[] = [];
-    const front: ReactNode[] = [];
-    const extra: ReactNode[] = [];
-    let snowRidge: Pt[] | null = null;
-    if (landscape === 'montagne') {
-      snowRidge = ridge(rnd, HZ + 10, 7, 70, 160);
-      back.push(<polygon key="r1" points={pts(snowRidge)} opacity={O_FAR} />);
-      front.push(<polygon key="r2" points={pts(ridge(rnd, HZ + 18, 9, 30, 82))} />);
-    } else if (landscape === 'plaine') {
-      back.push(<polygon key="h1" points={pts(hills(HZ - 4, 9, 0.006, 1.2))} opacity={O_FAR} />);
-      front.push(<polygon key="h2" points={pts(hills(HZ + 6, 7, 0.009, 3.1))} />);
-      for (let x = 20, i = 0; x < W; x += 34 + rnd() * 60, i++) {
-        front.push(poplar(`pt${i}`, x, HZ + 8 - rnd() * 6, 12 + rnd() * 10));
-      }
-    } else if (landscape === 'littoral') {
-      back.push(<polygon key="cote" points={pts(hills(SEA + 2, 8, 0.01, 0.4).map(([x, y]) => [x * 0.5, y] as Pt))} opacity={O_FAR} />);
-      // Cap rocheux et phare
-      const lx = 1092;
-      const ly = 214;
-      extra.push(
-        <g key="cap" className="art-scene__silhouette">
-          <path d={`M900 ${H}L940 252Q990 214 1050 ${ly}L1220 210L1220 ${H}Z`} opacity={O_NEAR} />
-          <g opacity={O_NEAR}>
-            <polygon points={pts([[lx - 11, ly], [lx + 11, ly], [lx + 7, ly - 72], [lx - 7, ly - 72]])} />
-            <rect x={lx - 11} y={ly - 76} width={22} height={4} />
-            <rect x={lx - 6} y={ly - 90} width={12} height={14} />
-            <polygon points={pts([[lx - 8, ly - 90], [lx, ly - 99], [lx + 8, ly - 90]])} />
-            <rect x={lx - 34} y={ly - 14} width={22} height={14} />
-            <polygon points={pts([[lx - 36, ly - 14], [lx - 23, ly - 24], [lx - 10, ly - 14]])} />
-          </g>
-          <rect x={lx - 9} y={ly - 54} width={16} height={5} className="art-scene__band" />
-          <rect x={lx - 8} y={ly - 30} width={17} height={5} className="art-scene__band" />
-          <rect x={lx - 4} y={ly - 88} width={8} height={10} className="art-scene__light art-scene__light--always" />
-          <polygon
-            points={pts([[lx, ly - 83], [lx - 420, ly - 130], [lx - 420, ly - 40]])}
-            className="art-scene__beam"
-            style={{ fill: `url(#${uid}-beam)` }}
-          />
-        </g>,
-      );
-    } else {
-      // Volcan au cratère fumant, massif plus lointain
-      back.push(<polygon key="massif" points={pts(ridge(rnd, SEA + 4, 4, 60, 120).map(([x, y]) => [x * 0.6 + 520, y] as Pt))} opacity={O_FAR} />);
-      const vc = 340;
-      const top = 88;
-      const half = 420;
-      const cone: Pt[] = [[vc - half, SEA + 6]];
-      for (let x = vc - half; x <= vc + half; x += 12) {
-        const d = Math.abs(x - vc);
-        const y = d < 26 ? top + 5 - (d / 26) * 5 : top + (SEA + 6 - top) * Math.pow((d - 26) / (half - 26), 0.62);
-        cone.push([x, y]);
-      }
-      cone.push([vc + half, SEA + 6]);
-      front.push(<polygon key="volcan" points={pts(cone)} />);
-      extra.push(
-        <g key="fumee" className="art-scene__smoke-wrap" transform={`translate(${vc} ${top - 4})`}>
-          {[0, 1, 2, 3].map((i) => (
-            <circle key={i} cx={i * 9 - 8} cy={-i * 14} r={8 + i * 5} className="art-scene__smoke" style={{ animationDelay: `${-i * 3}s` }} />
-          ))}
-        </g>,
-      );
-      // Rivage de sable et palmiers
-      extra.push(
-        <g key="rivage" className="art-scene__silhouette">
-          <path d={`M930 ${H}Q1010 280 1220 274L1220 ${H}Z`} opacity={O_NEAR} />
-          <g opacity={O_FORE}>
-            {palm('pa1', 1030, 290, 92, 26)}
-            {palm('pa2', 1112, 286, 118, -18)}
-            {palm('pa3', 1176, 290, 76, 22)}
-          </g>
-        </g>,
-      );
-    }
-    return { back, front, extra, snowRidge };
-  }, [landscape, uid]);
-
-  const built = useMemo(() => {
-    const x1 = coastal ? 830 : W + 20;
-    const rnd = makeRng(territory.length * 977 + landscape.length * 31);
-    switch (territory) {
-      case 'metropole':
-        return buildMetropole(-10, x1, rnd);
-      case 'ville_moyenne':
-        return buildVilleMoyenne(-10, x1, rnd);
-      case 'petite_ville':
-        return buildPetiteVille(-10, x1, rnd);
-      case 'rural':
-        return buildRural(-10, x1, rnd);
-    }
-  }, [territory, landscape, coastal]);
-
-  const waves = useMemo(() => {
-    if (!coastal) return [];
-    const rnd = makeRng(55);
-    return Array.from({ length: 22 }, (_, i) => {
-      const t = rnd();
-      const y = SEA + 4 + t * t * (H - SEA - 8);
-      const len = 14 + t * 60;
-      return { key: i, x: r1(rnd() * W), y: r1(y), len: r1(len), d: r1(rnd() * 6), w: r1(0.6 + t * 1.4) };
-    });
-  }, [coastal]);
-
-  const [sunX, sunY] = SUN[phase];
-  const rural = territory === 'rural';
-  const groundPath = coastal
-    ? `M-20 ${GY - 2}L780 ${GY - 2}Q860 ${GY + 4} 900 ${H}L-20 ${H}Z`
-    : `M-20 ${GY - 1}Q300 ${GY - 5} 600 ${GY - 1}T1220 ${GY - 2}L1220 ${H}L-20 ${H}Z`;
-
+  const [sunX, sunY] = SUN_POS[phase];
   const backing = { fill: `url(#${uid}-sky-${phase})` };
-  const classes = ['art-scene', `art-scene--${phase}`, paused ? 'art-scene--paused' : ''].filter(Boolean).join(' ');
-  const label = `${TERRITORY_LABEL[territory]} ${LANDSCAPE_LABEL[landscape]}, ${PHASE_LABEL[phase]}`;
+  const classes = ['art-scene', `art-scene--${phase}`, city ? `art-scene--city-${city}` : '', paused ? 'art-scene--paused' : '', className ?? '']
+    .filter(Boolean)
+    .join(' ');
+  const label = city
+    ? `${CITIES[city].place}, ${PHASE_LABEL[phase]}`
+    : `${TERRITORY_LABEL[territory]} ${LANDSCAPE_LABEL[landscape]}, ${PHASE_LABEL[phase]}`;
+  const a11y = decorative ? { 'aria-hidden': true } : { role: 'img', 'aria-label': label };
 
   return (
     <svg
       className={classes}
-      viewBox={`0 0 ${W} ${H}`}
+      viewBox={viewBox ?? `0 0 ${W} ${H}`}
       preserveAspectRatio="xMidYMid slice"
       width="100%"
       height={height}
-      role="img"
-      aria-label={label}
+      {...a11y}
     >
       <defs>
         {PHASES.map((p) => (
@@ -699,14 +673,6 @@ export function Scene(props: SceneProps): JSX.Element {
           <circle cx={0} cy={0} r={15} fill="#fff" />
           <circle cx={7} cy={-4} r={13} fill="#000" />
         </mask>
-        <clipPath id={`${uid}-land`}>
-          <path d={`M-20 ${HZ - 12}L800 ${HZ - 12}Q850 ${GY} 900 ${H}L-20 ${H}Z`} />
-        </clipPath>
-        {land.snowRidge ? (
-          <clipPath id={`${uid}-snow`}>
-            <polygon points={pts(land.snowRidge)} />
-          </clipPath>
-        ) : null}
       </defs>
 
       {/* Ciels superposés : seul celui du moment est opaque, les autres s'effacent en douceur */}
@@ -737,84 +703,15 @@ export function Scene(props: SceneProps): JSX.Element {
 
       <g className="art-scene__clouds">{sky.clouds}</g>
 
-      <g className="art-scene__silhouette">{land.back}</g>
-      {land.snowRidge ? (
-        <g clipPath={`url(#${uid}-snow)`} className="art-scene__snow">
-          <rect x={0} y={0} width={W} height={HZ - 92} />
-        </g>
-      ) : null}
-
-      {coastal ? (
-        <g>
-          <rect x={0} y={SEA} width={W} height={H - SEA} className="art-scene__sea" />
-          <rect x={0} y={SEA} width={W} height={1.4} className="art-scene__sea-line" />
-          <g className="art-scene__glint-wrap" style={{ transform: `translateX(${sunX}px)` }}>
-            {[0, 1, 2, 3, 4, 5].map((i) => (
-              <rect key={i} x={-(30 - i * 3)} y={SEA + 4 + i * 9} width={60 - i * 6} height={1.6} rx={0.8} className="art-scene__glint" />
-            ))}
-          </g>
-          <g className="art-scene__waves">
-            {waves.map((w) => (
-              <path
-                key={w.key}
-                d={`M${w.x} ${w.y}q${r1(w.len / 2)} -2 ${w.len} 0`}
-                strokeWidth={w.w}
-                className="art-scene__wave"
-                style={{ animationDelay: `${-w.d}s` }}
-              />
-            ))}
-          </g>
-        </g>
-      ) : null}
-
-      {/* Chaque plan translucide repose sur un fond opaque couleur ciel : rien ne transparaît derrière */}
-      <g style={backing}>{land.front}</g>
-      <g className="art-scene__silhouette" opacity={O_BACK}>
-        {land.front}
-      </g>
-
-      <g clipPath={rural && coastal ? `url(#${uid}-land)` : undefined}>
-        <g className="art-scene__silhouette" opacity={rural ? 1 : O_FAR + 0.06}>
-          {built.far}
-        </g>
-        {rural ? <g className="art-scene__furrows">{built.details}</g> : null}
-        {built.under}
-      </g>
-      <g style={backing}>{built.mid}</g>
-      <g className="art-scene__silhouette" opacity={O_MID}>
-        {built.mid}
-      </g>
-      {rural ? null : <g className="art-scene__details">{built.details}</g>}
-      <g className="art-scene__panes">
-        {built.windows.map((w, i) => (
-          <rect key={i} x={r1(w.x)} y={r1(w.y)} width={r1(w.w)} height={r1(w.h)} />
-        ))}
-      </g>
-      <g>
-        {built.windows
-          .filter((w) => w.lit)
-          .map((w, i) => (
-            <rect
-              key={i}
-              x={r1(w.x)}
-              y={r1(w.y)}
-              width={r1(w.w)}
-              height={r1(w.h)}
-              className={w.blink ? 'art-scene__light art-scene__light--blink' : 'art-scene__light'}
-              style={{ transitionDelay: `${w.delay}s`, animationDelay: `${-w.delay * 3}s` }}
-            />
-          ))}
-      </g>
-
-      {land.extra}
-
-      {rural ? null : <path d={groundPath} style={backing} />}
-      {rural ? null : <path d={groundPath} className="art-scene__silhouette" opacity={O_NEAR} />}
-      <g className="art-scene__silhouette" opacity={O_FORE}>
-        {built.near}
-      </g>
-      {built.extra}
-      {rural ? null : <rect x={-20} y={H - 14} width={W + 40} height={14} className="art-scene__silhouette" opacity={O_FORE} />}
+      {city ? (
+        <CityScene city={city} age={age} uid={uid} sunX={sunX} backing={backing} />
+      ) : (
+        <GenericLayers territory={territory} landscape={landscape} uid={uid} sunX={sunX} backing={backing} />
+      )}
     </svg>
   );
+}
+
+export function Scene(props: SceneProps): JSX.Element {
+  return <SceneCanvas {...props} />;
 }
