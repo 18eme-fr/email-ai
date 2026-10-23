@@ -247,3 +247,15 @@ export function cached(key: string, make: () => { pix: Pix; ax: number; ay: numb
 export function blit(ctx: CanvasRenderingContext2D, s: Sprite, sx: number, sy: number): void {
   ctx.drawImage(s.img, Math.round(sx) - s.ax, Math.round(sy) - s.ay);
 }
+
+const BAYER4 = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5];
+
+/** Seuil de tramage ordonné 4×4 dans [0, 1) : `level > bayer(x, y)` → pixel allumé. */
+export function bayer(x: number, y: number): number {
+  return ((BAYER4[(((y % 4) + 4) % 4) * 4 + (((x % 4) + 4) % 4)] ?? 0) + 0.5) / 16;
+}
+
+/** Choisit entre deux couleurs selon un niveau 0-1, avec tramage discret. */
+export function dith(x: number, y: number, level: number, a: RGBA, b: RGBA): RGBA {
+  return level > bayer(x, y) ? b : a;
+}

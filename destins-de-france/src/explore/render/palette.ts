@@ -1,74 +1,84 @@
 import { hex, hsl, type RGBA } from './pixelKit';
 
 /**
- * Palette contemporaine et chaleureuse. Chaque matériau a 3 à 4 tons
- * (clair, base, ombre, creux) ; la lumière vient du haut-gauche.
+ * Palette naturelle et nuancée (peu saturée, tons intermédiaires), chaude
+ * et lumineuse. Chaque matériau a 5 tons : reflet, clair, base, ombre, creux.
+ * La lumière vient du haut-gauche.
  */
 
 export interface Ramp {
+  hi: RGBA;
   light: RGBA;
   base: RGBA;
   dark: RGBA;
   deep: RGBA;
 }
 
-function ramp(light: string, base: string, dark: string, deep: string): Ramp {
-  return { light: hex(light), base: hex(base), dark: hex(dark), deep: hex(deep) };
+function ramp(hi: string, light: string, base: string, dark: string, deep: string): Ramp {
+  return { hi: hex(hi), light: hex(light), base: hex(base), dark: hex(dark), deep: hex(deep) };
 }
 
-/** Rampe dérivée d'une teinte (vêtements, stands, kakémonos). */
-export function hueRamp(h: number, s = 0.5, l = 0.5): Ramp {
+/** Rampe dérivée d'une teinte (vêtements, stands, kakémonos) : ombres plus chaudes, reflets plus froids. */
+export function hueRamp(h: number, s = 0.42, l = 0.5): Ramp {
   return {
-    light: hsl(h, s * 0.9, Math.min(0.85, l + 0.13)),
+    hi: hsl(h - 4, s * 0.7, Math.min(0.9, l + 0.24)),
+    light: hsl(h - 2, s * 0.85, Math.min(0.84, l + 0.12)),
     base: hsl(h, s, l),
-    dark: hsl(h + 6, s * 1.05, l - 0.13),
-    deep: hsl(h + 12, s * 1.1, Math.max(0.1, l - 0.25)),
+    dark: hsl(h + 8, s * 0.95, l - 0.12),
+    deep: hsl(h + 16, s * 0.9, Math.max(0.1, l - 0.24)),
   };
 }
 
-export const INK = hex('#2b2233');
-export const WHITE = hex('#f7f3ea');
+export const INK = hex('#2a2430');
+export const WHITE = hex('#f4f0e8');
+export const PAPER = hex('#ebe6dc');
 
 export const P = {
-  lino: ramp('#c2cdbd', '#adbaa9', '#97a594', '#7f8d7d'),
-  parquet: ramp('#d9a56c', '#c48e57', '#aa7643', '#8a5d33'),
-  carrelage: ramp('#ece7de', '#dcd5c9', '#c6bdaf', '#aca291'),
-  herbe: ramp('#93c26f', '#77ab5a', '#5f914a', '#4a763c'),
-  trottoir: ramp('#bdbab3', '#a9a6a0', '#94918b', '#7c7974'),
-  tapis: ramp('#c86a5c', '#b0544a', '#8f413c', '#6d3133'),
-  mur: ramp('#efe6d6', '#e3d7c3', '#cbbca4', '#a99a83'),
-  soubassement: ramp('#a3bcae', '#8eaa9b', '#789585', '#5f7a6c'),
-  plinthe: ramp('#6c6070', '#5a4f5e', '#483f4c', '#352e39'),
-  bois: ramp('#d1a272', '#b78655', '#986b41', '#76512f'),
-  boisSombre: ramp('#9c7354', '#7f5b40', '#664731', '#4c3424'),
-  metal: ramp('#c9ced3', '#a7adb4', '#868d96', '#646a73'),
-  liege: ramp('#d8aa72', '#c4925c', '#a87946', '#8a6038'),
-  terre: ramp('#e08a5c', '#c86d44', '#a55635', '#7f4029'),
-  feuille: ramp('#8cc56b', '#62a552', '#468742', '#336834'),
-  verre: ramp('#e4f3f6', '#b4dbe6', '#86bfd2', '#5e98ad'),
-  sortie: ramp('#5fcf8a', '#2f9e5b', '#227a45', '#175733'),
-  orange: ramp('#f2a65a', '#e07a3f', '#b95c2c', '#8c4320'),
+  // Sol sportif du gymnase : vert-de-gris doux, ciré
+  lino: ramp('#d3dccd', '#bfcab9', '#adb9a8', '#9aa696', '#859181'),
+  parquet: ramp('#e2bb8c', '#cfa274', '#ba8c5f', '#9f744c', '#7f5b3b'),
+  carrelage: ramp('#f1ede6', '#e3ddd3', '#d3ccc0', '#bdb4a6', '#a1988a'),
+  herbe: ramp('#a9c98a', '#8db571', '#76a05e', '#5f8a4d', '#4a703e'),
+  trottoir: ramp('#c8c5be', '#b6b3ac', '#a4a19a', '#8f8c86', '#76736e'),
+  tapis: ramp('#c98478', '#b46d62', '#9c5a52', '#7f4743', '#603637'),
+  mur: ramp('#f6efe2', '#ede4d3', '#e2d7c3', '#cdbfa8', '#b1a28b'),
+  soubassement: ramp('#bfd0c4', '#a9bfb2', '#94ae9f', '#7e978a', '#667d71'),
+  plinthe: ramp('#8a7e80', '#6f6467', '#5c5256', '#4a4145', '#383135'),
+  bois: ramp('#e0b98c', '#cba173', '#b48a5f', '#98714b', '#795839'),
+  boisSombre: ramp('#a8836a', '#8e6b54', '#765844', '#5f4536', '#483428'),
+  metal: ramp('#e1e4e7', '#c7ccd1', '#aab0b7', '#8c939b', '#6d737b'),
+  liege: ramp('#e0bb8d', '#cfa271', '#bb8c5d', '#a0744a', '#815c3a'),
+  terre: ramp('#e7a881', '#d38b63', '#bb734e', '#9b5c3e', '#77452f'),
+  feuille: ramp('#b7d39a', '#8fbb72', '#6e9f58', '#557f46', '#3f6136'),
+  verre: ramp('#f2f8f7', '#d7eaec', '#b9d8de', '#97bec8', '#7aa2ae'),
+  ciel: ramp('#f5f1e4', '#dfeaee', '#c7dde6', '#a9c9d6', '#8db2c2'),
+  sortie: ramp('#8fd8a8', '#5cbf83', '#3b9d63', '#2c7d4d', '#1f5c39'),
+  rouge: ramp('#ec9b88', '#d9705d', '#c2564a', '#a0433c', '#7a332f'),
+  orange: ramp('#f3c08c', '#e8a265', '#d4844b', '#b06a3b', '#86502e'),
+  jaune: ramp('#f5dd9a', '#ebc870', '#d9b04f', '#b78f3b', '#8c6c2d'),
 };
 
 /** Teinte unique et stylisée de la peau, identique pour tous les personnages. */
-export const SKIN = ramp('#d6c2b2', '#c4ab98', '#a68d7b', '#86705f');
+export const SKIN = ramp('#e2d3c6', '#d3c0b0', '#c3ad9b', '#a99383', '#8a7768');
+/** Lèvres / creux du visage, dans la même famille neutre. */
+export const SKIN_MOUTH = hex('#a1857a');
 
 export const HAIR: Ramp[] = [
-  ramp('#4a3a3a', '#2f2526', '#221a1c', '#160f12'),
-  ramp('#6a4a38', '#4a3226', '#38251c', '#271912'),
-  ramp('#8f603f', '#6b4530', '#523323', '#3a2318'),
-  ramp('#b07848', '#8c5a36', '#6d4428', '#4f301c'),
-  ramp('#d8b070', '#b98a4e', '#97703c', '#73542c'),
-  ramp('#5a4a5a', '#3b2f3a', '#2c222b', '#1d161c'),
+  ramp('#6b5a58', '#4a3d3c', '#382d2e', '#2a2123', '#1c1517'),
+  ramp('#8a6a55', '#6b4e3d', '#55392c', '#432b21', '#311e17'),
+  ramp('#a87d5c', '#8c6146', '#744d36', '#5c3b29', '#43291d'),
+  ramp('#c39a6c', '#a87d52', '#8e6641', '#734f33', '#573a26'),
+  ramp('#e2c590', '#cfab70', '#b8915a', '#9a7647', '#775a36'),
+  ramp('#76656f', '#574a53', '#43383f', '#33292f', '#241c21'),
 ];
-export const HAIR_GRAY = ramp('#c3c3c8', '#a5a5ad', '#87878f', '#6b6b73');
-export const HAIR_WHITE = ramp('#f0eff0', '#dcdbe0', '#bdbcc4', '#9c9ba4');
+export const HAIR_GRAY = ramp('#d6d6d9', '#bdbdc1', '#a3a3a9', '#8a8a91', '#707077');
+export const HAIR_WHITE = ramp('#fbfafa', '#ebeaec', '#d9d8dc', '#c1c0c6', '#a5a4ab');
 
 export const PANTS: Ramp[] = [
-  ramp('#5a6884', '#3e4a61', '#2f384b', '#222838'),
-  ramp('#66666e', '#4a4a52', '#38383f', '#28282e'),
-  ramp('#8a7862', '#6b5b4a', '#524537', '#3b3127'),
-  ramp('#7c90b0', '#5c6e8c', '#475672', '#343f56'),
+  ramp('#8592a8', '#68758d', '#536078', '#424d62', '#333b4c'),
+  ramp('#8e8d93', '#727177', '#5d5c62', '#4a494f', '#38383d'),
+  ramp('#b2a189', '#978670', '#7f6f5b', '#665847', '#4e4336'),
+  ramp('#93a6c0', '#7689a6', '#60728f', '#4d5c75', '#3b475b'),
 ];
 
-export const POSTER_COLORS = ['#e9c46a', '#e76f51', '#2a9d8f', '#8ab17d', '#f4a261', '#9c89b8', '#f2efe8', '#5fa8d3'].map((c) => hex(c));
+export const POSTER_COLORS = ['#e3c47e', '#d98a72', '#6aa79a', '#9dba8a', '#e8b07e', '#a99cbf', '#f1ece2', '#86b3cf'].map((c) => hex(c));
