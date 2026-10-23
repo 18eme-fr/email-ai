@@ -311,7 +311,7 @@ export function wallSprite(kind: WallKind, faces: { left: boolean; right: boolea
         for (const [on, i, d] of sides) {
           if (!on || i < 0 || i >= 16 || d < 0) continue;
           if (d < 4.5) {
-            const a = d < 1.5 ? 0.3 : d < 3 ? 0.18 : 0.09;
+            const a = d < 1.5 ? 0.36 : d < 3 ? 0.22 : 0.1;
             if (a > alpha && (d < 1.5 || a * 3 > bayer(x, y))) {
               alpha = a;
               col = AO;
@@ -319,7 +319,7 @@ export function wallSprite(kind: WallKind, faces: { left: boolean; right: boolea
           }
           if (kind === 'mur_fenetre' && i >= 3.5 && i <= 13.5 && Math.abs(i - 8.5) > 0.8 && d >= 8 && d <= 17) {
             const edge = Math.min(i - 3.5, 13.5 - i, d - 8, 17 - d);
-            const a = edge < 1 ? 0.1 : 0.2;
+            const a = edge < 1 ? 0.16 : 0.34;
             if (edge >= 1 || bayer(x, y) < 0.5) {
               alpha = a;
               col = SUN;

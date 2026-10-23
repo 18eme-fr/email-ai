@@ -1,7 +1,7 @@
 import type { Renderer } from './contract';
 import { characterSprite } from './characters';
 import { INK, WHITE } from './palette';
-import { Pix, blit, cached, hex, type Sprite } from './pixelKit';
+import { Pix, bayer, blit, cached, hex, type Sprite } from './pixelKit';
 import { propSprite } from './props';
 import { floorSprite, wallSprite } from './tiles';
 
@@ -15,11 +15,15 @@ function shadowSprite(w: number): Sprite {
   const ww = Math.max(4, Math.round(w));
   return cached(`s:${ww}`, () => {
     const hh = Math.max(2, Math.round(ww / 2.6));
-    const p = new Pix(ww + 2, hh + 2);
-    p.ellipse((ww + 2) / 2, (hh + 2) / 2, ww / 2, hh / 2, [26, 18, 40, 72]);
-    // Cœur un peu plus dense, toujours net
-    p.ellipse((ww + 2) / 2, (hh + 2) / 2, ww / 3, hh / 3, [26, 18, 40, 40]);
-    return { pix: p, ax: Math.floor((ww + 2) / 2), ay: Math.floor((hh + 2) / 2) };
+    const p = new Pix(ww + 4, hh + 4);
+    const cx = (ww + 4) / 2;
+    const cy = (hh + 4) / 2;
+    // Bord tramé, cœur plus dense : ombre douce mais nette au pixel
+    p.ellipse(cx, cy, ww / 2 + 1, hh / 2 + 1, (x, y) => (bayer(x, y) < 0.5 ? [30, 22, 40, 44] : [0, 0, 0, 0]));
+    p.ellipse(cx, cy, ww / 2, hh / 2, [30, 22, 40, 70]);
+    p.ellipse(cx - 0.5, cy - 0.5, ww / 3, hh / 3, [30, 22, 40, 50]);
+    // Décalée vers le bas-droite : la lumière vient du haut-gauche
+    return { pix: p, ax: Math.floor(cx) - 1, ay: Math.floor(cy) - 1 };
   });
 }
 
