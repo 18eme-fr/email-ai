@@ -21,7 +21,7 @@ func new_game(game_seed: int, difficulty_id: String = "standard") -> void:
 	state.difficulty = difficulty_id if data.balance.get("difficulties", {}).has(difficulty_id) else "standard"
 	var diff := data.difficulty(state.difficulty)
 	var start: Dictionary = data.balance["start"]
-	state.cash = roundi(float(start["cash"]) * float(diff.get("cash_mult", 1.0)))
+	state.cash = starting_cash()
 	for id: String in GameState.STAT_IDS:
 		state.stats[id] = float(start["stats"].get(id, 50))
 	# Subvention de fonctionnement : versements programmés dès le départ.
@@ -52,6 +52,11 @@ func start_turn() -> void:
 
 
 # --- Lecture ---------------------------------------------------------------------
+
+## Trésorerie de départ selon la difficulté (premier point des courbes).
+func starting_cash() -> int:
+	return roundi(float(data.balance["start"]["cash"]) * float(data.difficulty(state.difficulty).get("cash_mult", 1.0)))
+
 
 func period_name() -> String:
 	return str(data.period(state.turn).get("name", ""))
@@ -106,6 +111,18 @@ static func _cash_effect(gross: int, fin: Dictionary) -> int:
 func open_programming() -> void:
 	if state.phase == GameState.PHASE_SITUATION:
 		state.phase = GameState.PHASE_PROGRAMMING
+
+
+## Retour à l'étape précédente (avant l'événement uniquement : ensuite, les choix sont engagés).
+func go_back() -> bool:
+	match state.phase:
+		GameState.PHASE_PROGRAMMING:
+			state.phase = GameState.PHASE_SITUATION
+		GameState.PHASE_MANAGEMENT:
+			state.phase = GameState.PHASE_PROGRAMMING
+		_:
+			return false
+	return true
 
 
 ## Valide et enregistre la programmation. Retourne "" ou un message d'erreur.

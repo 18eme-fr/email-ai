@@ -36,13 +36,15 @@ func _ready() -> void:
 	for i in int(_layout.get("performers", 5)):
 		_performers.append(load(DIR + "performer_%d.png" % i))
 	var seats: Array = _layout.get("seats", [])
-	for i in seats.size():
-		_seat_order.append(i)
-	# Ordre de remplissage stable : les premiers rangs d'abord, avec un peu de désordre.
+	# Ordre de remplissage stable : premiers rangs d'abord, avec un peu de désordre.
+	# Une clé est tirée une seule fois par fauteuil (comparaison cohérente pour le tri).
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 7
-	_seat_order.sort_custom(func(a: int, b: int) -> bool:
-		return float(seats[a]["row"]) + rng.randf() * 1.5 < float(seats[b]["row"]) + rng.randf() * 1.5)
+	var keys: Array[float] = []
+	for i in seats.size():
+		_seat_order.append(i)
+		keys.append(float(seats[i]["row"]) + rng.randf() * 1.5)
+	_seat_order.sort_custom(func(a: int, b: int) -> bool: return keys[a] < keys[b])
 
 
 func _process(delta: float) -> void:

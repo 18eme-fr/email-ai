@@ -48,7 +48,7 @@ func _ready() -> void:
 	var footer := UiKit.hbox()
 	var back := UiKit.button("Retour", "SecondaryButton")
 	back.pressed.connect(func() -> void:
-		session.state.phase = GameState.PHASE_PROGRAMMING
+		session.go_back()
 		screen.advance())
 	footer.add_child(back)
 	footer.add_child(UiKit.spacer())

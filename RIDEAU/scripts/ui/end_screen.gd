@@ -16,6 +16,7 @@ func _ready() -> void:
 		Game.session = demo
 	session = Game.session
 	var s := session.state
+	var pending := Game.take_pending_notice()
 	if s.ending.is_empty():
 		s.ending = SeasonEvaluator.evaluate(session.data, s)
 	var e := s.ending
@@ -49,6 +50,10 @@ func _ready() -> void:
 	vt.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	vrow.add_child(vt)
 	_rows.add_child(verdict)
+	if pending != "":
+		var warn := UiKit.label(pending, "MutedLabel", true)
+		warn.add_theme_color_override("font_color", UiKit.BAD)
+		_rows.add_child(warn)
 
 	var cols := UiKit.hbox([], 14)
 	cols.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -72,7 +77,7 @@ func _ready() -> void:
 		Format.money(s.cash), Format.thousands(int(s.totals["attendance_total"])), roundi(Rules.rayonnement(session.data, s)), roundi(s.stat("fidelite")), roundi(s.stat("diversite"))]))
 	var chart := LineChart.new()
 	chart.custom_minimum_size = Vector2(520, 110)
-	var pts: Array[float] = [float(session.data.balance["start"]["cash"]) * float(session.data.difficulty(s.difficulty).get("cash_mult", 1.0))]
+	var pts: Array[float] = [float(session.starting_cash())]
 	var att: Array[float] = []
 	for h: Dictionary in s.history:
 		pts.append(float(h["cash"]))
@@ -135,6 +140,7 @@ func _key_decisions(s: GameState) -> Array:
 				worst = {"m": m, "t": sh["title"], "turn": r["turn"]}
 	if not best.is_empty():
 		out.append({"turn": best["turn"], "text": "Meilleure marge : « %s » (%s)" % [best["t"], Format.signed_money(best["m"])]})
-		out.append({"turn": worst["turn"], "text": "Plus gros déficit : « %s » (%s)" % [worst["t"], Format.signed_money(worst["m"])]})
+		if int(worst["m"]) < 0:
+			out.append({"turn": worst["turn"], "text": "Plus gros déficit : « %s » (%s)" % [worst["t"], Format.signed_money(worst["m"])]})
 	out.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return int(a["turn"]) < int(b["turn"]))
 	return out

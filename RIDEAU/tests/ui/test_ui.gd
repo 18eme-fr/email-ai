@@ -177,6 +177,20 @@ func test_full_turn_through_the_interface() -> void:
 	assert_bool(Game.saves.has_save()).is_true()
 
 
+func test_enter_does_not_trigger_hidden_button_behind_modal() -> void:
+	_new_session(41)
+	ScreenshotScenario.advance(Game.session, 5)  # étape « Bilan »
+	assert_str(Game.session.state.phase).is_equal(GameState.PHASE_REPORT)
+	var runner := scene_runner(MANAGEMENT)
+	await runner.simulate_frames(5)
+	runner.scene().open_pause()
+	await runner.simulate_frames(3)
+	runner.simulate_action_pressed("rideau_continue")
+	await runner.simulate_frames(3)
+	assert_int(Game.session.state.turn).is_equal(1)
+	assert_str(Game.session.state.phase).is_equal(GameState.PHASE_REPORT)
+
+
 func test_top_bar_shows_formatted_cash() -> void:
 	_new_session()
 	Game.session.state.cash = 12450

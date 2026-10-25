@@ -36,9 +36,12 @@ static func _slider(parent: Control, text: String, key: String) -> void:
 	var pct := UiKit.label("%d %%" % roundi(s.value * 100), "SmallLabel")
 	pct.custom_minimum_size.x = 50
 	s.value_changed.connect(func(v: float) -> void:
-		Settings.set_value(key, v)
+		Settings.set_value(key, v, false)
 		pct.text = "%d %%" % roundi(v * 100))
-	s.drag_ended.connect(func(_changed: bool) -> void: AudioDirector.play_sfx("blip"))
+	s.drag_ended.connect(func(_changed: bool) -> void:
+		Settings.save_settings()
+		AudioDirector.play_sfx("blip"))
+	s.focus_exited.connect(Settings.save_settings)
 	row.add_child(s)
 	row.add_child(pct)
 	parent.add_child(row)

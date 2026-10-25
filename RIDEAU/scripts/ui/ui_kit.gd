@@ -196,6 +196,12 @@ static func primary(text: String, icon_name: String = "play") -> Button:
 	b.shortcut = sc
 	b.shortcut_in_tooltip = true
 	b.size_flags_horizontal = Control.SIZE_SHRINK_END
+	# Entrée n'agit que si le focus est dans l'écran principal (« Margin ») :
+	# jamais à travers une fenêtre modale ouverte par-dessus.
+	b.ready.connect(func() -> void:
+		var scene := b.get_tree().current_scene
+		if scene:
+			b.shortcut_context = scene.get_node_or_null("Margin"))
 	return b
 
 

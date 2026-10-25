@@ -129,6 +129,18 @@ func test_steps_must_happen_in_order() -> void:
 	assert_int(s.state.seen_events.size()).is_equal(seen)
 	if s.state.current_event != "":
 		assert_dict(s.resolve_turn()).contains_keys(["error"])  # décision obligatoire
+	assert_bool(s.go_back()).is_false()                       # plus de retour après l'événement
+
+
+func test_go_back_before_event() -> void:
+	var s := _session()
+	s.open_programming()
+	assert_bool(s.go_back()).is_true()
+	assert_str(s.state.phase).is_equal(GameState.PHASE_SITUATION)
+	s.open_programming()
+	s.confirm_programming([])
+	assert_bool(s.go_back()).is_true()
+	assert_str(s.state.phase).is_equal(GameState.PHASE_PROGRAMMING)
 
 
 func test_conditional_subsidy_depends_on_objectives() -> void:

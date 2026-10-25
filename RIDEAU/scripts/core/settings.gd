@@ -28,10 +28,12 @@ func get_value(key: String) -> Variant:
 	return values.get(key, DEFAULTS.get(key))
 
 
-func set_value(key: String, value: Variant) -> void:
+## `persist = false` applique sans écrire sur le disque (glissement d'un curseur).
+func set_value(key: String, value: Variant, persist: bool = true) -> void:
 	values[key] = value
 	apply(key)
-	save_settings()
+	if persist:
+		save_settings()
 	changed.emit()
 
 

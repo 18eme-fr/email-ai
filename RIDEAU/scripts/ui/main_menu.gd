@@ -37,8 +37,8 @@ func _on_continue() -> void:
 		_message.text = msg
 		AudioDirector.play_sfx("error")
 	elif msg != "":
-		# La partie a été restaurée depuis la copie de secours : on le signale au joueur.
-		Game.notice.emit(msg, "warning")
+		# La partie a été restaurée depuis la copie de secours : l'écran suivant l'affichera.
+		Game.pending_notice = msg
 
 
 func _on_new_game() -> void:
@@ -71,7 +71,7 @@ func _on_new_game() -> void:
 	start.pressed.connect(func() -> void:
 		AudioDirector.play_sfx("curtain")
 		var s := seed_edit.text.strip_edges()
-		var game_seed: int = int(s) if s.is_valid_int() else (absi(hash(s)) % 1_000_000 if s != "" else -1)
+		var game_seed: int = absi(int(s)) if s.is_valid_int() else (absi(hash(s)) % 1_000_000 if s != "" else -1)
 		Game.new_game(chosen[0], game_seed))
 	c.add_child(start)
 	start.grab_focus.call_deferred()

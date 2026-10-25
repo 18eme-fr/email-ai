@@ -278,5 +278,10 @@
       "relations"
     ]
   },
-  "critics_art_threshold": 0.6
+  "critics_art_threshold": 0.6,
+  "warnings": {
+    "cash_projection": 3000,
+    "team_low": 40,
+    "remaining_periods": 4
+  }
 }

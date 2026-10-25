@@ -49,6 +49,9 @@ func _ready() -> void:
 	AudioDirector.play_music("foyer")
 	refresh_all()
 	show_phase()
+	var pending := Game.take_pending_notice()
+	if pending != "":
+		toast(pending, "warning")
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -115,7 +118,7 @@ func _refresh_status() -> void:
 		"fidelite": "Envie des spectateurs de revenir. Augmente la fréquentation de tous les spectacles.",
 		"diversite": "Variété des publics touchés (âges, quartiers, milieux).",
 		"equipe": "Forme de l'équipe. Influence la qualité des représentations.",
-		"equipement": "État du matériel et de la salle. Sous 45, risque d'incident sur les spectacles techniques.",
+		"equipement": "État du matériel et de la salle. Sous %d, risque d'incident sur les spectacles techniques." % int(session.data.balance["incident"]["threshold"]),
 		"communication": "Visibilité de la programmation. S'estompe d'une période à l'autre.",
 		"relations": "Confiance de la Ville et des partenaires.",
 	}
@@ -161,6 +164,8 @@ static func _objective_value(obj: Dictionary) -> String:
 func _refresh_stepper() -> void:
 	UiKit.clear(_stepper)
 	var phase := session.state.phase
+	if phase == GameState.PHASE_FINISHED:
+		phase = GameState.PHASE_REPORT
 	var reached := true
 	for step: Array in STEPS:
 		var active: bool = step[0] == phase
@@ -193,12 +198,11 @@ func refresh_theatre() -> void:
 			theatre.set_facade(textures)
 
 
-static func _report_fill(report: Dictionary) -> float:
+func _report_fill(report: Dictionary) -> float:
 	var best := 0.0
 	for sh: Dictionary in report.get("shows", []):
 		if not sh.get("cancelled", false) and sh.get("capacity_total", 0) > 0:
-			var data := GameData.get_default()
-			if data.shows.get(sh["show_id"], {}).get("format", "") == "salle":
+			if session.data.shows.get(sh["show_id"], {}).get("format", "") == "salle":
 				best = maxf(best, float(sh["fill"]))
 	return best
 

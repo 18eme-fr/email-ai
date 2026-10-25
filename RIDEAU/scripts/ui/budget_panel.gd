@@ -14,7 +14,7 @@ static func open(parent: Node, session: GameSession) -> Modal:
 	if s.history.size() > 0:
 		var chart := LineChart.new()
 		chart.custom_minimum_size = Vector2(820, 180)
-		var points: Array[float] = [float(session.data.balance["start"]["cash"]) * float(session.data.difficulty(s.difficulty).get("cash_mult", 1.0))]
+		var points: Array[float] = [float(session.starting_cash())]
 		for h: Dictionary in s.history:
 			points.append(float(h["cash"]))
 		chart.series = points

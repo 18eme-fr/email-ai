@@ -12,6 +12,8 @@ const MANAGEMENT := "res://scenes/management/management_screen.tscn"
 const END_SCREEN := "res://scenes/reports/end_screen.tscn"
 
 var session: GameSession = null
+## Message à afficher par le prochain écran (ex. restauration depuis la copie de secours).
+var pending_notice := ""
 var saves := SaveSystem.new()
 var data: GameData:
 	get:
@@ -62,6 +64,13 @@ func go_to_menu() -> void:
 
 func go_to_end() -> void:
 	get_tree().change_scene_to_file(END_SCREEN)
+
+
+## Renvoie et efface le message en attente.
+func take_pending_notice() -> String:
+	var msg := pending_notice
+	pending_notice = ""
+	return msg
 
 
 func notify_changed() -> void:
