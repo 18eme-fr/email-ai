@@ -20,6 +20,38 @@ var data: GameData:
 		return GameData.get_default()
 
 
+func _ready() -> void:
+	if "--smoke-test" in OS.get_cmdline_user_args():
+		_smoke_test.call_deferred()
+
+
+## Autotest d'une version exportée : `RIDEAU -- --smoke-test`.
+## Vérifie que les données, les dialogues et la sauvegarde sont bien dans le paquet,
+## joue une saison complète avec le bot, puis quitte (code 0 si tout va bien).
+func _smoke_test() -> void:
+	var ok := true
+	var d := GameData.get_default()
+	print("[autotest] données : %d spectacles, %d événements, %d notions, erreurs %s" % [d.shows.size(), d.events.size(), d.glossary.size(), d.load_errors])
+	ok = ok and d.load_errors.is_empty() and d.shows.size() > 0
+	var dialogue: Variant = load("res://dialogue/events.dialogue")
+	var line: DialogueLine = await DialogueManager.get_next_dialogue_line(dialogue, "journaliste") if dialogue else null
+	print("[autotest] dialogue : ", line.text if line else "INTROUVABLE")
+	ok = ok and line != null
+	var s := GameSession.new(d)
+	s.new_game(2024, "standard")
+	StrategyBot.new("equilibre", 2024).play_season(s)
+	print("[autotest] saison : %s, trésorerie %s, %d entrées" % [s.state.ending.get("title", "?"), Format.money(s.state.cash), int(s.state.totals["attendance_total"])])
+	ok = ok and s.state.finished
+	var saves_test := SaveSystem.new("user://autotest")
+	var w := saves_test.save(s.state, "autotest")
+	var r := saves_test.load("autotest")
+	saves_test.delete("autotest")
+	print("[autotest] sauvegarde : ", "OK" if r["status"] == SaveSystem.Status.OK else str(r["message"]))
+	ok = ok and w["status"] == SaveSystem.Status.OK and r["status"] == SaveSystem.Status.OK
+	print("[autotest] RÉSULTAT : ", "SUCCÈS" if ok else "ÉCHEC")
+	get_tree().quit(0 if ok else 1)
+
+
 func has_game() -> bool:
 	return session != null and session.state != null
 
