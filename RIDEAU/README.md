@@ -26,8 +26,11 @@ En ligne de commande :
 /Applications/Godot.app/Contents/MacOS/Godot --path chemin/vers/RIDEAU
 ```
 
-Les versions exportées pour Linux, Windows et le Web, quand elles ont été produites, se trouvent
-dans les fichiers joints aux livraisons (le dossier `exports/` n'est pas versionné).
+Des versions prêtes à jouer pour **Linux, Windows et le Web** ont été produites (archives
+`RIDEAU-0.9.0-*.zip` transmises avec la livraison ; le dossier `exports/` n'est pas versionné).
+La version Web se lance en servant le dossier décompressé, par exemple :
+`python3 -m http.server` puis <http://localhost:8000> (l'ouvrir directement en `file://` ne marche pas).
+Vérifier une version exportée : `./RIDEAU.x86_64 --headless -- --smoke-test`.
 
 ## Commandes de jeu
 

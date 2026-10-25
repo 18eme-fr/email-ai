@@ -10,6 +10,7 @@
 | Jersey 10 | The Soft Type Project Authors | (Google Fonts) | SIL Open Font License 1.1 | `assets/fonts/Jersey10-Regular.ttf` (+ `Jersey10-OFL.txt`) | Conserver le texte de la licence ; ne pas vendre la police seule ; usage commercial dans un jeu autorisé. |
 | Pixelify Sans | The Pixelify Sans Project Authors | (Google Fonts) | SIL Open Font License 1.1 | `assets/fonts/PixelifySans.ttf` (+ OFL) | Idem. Les fichiers `pixelify_body.tres` et `pixelify_bold.tres` sont des réglages Godot (ligatures, graisse), pas des polices modifiées. |
 | Atkinson Hyperlegible | Braille Institute of America | (Google Fonts) | SIL Open Font License 1.1 | `assets/fonts/AtkinsonHyperlegible-*.ttf` (+ OFL) | Idem. |
+| DejaVu Sans | DejaVu fonts team (d'après Bitstream Vera) | 2.37 (paquet Ubuntu `fonts-dejavu-core`) | Licence Bitstream Vera / domaine public pour les ajouts DejaVu | `assets/fonts/DejaVuSans.ttf` (+ `DejaVuSans-LICENSE.txt`) | Fichier non modifié, utilisé comme police de **repli** pour les symboles (flèches, étoiles, ✓, ⚠) ; conserver la licence ; ne pas vendre la police seule. |
 
 ## Ressources originales du projet
 

@@ -19,26 +19,39 @@ const NIGHT := Color("1f1830")
 func _init() -> void:
 	# Police de texte : Pixelify Sans sans ligatures (sa ligature « fi » ressemble à un « A »).
 	var ts := TextServerManager.get_primary_interface()
+	# Police de repli pour les symboles absents des polices pixel (flèches, étoiles, ✓, ⚠).
+	var symbols: Font = load("res://assets/fonts/DejaVuSans.ttf")
 	var body_var := FontVariation.new()
 	body_var.base_font = load("res://assets/fonts/PixelifySans.ttf")
+	body_var.fallbacks = [symbols]
 	body_var.opentype_features = {ts.name_to_tag("liga"): 0, ts.name_to_tag("clig"): 0, ts.name_to_tag("dlig"): 0}
 	ResourceSaver.save(body_var, "res://assets/fonts/pixelify_body.tres")
 	var bold := FontVariation.new()
 	bold.base_font = load("res://assets/fonts/PixelifySans.ttf")
 	bold.variation_opentype = {ts.name_to_tag("wght"): 650}
 	bold.opentype_features = body_var.opentype_features
+	bold.fallbacks = [symbols]
 	ResourceSaver.save(bold, "res://assets/fonts/pixelify_bold.tres")
+	var title_var := FontVariation.new()
+	title_var.base_font = load("res://assets/fonts/Jersey10-Regular.ttf")
+	title_var.fallbacks = [symbols]
+	ResourceSaver.save(title_var, "res://assets/fonts/jersey_title.tres")
+	for weight: String in ["Regular", "Bold"]:
+		var readable := FontVariation.new()
+		readable.base_font = load("res://assets/fonts/AtkinsonHyperlegible-%s.ttf" % weight)
+		readable.fallbacks = [symbols]
+		ResourceSaver.save(readable, "res://assets/fonts/atkinson_%s.tres" % weight.to_lower())
 	var err := ResourceSaver.save(_build(load("res://assets/fonts/pixelify_body.tres"), load("res://assets/fonts/pixelify_bold.tres"), 17), OUT)
 	print("Thème enregistré : ", OUT, " (", error_string(err), ")")
 	# Variante « police très lisible » : même thème, texte en Atkinson Hyperlegible.
-	var err2 := ResourceSaver.save(_build(load("res://assets/fonts/AtkinsonHyperlegible-Regular.ttf"), load("res://assets/fonts/AtkinsonHyperlegible-Bold.ttf"), 17), OUT_READABLE)
+	var err2 := ResourceSaver.save(_build(load("res://assets/fonts/atkinson_regular.tres"), load("res://assets/fonts/atkinson_bold.tres"), 17), OUT_READABLE)
 	print("Thème enregistré : ", OUT_READABLE, " (", error_string(err2), ")")
 	quit(0 if err == OK and err2 == OK else 1)
 
 
 func _build(body: Font, bold: Font, body_size: int) -> Theme:
 	var theme := Theme.new()
-	var title: Font = load("res://assets/fonts/Jersey10-Regular.ttf")
+	var title: Font = load("res://assets/fonts/jersey_title.tres")
 	theme.default_font = body
 	theme.default_font_size = body_size
 

@@ -26,14 +26,25 @@ Format inspiré de « Keep a Changelog ». Versions du jeu (`application/config/
 - **Direction artistique originale** générée par code : salle et façade du théâtre, rideau animé,
   public, comédiens, 20 affiches, 28 icônes, 20 portraits, thème d'interface velours/bois/or.
 - **Audio original** synthétisé : 10 sons d'interface, valse du menu, boucle d'ambiance.
-- **Tests GdUnit4 6.2.2** : 81 cas (économie, parties, événements, stratégies, sauvegarde,
+- **Tests GdUnit4 6.2.2** : 87 cas (économie, parties, événements, stratégies, sauvegarde,
   données, interface).
 - **Outils** : simulation multi-stratégies, rejeu de saison, captures d'écran, sonde de mise en page,
   vérification de compilation, construction du thème.
 - **Documentation** : README, GDD, architecture, modèle économique, format des données, audit des
   plugins, sources, licences, QA, feuille de route.
 
-### Corrigé pendant le développement (trouvé par les tests ou la simulation)
+### Livraison
+- Modèles d'export compilés depuis les sources (Linux, Windows sans D3D12, Web sans threads) ;
+  exports Linux, Windows et Web produits ; autotest `-- --smoke-test` pour vérifier un export.
+- Police de repli DejaVu Sans pour les symboles absents des polices pixel.
+
+### Corrigé pendant le développement (trouvé par les tests, la simulation, les revues ou les captures)
+- Estimations : une représentation fantôme était comptée hors programmation.
+- Touche Entrée qui déclenchait le bouton d'étape caché sous une fenêtre ouverte.
+- Étapes du tour appelables dans le désordre (double validation, résolution sans décision).
+- Sauvegarde : somme de contrôle contournable en changeant la version ; types non validés.
+- Export Web : Dialogue Manager cassé par un filtre d'export trop large (vu dans le navigateur).
+- Symboles (▸, ★, ✓, flèches) affichés comme des carrés.
 - Blocage de progression quand la trésorerie était trop basse pour « ne rien faire ».
 - Débordements d'interface sur les titres et réponses longs.
 - Ligature « fi » de Pixelify Sans affichée comme un « A ».

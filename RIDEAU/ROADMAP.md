@@ -8,9 +8,9 @@
 - [x] Phase 3 — Boucle jouable minimale
 - [x] Phase 4 — Tranche verticale : direction artistique, dialogues, sons, pédagogie, sauvegarde
 - [x] Phase 5 — Version complète 8 périodes, 20 spectacles, 19 événements, 9 fins, 3 difficultés
-- [x] Phase 6 — Tests (81), simulation d'équilibrage, correctifs, revue de code
-- [~] Phase 7 — Livraison : projet exécutable ; exports Linux / Windows / Web selon `QA_REPORT.md` ;
-  export macOS à faire depuis un Mac
+- [x] Phase 6 — Tests (87), simulation d'équilibrage, correctifs, deux revues de code
+- [x] Phase 7 — Livraison : projet exécutable ; exports Linux (vérifié), Web (vérifié dans Chromium),
+  Windows (produit, non lancé) ; export macOS à faire depuis un Mac
 
 ## Prochaines étapes proposées
 

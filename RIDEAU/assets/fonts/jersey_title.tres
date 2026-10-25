@@ -1,0 +1,8 @@
+[gd_resource type="FontVariation" format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/Jersey10-Regular.ttf" id="1_r821d"]
+[ext_resource type="FontFile" path="res://assets/fonts/DejaVuSans.ttf" id="2_rituj"]
+
+[resource]
+fallbacks = Array[Font]([ExtResource("2_rituj")])
+base_font = ExtResource("1_r821d")

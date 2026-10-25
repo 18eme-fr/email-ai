@@ -16,6 +16,7 @@ GdUnit4 6.2.2 (tests, non inclus dans les versions exportées) — Mike Schulze 
 Jersey 10 — The Soft Type Project Authors — SIL Open Font License 1.1
 Pixelify Sans — The Pixelify Sans Project Authors — SIL Open Font License 1.1
 Atkinson Hyperlegible — Braille Institute of America — SIL Open Font License 1.1
+DejaVu Sans (symboles) — DejaVu fonts team — licence Bitstream Vera / domaine public
 
 [b]Contenu pédagogique[/b]
 Les notions d'administration culturelle s'appuient sur des sources publiques (ministère de la Culture, ARTCENA, Eduscol, Légifrance…) listées dans SOURCES.md. Les montants, le théâtre, la ville et tous les personnages sont fictifs ; les règles du jeu simplifient la réalité.

@@ -1,8 +1,10 @@
 [gd_resource type="FontVariation" format=3]
 
 [ext_resource type="FontFile" path="res://assets/fonts/PixelifySans.ttf" id="1_onnpj"]
+[ext_resource type="FontFile" path="res://assets/fonts/DejaVuSans.ttf" id="2_o2w04"]
 
 [resource]
+fallbacks = Array[Font]([ExtResource("2_o2w04")])
 base_font = ExtResource("1_onnpj")
 variation_opentype = {
 2003265652: 650
