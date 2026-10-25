@@ -19,15 +19,15 @@ static func open(parent: Node, title: String, width: int = 760, height: int = 56
 
 func _build(title: String, width: int, height: int) -> void:
 	_previous_focus = get_viewport().gui_get_focus_owner()
-	set_anchors_preset(Control.PRESET_FULL_RECT)
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	var veil := ColorRect.new()
 	veil.color = Color(0.05, 0.03, 0.08, 0.72)
-	veil.set_anchors_preset(Control.PRESET_FULL_RECT)
+	veil.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(veil)
 	var center := CenterContainer.new()
-	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(center)
 	var frame := UiKit.panel("WoodPanel")
 	frame.custom_minimum_size = Vector2(width, height)

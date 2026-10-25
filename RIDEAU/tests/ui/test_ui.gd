@@ -11,9 +11,13 @@ func before_test() -> void:
 	Game.saves.delete()
 	Settings.values["show_tutorial"] = false
 	Settings.values["reduce_motion"] = true
+	Settings.values["readable_font"] = false
+	Settings.apply("readable_font")
 
 
 func after_test() -> void:
+	Settings.values["readable_font"] = false
+	Settings.apply("readable_font")
 	Game.saves.delete()
 	Game.saves = SaveSystem.new()
 	Game.session = null
@@ -230,6 +234,26 @@ func test_layout_fits_reference_resolution() -> void:
 	await end.simulate_frames(3)
 	var m := (end.scene().get_node("Margin") as Control).get_combined_minimum_size()
 	assert_float(m.y).override_failure_message("Écran de fin : hauteur minimale %d > 720" % m.y).is_less_equal(720.0)
+
+
+func test_readable_font_toggle_and_layout() -> void:
+	var project_font := ThemeDB.get_project_theme().default_font
+	Settings.values["readable_font"] = true
+	Settings.apply("readable_font")
+	assert_object(get_tree().root.theme).is_not_null()
+	for steps in [0, 1, 2, 3, 5]:
+		_new_session(3)
+		ScreenshotScenario.advance(Game.session, steps)
+		var runner := scene_runner(MANAGEMENT)
+		await runner.simulate_frames(3)
+		var minimum := (runner.scene().get_node("Margin") as Control).get_combined_minimum_size()
+		assert_float(minimum.x).override_failure_message("Police lisible, étape %d : largeur %d > 1280" % [steps, minimum.x]).is_less_equal(1280.0)
+		assert_float(minimum.y).override_failure_message("Police lisible, étape %d : hauteur %d > 720" % [steps, minimum.y]).is_less_equal(720.0)
+	Settings.values["readable_font"] = false
+	Settings.apply("readable_font")
+	assert_object(get_tree().root.theme).is_null()
+	# Le thème du projet n'a jamais été modifié.
+	assert_object(ThemeDB.get_project_theme().default_font).is_same(project_font)
 
 
 func test_texts_use_readable_sizes() -> void:

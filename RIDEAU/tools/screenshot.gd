@@ -28,12 +28,52 @@ func _run() -> void:
 		game.session.new_game(int(parts[1]), "standard")
 		var steps := int(parts[2]) if parts.size() > 2 else 0
 		ScreenshotScenario.advance(game.session, steps)
+	root.get_node("Settings").values["show_tutorial"] = scenario.contains(":tuto")
 	change_scene_to_file(scene_path)
-	for i in 90:
+	for i in 60:
 		await process_frame
-	if scenario.contains(":open:"):
-		pass
+	var action := ""
+	var args := OS.get_cmdline_user_args()
+	if args.size() > 3:
+		action = args[3]
+	_do_action(action)
+	for i in 40:
+		await process_frame
 	var img := root.get_texture().get_image()
 	img.save_png(out_path)
 	print("Capture enregistrée : ", out_path, " ", img.get_size())
 	quit()
+
+
+## Ouvre une fenêtre ou un onglet avant la capture (QA visuelle).
+## Les classes d'interface sont chargées dynamiquement : ce script est compilé avant les autoloads.
+func _do_action(action: String) -> void:
+	var scene := current_scene
+	if action == "":
+		return
+	var overlay: Node = scene.get_node_or_null("Overlay")
+	match action:
+		"glossary":
+			load("res://scripts/ui/glossary_panel.gd").open(overlay, "tresorerie_resultat")
+		"budget":
+			load("res://scripts/ui/budget_panel.gd").open(overlay, root.get_node("Game").session)
+		"reports":
+			load("res://scripts/ui/reports_history.gd").open(overlay, root.get_node("Game").session)
+		"settings":
+			load("res://scripts/ui/settings_panel.gd").open(overlay)
+		"pause":
+			scene.open_pause()
+		"readable":
+			# Sans enregistrer : une capture ne doit pas modifier les réglages du joueur.
+			var settings := root.get_node("Settings")
+			settings.values["readable_font"] = true
+			settings.apply("readable_font")
+		_:
+			if action.begins_with("tab:"):
+				for b in scene.find_children("*", "Button", true, false):
+					if (b as Button).text == action.substr(4):
+						(b as Button).pressed.emit()
+			elif action.begins_with("show:"):
+				var panel := scene.find_children("*", "VBoxContainer", true, false).filter(func(n: Node) -> bool: return n.has_method("_show_detail"))
+				if not panel.is_empty():
+					panel[0]._show_detail(action.substr(5))

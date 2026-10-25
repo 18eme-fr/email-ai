@@ -4,6 +4,7 @@ extends Node
 signal changed
 
 const PATH := "user://settings.cfg"
+const READABLE_THEME := "res://assets/ui/rideau_theme_readable.tres"
 const DEFAULTS := {
 	"master_volume": 0.8,
 	"music_volume": 0.6,
@@ -29,7 +30,7 @@ func get_value(key: String) -> Variant:
 
 func set_value(key: String, value: Variant) -> void:
 	values[key] = value
-	apply()
+	apply(key)
 	save_settings()
 	changed.emit()
 
@@ -51,11 +52,15 @@ func save_settings() -> void:
 	cfg.save(PATH)
 
 
-func apply() -> void:
-	_set_bus("Master", float(values["master_volume"]))
-	_set_bus("Music", float(values["music_volume"]))
-	_set_bus("SFX", float(values["sfx_volume"]))
-	if DisplayServer.get_name() != "headless":
+## Applique les paramètres (tous, ou seulement celui qui vient de changer).
+func apply(key: String = "") -> void:
+	if key == "" or key.ends_with("_volume"):
+		_set_bus("Master", float(values["master_volume"]))
+		_set_bus("Music", float(values["music_volume"]))
+		_set_bus("SFX", float(values["sfx_volume"]))
+	if key == "" or key == "readable_font":
+		_apply_font(bool(values["readable_font"]))
+	if (key == "" or key == "fullscreen") and DisplayServer.get_name() != "headless":
 		var mode := DisplayServer.WINDOW_MODE_FULLSCREEN if values["fullscreen"] else DisplayServer.WINDOW_MODE_WINDOWED
 		if DisplayServer.window_get_mode() != mode and not OS.has_feature("web"):
 			DisplayServer.window_set_mode(mode)
@@ -67,6 +72,17 @@ func _set_bus(bus_name: String, linear: float) -> void:
 		return
 	AudioServer.set_bus_mute(idx, linear <= 0.001)
 	AudioServer.set_bus_volume_db(idx, linear_to_db(maxf(linear, 0.001)))
+
+
+## Police « très lisible » : un second thème complet (généré par tools/build_theme.gd)
+## est posé sur la fenêtre racine ; il prime sur le thème du projet, sans le modifier.
+func _apply_font(readable: bool) -> void:
+	var tree := get_tree()
+	if tree == null:
+		return
+	var wanted: Theme = load(READABLE_THEME) if readable else null
+	if tree.root.theme != wanted:
+		tree.root.theme = wanted
 
 
 func reduce_motion() -> bool:

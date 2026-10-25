@@ -5,6 +5,7 @@ extends SceneTree
 
 const UI := "res://assets/ui/"
 const OUT := "res://assets/ui/rideau_theme.tres"
+const OUT_READABLE := "res://assets/ui/rideau_theme_readable.tres"
 
 const CREAM := Color("f3e9d2")
 const PAPER_INK := Color("2b1d2e")
@@ -16,23 +17,30 @@ const NIGHT := Color("1f1830")
 
 
 func _init() -> void:
-	var theme := Theme.new()
 	# Police de texte : Pixelify Sans sans ligatures (sa ligature « fi » ressemble à un « A »).
 	var ts := TextServerManager.get_primary_interface()
 	var body_var := FontVariation.new()
 	body_var.base_font = load("res://assets/fonts/PixelifySans.ttf")
 	body_var.opentype_features = {ts.name_to_tag("liga"): 0, ts.name_to_tag("clig"): 0, ts.name_to_tag("dlig"): 0}
 	ResourceSaver.save(body_var, "res://assets/fonts/pixelify_body.tres")
-	var body: Font = load("res://assets/fonts/pixelify_body.tres")
-	var title: Font = load("res://assets/fonts/Jersey10-Regular.ttf")
 	var bold := FontVariation.new()
 	bold.base_font = load("res://assets/fonts/PixelifySans.ttf")
 	bold.variation_opentype = {ts.name_to_tag("wght"): 650}
 	bold.opentype_features = body_var.opentype_features
 	ResourceSaver.save(bold, "res://assets/fonts/pixelify_bold.tres")
-	bold = load("res://assets/fonts/pixelify_bold.tres")
+	var err := ResourceSaver.save(_build(load("res://assets/fonts/pixelify_body.tres"), load("res://assets/fonts/pixelify_bold.tres"), 17), OUT)
+	print("Thème enregistré : ", OUT, " (", error_string(err), ")")
+	# Variante « police très lisible » : même thème, texte en Atkinson Hyperlegible.
+	var err2 := ResourceSaver.save(_build(load("res://assets/fonts/AtkinsonHyperlegible-Regular.ttf"), load("res://assets/fonts/AtkinsonHyperlegible-Bold.ttf"), 17), OUT_READABLE)
+	print("Thème enregistré : ", OUT_READABLE, " (", error_string(err2), ")")
+	quit(0 if err == OK and err2 == OK else 1)
+
+
+func _build(body: Font, bold: Font, body_size: int) -> Theme:
+	var theme := Theme.new()
+	var title: Font = load("res://assets/fonts/Jersey10-Regular.ttf")
 	theme.default_font = body
-	theme.default_font_size = 17
+	theme.default_font_size = body_size
 
 	# --- Libellés -------------------------------------------------------------
 	theme.set_color("font_color", "Label", CREAM)
@@ -166,9 +174,7 @@ func _init() -> void:
 	theme.set_constant("h_separation", "GridContainer", 8)
 	theme.set_constant("v_separation", "GridContainer", 8)
 
-	var err := ResourceSaver.save(theme, OUT)
-	print("Thème enregistré : ", OUT, " (", error_string(err), ")")
-	quit(0 if err == OK else 1)
+	return theme
 
 
 func _tex(name: String, margin: int, content: Vector4) -> StyleBoxTexture:
