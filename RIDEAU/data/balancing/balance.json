@@ -1,0 +1,258 @@
+{
+  "_doc": "Paramètres d'équilibrage de RIDEAU !. Toutes les sommes sont des conventions de jeu fictives (voir docs/ECONOMIC_MODEL.md). Modifiez ce fichier pour rééquilibrer sans toucher au code.",
+  "turns": 8,
+  "venue": {
+    "name": "Théâtre de la Lanterne",
+    "town": "Bréval-sur-Ondine",
+    "capacity_hall": 220,
+    "capacity_small": 80
+  },
+  "start": {
+    "cash": 20000,
+    "stats": {
+      "reputation": 40,
+      "fidelite": 35,
+      "diversite": 30,
+      "equipe": 62,
+      "equipement": 55,
+      "communication": 25,
+      "relations": 50
+    }
+  },
+  "periods": [
+    {
+      "name": "Septembre – octobre",
+      "short": "Rentrée",
+      "demand": 1.0,
+      "tags": [
+        "rentree"
+      ]
+    },
+    {
+      "name": "Novembre",
+      "short": "Novembre",
+      "demand": 0.95,
+      "tags": []
+    },
+    {
+      "name": "Décembre",
+      "short": "Fêtes",
+      "demand": 1.08,
+      "tags": [
+        "fetes"
+      ]
+    },
+    {
+      "name": "Janvier",
+      "short": "Janvier",
+      "demand": 0.9,
+      "tags": [
+        "hiver"
+      ]
+    },
+    {
+      "name": "Février",
+      "short": "Février",
+      "demand": 0.95,
+      "tags": [
+        "hiver",
+        "vacances"
+      ]
+    },
+    {
+      "name": "Mars",
+      "short": "Mars",
+      "demand": 1.02,
+      "tags": []
+    },
+    {
+      "name": "Avril",
+      "short": "Avril",
+      "demand": 0.97,
+      "tags": [
+        "vacances"
+      ]
+    },
+    {
+      "name": "Mai – juin",
+      "short": "Fin de saison",
+      "demand": 0.92,
+      "tags": [
+        "ete"
+      ]
+    }
+  ],
+  "fixed_costs": [
+    {
+      "id": "salaires",
+      "label": "Salaires de l'équipe permanente",
+      "amount": 4000
+    },
+    {
+      "id": "batiment",
+      "label": "Bâtiment : énergie, assurance, entretien courant",
+      "amount": 1000
+    }
+  ],
+  "municipal_subsidy": {
+    "label": "Subvention de fonctionnement (Ville)",
+    "total": 34000,
+    "tranches": [
+      {
+        "turn": 1,
+        "share": 0.4,
+        "label": "Avance (40 %)"
+      },
+      {
+        "turn": 4,
+        "share": 0.4,
+        "label": "Deuxième versement (40 %)"
+      },
+      {
+        "turn": 8,
+        "share": 0.2,
+        "label": "Solde (20 %) sous condition du bilan",
+        "conditional": true
+      }
+    ]
+  },
+  "tax": {
+    "vat_default": 0.055,
+    "vat_creation": 0.021,
+    "vat_payment_delay": 1,
+    "author_rights_rate": 0.105,
+    "author_rights_delay": 1
+  },
+  "slots": {
+    "total": 3,
+    "hall_max": 2
+  },
+  "team_actions_per_turn": 2,
+  "team_actions_bonus_threshold": 75,
+  "price_levels": [
+    {
+      "id": "reduit",
+      "label": "Tarif solidaire",
+      "mult": 0.75,
+      "diversite": 2
+    },
+    {
+      "id": "normal",
+      "label": "Tarif normal",
+      "mult": 1.0,
+      "diversite": 0
+    },
+    {
+      "id": "plein",
+      "label": "Tarif élevé",
+      "mult": 1.25,
+      "diversite": -2
+    }
+  ],
+  "demand": {
+    "comm_base": 0.75,
+    "comm_weight": 0.5,
+    "fid_base": 0.85,
+    "fid_weight": 0.4,
+    "rep_weight": 0.8,
+    "diversity_weight": 0.35,
+    "elasticity": 1.0,
+    "fatigue": 0.85,
+    "noise": 0.32,
+    "min_fill": 0.03,
+    "school_bonus": 0.25
+  },
+  "quality": {
+    "base": 0.55,
+    "team_weight": 0.25,
+    "equipment_weight": 0.15,
+    "noise": 0.18
+  },
+  "drift": {
+    "communication_decay": 0.3,
+    "communication_floor": 15,
+    "equipe_recovery": 4,
+    "equipe_target": 60,
+    "equipement_wear": 2,
+    "fidelite_erosion": 1
+  },
+  "incident": {
+    "threshold": 45,
+    "per_point": 0.012,
+    "repair_cost": 900
+  },
+  "overdraft_limit": -6000,
+  "rayonnement_weights": {
+    "reputation": 0.5,
+    "relations": 0.25,
+    "diversite": 0.25
+  },
+  "objectives": [
+    {
+      "id": "equilibre",
+      "label": "Terminer la saison avec une trésorerie positive",
+      "metric": "cash",
+      "target": 0,
+      "required": true,
+      "notion": "tresorerie_resultat"
+    },
+    {
+      "id": "publics",
+      "label": "Accueillir au moins 3 600 spectateurs et participants",
+      "metric": "attendance_total",
+      "target": 3600,
+      "notion": "frequentation"
+    },
+    {
+      "id": "eac",
+      "label": "Mener au moins 5 actions d'éducation artistique et de médiation",
+      "metric": "eac_count",
+      "target": 5,
+      "notion": "eac"
+    },
+    {
+      "id": "exigence",
+      "label": "Présenter au moins 4 œuvres à forte exigence artistique",
+      "metric": "art_count",
+      "target": 4,
+      "notion": "programmation"
+    }
+  ],
+  "renewal_rule": {
+    "required": [
+      "equilibre"
+    ],
+    "others_needed": 2,
+    "min_relations": 40
+  },
+  "art_threshold": 0.7,
+  "difficulties": {
+    "decouverte": {
+      "label": "Découverte",
+      "description": "Plus de trésorerie, publics plus prévisibles.",
+      "cash_mult": 1.2,
+      "fixed_mult": 0.95,
+      "subsidy_mult": 1.05,
+      "noise_mult": 0.7,
+      "demand_mult": 1.05
+    },
+    "standard": {
+      "label": "Standard",
+      "description": "L'expérience prévue.",
+      "cash_mult": 1.0,
+      "fixed_mult": 1.0,
+      "subsidy_mult": 1.0,
+      "noise_mult": 1.0,
+      "demand_mult": 1.0
+    },
+    "exigeant": {
+      "label": "Exigeant",
+      "description": "Trésorerie serrée, publics capricieux.",
+      "cash_mult": 0.8,
+      "fixed_mult": 1.05,
+      "subsidy_mult": 0.92,
+      "noise_mult": 1.25,
+      "demand_mult": 0.95
+    }
+  }
+}

@@ -1,0 +1,303 @@
+{
+  "_doc": "Événements narratifs. Le texte parlé est dans dialogue/events.dialogue (une étiquette ~cue par événement, réponses marquées [#choice=<id>]). Les effets mécaniques sont ici, pour que la simulation puisse jouer sans interface. Format : docs/DATA_FORMAT.md.",
+  "events": [
+    {
+      "id": "alerte_tresorerie",
+      "title": "Alerte de trésorerie",
+      "character": "helene",
+      "forced": true,
+      "priority": 100,
+      "conditions": {"cash_max": -1, "min_turn": 2},
+      "notion": "tresorerie_resultat",
+      "choices": [
+        {"id": "avance_ville", "label": "Demander une avance remboursable à la Ville", "hint": "+4 000 € maintenant, 4 000 € à rembourser dans 3 périodes. Relations ↓",
+         "effects": {"ledger": [{"label": "Avance de trésorerie de la Ville", "category": "avance", "amount": 4000, "direction": 1, "delay": 0, "neutral": true}, {"label": "Remboursement de l'avance de la Ville", "category": "avance", "amount": 4000, "direction": -1, "delay": 3, "neutral": true}], "stats": {"relations": -6}}},
+        {"id": "reduire", "label": "Reporter des achats et serrer les dépenses", "hint": "+800 € d'économies. Équipe ↓, Équipements ↓",
+         "effects": {"cash": 800, "cash_label": "Achats reportés", "stats": {"equipe": -5, "equipement": -6}}},
+        {"id": "decouvert", "label": "Rester à découvert auprès de la banque", "hint": "−250 € d'agios. Risqué si la situation s'aggrave.",
+         "effects": {"cash": -250, "cash_label": "Agios bancaires"}}
+      ]
+    },
+    {
+      "id": "bilan_mi_parcours",
+      "title": "Le bilan de mi-saison",
+      "character": "pommier",
+      "forced": true,
+      "priority": 90,
+      "conditions": {"turns": [4]},
+      "notion": "evaluation",
+      "choices": [
+        {"id": "rapport_complet", "label": "Rédiger un bilan complet avec indicateurs", "hint": "Relations ↑↑, Équipe ↓",
+         "effects": {"stats": {"relations": 10, "equipe": -5}}},
+        {"id": "inviter_elu", "label": "Inviter l'élu à une représentation", "hint": "−150 € (invitations, accueil). Relations ↑",
+         "requires": {"has_show": true},
+         "effects": {"cash": -150, "cash_label": "Accueil de l'élu", "stats": {"relations": 6, "fidelite": 1}}},
+        {"id": "rapport_rapide", "label": "Envoyer un tableau rapide", "hint": "L'équipe se repose. Relations ↓",
+         "effects": {"stats": {"relations": -5, "equipe": 2}}}
+      ]
+    },
+    {
+      "id": "annulation_maladie",
+      "title": "Une comédienne aphone",
+      "character": "bastien",
+      "weight": 6,
+      "conditions": {"has_hall_show": true, "min_turn": 2},
+      "notion": "contrat_cession",
+      "choices": [
+        {"id": "annuler", "label": "Annuler et rembourser les spectateurs", "hint": "Le spectacle n'a pas lieu. −400 € de frais déjà engagés. Fidélité ↓",
+         "effects": {"cancel_show": true, "cash": -400, "cash_label": "Frais engagés non récupérables", "stats": {"fidelite": -3}}},
+        {"id": "lecture", "label": "Transformer la soirée en lecture-spectacle", "hint": "Le spectacle a lieu mais attire moins. Réputation ↑, Équipe ↓",
+         "effects": {"demand_mult": 0.75, "quality_mod": -0.05, "stats": {"reputation": 2, "equipe": -3}}},
+        {"id": "doublure", "label": "Faire jouer la doublure", "hint": "Pari : réussite si l'équipe est solide.",
+         "effects": {"chance": {"base": 0.35, "stat": "equipe", "per_point": 0.006, "label": "La doublure", "success": {"stats": {"reputation": 3, "equipe": 3}}, "failure": {"quality_mod": -0.25, "stats": {"fidelite": -3}}}}}
+      ]
+    },
+    {
+      "id": "partenariat_scolaire",
+      "title": "Un collège frappe à la porte",
+      "character": "ines",
+      "weight": 8,
+      "conditions": {"max_turn": 6, "flags_none": ["partenariat_scolaire"]},
+      "notion": "eac",
+      "choices": [
+        {"id": "accepter", "label": "Monter un parcours d'éducation artistique", "hint": "−600 € maintenant, aide de 1 500 € versée dans 2 périodes. Diversité ↑, Relations ↑",
+         "effects": {"cash": -600, "cash_label": "Parcours EAC : interventions", "eac": 1, "flags": ["partenariat_scolaire"], "stats": {"diversite": 6, "relations": 4}, "ledger": [{"label": "Aide à l'éducation artistique (fictive)", "category": "subvention", "amount": 1500, "direction": 1, "delay": 2}]}},
+        {"id": "benevole", "label": "Accepter sans budget, avec les moyens du bord", "hint": "Gratuit, mais l'équipe s'épuise. Diversité ↑",
+         "effects": {"eac": 1, "flags": ["partenariat_scolaire"], "stats": {"diversite": 4, "equipe": -8}}},
+        {"id": "plus_tard", "label": "Proposer d'en reparler l'an prochain", "hint": "Aucun coût. Relations ↓",
+         "effects": {"stats": {"relations": -3}}}
+      ]
+    },
+    {
+      "id": "panne_console",
+      "title": "La console lumière rend l'âme",
+      "character": "bastien",
+      "weight": 7,
+      "conditions": {"min_turn": 2, "stat_max": {"equipement": 62}},
+      "notion": "charges_fixes_variables",
+      "choices": [
+        {"id": "reparer", "label": "Acheter une console d'occasion", "hint": "−1 800 €. Équipements ↑",
+         "effects": {"cash": -1800, "cash_label": "Console lumière d'occasion", "stats": {"equipement": 15}}},
+        {"id": "louer", "label": "Louer une console pour la période", "hint": "−650 €. Ne règle pas le problème de fond.",
+         "effects": {"cash": -650, "cash_label": "Location de console", "stats": {"equipement": 2}}},
+        {"id": "bricoler", "label": "Laisser Bastien bricoler", "hint": "Gratuit. Pari : ça tient… ou pas.",
+         "effects": {"stats": {"equipement": -6}, "chance": {"base": 0.5, "stat": "equipe", "per_point": 0.004, "label": "Le bricolage", "success": {"stats": {"equipe": 3}}, "failure": {"quality_mod": -0.2, "stats": {"reputation": -3}}}}}
+      ]
+    },
+    {
+      "id": "association_debat",
+      "title": "Une association cherche une salle",
+      "character": "ines",
+      "weight": 6,
+      "conditions": {},
+      "notion": "partenariat",
+      "choices": [
+        {"id": "gratuit", "label": "Prêter le foyer gratuitement", "hint": "Diversité ↑, Relations ↑, Équipe ↓",
+         "effects": {"eac": 1, "stats": {"diversite": 6, "relations": 4, "equipe": -4}}},
+        {"id": "payant", "label": "Louer le foyer à prix modique", "hint": "+300 € encaissés. Diversité ↑ (un peu)",
+         "effects": {"cash": 300, "cash_label": "Mise à disposition du foyer", "stats": {"diversite": 2, "relations": 1}}},
+        {"id": "refuser", "label": "Décliner poliment", "hint": "Relations ↓",
+         "effects": {"stats": {"relations": -3}}}
+      ]
+    },
+    {
+      "id": "journaliste",
+      "title": "La presse s'intéresse à vous",
+      "character": "helene",
+      "weight": 6,
+      "conditions": {"min_turn": 2},
+      "notion": "communication",
+      "choices": [
+        {"id": "interview", "label": "Accorder une interview sur la saison", "hint": "Communication ↑, Réputation ↑, Équipe ↓",
+         "effects": {"stats": {"communication": 15, "reputation": 2, "equipe": -2}}},
+        {"id": "creation", "label": "Parler uniquement de la création à venir", "hint": "Pari : dépend de votre réputation artistique.",
+         "effects": {"chance": {"base": 0.2, "stat": "reputation", "per_point": 0.008, "label": "L'article", "success": {"stats": {"reputation": 7, "communication": 10}}, "failure": {"stats": {"reputation": -3}}}}},
+        {"id": "decliner", "label": "Décliner, l'équipe a besoin de souffler", "hint": "Équipe ↑",
+         "effects": {"stats": {"equipe": 3}}}
+      ]
+    },
+    {
+      "id": "bonnes_critiques",
+      "title": "Les critiques sont enthousiastes",
+      "character": "louison",
+      "weight": 6,
+      "conditions": {"has_art_show": true},
+      "notion": "production_diffusion",
+      "choices": [
+        {"id": "prolonger", "label": "Ajouter une représentation", "hint": "Une date de plus : frais techniques en plus, recettes en plus.",
+         "effects": {"add_representation": true, "stats": {"reputation": 2, "equipe": -3}}},
+        {"id": "communiquer", "label": "Relayer les critiques partout", "hint": "Communication ↑↑, Réputation ↑",
+         "effects": {"stats": {"communication": 20, "reputation": 2}}}
+      ]
+    },
+    {
+      "id": "exigences_techniques",
+      "title": "La compagnie veut plus de projecteurs",
+      "character": "bastien",
+      "weight": 6,
+      "conditions": {"has_tech_show": 2},
+      "notion": "charges_fixes_variables",
+      "choices": [
+        {"id": "accepter", "label": "Louer le matériel demandé", "hint": "−900 €. Qualité du spectacle ↑",
+         "effects": {"cash": -900, "cash_label": "Location de matériel scénique", "quality_mod": 0.1, "stats": {"equipe": 2}}},
+        {"id": "compromis", "label": "Trouver un compromis avec le stock maison", "hint": "−300 €. Équipements ↓ (usure)",
+         "effects": {"cash": -300, "cash_label": "Petites fournitures techniques", "stats": {"equipement": -5}}},
+        {"id": "refuser", "label": "Refuser : le contrat ne le prévoit pas", "hint": "Gratuit. Qualité ↓, Réputation ↓",
+         "effects": {"quality_mod": -0.1, "stats": {"reputation": -2}}}
+      ]
+    },
+    {
+      "id": "mecene",
+      "title": "Une entreprise locale veut vous soutenir",
+      "character": "helene",
+      "weight": 7,
+      "conditions": {"min_turn": 2, "any_of": [{"flags_all": ["prospection"]}, {"stat_min": {"relations": 58}}]},
+      "notion": "mecenat",
+      "choices": [
+        {"id": "visible", "label": "Accepter avec logo sur toutes les affiches", "hint": "+2 500 € versés à la période suivante. Réputation ↓",
+         "effects": {"ledger": [{"label": "Mécénat de la Biscuiterie Ondine (fictive)", "category": "mecenat", "amount": 2500, "direction": 1, "delay": 1}], "stats": {"reputation": -2}}},
+        {"id": "discret", "label": "Proposer un mécénat discret", "hint": "+1 200 € à la période suivante. Relations ↑",
+         "effects": {"ledger": [{"label": "Mécénat discret (fictif)", "category": "mecenat", "amount": 1200, "direction": 1, "delay": 1}], "stats": {"relations": 3}}},
+        {"id": "refuser", "label": "Refuser pour garder votre indépendance", "hint": "Réputation ↑ (un peu)",
+         "effects": {"stats": {"reputation": 2, "relations": -1}}}
+      ]
+    },
+    {
+      "id": "equipe_epuisee",
+      "title": "L'équipe tire la langue",
+      "character": "bastien",
+      "weight": 12,
+      "conditions": {"stat_max": {"equipe": 40}},
+      "notion": "equipe",
+      "choices": [
+        {"id": "renfort", "label": "Engager des renforts intermittents", "hint": "−800 €. Équipe ↑↑",
+         "effects": {"cash": -800, "cash_label": "Renforts techniques intermittents", "stats": {"equipe": 15}}},
+        {"id": "pot", "label": "Organiser un moment convivial", "hint": "−200 €. Équipe ↑",
+         "effects": {"cash": -200, "cash_label": "Moment convivial d'équipe", "stats": {"equipe": 7}}},
+        {"id": "tenir", "label": "Demander de tenir jusqu'à la fin de la période", "hint": "Gratuit. Équipe ↓, qualité ↓",
+         "effects": {"quality_mod": -0.08, "stats": {"equipe": -5}}}
+      ]
+    },
+    {
+      "id": "commission_securite",
+      "title": "Visite de la commission de sécurité",
+      "character": "pommier",
+      "weight": 10,
+      "conditions": {"stat_max": {"equipement": 42}},
+      "notion": "collectivite",
+      "choices": [
+        {"id": "travaux", "label": "Engager les travaux de mise en conformité", "hint": "−2 200 €. Équipements ↑↑, Relations ↑",
+         "effects": {"cash": -2200, "cash_label": "Travaux de mise en conformité", "stats": {"equipement": 20, "relations": 2}}},
+        {"id": "delai", "label": "Demander un délai", "hint": "Gratuit maintenant. Relations ↓↓, jauge réduite cette période.",
+         "effects": {"demand_mult": 0.85, "stats": {"relations": -8}}}
+      ]
+    },
+    {
+      "id": "tarif_solidaire",
+      "title": "Et si le théâtre était pour tout le monde ?",
+      "character": "ines",
+      "weight": 5,
+      "conditions": {"flags_none": ["billets_suspendus"]},
+      "notion": "diversification",
+      "choices": [
+        {"id": "suspendus", "label": "Lancer les « billets suspendus »", "hint": "Les spectateurs offrent des places. Diversité ↑, Relations ↑",
+         "effects": {"flags": ["billets_suspendus"], "stats": {"diversite": 5, "relations": 2, "equipe": -2}}},
+        {"id": "jeunes", "label": "Créer un tarif jeunes à 5 € cette période", "hint": "Plus de jeunes, recettes par billet ↓. Diversité ↑↑",
+         "effects": {"price_mult": 0.9, "demand_mult": 1.06, "stats": {"diversite": 8}}},
+        {"id": "plus_tard", "label": "Pas cette saison", "hint": "Aucun effet immédiat. Diversité ↓ (un peu)",
+         "effects": {"stats": {"diversite": -1}}}
+      ]
+    },
+    {
+      "id": "appel_projets",
+      "title": "Un appel à projets du Département",
+      "character": "helene",
+      "weight": 7,
+      "conditions": {"min_turn": 2, "max_turn": 6},
+      "notion": "subvention",
+      "choices": [
+        {"id": "deposer", "label": "Déposer un dossier", "hint": "Équipe ↓. Chances selon votre rayonnement : 3 500 € versés dans 2 périodes si accepté.",
+         "effects": {"stats": {"equipe": -5}, "chance": {"base": 0.05, "stat": "rayonnement", "per_point": 0.009, "label": "Le dossier", "success": {"ledger": [{"label": "Aide à la diffusion du Département (fictive)", "category": "subvention", "amount": 3500, "direction": 1, "delay": 2}]}, "failure": {}}}},
+        {"id": "deposer_reseau", "label": "Déposer avec des partenaires du territoire", "hint": "Nécessite de bonnes relations. Meilleures chances.",
+         "requires": {"stat_min": {"relations": 55}},
+         "effects": {"stats": {"equipe": -4}, "chance": {"base": 0.3, "stat": "rayonnement", "per_point": 0.008, "label": "Le dossier collectif", "success": {"ledger": [{"label": "Aide à la diffusion du Département (fictive)", "category": "subvention", "amount": 3500, "direction": 1, "delay": 2}], "stats": {"relations": 3}}, "failure": {}}}},
+        {"id": "passer", "label": "Passer votre tour", "hint": "L'équipe se concentre sur la saison. Équipe ↑",
+         "effects": {"stats": {"equipe": 2}}}
+      ]
+    },
+    {
+      "id": "residence_louison",
+      "title": "Louison rêve d'une résidence",
+      "character": "louison",
+      "weight": 6,
+      "conditions": {"min_turn": 2, "max_turn": 6, "flags_none": ["residence_done", "louison_refus"]},
+      "notion": "residence",
+      "choices": [
+        {"id": "accueillir", "label": "Ouvrir le plateau une semaine", "hint": "−1 000 € (accueil). Réputation ↑, prépare la création",
+         "effects": {"cash": -1000, "cash_label": "Accueil en résidence", "flags": ["residence_done"], "stats": {"reputation": 5}}},
+        {"id": "refuser", "label": "Expliquer que le calendrier est plein", "hint": "Gratuit. Réputation ↓, Louison s'en souviendra",
+         "effects": {"flags": ["louison_refus"], "stats": {"reputation": -3, "equipe": 1}}}
+      ]
+    },
+    {
+      "id": "billetterie_en_ligne",
+      "title": "Moderniser la billetterie",
+      "character": "helene",
+      "weight": 5,
+      "conditions": {"min_turn": 2, "max_turn": 6, "flags_none": ["billetterie_en_ligne"]},
+      "notion": "billetterie",
+      "choices": [
+        {"id": "investir", "label": "Investir dans un logiciel de billetterie", "hint": "1 200 € payés à la période suivante. Fréquentation +5 % pour le reste de la saison",
+         "effects": {"flags": ["billetterie_en_ligne"], "ledger": [{"label": "Logiciel de billetterie", "category": "charge", "amount": 1200, "direction": -1, "delay": 1}], "stats": {"fidelite": 2}}},
+        {"id": "attendre", "label": "Garder le carnet à souches", "hint": "Aucun coût. Rien ne change.",
+         "effects": {"stats": {"equipe": 1}}}
+      ]
+    },
+    {
+      "id": "vague_froid",
+      "title": "Il fait froid dans la salle",
+      "character": "helene",
+      "weight": 9,
+      "conditions": {"period_tags": ["hiver"]},
+      "notion": "charges_fixes_variables",
+      "choices": [
+        {"id": "chauffer", "label": "Chauffer normalement", "hint": "−1 000 € d'énergie supplémentaire",
+         "effects": {"cash": -1000, "cash_label": "Surcoût de chauffage"}},
+        {"id": "plaids", "label": "Prêter des plaids aux spectateurs", "hint": "−200 €. Charmant, mais un peu frais. Fidélité ↑ (un peu)",
+         "effects": {"cash": -200, "cash_label": "Plaids pour la salle", "demand_mult": 0.96, "stats": {"fidelite": 1}}},
+        {"id": "baisser", "label": "Baisser le chauffage", "hint": "Gratuit. Fidélité ↓, Équipe ↓",
+         "effects": {"demand_mult": 0.92, "stats": {"fidelite": -4, "equipe": -3}}}
+      ]
+    },
+    {
+      "id": "fete_quartier",
+      "title": "La fête du quartier des Tanneurs",
+      "character": "ines",
+      "weight": 7,
+      "conditions": {"min_turn": 6},
+      "notion": "diversification",
+      "choices": [
+        {"id": "participer", "label": "Installer une scène ouverte dans la rue", "hint": "−400 €. Diversité ↑↑, Relations ↑, Fidélité ↑",
+         "effects": {"cash": -400, "cash_label": "Scène ouverte de quartier", "eac": 1, "stats": {"diversite": 7, "relations": 4, "fidelite": 2, "equipe": -3}}},
+        {"id": "stand", "label": "Tenir un simple stand d'information", "hint": "−80 €. Communication ↑",
+         "effects": {"cash": -80, "cash_label": "Stand d'information", "stats": {"communication": 8, "diversite": 2}}},
+        {"id": "decliner", "label": "Décliner : l'équipe est déjà sur le pont", "hint": "Équipe ↑ (un peu), Relations ↓",
+         "effects": {"stats": {"equipe": 2, "relations": -2}}}
+      ]
+    },
+    {
+      "id": "louison_coup_de_gueule",
+      "title": "Le coup de gueule de Louison",
+      "character": "louison",
+      "weight": 8,
+      "conditions": {"min_turn": 3, "stat_max": {"reputation": 38}},
+      "notion": "programmation",
+      "choices": [
+        {"id": "ecouter", "label": "Promettre une place à la création la saison prochaine", "hint": "Réputation ↑ (un peu), Équipe ↑",
+         "effects": {"stats": {"reputation": 2, "equipe": 2}}},
+        {"id": "assumer", "label": "Assumer une ligne populaire", "hint": "Fidélité ↑, Réputation ↓",
+         "effects": {"stats": {"fidelite": 3, "reputation": -3}}}
+      ]
+    }
+  ]
+}

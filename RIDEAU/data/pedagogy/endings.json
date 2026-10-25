@@ -1,0 +1,34 @@
+{
+  "_doc": "Fins de saison. Le premier profil dont les conditions sont remplies est retenu (ordre du tableau). Conditions : renewed, bankrupt, stat_min, stat_max, metric_min, metric_max.",
+  "endings": [
+    {"id": "faillite", "title": "Rideau baissé", "conditions": {"bankrupt": true}, "tone": "bad",
+     "text": "La trésorerie a dépassé la limite du découvert. Les salaires ne peuvent plus être payés : le théâtre ferme ses portes en pleine saison."},
+    {"id": "reference", "title": "Une scène qui compte", "conditions": {"renewed": true, "stat_min": {"rayonnement": 66, "fidelite": 60}}, "tone": "great",
+     "text": "Salles pleines, critiques élogieuses, partenaires conquis : la Lanterne est devenue une scène de référence du territoire. On parle même d'une demande d'appellation nationale."},
+    {"id": "laboratoire", "title": "Le laboratoire", "conditions": {"renewed": true, "stat_min": {"reputation": 65}}, "tone": "good",
+     "text": "Votre théâtre est devenu un lieu de création reconnu par la profession. Les compagnies se bousculent pour y travailler."},
+    {"id": "maison_publics", "title": "La maison de tous les publics", "conditions": {"renewed": true, "stat_min": {"diversite": 60}}, "tone": "good",
+     "text": "Collégiens, habitants des Tanneurs, abonnés de toujours : la salle ressemble enfin à la ville."},
+    {"id": "populaire", "title": "Le théâtre populaire", "conditions": {"renewed": true, "stat_min": {"fidelite": 60}}, "tone": "good",
+     "text": "Les Brévalois ont pris l'habitude de venir, et de revenir. Le public est fidèle et chaleureux."},
+    {"id": "equilibre", "title": "Le juste équilibre", "conditions": {"renewed": true}, "tone": "good",
+     "text": "Ni triomphe ni naufrage : une saison tenue, des comptes à l'équilibre et une convention renouvelée. C'est déjà beaucoup."},
+    {"id": "caisse_pleine", "title": "Caisse pleine, convention vide", "conditions": {"renewed": false, "metric_min": {"cash": 0}, "stat_max": {"reputation": 45}}, "tone": "mixed",
+     "text": "Les comptes sont bons, mais la Ville estime que le théâtre a oublié une partie de ses missions de service public. La convention n'est pas renouvelée en l'état."},
+    {"id": "demi_teinte", "title": "Une saison en demi-teinte", "conditions": {"renewed": false, "metric_min": {"cash": 0}}, "tone": "mixed",
+     "text": "La trésorerie est sauve, mais trop d'objectifs de la convention restent hors d'atteinte. La Ville demande un nouveau projet."},
+    {"id": "dans_le_rouge", "title": "Belle saison, comptes dans le rouge", "conditions": {"renewed": false}, "tone": "bad",
+     "text": "Le public et les artistes étaient au rendez-vous, mais la saison se termine en déficit de trésorerie. Sans équilibre financier, impossible de renouveler la convention."}
+  ],
+  "lessons": [
+    {"id": "deficit", "when": {"metric_max": {"cash": -1}}, "text": "Une programmation ambitieuse doit être financée : surveillez la trésorerie prévisionnelle, pas seulement les recettes espérées."},
+    {"id": "art_low", "when": {"metric_max": {"art_count": 3}}, "text": "Les spectacles populaires équilibrent les comptes, mais un lieu soutenu par l'argent public est aussi attendu sur la création et la diversité des esthétiques."},
+    {"id": "eac_low", "when": {"metric_max": {"eac_count": 4}}, "text": "L'éducation artistique et la médiation ne rapportent pas de billetterie, mais elles comptent dans les engagements pris auprès des financeurs et élargissent les publics."},
+    {"id": "attendance_low", "when": {"metric_max": {"attendance_total": 3599}}, "text": "Une salle à moitié vide coûte presque autant qu'une salle pleine : les charges fixes ne baissent pas avec la fréquentation."},
+    {"id": "equipement_low", "when": {"stat_max": {"equipement": 35}}, "text": "Reporter l'entretien fait des économies à court terme, mais augmente les incidents et limite les spectacles techniques."},
+    {"id": "equipe_low", "when": {"stat_max": {"equipe": 35}}, "text": "Une petite équipe s'épuise vite : trop d'activité dégrade la qualité des représentations."},
+    {"id": "relations_low", "when": {"stat_max": {"relations": 40}}, "text": "Les relations avec la collectivité se construisent toute l'année : bilans, invitations, partenariats."},
+    {"id": "diversite_high", "when": {"stat_min": {"diversite": 60}}, "text": "La médiation, les tarifs adaptés et le travail avec les écoles ont réellement élargi vos publics."},
+    {"id": "result_vs_cash", "when": {}, "text": "Rappel : une aide votée n'est pas une aide versée. Le résultat d'une période et sa variation de trésorerie racontent deux histoires différentes."}
+  ]
+}

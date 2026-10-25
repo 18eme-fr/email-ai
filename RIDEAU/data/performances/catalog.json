@@ -1,0 +1,862 @@
+{
+  "_doc": "Catalogue des propositions artistiques. Toutes les compagnies et œuvres sont fictives. Champs documentés dans docs/DATA_FORMAT.md.",
+  "genres": {
+    "comedie": {
+      "label": "Comédie populaire",
+      "color": "#d9824b"
+    },
+    "humour": {
+      "label": "Humour / seul-en-scène",
+      "color": "#e3b341"
+    },
+    "contemporain": {
+      "label": "Théâtre contemporain",
+      "color": "#4f7cac"
+    },
+    "familial": {
+      "label": "Spectacle familial",
+      "color": "#6aa86b"
+    },
+    "jeune_public": {
+      "label": "Théâtre jeune public",
+      "color": "#8cc084"
+    },
+    "lecture": {
+      "label": "Lecture théâtralisée",
+      "color": "#a58bc4"
+    },
+    "rencontre": {
+      "label": "Rencontre avec des artistes",
+      "color": "#b8a07a"
+    },
+    "atelier": {
+      "label": "Atelier de pratique",
+      "color": "#c4796b"
+    },
+    "creation": {
+      "label": "Création expérimentale",
+      "color": "#c94f6d"
+    },
+    "musique": {
+      "label": "Concert-spectacle",
+      "color": "#5fa8a3"
+    },
+    "classique": {
+      "label": "Classique revisité",
+      "color": "#9c6b3f"
+    },
+    "danse": {
+      "label": "Danse contemporaine",
+      "color": "#7a5ea8"
+    },
+    "cirque": {
+      "label": "Cirque contemporain",
+      "color": "#d16b3a"
+    },
+    "marionnette": {
+      "label": "Marionnette pour adultes",
+      "color": "#6b4e71"
+    },
+    "residence": {
+      "label": "Résidence de création",
+      "color": "#8a8f98"
+    }
+  },
+  "shows": [
+    {
+      "id": "comedie_diner",
+      "title": "Le Dîner des quiproquos",
+      "company": "Cie Les Joyeux Fâcheux",
+      "genre": "comedie",
+      "format": "salle",
+      "contract": "cession",
+      "fee": 3200,
+      "representations": 2,
+      "price": 20,
+      "popularity": 0.8,
+      "art": 0.25,
+      "risk": 0.15,
+      "audiences": [
+        "grand_public",
+        "seniors"
+      ],
+      "tech_level": 1,
+      "tech_cost": 350,
+      "hosting": 500,
+      "rights": true,
+      "workload": 5,
+      "stats": {
+        "fidelite": 3
+      },
+      "pitch": "Un boulevard efficace qui remplit les salles.",
+      "description": "Un notaire invite par erreur ses deux belles-familles le même soir. Portes qui claquent, sauce béarnaise et quiproquos garantis. Le public rit, la caisse aussi, mais la critique boude.",
+      "notions": [
+        "contrat_cession",
+        "billetterie"
+      ],
+      "poster": {
+        "bg": "#d9824b",
+        "fg": "#2b1d2e",
+        "motif": "door"
+      }
+    },
+    {
+      "id": "humour_banquier",
+      "title": "Mon banquier, ma bataille",
+      "company": "Production Rires & Agios",
+      "genre": "humour",
+      "format": "salle",
+      "contract": "cession",
+      "fee": 2700,
+      "representations": 1,
+      "price": 22,
+      "popularity": 0.86,
+      "art": 0.15,
+      "risk": 0.2,
+      "audiences": [
+        "grand_public",
+        "jeunes"
+      ],
+      "tech_level": 1,
+      "tech_cost": 250,
+      "hosting": 300,
+      "rights": true,
+      "workload": 3,
+      "stats": {
+        "fidelite": 2,
+        "reputation": -1
+      },
+      "pitch": "Un humoriste en tournée, une soirée qui affiche complet.",
+      "description": "Seul en scène, un ancien conseiller bancaire raconte ses rendez-vous les plus absurdes. Très demandé, mais le cachet est élevé et l'intérêt artistique modeste.",
+      "notions": [
+        "contrat_cession",
+        "jauge"
+      ],
+      "poster": {
+        "bg": "#e3b341",
+        "fg": "#2b1d2e",
+        "motif": "mic"
+      }
+    },
+    {
+      "id": "contemporain_heures",
+      "title": "Les Heures blanches",
+      "company": "Collectif Insomnie",
+      "genre": "contemporain",
+      "format": "salle",
+      "contract": "corealisation",
+      "company_share": 0.7,
+      "fee": 0,
+      "representations": 2,
+      "price": 15,
+      "popularity": 0.42,
+      "art": 0.82,
+      "risk": 0.35,
+      "audiences": [
+        "curieux",
+        "jeunes"
+      ],
+      "tech_level": 2,
+      "tech_cost": 450,
+      "hosting": 400,
+      "rights": true,
+      "workload": 6,
+      "stats": {
+        "reputation": 4
+      },
+      "pitch": "Une écriture d'aujourd'hui, saluée par la profession.",
+      "description": "Trois veilleurs de nuit dans un hôpital racontent la ville qui dort. Une pièce exigeante et sensible. En coréalisation, la compagnie partage avec vous le risque de billetterie.",
+      "notions": [
+        "corealisation",
+        "programmation"
+      ],
+      "poster": {
+        "bg": "#4f7cac",
+        "fg": "#f3e9d2",
+        "motif": "moon"
+      }
+    },
+    {
+      "id": "familial_pipo",
+      "title": "Le Grand Voyage de Pipo",
+      "company": "Théâtre de la Valise",
+      "genre": "familial",
+      "format": "salle",
+      "contract": "cession",
+      "fee": 2000,
+      "representations": 2,
+      "price": 11,
+      "popularity": 0.72,
+      "art": 0.5,
+      "risk": 0.2,
+      "audiences": [
+        "familles"
+      ],
+      "season_bonus": {
+        "fetes": 1.25,
+        "vacances": 1.12
+      },
+      "tech_level": 1,
+      "tech_cost": 300,
+      "hosting": 450,
+      "rights": true,
+      "workload": 5,
+      "stats": {
+        "diversite": 4,
+        "fidelite": 2
+      },
+      "pitch": "Théâtre d'objets pour toute la famille, idéal pendant les fêtes.",
+      "description": "Une valise, un petit bonhomme en carton et un tour du monde bricolé à vue. Les familles adorent, surtout pendant les fêtes et les vacances scolaires.",
+      "notions": [
+        "diversification",
+        "tarification"
+      ],
+      "poster": {
+        "bg": "#6aa86b",
+        "fg": "#2b1d2e",
+        "motif": "suitcase"
+      }
+    },
+    {
+      "id": "jeune_ourse",
+      "title": "Petite Ourse ne dort pas",
+      "company": "Cie Pas Sage",
+      "genre": "jeune_public",
+      "format": "salle",
+      "contract": "cession",
+      "fee": 1300,
+      "representations": 2,
+      "price": 8,
+      "popularity": 0.6,
+      "art": 0.65,
+      "risk": 0.2,
+      "audiences": [
+        "scolaires",
+        "familles"
+      ],
+      "school": true,
+      "eac": true,
+      "tech_level": 1,
+      "tech_cost": 250,
+      "hosting": 350,
+      "rights": true,
+      "workload": 5,
+      "stats": {
+        "diversite": 6,
+        "relations": 2
+      },
+      "pitch": "Une séance scolaire et une séance familiale : le jeune public au cœur.",
+      "description": "Une ourse refuse d'hiberner pour voir enfin la neige. Une séance est réservée aux écoles : les classes viennent plus nombreuses si vous entretenez des partenariats scolaires.",
+      "notions": [
+        "eac",
+        "diversification"
+      ],
+      "poster": {
+        "bg": "#8cc084",
+        "fg": "#2b1d2e",
+        "motif": "bear"
+      }
+    },
+    {
+      "id": "lecture_voix",
+      "title": "Voix d'elles",
+      "company": "Lectures Vagabondes",
+      "genre": "lecture",
+      "format": "petit",
+      "contract": "cession",
+      "fee": 600,
+      "representations": 1,
+      "price": 8,
+      "popularity": 0.55,
+      "art": 0.6,
+      "risk": 0.15,
+      "audiences": [
+        "curieux",
+        "seniors"
+      ],
+      "tech_level": 0,
+      "tech_cost": 80,
+      "hosting": 120,
+      "rights": true,
+      "workload": 2,
+      "stats": {
+        "reputation": 2,
+        "fidelite": 2
+      },
+      "pitch": "Une lecture au foyer, légère à organiser.",
+      "description": "Deux comédiennes lisent des textes d'autrices oubliées, au foyer du théâtre (80 places). Peu coûteux, apprécié des fidèles.",
+      "notions": [
+        "jauge",
+        "fidelisation"
+      ],
+      "poster": {
+        "bg": "#a58bc4",
+        "fg": "#2b1d2e",
+        "motif": "book"
+      }
+    },
+    {
+      "id": "rencontre_ecrire",
+      "title": "Écrire le théâtre aujourd'hui",
+      "company": "Rencontre animée par l'équipe",
+      "genre": "rencontre",
+      "format": "petit",
+      "contract": "interne",
+      "fee": 250,
+      "representations": 1,
+      "price": 0,
+      "popularity": 0.55,
+      "art": 0.5,
+      "risk": 0.1,
+      "audiences": [
+        "curieux",
+        "jeunes"
+      ],
+      "eac": true,
+      "tech_level": 0,
+      "tech_cost": 0,
+      "hosting": 150,
+      "rights": false,
+      "workload": 2,
+      "stats": {
+        "fidelite": 3,
+        "reputation": 2,
+        "relations": 1
+      },
+      "pitch": "Entrée libre : on ne gagne rien, on gagne des liens.",
+      "description": "Une autrice et un metteur en scène échangent avec le public autour d'un verre. Aucune recette de billetterie, mais une action de médiation appréciée.",
+      "notions": [
+        "mediation",
+        "fidelisation"
+      ],
+      "poster": {
+        "bg": "#b8a07a",
+        "fg": "#2b1d2e",
+        "motif": "speech"
+      }
+    },
+    {
+      "id": "atelier_amateur",
+      "title": "Atelier du samedi",
+      "company": "Intervenant : Cie Pas Sage",
+      "genre": "atelier",
+      "format": "petit",
+      "contract": "interne",
+      "fee": 900,
+      "representations": 1,
+      "capacity": 16,
+      "price": 45,
+      "popularity": 0.75,
+      "art": 0.35,
+      "risk": 0.1,
+      "audiences": [
+        "amateurs",
+        "jeunes"
+      ],
+      "eac": true,
+      "tech_level": 0,
+      "tech_cost": 0,
+      "hosting": 0,
+      "rights": false,
+      "vat": "none",
+      "workload": 3,
+      "stats": {
+        "diversite": 4,
+        "fidelite": 4
+      },
+      "pitch": "Seize participants, une pratique artistique partagée.",
+      "description": "Un cycle d'ateliers de pratique théâtrale pour amateurs. Les inscriptions couvrent à peine l'intervenant, mais les participants deviennent des spectateurs fidèles.",
+      "notions": [
+        "eac",
+        "mediation"
+      ],
+      "poster": {
+        "bg": "#c4796b",
+        "fg": "#2b1d2e",
+        "motif": "hands"
+      }
+    },
+    {
+      "id": "creation_machine",
+      "title": "Machine Ø",
+      "company": "Louison Vasseur, artiste associé·e",
+      "genre": "creation",
+      "format": "salle",
+      "contract": "coproduction",
+      "fee": 4000,
+      "representations": 1,
+      "price": 14,
+      "popularity": 0.28,
+      "art": 1.0,
+      "risk": 0.55,
+      "quality_bonus": 0.05,
+      "audiences": [
+        "curieux"
+      ],
+      "tech_level": 3,
+      "min_equipement": 50,
+      "tech_cost": 900,
+      "hosting": 300,
+      "rights": true,
+      "vat": "creation",
+      "workload": 8,
+      "stats": {
+        "reputation": 10
+      },
+      "residence_bonus": 0.12,
+      "pitch": "La création de votre artiste associé·e. Un pari audacieux.",
+      "description": "Une performance entre machines sonores et théâtre d'objets. En coproduction, vous apportez de l'argent à la création avant la première. Gros risque financier, fort rayonnement si c'est réussi. Une résidence préalable améliore la qualité.",
+      "notions": [
+        "production_diffusion",
+        "residence"
+      ],
+      "poster": {
+        "bg": "#c94f6d",
+        "fg": "#f3e9d2",
+        "motif": "gear"
+      }
+    },
+    {
+      "id": "musique_chansons",
+      "title": "Chansons d'en face",
+      "company": "Trio Palier",
+      "genre": "musique",
+      "format": "salle",
+      "contract": "cession",
+      "fee": 2300,
+      "representations": 1,
+      "price": 16,
+      "popularity": 0.7,
+      "art": 0.45,
+      "risk": 0.2,
+      "audiences": [
+        "grand_public",
+        "seniors",
+        "jeunes"
+      ],
+      "tech_level": 2,
+      "tech_cost": 400,
+      "hosting": 350,
+      "rights": true,
+      "workload": 4,
+      "stats": {
+        "fidelite": 3
+      },
+      "pitch": "Un concert-spectacle qui fait chanter la salle.",
+      "description": "Trois voisins de palier transforment leurs disputes en chansons. Un spectacle musical populaire. (Pour la musique, les droits sont en réalité gérés par la SACEM : le jeu simplifie.)",
+      "notions": [
+        "droits_auteur",
+        "billetterie"
+      ],
+      "poster": {
+        "bg": "#5fa8a3",
+        "fg": "#2b1d2e",
+        "motif": "note"
+      }
+    },
+    {
+      "id": "classique_malade",
+      "title": "Le Malade (presque) imaginaire",
+      "company": "Cie du Grand Siècle Court",
+      "genre": "classique",
+      "format": "salle",
+      "contract": "cession",
+      "fee": 2600,
+      "representations": 2,
+      "price": 16,
+      "popularity": 0.66,
+      "art": 0.6,
+      "risk": 0.2,
+      "audiences": [
+        "scolaires",
+        "grand_public",
+        "seniors"
+      ],
+      "school": true,
+      "tech_level": 2,
+      "tech_cost": 400,
+      "hosting": 500,
+      "rights": false,
+      "workload": 6,
+      "stats": {
+        "diversite": 2,
+        "reputation": 1
+      },
+      "pitch": "Molière revisité, apprécié des collèges comme des habitués.",
+      "description": "Argan en survêtement, Toinette en livreuse à vélo : un classique dépoussiéré. Une représentation attire les collégiens. L'œuvre étant dans le domaine public, pas de droits d'auteur sur le texte.",
+      "notions": [
+        "droits_auteur",
+        "eac"
+      ],
+      "poster": {
+        "bg": "#9c6b3f",
+        "fg": "#f3e9d2",
+        "motif": "mask"
+      }
+    },
+    {
+      "id": "danse_lignes",
+      "title": "Lignes de fuite",
+      "company": "Cie Diagonale",
+      "genre": "danse",
+      "format": "salle",
+      "contract": "corealisation",
+      "company_share": 0.65,
+      "fee": 0,
+      "representations": 1,
+      "price": 15,
+      "popularity": 0.38,
+      "art": 0.86,
+      "risk": 0.35,
+      "audiences": [
+        "curieux",
+        "jeunes"
+      ],
+      "tech_level": 3,
+      "min_equipement": 45,
+      "tech_cost": 650,
+      "hosting": 450,
+      "rights": true,
+      "workload": 5,
+      "stats": {
+        "reputation": 5,
+        "diversite": 1
+      },
+      "pitch": "Une danse contemporaine remarquée, peu connue du grand public.",
+      "description": "Cinq interprètes et des lignes de lumière au sol. Une pièce soutenue par les réseaux de diffusion. Exige un plateau en bon état.",
+      "notions": [
+        "corealisation",
+        "programmation"
+      ],
+      "poster": {
+        "bg": "#7a5ea8",
+        "fg": "#f3e9d2",
+        "motif": "lines"
+      }
+    },
+    {
+      "id": "cirque_bascule",
+      "title": "Bascule",
+      "company": "Collectif Contrepoids",
+      "genre": "cirque",
+      "format": "salle",
+      "contract": "cession",
+      "fee": 3600,
+      "representations": 2,
+      "price": 14,
+      "popularity": 0.72,
+      "art": 0.72,
+      "risk": 0.25,
+      "audiences": [
+        "familles",
+        "grand_public",
+        "jeunes"
+      ],
+      "season_bonus": {
+        "fetes": 1.12,
+        "vacances": 1.1
+      },
+      "tech_level": 3,
+      "min_equipement": 45,
+      "tech_cost": 600,
+      "hosting": 700,
+      "rights": true,
+      "workload": 7,
+      "stats": {
+        "diversite": 3,
+        "reputation": 3
+      },
+      "pitch": "Du cirque contemporain qui plaît à tous, mais qui coûte cher.",
+      "description": "Une planche, quatre acrobates et beaucoup d'équilibre. Exigeant et populaire à la fois, mais le cachet et les besoins techniques sont élevés.",
+      "notions": [
+        "charges_fixes_variables",
+        "contrat_cession"
+      ],
+      "poster": {
+        "bg": "#d16b3a",
+        "fg": "#2b1d2e",
+        "motif": "seesaw"
+      }
+    },
+    {
+      "id": "impro_match",
+      "title": "Match d'impro : Bretelles contre Chaussettes",
+      "company": "Ligue d'improvisation de l'Ondine",
+      "genre": "humour",
+      "format": "salle",
+      "contract": "corealisation",
+      "company_share": 0.5,
+      "fee": 0,
+      "representations": 1,
+      "price": 10,
+      "popularity": 0.62,
+      "art": 0.2,
+      "risk": 0.25,
+      "audiences": [
+        "jeunes",
+        "amateurs"
+      ],
+      "tech_level": 0,
+      "tech_cost": 150,
+      "hosting": 0,
+      "rights": false,
+      "workload": 3,
+      "stats": {
+        "diversite": 3,
+        "relations": 2
+      },
+      "pitch": "Une soirée festive avec la troupe locale.",
+      "description": "Deux équipes locales s'affrontent sous l'œil d'un arbitre de mauvaise foi. Peu de risque, un public jeune, et la ville apprécie qu'on accueille les amateurs.",
+      "notions": [
+        "corealisation",
+        "partenariat"
+      ],
+      "poster": {
+        "bg": "#e0a458",
+        "fg": "#2b1d2e",
+        "motif": "whistle"
+      }
+    },
+    {
+      "id": "documentaire_terres",
+      "title": "Terres rares",
+      "company": "Cie L'Enquête",
+      "genre": "contemporain",
+      "format": "salle",
+      "contract": "corealisation",
+      "company_share": 0.7,
+      "fee": 0,
+      "representations": 2,
+      "price": 14,
+      "popularity": 0.4,
+      "art": 0.78,
+      "risk": 0.3,
+      "audiences": [
+        "curieux",
+        "jeunes"
+      ],
+      "tech_level": 2,
+      "tech_cost": 400,
+      "hosting": 400,
+      "rights": true,
+      "workload": 6,
+      "stats": {
+        "reputation": 4,
+        "relations": 1
+      },
+      "pitch": "Théâtre documentaire sur ce que cachent nos téléphones.",
+      "description": "Une enquête théâtrale nourrie de témoignages de mineurs et d'ingénieurs. Les débats d'après-spectacle sont souvent vifs.",
+      "notions": [
+        "corealisation",
+        "evaluation"
+      ],
+      "poster": {
+        "bg": "#5b6b7a",
+        "fg": "#f3e9d2",
+        "motif": "rock"
+      }
+    },
+    {
+      "id": "conte_veillee",
+      "title": "Veillée de contes",
+      "company": "Mélusine Fortin, conteuse",
+      "genre": "lecture",
+      "format": "petit",
+      "contract": "cession",
+      "fee": 500,
+      "representations": 1,
+      "price": 7,
+      "popularity": 0.6,
+      "art": 0.45,
+      "risk": 0.1,
+      "audiences": [
+        "familles",
+        "seniors"
+      ],
+      "season_bonus": {
+        "hiver": 1.15,
+        "fetes": 1.1
+      },
+      "tech_level": 0,
+      "tech_cost": 60,
+      "hosting": 100,
+      "rights": false,
+      "workload": 2,
+      "stats": {
+        "diversite": 2,
+        "fidelite": 3
+      },
+      "pitch": "Une veillée chaleureuse au foyer, pour petits et grands.",
+      "description": "Des contes d'hiver racontés au coin d'un faux feu, au foyer du théâtre. Peu de recettes, beaucoup de sourires.",
+      "notions": [
+        "fidelisation",
+        "jauge"
+      ],
+      "poster": {
+        "bg": "#3f5d7d",
+        "fg": "#f3e9d2",
+        "motif": "fire"
+      }
+    },
+    {
+      "id": "residence_fil",
+      "title": "Résidence : la Compagnie du Fil",
+      "company": "Compagnie du Fil",
+      "genre": "residence",
+      "format": "residence",
+      "contract": "residence",
+      "fee": 900,
+      "representations": 1,
+      "capacity": 60,
+      "price": 0,
+      "popularity": 0.5,
+      "art": 0.7,
+      "risk": 0.1,
+      "audiences": [
+        "curieux"
+      ],
+      "eac": true,
+      "tech_level": 1,
+      "tech_cost": 0,
+      "hosting": 0,
+      "rights": false,
+      "workload": 4,
+      "stats": {
+        "reputation": 5,
+        "relations": 2,
+        "equipe": 2
+      },
+      "flags": [
+        "residence_done"
+      ],
+      "pitch": "Prêter le plateau à une équipe en création, avec une sortie publique.",
+      "description": "Vous accueillez une compagnie pendant deux semaines pour qu'elle crée son prochain spectacle. Pas de billetterie, une présentation publique gratuite. Cela renforce votre réputation et prépare les créations futures.",
+      "notions": [
+        "residence",
+        "production_diffusion"
+      ],
+      "poster": {
+        "bg": "#8a8f98",
+        "fg": "#2b1d2e",
+        "motif": "thread"
+      }
+    },
+    {
+      "id": "boulevard_reveillon",
+      "title": "Réveillon chez les Morel",
+      "company": "Les Tréteaux du Dimanche",
+      "genre": "comedie",
+      "format": "salle",
+      "contract": "cession",
+      "fee": 3700,
+      "representations": 2,
+      "price": 21,
+      "popularity": 0.74,
+      "art": 0.2,
+      "risk": 0.2,
+      "audiences": [
+        "grand_public",
+        "seniors"
+      ],
+      "season_bonus": {
+        "fetes": 1.25
+      },
+      "tech_level": 1,
+      "tech_cost": 350,
+      "hosting": 550,
+      "rights": true,
+      "workload": 5,
+      "stats": {
+        "fidelite": 2,
+        "reputation": -1
+      },
+      "pitch": "La comédie de fin d'année, taillée pour les fêtes.",
+      "description": "Une dinde, un oncle encombrant et un secret de famille. Idéal en décembre, beaucoup moins pertinent le reste de l'année.",
+      "notions": [
+        "contrat_cession",
+        "budget_previsionnel"
+      ],
+      "poster": {
+        "bg": "#b33a3a",
+        "fg": "#f3e9d2",
+        "motif": "star"
+      }
+    },
+    {
+      "id": "hamlet_express",
+      "title": "Hamlet en 45 minutes",
+      "company": "Cie Tempête dans un verre",
+      "genre": "classique",
+      "format": "salle",
+      "contract": "cession",
+      "fee": 1100,
+      "representations": 1,
+      "price": 10,
+      "popularity": 0.6,
+      "art": 0.55,
+      "risk": 0.2,
+      "audiences": [
+        "scolaires",
+        "jeunes"
+      ],
+      "school": true,
+      "eac": true,
+      "tech_level": 1,
+      "tech_cost": 250,
+      "hosting": 300,
+      "rights": false,
+      "workload": 4,
+      "stats": {
+        "diversite": 4
+      },
+      "pitch": "Shakespeare au pas de course pour les lycéens.",
+      "description": "Trois comédiens, un crâne en plastique et toute la tragédie en trois quarts d'heure. Une séance pensée pour les lycées, suivie d'un échange en classe.",
+      "notions": [
+        "eac",
+        "mediation"
+      ],
+      "poster": {
+        "bg": "#2f4858",
+        "fg": "#f3e9d2",
+        "motif": "skull"
+      }
+    },
+    {
+      "id": "marionnette_fils",
+      "title": "Les Fils invisibles",
+      "company": "Théâtre Manivelle",
+      "genre": "marionnette",
+      "format": "salle",
+      "contract": "corealisation",
+      "company_share": 0.65,
+      "fee": 0,
+      "representations": 1,
+      "price": 14,
+      "popularity": 0.45,
+      "art": 0.8,
+      "risk": 0.3,
+      "audiences": [
+        "curieux"
+      ],
+      "tech_level": 2,
+      "tech_cost": 450,
+      "hosting": 400,
+      "rights": true,
+      "workload": 5,
+      "stats": {
+        "reputation": 4
+      },
+      "pitch": "Une marionnette pour adultes, troublante et remarquée.",
+      "description": "Une vieille femme et sa marionnette-double se disputent leurs souvenirs. Une forme rare, très appréciée des programmateurs.",
+      "notions": [
+        "corealisation",
+        "programmation"
+      ],
+      "poster": {
+        "bg": "#6b4e71",
+        "fg": "#f3e9d2",
+        "motif": "puppet"
+      }
+    }
+  ]
+}

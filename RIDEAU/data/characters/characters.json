@@ -1,0 +1,40 @@
+{
+  "_doc": "Personnages récurrents (tous fictifs). 'portrait' renvoie à assets/pixel_art/portraits/<id>.png.",
+  "characters": {
+    "helene": {
+      "name": "Hélène Marchal",
+      "role": "Administratrice",
+      "pronoun": "elle",
+      "color": "#c9a24b",
+      "personality": "Rigoureuse, pince-sans-rire, amoureuse des tableurs. Dit « on verra au bilan » comme d'autres disent bonjour."
+    },
+    "bastien": {
+      "name": "Bastien Koné",
+      "role": "Régisseur général",
+      "pronoun": "il",
+      "color": "#5f8fb4",
+      "personality": "Pragmatique, bricoleur de génie, parle à ses projecteurs. Allergique aux promesses sans budget."
+    },
+    "ines": {
+      "name": "Inès Belkacem",
+      "role": "Chargée des relations avec les publics",
+      "pronoun": "elle",
+      "color": "#c46a7c",
+      "personality": "Enthousiaste, connaît tout le monde en ville, transforme chaque problème en atelier."
+    },
+    "pommier": {
+      "name": "Gérard Pommier",
+      "role": "Adjoint à la culture de la Ville",
+      "pronoun": "il",
+      "color": "#7d9a5b",
+      "personality": "Diplomate, attaché aux chiffres de fréquentation et aux inaugurations. Bienveillant tant qu'on lui envoie le bilan."
+    },
+    "louison": {
+      "name": "Louison Vasseur",
+      "role": "Artiste associé·e",
+      "pronoun": "iel",
+      "color": "#9b6bc4",
+      "personality": "Exalté·e, généreux·se, convaincu·e que chaque saison doit contenir au moins un risque. Défend la création avec panache."
+    }
+  }
+}

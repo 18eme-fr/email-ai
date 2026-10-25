@@ -1,0 +1,283 @@
+{
+  "_doc": "Carnet du directeur : notions d'administration culturelle. 'game' décrit la règle du jeu ; 'reality' nuance avec la pratique réelle. 'simplified' = true signale une simplification pédagogique. 'sources' renvoie aux identifiants de SOURCES.md.",
+  "notions": {
+    "tresorerie_resultat": {
+      "title": "Trésorerie et résultat",
+      "short": "La trésorerie, c'est l'argent disponible sur le compte. Le résultat, c'est la différence entre ce que la période a rapporté et ce qu'elle a coûté.",
+      "game": "Le bilan de chaque période affiche les deux. Une aide votée mais pas encore versée améliore le résultat sans remplir la caisse ; une facture reçue mais payée plus tard fait l'inverse.",
+      "reality": "Une structure peut être bénéficiaire et manquer de trésorerie (les subventions arrivent tard), ou avoir de la trésorerie en étant déficitaire. Les comptes réels suivent le plan comptable associatif, bien plus détaillé.",
+      "simplified": true,
+      "sources": [
+        "S11",
+        "S12"
+      ]
+    },
+    "budget_previsionnel": {
+      "title": "Budget prévisionnel",
+      "short": "Une estimation chiffrée des dépenses et des recettes à venir, établie avant d'agir.",
+      "game": "Avant de valider la programmation, le jeu calcule une fourchette de recettes et le coût engagé. Les recettes réelles peuvent s'en écarter.",
+      "reality": "Les financeurs publics demandent presque toujours un budget prévisionnel équilibré à l'appui d'une demande de subvention.",
+      "simplified": false,
+      "sources": [
+        "S11"
+      ]
+    },
+    "billetterie": {
+      "title": "Billetterie",
+      "short": "La vente des places. Ce que le spectateur paie inclut la TVA, qui est reversée à l'État.",
+      "game": "Les recettes de billetterie sont encaissées pendant la période ; la TVA collectée (5,5 % en général, 2,1 % pour une création) est payée à la période suivante.",
+      "reality": "Le taux réduit de 5,5 % s'applique à la plupart des spectacles vivants ; un taux de 2,1 % existe pour les 140 premières représentations de certaines créations. Certains concerts peuvent relever d'autres taux.",
+      "simplified": true,
+      "sources": [
+        "S1",
+        "S2"
+      ]
+    },
+    "jauge": {
+      "title": "Jauge",
+      "short": "Le nombre maximal de spectateurs que peut accueillir une salle, selon sa configuration et les règles de sécurité.",
+      "game": "La grande salle compte 220 places, le foyer 80. On ne vend jamais plus de places que la jauge.",
+      "reality": "La jauge dépend aussi de la configuration scénique et de l'avis de la commission de sécurité. La « jauge financière » (places × prix moyen) sert parfois au calcul de certains droits.",
+      "simplified": true,
+      "sources": [
+        "S4"
+      ]
+    },
+    "programmation": {
+      "title": "Programmation",
+      "short": "Le choix des spectacles et des activités proposés au public au cours d'une saison.",
+      "game": "Chaque période, vous retenez jusqu'à trois propositions. Il n'existe pas de programmation parfaite : chaque choix déplace l'équilibre entre publics, finances et exigence artistique.",
+      "reality": "Les lieux labellisés ou conventionnés s'engagent sur un projet artistique et culturel : soutien à la création, diversité des esthétiques, présence sur le territoire.",
+      "simplified": false,
+      "sources": [
+        "S8",
+        "S9"
+      ]
+    },
+    "contrat_cession": {
+      "title": "Contrat de cession",
+      "short": "Le producteur fournit un spectacle « clés en main » contre un prix fixe ; l'organisateur garde la billetterie et assume le risque.",
+      "game": "En cession, vous payez le prix convenu quel que soit le nombre de spectateurs.",
+      "reality": "C'est un contrat de diffusion (et non un contrat de vente). L'organisateur prend en charge le lieu, l'accueil du public, la billetterie et la promotion.",
+      "simplified": false,
+      "sources": [
+        "S3"
+      ]
+    },
+    "corealisation": {
+      "title": "Coréalisation",
+      "short": "La compagnie et le lieu partagent la recette de billetterie selon un pourcentage convenu.",
+      "game": "En coréalisation, vous ne payez pas de cachet fixe : la compagnie reçoit une part (souvent 65 à 70 % dans le jeu) de la recette nette. Le risque est partagé.",
+      "reality": "Contrat dit « innommé », régi par le droit commun des contrats. Il est fréquent qu'un minimum garanti s'y ajoute, ce que le jeu ne modélise pas.",
+      "simplified": true,
+      "sources": [
+        "S3"
+      ]
+    },
+    "droits_auteur": {
+      "title": "Droits d'auteur",
+      "short": "Une rémunération due aux auteurs pour la représentation publique de leurs œuvres.",
+      "game": "Le jeu applique 10,5 % de la recette nette, payés à la période suivante. Les œuvres du domaine public (Molière, Shakespeare) en sont exemptées.",
+      "reality": "Le taux, l'assiette et les minimums dépendent de la société d'auteurs (SACD pour le théâtre, SACEM pour la musique) et du contrat. Le jeu retient un taux unique simplifié.",
+      "simplified": true,
+      "sources": [
+        "S4"
+      ]
+    },
+    "charges_fixes_variables": {
+      "title": "Charges fixes et variables",
+      "short": "Les charges fixes reviennent quoi qu'il arrive (salaires permanents, bâtiment). Les charges variables dépendent de l'activité (cachets, technique, accueil).",
+      "game": "5 000 € de charges fixes par période en mode Standard. Chaque spectacle ajoute ses propres charges variables.",
+      "reality": "Dans un théâtre, la part des charges fixes est importante : c'est pourquoi les financements de fonctionnement sont essentiels.",
+      "simplified": true,
+      "sources": [
+        "S11"
+      ]
+    },
+    "subvention": {
+      "title": "Subvention",
+      "short": "Une aide financière accordée par une collectivité ou l'État pour soutenir un projet d'intérêt général.",
+      "game": "La Ville verse 34 000 € en trois fois ; le solde dépend du bilan. D'autres aides ponctuelles s'obtiennent via les événements. Elles sont versées plusieurs périodes après leur obtention.",
+      "reality": "Au-delà de 23 000 € par an, une convention définissant objet, montant et conditions d'utilisation est obligatoire. Un compte rendu financier doit être produit.",
+      "simplified": true,
+      "sources": [
+        "S6",
+        "S7"
+      ]
+    },
+    "convention_objectifs": {
+      "title": "Convention d'objectifs",
+      "short": "Un accord entre un financeur public et une structure, qui fixe des objectifs et les moyens associés, souvent sur plusieurs années.",
+      "game": "Les objectifs de la saison sont ceux de votre convention avec la Ville. Le solde de la subvention et le renouvellement en dépendent.",
+      "reality": "Les conventions pluriannuelles d'objectifs (CPO) prévoient des indicateurs, des bilans et des modalités de versement. Les modèles officiels sont annexés à une circulaire de 2015.",
+      "simplified": true,
+      "sources": [
+        "S6",
+        "S7"
+      ]
+    },
+    "collectivite": {
+      "title": "Relations avec les collectivités",
+      "short": "Les communes, départements et régions financent largement la culture et attendent en retour un projet au service du territoire.",
+      "game": "La jauge « Relations » mesure la confiance des partenaires publics. Elle conditionne le renouvellement de la convention et certaines aides.",
+      "reality": "Les collectivités territoriales sont, ensemble, des financeurs majeurs de la culture en France, aux côtés de l'État (via les DRAC).",
+      "simplified": true,
+      "sources": [
+        "S9",
+        "S10"
+      ]
+    },
+    "mediation": {
+      "title": "Médiation culturelle",
+      "short": "L'ensemble des actions qui créent du lien entre les œuvres, les artistes et les publics.",
+      "game": "L'action « Médiation » augmente la diversité et la fidélité des publics, et compte pour l'objectif d'éducation artistique.",
+      "reality": "Le développement des publics, en particulier les plus éloignés de la culture, fait partie des missions des lieux soutenus par l'État et les collectivités.",
+      "simplified": false,
+      "sources": [
+        "S5",
+        "S8"
+      ]
+    },
+    "eac": {
+      "title": "Éducation artistique et culturelle",
+      "short": "Une politique publique qui vise à ce que chaque jeune rencontre des œuvres, pratique, et acquière des connaissances.",
+      "game": "Séances scolaires, ateliers, parcours avec un collège : ces actions comptent pour l'objectif « EAC » de la convention.",
+      "reality": "L'EAC repose sur trois piliers : fréquenter (rencontres avec les œuvres et les artistes), pratiquer, s'approprier (connaissances). Elle est portée conjointement par les ministères de la Culture et de l'Éducation nationale.",
+      "simplified": false,
+      "sources": [
+        "S5"
+      ]
+    },
+    "diversification": {
+      "title": "Diversification des publics",
+      "short": "Faire venir des personnes qui ne fréquentent pas, ou peu, les lieux culturels.",
+      "game": "La jauge « Diversité » progresse avec la médiation, les tarifs solidaires, le jeune public et les partenariats. Elle compte dans le rayonnement.",
+      "reality": "Le prix n'est qu'un frein parmi d'autres : sentiment de légitimité, transports, information, horaires. C'est pourquoi la médiation compte autant que la tarification.",
+      "simplified": true,
+      "sources": [
+        "S5",
+        "S8"
+      ]
+    },
+    "tarification": {
+      "title": "Tarification",
+      "short": "Le choix des prix des places et des réductions.",
+      "game": "Pour chaque spectacle, trois niveaux : solidaire (−25 %), normal, élevé (+25 %). Un prix bas remplit davantage la salle mais rapporte moins par billet.",
+      "reality": "Les lieux combinent abonnements, tarifs réduits, tarifs jeunes et dispositifs nationaux. La relation prix-fréquentation varie beaucoup selon les publics.",
+      "simplified": true,
+      "sources": [
+        "S8"
+      ]
+    },
+    "fidelisation": {
+      "title": "Fidélisation",
+      "short": "Donner envie aux spectateurs de revenir, saison après saison.",
+      "game": "La jauge « Fidélité » augmente la fréquentation de tous les spectacles. Elle progresse avec un bon accueil, des spectacles réussis et les rencontres.",
+      "reality": "L'abonnement, la qualité de l'accueil et le lien avec l'équipe sont des leviers classiques de fidélisation.",
+      "simplified": true,
+      "sources": [
+        "S8"
+      ]
+    },
+    "frequentation": {
+      "title": "Fréquentation",
+      "short": "Le nombre d'entrées (spectateurs, participants) sur une période.",
+      "game": "Toutes les entrées comptent pour l'objectif « Publics », y compris les gratuites. Une salle pleine n'est pas forcément rentable.",
+      "reality": "Les financeurs examinent la fréquentation, mais aussi le taux de remplissage, la part de publics nouveaux ou scolaires, et l'action sur le territoire.",
+      "simplified": true,
+      "sources": [
+        "S7",
+        "S9"
+      ]
+    },
+    "communication": {
+      "title": "Communication",
+      "short": "Faire connaître la programmation : affiches, presse, réseaux sociaux, brochure de saison.",
+      "game": "La campagne augmente la jauge « Communication », qui multiplie la demande des spectacles de la période, puis s'estompe.",
+      "reality": "La communication d'un lieu culturel combine une brochure de saison, des outils numériques et beaucoup de bouche-à-oreille.",
+      "simplified": true,
+      "sources": []
+    },
+    "partenariat": {
+      "title": "Partenariats",
+      "short": "Des collaborations avec d'autres acteurs : écoles, associations, entreprises, autres lieux.",
+      "game": "Les partenariats améliorent les relations, ouvrent des événements (mécénat, dossiers collectifs) et augmentent les chances d'obtenir des aides.",
+      "reality": "Le travail en réseau (avec d'autres lieux, des associations, des établissements scolaires) est au cœur des missions des scènes conventionnées.",
+      "simplified": true,
+      "sources": [
+        "S9"
+      ]
+    },
+    "mecenat": {
+      "title": "Mécénat",
+      "short": "Un soutien apporté par une entreprise ou un particulier à une activité d'intérêt général, sans contrepartie équivalente.",
+      "game": "Une entreprise peut vous soutenir ; plus le logo est visible, plus le soutien est généreux… et moins il est discret.",
+      "reality": "En France, les entreprises peuvent bénéficier d'une réduction d'impôt de 60 % des sommes versées, dans certaines limites (article 238 bis du Code général des impôts). Le parrainage avec contreparties importantes relève d'un autre régime.",
+      "simplified": true,
+      "sources": [
+        "S13"
+      ]
+    },
+    "production_diffusion": {
+      "title": "Production et diffusion",
+      "short": "Produire, c'est porter la création d'un spectacle (financement, répétitions, équipe). Diffuser, c'est le présenter au public.",
+      "game": "La plupart des propositions sont de la diffusion. « Machine Ø » est une coproduction : vous apportez de l'argent avant même de savoir si ce sera réussi.",
+      "reality": "Les lieux soutiennent souvent la création par des coproductions et des résidences, puis des réseaux aident les spectacles à tourner.",
+      "simplified": true,
+      "sources": [
+        "S9",
+        "S14"
+      ]
+    },
+    "residence": {
+      "title": "Résidence de création",
+      "short": "Un lieu accueille une équipe artistique pour qu'elle travaille à sa création, souvent avec des rencontres publiques.",
+      "game": "Accueillir une résidence coûte un peu, rapporte en réputation et améliore la qualité de la création de votre artiste associé·e.",
+      "reality": "L'accueil en résidence fait partie des missions de soutien à la création des lieux conventionnés.",
+      "simplified": true,
+      "sources": [
+        "S9"
+      ]
+    },
+    "evaluation": {
+      "title": "Évaluation et bilan",
+      "short": "Rendre compte de l'activité aux financeurs : chiffres, publics touchés, actions menées.",
+      "game": "À mi-saison, la Ville demande un bilan ; en fin de saison, le solde de la subvention dépend des objectifs atteints.",
+      "reality": "Le bilan d'activité et le compte rendu financier sont des obligations courantes des structures subventionnées.",
+      "simplified": true,
+      "sources": [
+        "S6",
+        "S7"
+      ]
+    },
+    "equipe": {
+      "title": "L'équipe",
+      "short": "Administration, technique, relations avec les publics : un petit théâtre repose sur peu de personnes très polyvalentes.",
+      "game": "La jauge « Équipe » influence la qualité des représentations. Trop de spectacles et d'actions l'épuisent.",
+      "reality": "Les techniciens et artistes sont souvent employés comme intermittents du spectacle pour les besoins ponctuels.",
+      "simplified": true,
+      "sources": []
+    },
+    "entrepreneur_spectacles": {
+      "title": "Entrepreneur de spectacles",
+      "short": "Toute structure qui exploite un lieu, produit ou diffuse des spectacles doit déclarer son activité.",
+      "game": "Votre théâtre est censé être en règle : le jeu n'en fait pas une mécanique.",
+      "reality": "Depuis le 1er octobre 2019, l'ancienne licence est remplacée par une déclaration en ligne, valable cinq ans (ordonnance du 3 juillet 2019).",
+      "simplified": false,
+      "sources": [
+        "S10"
+      ]
+    },
+    "rayonnement": {
+      "title": "Rayonnement",
+      "short": "La place qu'occupe le théâtre dans la vie culturelle de son territoire et auprès de la profession.",
+      "game": "Le rayonnement combine la réputation artistique (50 %), les relations avec les partenaires (25 %) et la diversité des publics (25 %). Il augmente vos chances d'obtenir des aides.",
+      "reality": "Il n'existe pas d'indicateur officiel unique : les financeurs croisent fréquentation, actions sur le territoire, soutien à la création, couverture presse, partenariats.",
+      "simplified": true,
+      "sources": [
+        "S8",
+        "S9"
+      ]
+    }
+  }
+}

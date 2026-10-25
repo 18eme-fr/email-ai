@@ -1,0 +1,206 @@
+~ alerte_tresorerie
+Hélène: [#mood=worried] Je vais être directe : le compte est dans le rouge.
+Hélène: Le découvert, c'est comme le chauffage au fioul. Ça dépanne, mais ça finit toujours par coûter cher.
+Hélène: Il faut décider maintenant, avant que la banque ne décide pour nous.
+- Demander une avance remboursable à la Ville [#choice=avance_ville]
+	Hélène: Je prépare le courrier. Monsieur Pommier va soupirer, mais il signera.
+- Reporter des achats et serrer les dépenses [#choice=reduire]
+	Hélène: Bastien va râler. Les projecteurs aussi, à leur manière.
+- Rester à découvert auprès de la banque [#choice=decouvert]
+	Hélène: Très bien. Je note les agios dans la colonne « choses que je n'aime pas ».
+=> END
+
+~ bilan_mi_parcours
+Pommier: [#mood=formal] Bonjour ! Mi-saison déjà. Le conseil municipal aimerait un point d'étape.
+Pommier: Fréquentation, publics touchés, budget… Vous savez, les élus adorent les indicateurs.
+Pommier: Et entre nous, un beau bilan rend le vote du solde de la subvention beaucoup plus serein.
+- Rédiger un bilan complet avec indicateurs [#choice=rapport_complet]
+	Pommier: Magnifique ! Des graphiques ! Je vais pouvoir les montrer en commission.
+- Inviter l'élu à une représentation [#choice=inviter_elu]
+	Pommier: Avec plaisir. Rien ne vaut une salle pleine pour convaincre un élu.
+- Envoyer un tableau rapide [#choice=rapport_rapide]
+	Pommier: Ah. C'est… concis. Je ferai avec.
+=> END
+
+~ annulation_maladie
+Bastien: [#mood=worried] Mauvaise nouvelle. La comédienne principale n'a plus de voix. Laryngite.
+Bastien: La compagnie propose plusieurs options. Aucune n'est parfaite, évidemment.
+Hélène: Rappel utile : le contrat de cession prévoit des frais même si on annule.
+- Annuler et rembourser les spectateurs [#choice=annuler]
+	Bastien: Je m'occupe des panneaux « relâche ». Inès appelle les abonnés.
+- Transformer la soirée en lecture-spectacle [#choice=lecture]
+	Bastien: Un pupitre, une lampe, et on fait confiance au texte. J'aime bien l'idée.
+- Faire jouer la doublure [#choice=doublure]
+	Bastien: La doublure connaît le texte… presque. Croisons les doigts.
+=> END
+
+~ partenariat_scolaire
+Inès: [#mood=happy] Le collège Jean-Rostand voudrait bâtir un parcours avec nous toute l'année !
+Inès: Des élèves qui voient des spectacles, rencontrent des artistes et pratiquent eux-mêmes. Les trois piliers de l'éducation artistique et culturelle.
+Hélène: Et il existe des aides pour ça. Versées plus tard, comme toujours.
+- Monter un parcours d'éducation artistique [#choice=accepter]
+	Inès: Génial ! Je leur envoie un planning ce soir. Enfin, demain matin.
+- Accepter sans budget, avec les moyens du bord [#choice=benevole]
+	Inès: On fera avec le cœur. Et beaucoup d'heures supplémentaires.
+- Proposer d'en reparler l'an prochain [#choice=plus_tard]
+	Inès: D'accord… Je leur dirai que ce n'est que partie remise.
+=> END
+
+~ panne_console
+Bastien: [#mood=worried] La console lumière a fait « pfiout ». Puis plus rien.
+Bastien: Elle avait vingt ans. C'est un bel âge pour une console. Moins pour un spectacle ce soir.
+- Acheter une console d'occasion [#choice=reparer]
+	Bastien: Une console qui marche ! Je vais en pleurer de joie, discrètement.
+- Louer une console pour la période [#choice=louer]
+	Bastien: On loue, on rend, et on en reparle au prochain budget.
+- Laisser Bastien bricoler [#choice=bricoler]
+	Bastien: Un fer à souder, du scotch et beaucoup d'amour. Ça devrait tenir.
+=> END
+
+~ association_debat
+Inès: L'association des Tanneurs cherche une salle pour une soirée débat sur le quartier.
+Inès: Ce sont des gens qui ne viennent jamais au théâtre. Enfin, pas encore.
+- Prêter le foyer gratuitement [#choice=gratuit]
+	Inès: Merci ! On glissera quelques programmes de saison sur les chaises.
+- Louer le foyer à prix modique [#choice=payant]
+	Hélène: Une petite recette, c'est toujours une recette.
+- Décliner poliment [#choice=refuser]
+	Inès: Je leur explique. Ils trouveront sans doute ailleurs.
+=> END
+
+~ journaliste
+Hélène: Le Courrier de l'Ondine veut un entretien avec la direction. Une page entière.
+Hélène: Une page entière, c'est plus que ce que notre budget communication nous offrira cette année.
+- Accorder une interview sur la saison [#choice=interview]
+	Hélène: Je vous prépare des éléments de langage. Et des chiffres, évidemment.
+- Parler uniquement de la création à venir [#choice=creation]
+	Louison: Enfin quelqu'un qui s'intéresse à l'art ! Je viens avec vous.
+- Décliner, l'équipe a besoin de souffler [#choice=decliner]
+	Hélène: Je décline avec élégance. Ils rappelleront.
+=> END
+
+~ bonnes_critiques
+Louison: [#mood=happy] Vous avez lu ? « Une soirée rare, à ne pas manquer ». Rare ! Nous !
+Louison: La compagnie est disponible pour une date de plus. Le bouche-à-oreille est en marche.
+- Ajouter une représentation [#choice=prolonger]
+	Louison: Merveilleux ! Bastien, on garde le plateau monté !
+	Bastien: Évidemment. Je n'avais rien prévu de ma vie, de toute façon.
+- Relayer les critiques partout [#choice=communiquer]
+	Inès: Je fais des affiches avec la citation en très, très gros.
+=> END
+
+~ exigences_techniques
+Bastien: La compagnie arrive demain. Elle réclame six projecteurs de plus que prévu.
+Bastien: Le contrat ne mentionne rien. Mais un spectacle mal éclairé, ça se voit.
+- Louer le matériel demandé [#choice=accepter]
+	Bastien: Je passe commande. Ils vont être contents, et moi aussi.
+- Trouver un compromis avec le stock maison [#choice=compromis]
+	Bastien: On fera du bon travail avec du vieux matériel. On a l'habitude.
+- Refuser : le contrat ne le prévoit pas [#choice=refuser]
+	Bastien: Je leur dis. Diplomatiquement. Enfin, je vais essayer.
+=> END
+
+~ mecene
+Hélène: La Biscuiterie Ondine propose de nous soutenir. Du mécénat, en bonne et due forme.
+Hélène: Pour elle, une partie du don ouvre droit à une réduction d'impôt. Pour nous, c'est une recette bienvenue.
+Louison: Tant qu'on ne joue pas « Le Petit Beurre du Roi Lear »…
+- Accepter avec logo sur toutes les affiches [#choice=visible]
+	Hélène: Je préviens le graphiste. Le logo est… très orange.
+- Proposer un mécénat discret [#choice=discret]
+	Hélène: Moins d'argent, plus d'élégance. Ils ont l'air d'apprécier.
+- Refuser pour garder votre indépendance [#choice=refuser]
+	Louison: L'art ne se vend pas ! Enfin… pas à ce prix-là.
+=> END
+
+~ equipe_epuisee
+Bastien: [#mood=tired] Je ne vais pas tourner autour du pot : l'équipe est fatiguée.
+Bastien: Montages de nuit, démontages à l'aube… Hier, j'ai salué un projecteur.
+- Engager des renforts intermittents [#choice=renfort]
+	Bastien: Des renforts ! Je vais pouvoir dormir. Presque huit heures.
+- Organiser un moment convivial [#choice=pot]
+	Inès: Je m'occupe des crêpes !
+- Demander de tenir jusqu'à la fin de la période [#choice=tenir]
+	Bastien: On tiendra. On tient toujours. Mais ça se paie un jour.
+=> END
+
+~ commission_securite
+Pommier: La commission de sécurité est passée. Elle s'inquiète de l'état de la salle.
+Pommier: Issues de secours, cintres, éclairage… Vous comprendrez que je ne peux pas fermer les yeux.
+- Engager les travaux de mise en conformité [#choice=travaux]
+	Pommier: Parfait. La sécurité du public avant tout.
+- Demander un délai [#choice=delai]
+	Pommier: Je vous l'accorde. Mais la jauge sera réduite en attendant, et je m'en souviendrai.
+=> END
+
+~ tarif_solidaire
+Inès: J'ai une idée ! Des billets « suspendus » : un spectateur paie une place en plus pour quelqu'un qui ne pourrait pas venir.
+Inès: Ou alors un tarif jeunes, tout simple. Le prix est souvent la première barrière.
+Hélène: Souvent. Pas toujours. Mais souvent.
+- Lancer les « billets suspendus » [#choice=suspendus]
+	Inès: Je fabrique une jolie boîte pour la billetterie !
+- Créer un tarif jeunes à 5 € cette période [#choice=jeunes]
+	Hélène: Moins de recette par billet, plus de billets. On verra au bilan.
+- Pas cette saison [#choice=plus_tard]
+	Inès: D'accord. Je garde l'idée dans mon carnet.
+=> END
+
+~ appel_projets
+Hélène: Le Département lance un appel à projets pour aider la diffusion de spectacles en milieu rural.
+Hélène: Le dossier est long. Les chances dépendent de notre rayonnement… et de nos alliés.
+- Déposer un dossier [#choice=deposer]
+	Hélène: Je sors les annexes, les budgets prévisionnels et le café.
+- Déposer avec des partenaires du territoire [#choice=deposer_reseau]
+	Inès: J'appelle la médiathèque et le centre social. Ensemble, on pèse plus lourd.
+- Passer votre tour [#choice=passer]
+	Hélène: Sage décision. On ne peut pas tout faire.
+=> END
+
+~ residence_louison
+Louison: [#mood=happy] J'ai besoin du plateau. Une semaine. Pour chercher, rater, recommencer.
+Louison: Une résidence, ce n'est pas un spectacle : c'est le moment où le spectacle naît.
+- Ouvrir le plateau une semaine [#choice=accueillir]
+	Louison: Merci ! Vous verrez, la création n'en sera que plus belle.
+- Expliquer que le calendrier est plein [#choice=refuser]
+	Louison: Je comprends. Enfin, je vais essayer de comprendre.
+=> END
+
+~ billetterie_en_ligne
+Hélène: Notre billetterie, c'est un téléphone, un carnet à souches et ma mémoire.
+Hélène: Un logiciel nous permettrait de vendre en ligne et de mieux connaître nos publics.
+- Investir dans un logiciel de billetterie [#choice=investir]
+	Hélène: Enfin ! Je vais pouvoir faire des tableaux croisés dynamiques.
+- Garder le carnet à souches [#choice=attendre]
+	Hélène: Le carnet a ses charmes. Peu nombreux, mais réels.
+=> END
+
+~ vague_froid
+Hélène: Une vague de froid arrive, et la chaudière consomme comme un ogre.
+Hélène: L'énergie fait partie de nos charges fixes… jusqu'au jour où elle ne l'est plus.
+- Chauffer normalement [#choice=chauffer]
+	Hélène: Le public aura chaud. Le budget, beaucoup moins.
+- Prêter des plaids aux spectateurs [#choice=plaids]
+	Inès: Des plaids rouges ! Assortis aux fauteuils !
+- Baisser le chauffage [#choice=baisser]
+	Bastien: Je préviens : on va jouer en doudoune.
+=> END
+
+~ fete_quartier
+Inès: [#mood=happy] La fête du quartier des Tanneurs, c'est samedi ! On pourrait y être.
+Inès: Aller vers les gens qui ne viennent pas, c'est aussi ça, la médiation.
+- Installer une scène ouverte dans la rue [#choice=participer]
+	Inès: Je réserve la remorque et la guirlande lumineuse !
+- Tenir un simple stand d'information [#choice=stand]
+	Inès: Un stand, des programmes et des bonbons. Classique et efficace.
+- Décliner : l'équipe est déjà sur le pont [#choice=decliner]
+	Inès: Dommage… L'an prochain, peut-être.
+=> END
+
+~ louison_coup_de_gueule
+Louison: [#mood=angry] Je dois vous parler. Notre programmation ressemble à un catalogue de vacances.
+Louison: Un théâtre public doit aussi prendre des risques, découvrir, déranger un peu !
+Hélène: Et payer ses factures. Mais je laisse Louison finir.
+- Promettre une place à la création la saison prochaine [#choice=ecouter]
+	Louison: Je vous prends au mot. Et je note la date.
+- Assumer une ligne populaire [#choice=assumer]
+	Louison: Très bien. Mais je viendrai râler à chaque réunion.
+=> END

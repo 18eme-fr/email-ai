@@ -1,0 +1,14 @@
+[gd_resource type="FontVariation" format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/PixelifySans.ttf" id="1_onnpj"]
+
+[resource]
+base_font = ExtResource("1_onnpj")
+variation_opentype = {
+2003265652: 650
+}
+opentype_features = {
+1668049255: 0,
+1684826471: 0,
+1818847073: 0
+}

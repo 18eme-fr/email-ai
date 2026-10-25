@@ -1,0 +1,36 @@
+~ intro
+Hélène: [#mood=formal] Bienvenue au Théâtre de la Lanterne ! Je suis Hélène, l'administratrice. Votre bureau est là, derrière la pile de factures.
+Hélène: Une saison, ici, c'est huit périodes, de la rentrée jusqu'à juin. À chaque période : vous programmez, vous gérez, vous faites face aux imprévus. Puis on fait les comptes.
+Hélène: Trois indicateurs comptent : la trésorerie, c'est-à-dire l'argent réellement disponible ; les publics ; et le rayonnement du théâtre.
+Bastien: Bastien, régisseur général. Si quelque chose fume, grince ou tombe, c'est pour moi. Gardez les équipements en état, sinon les spectacles techniques deviennent risqués.
+Inès: Moi, c'est Inès ! Relations avec les publics. Mon rêve : que toute la ville passe un jour notre porte. Les écoles, les quartiers, les curieux…
+Louison: Louison Vasseur, artiste associé·e. Je suis là pour vous rappeler qu'un théâtre sans création, c'est une salle des fêtes avec des rideaux.
+Hélène: La Ville nous verse une subvention en trois fois. Le dernier versement dépend du bilan de fin de saison : regardez les objectifs de la convention.
+Hélène: Dernier conseil : une recette prévue n'est pas une recette encaissée. On verra au bilan.
+=> END
+
+~ first_programming
+Hélène: Voici les propositions reçues pour cette période. Cliquez sur une affiche pour lire sa fiche.
+Hélène: Trois créneaux au maximum, dont deux en grande salle. Le foyer accueille les petites formes.
+Hélène: Attention au contrat : en cession, on paie un prix fixe ; en coréalisation, on partage la recette avec la compagnie.
+=> END
+
+~ first_management
+Inès: Maintenant, à vous de répartir les forces de l'équipe : deux actions par période, trois si l'équipe est en grande forme.
+Inès: La communication remplit les salles, la médiation élargit les publics, l'entretien évite les catastrophes. Tout se tient !
+=> END
+
+~ end_renewed
+Pommier: [#mood=happy] Le conseil municipal a voté : la convention du Théâtre de la Lanterne est renouvelée !
+Pommier: Vous avez tenu les comptes et les promesses. Bravo, et à la saison prochaine.
+=> END
+
+~ end_not_renewed
+Pommier: [#mood=worried] Le conseil municipal a examiné votre bilan. Je ne vais pas vous mentir : il y a des réserves.
+Pommier: La convention n'est pas renouvelée en l'état. Nous allons devoir revoir ensemble le projet du théâtre.
+=> END
+
+~ end_bankrupt
+Hélène: [#mood=worried] La banque a refusé de prolonger notre découvert. Nous ne pouvons plus payer les salaires.
+Hélène: Le conseil d'administration doit se réunir. Le rideau tombe plus tôt que prévu.
+=> END

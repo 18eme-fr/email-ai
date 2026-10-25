@@ -1,0 +1,105 @@
+{
+  "_doc": "Actions de gestion. 'cost' est engagé immédiatement ; 'payment_delay' indique en combien de périodes la facture est payée (0 = payée dans la période). 'effects' suit le format décrit dans docs/DATA_FORMAT.md.",
+  "actions": [
+    {
+      "id": "communication",
+      "label": "Campagne de communication",
+      "icon": "megaphone",
+      "cost": 700,
+      "payment_delay": 1,
+      "summary": "Affiches, réseaux sociaux, presse locale.",
+      "description": "Une campagne attire davantage de spectateurs sur les spectacles de cette période. L'effet s'estompe ensuite. Facture payée à 30 jours (période suivante).",
+      "effects": {
+        "stats": {
+          "communication": 30
+        }
+      },
+      "notion": "communication"
+    },
+    {
+      "id": "mediation",
+      "label": "Actions de médiation",
+      "icon": "bridge",
+      "cost": 500,
+      "payment_delay": 0,
+      "summary": "Ateliers en classe, visites, bords de plateau.",
+      "description": "La chargée des relations avec les publics va à la rencontre des écoles, des associations et des quartiers. Élargit et diversifie les publics ; compte comme action d'éducation artistique et culturelle.",
+      "effects": {
+        "stats": {
+          "diversite": 7,
+          "fidelite": 3,
+          "relations": 2
+        },
+        "eac": 1,
+        "flags": [
+          "mediation_this_turn"
+        ]
+      },
+      "notion": "mediation"
+    },
+    {
+      "id": "accueil",
+      "label": "Améliorer l'accueil",
+      "icon": "door",
+      "cost": 400,
+      "payment_delay": 0,
+      "summary": "Billetterie, bar, signalétique, accessibilité.",
+      "description": "Un hall plus accueillant, une billetterie plus simple, une meilleure accessibilité. Les spectateurs reviennent plus volontiers.",
+      "effects": {
+        "stats": {
+          "fidelite": 6,
+          "diversite": 2
+        }
+      },
+      "notion": "fidelisation"
+    },
+    {
+      "id": "formation",
+      "label": "Former l'équipe",
+      "icon": "book",
+      "cost": 400,
+      "payment_delay": 0,
+      "summary": "Sécurité, accueil des publics, outils numériques.",
+      "description": "Une équipe formée est plus sereine et plus efficace : la qualité des représentations augmente et les risques diminuent.",
+      "effects": {
+        "stats": {
+          "equipe": 12
+        }
+      },
+      "notion": "equipe"
+    },
+    {
+      "id": "entretien",
+      "label": "Entretenir le lieu",
+      "icon": "wrench",
+      "cost": 900,
+      "payment_delay": 1,
+      "summary": "Projecteurs, cintres, fauteuils, sécurité.",
+      "description": "Remettre en état le matériel scénique et la salle. Indispensable pour accueillir des spectacles techniques et éviter les incidents. Facture payée à la période suivante.",
+      "effects": {
+        "stats": {
+          "equipement": 20
+        }
+      },
+      "notion": "charges_fixes_variables"
+    },
+    {
+      "id": "partenariats",
+      "label": "Développer les partenariats",
+      "icon": "handshake",
+      "cost": 300,
+      "payment_delay": 0,
+      "summary": "Associations, entreprises, collectivités voisines.",
+      "description": "Rencontrer associations, entreprises et institutions. Renforce les relations avec les partenaires et augmente les chances d'obtenir des soutiens (mécénat, aides).",
+      "effects": {
+        "stats": {
+          "relations": 7
+        },
+        "flags": [
+          "prospection"
+        ]
+      },
+      "notion": "partenariat"
+    }
+  ]
+}

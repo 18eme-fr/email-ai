@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://tao0sp0ae6gk"
+path="res://.godot/imported/events.dialogue-7f8a88d504a341b5916a9909d3db2fda.tres"
+
+[deps]
+
+source_file="res://dialogue/events.dialogue"
+dest_files=["res://.godot/imported/events.dialogue-7f8a88d504a341b5916a9909d3db2fda.tres"]
+
+[params]
+
+defaults=true

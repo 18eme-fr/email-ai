@@ -1,0 +1,12 @@
+# Godot
+.godot/
+*.tmp
+/android/
+# Exports
+/exports/
+/build/
+# Python
+__pycache__/
+*.pyc
+# Tests
+/reports/
