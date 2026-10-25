@@ -23,7 +23,7 @@ static func open(parent: Node, session: GameSession) -> Modal:
 	c.add_child(UiKit.label("Échéancier", "SubHeaderLabel"))
 	var rows: Array = []
 	for e: Dictionary in s.ledger:
-		if not e["settled"] and not e["cancelled"]:
+		if not e["settled"] and not e["cancelled"] and not e.get("non_cash", false):
 			rows.append(e)
 	rows.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return int(a["due_turn"]) < int(b["due_turn"]))
 	if rows.is_empty():

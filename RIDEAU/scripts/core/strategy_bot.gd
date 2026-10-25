@@ -3,7 +3,13 @@ extends RefCounted
 ## Joueur automatique utilisé par l'outil de simulation et par les tests.
 ## Chaque stratégie est une manière cohérente de jouer, pas une stratégie optimale.
 
-const STRATEGIES := ["prudente", "artistique", "publics", "equilibre", "aleatoire", "passive"]
+const STRATEGIES := ["prudente", "artistique", "publics", "equilibre", "batisseur", "aleatoire", "passive"]
+
+## « batisseur » joue comme « equilibre » mais investit dans les rénovations
+## tant que la trésorerie prévue reste confortable.
+const BUILD_ORDER := ["projecteurs_led", "foyer_bar", "accessibilite", "enseigne", "loges"]
+const BUILD_COMFORT := 8000
+const BUILD_LAST_TURN := 6
 
 ## Poids utilisés pour évaluer les effets des choix d'événements.
 const WEIGHTS := {
@@ -14,11 +20,15 @@ const WEIGHTS := {
 }
 
 var strategy: String
+var builds := false
 var rng := RandomNumberGenerator.new()
 
 
 func _init(strategy_id: String, bot_seed: int = 0) -> void:
 	strategy = strategy_id
+	if strategy_id == "batisseur":
+		strategy = "equilibre"
+		builds = true
 	rng.seed = hash([strategy_id, bot_seed])
 
 
@@ -32,6 +42,8 @@ func play_season(session: GameSession) -> GameState:
 
 
 func play_turn(session: GameSession) -> void:
+	if builds:
+		_build(session)
 	session.open_programming()
 	var programmed := choose_programming(session)
 	while session.confirm_programming(programmed) != "":
@@ -47,6 +59,18 @@ func play_turn(session: GameSession) -> void:
 	var report := session.resolve_turn()
 	assert(not report.has("error"), "La période doit pouvoir être résolue.")
 	session.next_turn()
+
+
+func _build(session: GameSession) -> void:
+	if session.state.turn > BUILD_LAST_TURN:
+		return
+	for id: String in BUILD_ORDER:
+		if session.upgrade_block_reason(id) != "":
+			continue
+		var low := int(session.projected_cash([], [])["low"]) - int(session.data.upgrades[id]["cost"])
+		if low >= BUILD_COMFORT:
+			session.buy_upgrade(id)
+			return
 
 
 # --- Programmation ---------------------------------------------------------------

@@ -1,0 +1,982 @@
+{
+ "_doc": "Monde explorable. Chaque carte est une grille de caractères (une case = 16 px). Légende commune dans 'legend' : 'walk' indique si l'on peut marcher sur la case. 'doors' : passage vers une autre carte (on y entre en marchant). 'spots' : objets avec lesquels on interagit en se plaçant devant (case adjacente, face à l'objet). 'npcs' : position de départ et rayon de promenade des personnages. Le rendu graphique (tools/art/world.py) lit les mêmes grilles.",
+ "tile_size": 16,
+ "legend": {
+  " ": {
+   "name": "vide",
+   "walk": false
+  },
+  "X": {
+   "name": "haie ou mur du fond",
+   "walk": false
+  },
+  "#": {
+   "name": "mur",
+   "walk": false
+  },
+  ".": {
+   "name": "sol",
+   "walk": true
+  },
+  ",": {
+   "name": "tapis",
+   "walk": true
+  },
+  "D": {
+   "name": "porte (passage)",
+   "walk": true
+  },
+  "d": {
+   "name": "porte fermée ou bureau",
+   "walk": false
+  },
+  "S": {
+   "name": "escalier",
+   "walk": true
+  },
+  "H": {
+   "name": "bâtiment",
+   "walk": false
+  },
+  "_": {
+   "name": "trottoir",
+   "walk": true
+  },
+  "=": {
+   "name": "chaussée",
+   "walk": true
+  },
+  "z": {
+   "name": "passage piéton",
+   "walk": true
+  },
+  "g": {
+   "name": "pelouse",
+   "walk": true
+  },
+  "T": {
+   "name": "arbre",
+   "walk": false
+  },
+  "B": {
+   "name": "banc",
+   "walk": false
+  },
+  "L": {
+   "name": "réverbère",
+   "walk": false
+  },
+  "K": {
+   "name": "colonne Morris",
+   "walk": false
+  },
+  "F": {
+   "name": "fontaine",
+   "walk": false
+  },
+  "f": {
+   "name": "massif de fleurs",
+   "walk": false
+  },
+  "t": {
+   "name": "table",
+   "walk": false
+  },
+  "c": {
+   "name": "comptoir",
+   "walk": false
+  },
+  "o": {
+   "name": "plante",
+   "walk": false
+  },
+  "n": {
+   "name": "panneau",
+   "walk": false
+  },
+  "p": {
+   "name": "plateau",
+   "walk": true
+  },
+  "C": {
+   "name": "pendrillon",
+   "walk": false
+  },
+  "e": {
+   "name": "bord de scène",
+   "walk": false
+  },
+  "r": {
+   "name": "marches",
+   "walk": true
+  },
+  "s": {
+   "name": "fauteuils",
+   "walk": false
+  },
+  "k": {
+   "name": "régie ou classeur",
+   "walk": false
+  },
+  "m": {
+   "name": "table de maquillage",
+   "walk": false
+  },
+  "w": {
+   "name": "établi",
+   "walk": false
+  },
+  "x": {
+   "name": "caisses",
+   "walk": false
+  },
+  "R": {
+   "name": "portant de costumes",
+   "walk": false
+  },
+  "b": {
+   "name": "bibliothèque",
+   "walk": false
+  }
+ },
+ "start": {
+  "map": "bureau",
+  "cell": [
+   6,
+   6
+  ],
+  "facing": "up"
+ },
+ "maps": {
+  "rue": {
+   "name": "Place de la Lanterne",
+   "outdoor": true,
+   "grid": [
+    "XXXXXXXXXXXXXXHHHHHHHHHHHHXXXXXXXXXXXXXX",
+    "XHHHHHHHHHHXXXHHHHHHHHHHHHXXXXXXXXXXXXXX",
+    "XHHHHHHHHHHXXXHHHHHHHHHHHHXXHHHHHHXHHHHH",
+    "XHHHHHHHHHHXXXHHHHHHHHHHHHXXHHHHHHXHHHHH",
+    "XHHHHHHHHHHXXXHHHHHHHHHHHHXXHHHHHHXHHHHH",
+    "XHHHHHHHHHHXXXHHHHHHHHHHHHXXHHHHHHXHHHHH",
+    "XHHHHHHHHHHXXXHHHHHHHHHHHHXXHHHHHHXHHHHH",
+    "XHHHHddHHHHXXXHHHHHDDHHHHHXXHHdHHHXHHdHH",
+    "____________L______________L______L_____",
+    "_________K___________________t__t_______",
+    "===================zz===================",
+    "===================zz===================",
+    "===================zz===================",
+    "________________________________________",
+    "TgggggggfggggggggggggggggggggggfgggggggT",
+    "TggggffggggTggBBgggFFgggBBggTggggffggggT",
+    "gggggggggggggggggggFFggggggggggggggggggg",
+    "TggTggTggTggTggTggTggTggTggTggTggTggTggT"
+   ],
+   "doors": [
+    {
+     "cell": [
+      19,
+      7
+     ],
+     "to": "hall",
+     "to_cell": [
+      10,
+      12
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      20,
+      7
+     ],
+     "to": "hall",
+     "to_cell": [
+      11,
+      12
+     ],
+     "facing": "up"
+    }
+   ],
+   "spots": [
+    {
+     "id": "mairie",
+     "cells": [
+      [
+       5,
+       7
+      ],
+      [
+       6,
+       7
+      ]
+     ],
+     "label": "Mairie",
+     "kind": "place",
+     "character": "pommier"
+    },
+    {
+     "id": "cafe",
+     "cells": [
+      [
+       30,
+       7
+      ]
+     ],
+     "label": "Café des Artistes",
+     "kind": "flavor"
+    },
+    {
+     "id": "imprimerie",
+     "cells": [
+      [
+       37,
+       7
+      ]
+     ],
+     "label": "Imprimerie Lebrun",
+     "kind": "action",
+     "action": "communication"
+    },
+    {
+     "id": "colonne",
+     "cells": [
+      [
+       9,
+       9
+      ]
+     ],
+     "label": "Colonne Morris",
+     "kind": "posters"
+    },
+    {
+     "id": "facade",
+     "cells": [
+      [
+       18,
+       7
+      ],
+      [
+       21,
+       7
+      ]
+     ],
+     "label": "Façade du théâtre",
+     "kind": "upgrade",
+     "upgrade": "enseigne"
+    },
+    {
+     "id": "fontaine",
+     "cells": [
+      [
+       19,
+       15
+      ],
+      [
+       20,
+       15
+      ],
+      [
+       19,
+       16
+      ],
+      [
+       20,
+       16
+      ]
+     ],
+     "label": "Fontaine",
+     "kind": "flavor"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "pommier",
+     "cell": [
+      7,
+      8
+     ],
+     "radius": 2
+    },
+    {
+     "id": "passant_1",
+     "cell": [
+      3,
+      13
+     ],
+     "radius": 6
+    },
+    {
+     "id": "passant_2",
+     "cell": [
+      30,
+      14
+     ],
+     "radius": 5
+    },
+    {
+     "id": "passant_3",
+     "cell": [
+      16,
+      9
+     ],
+     "radius": 5
+    },
+    {
+     "id": "passant_4",
+     "cell": [
+      36,
+      12
+     ],
+     "radius": 4
+    }
+   ]
+  },
+  "hall": {
+   "name": "Hall d'accueil",
+   "outdoor": false,
+   "grid": [
+    "######################",
+    "##########DD##########",
+    "#o.......,,,,.......o#",
+    "#.ccccc..,,,,..ccccc.#",
+    "#........,,,,........#",
+    "#........,,,,........#",
+    "#........,,,,........S",
+    "#........,,,,........S",
+    "#........,,,,........#",
+    "#..BB....,,,,....BB..#",
+    "#........,,,,........#",
+    "#........,,,,........#",
+    "#o.....n.,,,,.......o#",
+    "##########DD##########"
+   ],
+   "doors": [
+    {
+     "cell": [
+      10,
+      13
+     ],
+     "to": "rue",
+     "to_cell": [
+      19,
+      8
+     ],
+     "facing": "down"
+    },
+    {
+     "cell": [
+      11,
+      13
+     ],
+     "to": "rue",
+     "to_cell": [
+      20,
+      8
+     ],
+     "facing": "down"
+    },
+    {
+     "cell": [
+      10,
+      1
+     ],
+     "to": "salle",
+     "to_cell": [
+      10,
+      14
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      11,
+      1
+     ],
+     "to": "salle",
+     "to_cell": [
+      11,
+      14
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      21,
+      6
+     ],
+     "to": "bureau",
+     "to_cell": [
+      6,
+      8
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      21,
+      7
+     ],
+     "to": "bureau",
+     "to_cell": [
+      6,
+      8
+     ],
+     "facing": "up"
+    }
+   ],
+   "spots": [
+    {
+     "id": "guichet",
+     "cells": [
+      [
+       2,
+       3
+      ],
+      [
+       3,
+       3
+      ],
+      [
+       4,
+       3
+      ],
+      [
+       5,
+       3
+      ],
+      [
+       6,
+       3
+      ]
+     ],
+     "label": "Billetterie",
+     "kind": "action",
+     "action": "accueil"
+    },
+    {
+     "id": "bar",
+     "cells": [
+      [
+       15,
+       3
+      ],
+      [
+       16,
+       3
+      ],
+      [
+       17,
+       3
+      ],
+      [
+       18,
+       3
+      ],
+      [
+       19,
+       3
+      ]
+     ],
+     "label": "Bar du foyer",
+     "kind": "upgrade",
+     "upgrade": "foyer_bar"
+    },
+    {
+     "id": "panneau",
+     "cells": [
+      [
+       7,
+       12
+      ]
+     ],
+     "label": "Projet : accessibilité",
+     "kind": "upgrade",
+     "upgrade": "accessibilite"
+    },
+    {
+     "id": "affiches",
+     "cells": [
+      [
+       4,
+       1
+      ],
+      [
+       5,
+       1
+      ],
+      [
+       6,
+       1
+      ],
+      [
+       15,
+       1
+      ],
+      [
+       16,
+       1
+      ],
+      [
+       17,
+       1
+      ]
+     ],
+     "label": "Affiches de la période",
+     "kind": "posters"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "ines",
+     "cell": [
+      14,
+      8
+     ],
+     "radius": 3
+    },
+    {
+     "id": "accueil",
+     "cell": [
+      4,
+      2
+     ],
+     "radius": 0
+    }
+   ]
+  },
+  "salle": {
+   "name": "Grande salle (220 places)",
+   "outdoor": false,
+   "grid": [
+    "######################",
+    "######################",
+    "#pCppppppppppppppppC##",
+    "#pCppppppppppppppppC##",
+    "DppppppppppppppppppC##",
+    "#pCppppppppppppppppC##",
+    "#pCppppppppppppppppC##",
+    "#eeeeeeeeerreeeeeeeee#",
+    "#....................#",
+    "#..sssssss..sssssss..#",
+    "#....................#",
+    "#..sssssss..sssssss..#",
+    "#....................#",
+    "#..sssssss..sssssss..#",
+    "#..............kkkk..#",
+    "##########DD##########"
+   ],
+   "doors": [
+    {
+     "cell": [
+      10,
+      15
+     ],
+     "to": "hall",
+     "to_cell": [
+      10,
+      2
+     ],
+     "facing": "down"
+    },
+    {
+     "cell": [
+      11,
+      15
+     ],
+     "to": "hall",
+     "to_cell": [
+      11,
+      2
+     ],
+     "facing": "down"
+    },
+    {
+     "cell": [
+      0,
+      4
+     ],
+     "to": "coulisses",
+     "to_cell": [
+      16,
+      5
+     ],
+     "facing": "left"
+    }
+   ],
+   "spots": [
+    {
+     "id": "projecteurs",
+     "cells": [
+      [
+       5,
+       1
+      ],
+      [
+       6,
+       1
+      ],
+      [
+       7,
+       1
+      ],
+      [
+       14,
+       1
+      ],
+      [
+       15,
+       1
+      ],
+      [
+       16,
+       1
+      ]
+     ],
+     "label": "Rampe de projecteurs",
+     "kind": "upgrade",
+     "upgrade": "projecteurs_led"
+    },
+    {
+     "id": "regie",
+     "cells": [
+      [
+       15,
+       14
+      ],
+      [
+       16,
+       14
+      ],
+      [
+       17,
+       14
+      ],
+      [
+       18,
+       14
+      ]
+     ],
+     "label": "Régie son et lumière",
+     "kind": "flavor"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "bastien",
+     "cell": [
+      14,
+      4
+     ],
+     "radius": 3
+    }
+   ],
+   "performance": {
+    "player_cell": [
+     10,
+     14
+    ],
+    "facing": "up",
+    "seat_rows": [
+     9,
+     11,
+     13
+    ],
+    "seat_cols": [
+     [
+      3,
+      9
+     ],
+     [
+      12,
+      18
+     ]
+    ]
+   }
+  },
+  "coulisses": {
+   "name": "Coulisses et atelier",
+   "outdoor": false,
+   "grid": [
+    "##################",
+    "##################",
+    "#.mmmmm.#.wwww...#",
+    "#.......#........#",
+    "#.......#........#",
+    "#.......#........D",
+    "#.......#........#",
+    "#................#",
+    "#.RR..........xx.#",
+    "#..............x.#",
+    "#o...............#",
+    "##################"
+   ],
+   "doors": [
+    {
+     "cell": [
+      17,
+      5
+     ],
+     "to": "salle",
+     "to_cell": [
+      1,
+      4
+     ],
+     "facing": "right"
+    }
+   ],
+   "spots": [
+    {
+     "id": "etabli",
+     "cells": [
+      [
+       10,
+       2
+      ],
+      [
+       11,
+       2
+      ],
+      [
+       12,
+       2
+      ],
+      [
+       13,
+       2
+      ]
+     ],
+     "label": "Établi de l'atelier",
+     "kind": "upgrade",
+     "upgrade": "loges"
+    },
+    {
+     "id": "loges",
+     "cells": [
+      [
+       2,
+       2
+      ],
+      [
+       3,
+       2
+      ],
+      [
+       4,
+       2
+      ],
+      [
+       5,
+       2
+      ],
+      [
+       6,
+       2
+      ]
+     ],
+     "label": "Loges",
+     "kind": "flavor"
+    },
+    {
+     "id": "costumes",
+     "cells": [
+      [
+       2,
+       8
+      ],
+      [
+       3,
+       8
+      ]
+     ],
+     "label": "Portant de costumes",
+     "kind": "flavor"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "louison",
+     "cell": [
+      4,
+      5
+     ],
+     "radius": 2
+    }
+   ]
+  },
+  "bureau": {
+   "name": "Bureau de la direction",
+   "outdoor": false,
+   "grid": [
+    "##############",
+    "##############",
+    "#bbb.......kk#",
+    "#............#",
+    "#....ddd.....#",
+    "#............#",
+    "#........dd..#",
+    "#............#",
+    "#o..........o#",
+    "######D#######"
+   ],
+   "doors": [
+    {
+     "cell": [
+      6,
+      9
+     ],
+     "to": "hall",
+     "to_cell": [
+      20,
+      6
+     ],
+     "facing": "left"
+    }
+   ],
+   "spots": [
+    {
+     "id": "cahier",
+     "cells": [
+      [
+       5,
+       4
+      ],
+      [
+       6,
+       4
+      ],
+      [
+       7,
+       4
+      ]
+     ],
+     "label": "Votre bureau",
+     "kind": "desk"
+    },
+    {
+     "id": "bibliotheque",
+     "cells": [
+      [
+       1,
+       2
+      ],
+      [
+       2,
+       2
+      ],
+      [
+       3,
+       2
+      ]
+     ],
+     "label": "Carnet du directeur",
+     "kind": "glossary"
+    },
+    {
+     "id": "classeur",
+     "cells": [
+      [
+       11,
+       2
+      ],
+      [
+       12,
+       2
+      ]
+     ],
+     "label": "Classeur des bilans",
+     "kind": "reports"
+    },
+    {
+     "id": "tableau",
+     "cells": [
+      [
+       8,
+       1
+      ],
+      [
+       9,
+       1
+      ]
+     ],
+     "label": "Tableau de trésorerie",
+     "kind": "budget"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "helene",
+     "cell": [
+      10,
+      5
+     ],
+     "radius": 1
+    }
+   ]
+  }
+ },
+ "people": {
+  "helene": {
+   "sprite": "helene",
+   "action": "formation",
+   "home": "bureau"
+  },
+  "bastien": {
+   "sprite": "bastien",
+   "action": "entretien",
+   "home": "salle"
+  },
+  "ines": {
+   "sprite": "ines",
+   "action": "mediation",
+   "home": "hall"
+  },
+  "pommier": {
+   "sprite": "pommier",
+   "action": "partenariats",
+   "home": "rue"
+  },
+  "louison": {
+   "sprite": "louison",
+   "home": "coulisses"
+  },
+  "accueil": {
+   "sprite": "accueil",
+   "name": "Rémi",
+   "role": "Agent d'accueil",
+   "home": "hall"
+  },
+  "passant_1": {
+   "sprite": "passant_a",
+   "name": "Passante",
+   "home": "rue"
+  },
+  "passant_2": {
+   "sprite": "passant_b",
+   "name": "Passant",
+   "home": "rue"
+  },
+  "passant_3": {
+   "sprite": "passant_c",
+   "name": "Passante",
+   "home": "rue"
+  },
+  "passant_4": {
+   "sprite": "passant_d",
+   "name": "Passant",
+   "home": "rue"
+  }
+ },
+ "seasons": {
+  "1": "automne",
+  "2": "automne",
+  "3": "hiver",
+  "4": "hiver",
+  "5": "hiver",
+  "6": "printemps",
+  "7": "printemps",
+  "8": "ete"
+ },
+ "festive_turns": [
+  3
+ ]
+}

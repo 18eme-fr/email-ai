@@ -11,6 +11,7 @@ const EVENTS_PATH := "res://data/events/events.json"
 const CHARACTERS_PATH := "res://data/characters/characters.json"
 const GLOSSARY_PATH := "res://data/pedagogy/glossary.json"
 const ENDINGS_PATH := "res://data/pedagogy/endings.json"
+const UPGRADES_PATH := "res://data/upgrades/upgrades.json"
 
 static var _default: GameData = null
 
@@ -23,6 +24,9 @@ var action_order: Array[String] = []
 var events: Dictionary = {}         ## id -> event
 var event_order: Array[String] = []
 var characters: Dictionary = {}
+var upgrades: Dictionary = {}       ## id -> rénovation
+var upgrade_order: Array[String] = []
+var periods_per_year: int = 8
 var glossary: Dictionary = {}
 var endings: Array = []
 var lessons: Array = []
@@ -70,6 +74,13 @@ func load_all() -> void:
 		events[event["id"]] = event
 		event_order.append(event["id"])
 	characters = _read_dict(CHARACTERS_PATH).get("characters", {})
+	upgrades.clear()
+	upgrade_order.clear()
+	var upgrades_data := _read_dict(UPGRADES_PATH)
+	periods_per_year = int(upgrades_data.get("periods_per_year", 8))
+	for upgrade: Dictionary in upgrades_data.get("upgrades", []):
+		upgrades[upgrade["id"]] = upgrade
+		upgrade_order.append(upgrade["id"])
 	glossary = _read_dict(GLOSSARY_PATH).get("notions", {})
 	var endings_data := _read_dict(ENDINGS_PATH)
 	endings = endings_data.get("endings", [])

@@ -93,7 +93,7 @@ func test_incomplete_state_is_rejected() -> void:
 
 func test_downgrading_version_does_not_bypass_checksum() -> void:
 	var s := _played_session(1)
-	var text := SaveSystem.serialize(s.state).replace("\"version\": 1", "\"version\": 0")
+	var text := SaveSystem.serialize(s.state).replace("\"version\": %d" % SaveSystem.CURRENT_VERSION, "\"version\": 0")
 	text = text.replace("\"cash\": %d" % s.state.cash, "\"cash\": 999999")
 	assert_int(int(SaveSystem.deserialize(text)["status"])).is_equal(SaveSystem.Status.CORRUPTED)
 
@@ -110,7 +110,7 @@ func test_wrong_field_types_are_rejected_without_crash() -> void:
 
 func test_future_version_is_not_loaded() -> void:
 	var s := _played_session(1)
-	var text := SaveSystem.serialize(s.state).replace("\"version\": 1", "\"version\": 99")
+	var text := SaveSystem.serialize(s.state).replace("\"version\": %d" % SaveSystem.CURRENT_VERSION, "\"version\": 99")
 	assert_int(int(SaveSystem.deserialize(text)["status"])).is_equal(SaveSystem.Status.INCOMPATIBLE)
 
 
@@ -124,6 +124,25 @@ func test_old_version_is_migrated() -> void:
 	var result := SaveSystem.deserialize(JSON.stringify(envelope, "", true, true))
 	assert_int(int(result["status"])).is_equal(SaveSystem.Status.OK)
 	assert_int(int((result["state"] as GameState).totals["attendance_total"])).is_equal(0)
+
+
+func test_version_1_save_gets_empty_upgrades() -> void:
+	var s := _played_session(1)
+	var d := s.state.to_dict()
+	d.erase("upgrades")
+	var envelope := {"format": SaveSystem.FORMAT_ID, "version": 1, "state": d, "checksum": SaveSystem.checksum(d)}
+	var result := SaveSystem.deserialize(JSON.stringify(envelope, "", true, true))
+	assert_int(int(result["status"])).is_equal(SaveSystem.Status.OK)
+	assert_array((result["state"] as GameState).upgrades).is_empty()
+
+
+func test_upgrades_survive_a_roundtrip() -> void:
+	var s := _played_session(1)
+	s.next_turn()
+	assert_str(s.buy_upgrade("foyer_bar")).is_empty()
+	var result := SaveSystem.deserialize(SaveSystem.serialize(s.state))
+	assert_int(int(result["status"])).is_equal(SaveSystem.Status.OK)
+	assert_array((result["state"] as GameState).upgrades).contains_exactly(["foyer_bar"])
 
 
 func test_failed_write_keeps_previous_save() -> void:

@@ -9,10 +9,12 @@ extends RefCounted
 ## trésorerie sans compter dans le résultat.
 ## Une écriture « conditionnelle » n'est ni comptée ni réglée tant que sa
 ## condition n'est pas validée (ex. solde de subvention lié au bilan).
+## Une écriture « sans mouvement d'argent » (non_cash : dotation aux
+## amortissements) compte dans le résultat mais ne touche jamais la trésorerie.
 ##
 ## Format d'une écriture :
 ## {id, label, category, amount (int > 0), direction (+1 recette / -1 dépense),
-##  turn_engaged, due_turn, settled, neutral, conditional, cancelled, source}
+##  turn_engaged, due_turn, settled, neutral, non_cash, conditional, cancelled, source}
 
 const INCOME := 1
 const EXPENSE := -1
@@ -40,6 +42,7 @@ static func add(state: GameState, label: String, category: String, amount: int, 
 		"due_turn": due_turn,
 		"settled": false,
 		"neutral": bool(extra.get("neutral", false)),
+		"non_cash": bool(extra.get("non_cash", false)),
 		"conditional": bool(extra.get("conditional", false)),
 		"cancelled": false,
 		"source": str(extra.get("source", "")),
@@ -57,9 +60,11 @@ static func settle_due(state: GameState, turn: int) -> Array:
 		if entry["settled"] or entry["cancelled"] or entry["conditional"]:
 			continue
 		if int(entry["due_turn"]) <= turn:
-			state.cash += int(entry["amount"]) * int(entry["direction"])
 			entry["settled"] = true
 			entry["settled_turn"] = turn
+			if entry.get("non_cash", false):
+				continue
+			state.cash += int(entry["amount"]) * int(entry["direction"])
 			settled.append(entry)
 	return settled
 
@@ -89,11 +94,12 @@ static func result_of(state: GameState, turn: int) -> int:
 	return sum(entries, INCOME) - sum(entries, EXPENSE)
 
 
-## Écritures non encore réglées (à recevoir / à payer), conditionnelles exclues.
+## Écritures non encore réglées (à recevoir / à payer), conditionnelles et
+## écritures sans mouvement d'argent exclues.
 static func outstanding(state: GameState, direction: int) -> Array:
 	var out: Array = []
 	for entry: Dictionary in state.ledger:
-		if entry["settled"] or entry["cancelled"] or entry["conditional"]:
+		if entry["settled"] or entry["cancelled"] or entry["conditional"] or entry.get("non_cash", false):
 			continue
 		if int(entry["direction"]) == direction:
 			out.append(entry)
@@ -108,7 +114,7 @@ static func outstanding_total(state: GameState, direction: int) -> int:
 static func due_until(state: GameState, turn: int) -> int:
 	var total := 0
 	for entry: Dictionary in state.ledger:
-		if entry["settled"] or entry["cancelled"] or entry["conditional"]:
+		if entry["settled"] or entry["cancelled"] or entry["conditional"] or entry.get("non_cash", false):
 			continue
 		if int(entry["due_turn"]) <= turn:
 			total += int(entry["amount"]) * int(entry["direction"])

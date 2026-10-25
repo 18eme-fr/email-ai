@@ -1,0 +1,81 @@
+{
+  "_doc": "Rénovations du théâtre (investissements). Achetées une seule fois, avant l'événement de la période. 'cost' sort de la trésorerie à la période 'payment_delay' (écriture neutre pour le résultat) ; le résultat supporte seulement la dotation aux amortissements : cost / (useful_life_years × periods_per_year) par période, jusqu'à la fin de la saison. 'effects' (format des actions) s'applique à l'achat ; 'per_turn' s'applique à chaque période résolue (stats et éventuelle recette 'income'). 'place' indique où la rénovation se voit et s'achète dans le monde.",
+  "periods_per_year": 8,
+  "upgrades": [
+    {
+      "id": "projecteurs_led",
+      "label": "Projecteurs LED",
+      "icon": "wrench",
+      "place": "salle",
+      "character": "bastien",
+      "cost": 2400,
+      "payment_delay": 1,
+      "useful_life_years": 8,
+      "summary": "Remplacer les vieux projecteurs halogènes de la salle.",
+      "description": "Moins de pannes, une lumière plus précise et une facture d'électricité allégée. Le matériel neuf s'use moins vite.",
+      "effects": {"stats": {"equipement": 12}},
+      "per_turn": {"stats": {"equipement": 2}, "income": 120, "income_label": "Économies d'électricité (projecteurs LED)"},
+      "notion": "investissement"
+    },
+    {
+      "id": "foyer_bar",
+      "label": "Foyer-bar rénové",
+      "icon": "heart",
+      "place": "hall",
+      "character": "ines",
+      "cost": 1800,
+      "payment_delay": 0,
+      "useful_life_years": 10,
+      "summary": "Un vrai foyer chaleureux, avec un bar ouvert avant et après les spectacles.",
+      "description": "Le public s'attarde, discute avec les artistes et revient. Le bar dégage une petite marge à chaque période.",
+      "effects": {"stats": {"fidelite": 4}},
+      "per_turn": {"stats": {"fidelite": 1.5}, "income": 200, "income_label": "Marge du bar du foyer"},
+      "notion": "investissement"
+    },
+    {
+      "id": "accessibilite",
+      "label": "Accessibilité de la salle",
+      "icon": "diversity",
+      "place": "hall",
+      "character": "pommier",
+      "cost": 1500,
+      "payment_delay": 0,
+      "useful_life_years": 15,
+      "summary": "Rampe d'accès, places pour fauteuils roulants, boucle magnétique pour les personnes malentendantes.",
+      "description": "Le théâtre devient accessible à tous les publics. La Ville, attentive à ces obligations, apprécie.",
+      "effects": {"stats": {"diversite": 6, "relations": 5}},
+      "per_turn": {"stats": {"diversite": 1}},
+      "notion": "investissement"
+    },
+    {
+      "id": "enseigne",
+      "label": "Enseigne lumineuse",
+      "icon": "megaphone",
+      "place": "rue",
+      "character": "helene",
+      "cost": 900,
+      "payment_delay": 1,
+      "useful_life_years": 6,
+      "summary": "Une enseigne et un panneau d'affichage lumineux sur la façade.",
+      "description": "Les passants voient le programme depuis la rue : la communication ne retombe jamais tout à fait.",
+      "effects": {"stats": {"communication": 10}},
+      "per_turn": {"stats": {"communication": 4}},
+      "notion": "investissement"
+    },
+    {
+      "id": "loges",
+      "label": "Loges et atelier rénovés",
+      "icon": "team",
+      "place": "coulisses",
+      "character": "bastien",
+      "cost": 1600,
+      "payment_delay": 0,
+      "useful_life_years": 10,
+      "summary": "Des loges chauffées et un atelier de décors bien rangé.",
+      "description": "Les équipes et les artistes travaillent dans de meilleures conditions : moins de fatigue, plus de soin.",
+      "effects": {"stats": {"equipe": 8}},
+      "per_turn": {"stats": {"equipe": 1}},
+      "notion": "investissement"
+    }
+  ]
+}

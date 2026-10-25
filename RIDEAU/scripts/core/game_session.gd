@@ -140,6 +140,28 @@ func confirm_programming(programmed: Array) -> String:
 	return ""
 
 
+## Ajoute ou retire une action du plan de la période (monde explorable : on
+## décide les actions une par une auprès des personnes concernées).
+## Retourne "" ou la raison du refus.
+func plan_action(action_id: String, planned: bool) -> String:
+	if state.phase != GameState.PHASE_MANAGEMENT:
+		return "Les actions se décident une fois la programmation validée."
+	var next := state.actions.duplicate()
+	if planned:
+		if action_id in next:
+			return ""
+		next.append(action_id)
+	else:
+		next.erase(action_id)
+	var err := Programming.validate_actions(data, state, next)
+	if err == "" and planned:
+		err = _affordability_error(state.programmed, next)
+	if err != "":
+		return err
+	state.actions = next
+	return ""
+
+
 ## Valide les actions, puis tire l'événement de la période.
 func confirm_actions(actions: Array) -> String:
 	if state.phase != GameState.PHASE_MANAGEMENT:
@@ -168,6 +190,55 @@ func _affordability_error(programmed: Array, actions: Array) -> String:
 	var baseline := projected_cash([], [])
 	if projection["low"] < limit and projection["low"] < baseline["low"]:
 		return "Dépenses refusées : dans le pire des cas, la trésorerie tomberait à %s, sous la limite du découvert (%s). Allégez la programmation ou les actions." % [Format.money(projection["low"]), Format.money(limit)]
+	return ""
+
+
+# --- Rénovations (investissements) ---------------------------------------------
+
+## Dotation aux amortissements d'une rénovation, par période : son coût réparti
+## sur sa durée d'utilisation (en années de huit périodes).
+func amortization_per_turn(upgrade_id: String) -> int:
+	var upgrade: Dictionary = data.upgrades.get(upgrade_id, {})
+	if upgrade.is_empty():
+		return 0
+	var periods := maxi(1, int(upgrade.get("useful_life_years", 1)) * data.periods_per_year)
+	return maxi(1, roundi(float(upgrade["cost"]) / float(periods)))
+
+
+## Raison pour laquelle une rénovation ne peut pas être achetée maintenant, ou "".
+func upgrade_block_reason(upgrade_id: String) -> String:
+	if not data.upgrades.has(upgrade_id):
+		return "Rénovation inconnue."
+	if upgrade_id in state.upgrades:
+		return "Ces travaux sont déjà faits."
+	if not state.phase in [GameState.PHASE_SITUATION, GameState.PHASE_PROGRAMMING, GameState.PHASE_MANAGEMENT]:
+		return "Les travaux se décident avant l'événement de la période."
+	var limit := int(data.balance.get("overdraft_limit", -6000))
+	var low := int(projected_cash(state.programmed, state.actions)["low"]) - int(data.upgrades[upgrade_id]["cost"])
+	if low < limit:
+		return "Trésorerie insuffisante : dans le pire des cas, elle tomberait à %s, sous la limite du découvert (%s)." % [Format.money(low), Format.money(limit)]
+	return ""
+
+
+## Achète une rénovation. Le prix sort de la trésorerie (écriture neutre pour
+## le résultat) ; le résultat supporte une dotation aux amortissements à chaque
+## période restante. Retourne "" ou un message d'erreur.
+func buy_upgrade(upgrade_id: String) -> String:
+	var reason := upgrade_block_reason(upgrade_id)
+	if reason != "":
+		return reason
+	var upgrade: Dictionary = data.upgrades[upgrade_id]
+	var label := str(upgrade["label"])
+	var turn := state.turn
+	Ledger.add(state, "Investissement — %s" % label, "investissement", int(upgrade["cost"]), Ledger.EXPENSE,
+			turn, turn + int(upgrade.get("payment_delay", 0)), {"neutral": true, "source": upgrade_id})
+	var per := amortization_per_turn(upgrade_id)
+	for t in range(turn, data.turns() + 1):
+		Ledger.add(state, "Dotation aux amortissements — %s" % label, "amortissement", per, Ledger.EXPENSE,
+				t, t, {"non_cash": true, "source": upgrade_id})
+	Rules.apply(upgrade.get("effects", {}), data, state, label, hash(upgrade_id))
+	state.upgrades.append(upgrade_id)
+	state.key_decisions.append({"turn": turn, "text": "Rénovation : %s" % label, "kind": "upgrade"})
 	return ""
 
 

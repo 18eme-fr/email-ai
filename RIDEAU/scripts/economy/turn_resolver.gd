@@ -44,6 +44,16 @@ static func resolve(data: GameData, state: GameState) -> Dictionary:
 		Rules.apply(action.get("effects", {}), data, state, str(action["label"]), hash(id))
 		report["actions"].append({"id": id, "label": action["label"], "cost": cost, "delay": int(action.get("payment_delay", 0))})
 
+	# 2 bis. Rénovations réalisées : effets durables et petites recettes.
+	for id: String in state.upgrades:
+		var upgrade: Dictionary = data.upgrades.get(id, {})
+		var per: Dictionary = upgrade.get("per_turn", {})
+		for stat_id: String in per.get("stats", {}):
+			Rules.change_stat(state, stat_id, float(per["stats"][stat_id]), str(upgrade["label"]))
+		if int(per.get("income", 0)) > 0:
+			Ledger.add(state, str(per.get("income_label", upgrade["label"])), "renovation", int(per["income"]),
+					Ledger.INCOME, turn, turn, {"source": id})
+
 	# 3. Représentations.
 	var genres_this_turn: Array = []
 	var cancel_index := int(state.turn_mods.get("cancel_index", -1))
@@ -284,6 +294,12 @@ static func _explain(data: GameData, state: GameState, report: Dictionary) -> Ar
 	lines.append("Variation de trésorerie : %s (encaissé %s, payé %s)." % [Format.signed_money(fin["variation"]), Format.money(fin["encaisse_total"]), Format.money(fin["decaisse_total"])])
 	if fin["resultat"] != fin["variation"]:
 		lines.append("Les deux diffèrent : certaines sommes sont engagées maintenant mais réglées plus tard (TVA, droits d'auteur, factures à 30 jours, aides), ou l'inverse.")
+	var amortization := 0
+	for line: Dictionary in fin["charges_detail"]:
+		if line["category"] == "amortissement":
+			amortization += int(line["amount"])
+	if amortization > 0:
+		lines.append("Amortissements : %s comptés dans le résultat sans sortie d'argent. Le prix des rénovations sort de la trésorerie à l'achat ; le résultat n'en supporte qu'une part à chaque période." % Format.money(amortization))
 	for s: Dictionary in report["shows"]:
 		if s.get("cancelled", false):
 			lines.append("« %s » a été annulé." % s["title"])

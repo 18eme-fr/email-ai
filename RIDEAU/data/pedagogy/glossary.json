@@ -278,6 +278,17 @@
         "S8",
         "S9"
       ]
+    },
+    "investissement": {
+      "title": "Investissement et amortissement",
+      "short": "Un investissement est un achat durable (matériel, travaux) qui sert plusieurs années. Son prix sort de la trésorerie tout de suite, mais le résultat n'en supporte qu'une part chaque année : c'est l'amortissement.",
+      "game": "Les rénovations du théâtre se paient en une fois (trésorerie), puis une « dotation aux amortissements » est comptée dans le résultat à chaque période, sans nouvelle sortie d'argent. Exemple : des projecteurs à 2 400 € utilisés huit ans coûtent environ 38 € par période au résultat.",
+      "reality": "Un bien durable est inscrit en immobilisation et amorti sur sa durée réelle d'utilisation, fixée à l'achat ; la dotation annuelle est une charge (compte 68). Une partie peut être financée par une subvention d'investissement, elle-même étalée dans le temps. Ici, une saison compte pour une année.",
+      "simplified": true,
+      "sources": [
+        "S15",
+        "S12"
+      ]
     }
   }
 }

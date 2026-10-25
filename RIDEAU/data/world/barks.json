@@ -1,0 +1,63 @@
+{
+  "_doc": "Répliques des personnages et descriptions des lieux dans le monde explorable. 'who' : personnage ou objet (spot). 'when' : conditions au format de Rules.check (docs/DATA_FORMAT.md), plus 'phase' (liste d'étapes), 'has_upgrade' et 'missing_upgrade'. Parmi les répliques possibles, la plus spécifique (nombre de conditions + 'priority') est préférée, avec un peu de hasard.",
+  "barks": [
+    {"priority": 2, "who": "helene", "text": "Bienvenue au Théâtre de la Lanterne ! Le cahier de programmation vous attend sur votre bureau, juste là.", "when": {"turns": [1], "phase": ["situation", "programmation"]}},
+    {"who": "helene", "text": "On verra au bilan. Comme toujours.", "when": {}},
+    {"who": "helene", "text": "Rappel : une facture à 30 jours pèse sur le résultat tout de suite, mais sur la trésorerie le mois suivant.", "when": {}},
+    {"priority": 2, "who": "helene", "text": "La trésorerie est basse. Chaque dépense compte : regardez bien l'échéancier avant de signer.", "when": {"cash_max": 4000}},
+    {"priority": 2, "who": "helene", "text": "Nous sommes à découvert. La banque tolère, mais pas indéfiniment.", "when": {"cash_max": -1}},
+    {"who": "helene", "text": "Belle trésorerie. Un investissement durable pourrait se discuter… avec un tableau d'amortissement, évidemment.", "when": {"cash_min": 16000}},
+    {"who": "helene", "text": "La Ville verse le solde de la subvention seulement si le bilan de fin de saison tient la route.", "when": {"min_turn": 5}},
+    {"who": "helene", "text": "Les rénovations ? Le prix sort de la caisse d'un coup, mais le résultat ne voit passer qu'un petit amortissement chaque période.", "when": {"phase": ["situation", "programmation", "gestion"]}},
+    {"who": "helene", "text": "C'est le moment de répartir les forces de l'équipe. Venez me voir si vous voulez former tout le monde.", "when": {"phase": ["gestion"]}},
+
+    {"priority": 2, "who": "bastien", "text": "Le projecteur 4 clignote encore. Je lui parle gentiment, mais un entretien ne serait pas du luxe.", "when": {"stat_max": {"equipement": 45}}},
+    {"who": "bastien", "text": "Le plateau est prêt. Enfin, aussi prêt qu'un plateau peut l'être.", "when": {}},
+    {"who": "bastien", "text": "Pas de promesse sans budget. C'est ma devise.", "when": {}},
+    {"who": "bastien", "text": "Mes projecteurs LED ! Moins de chaleur, moins de pannes, et la facture d'électricité qui baisse.", "when": {"has_upgrade": "projecteurs_led"}},
+    {"who": "bastien", "text": "Ces vieux halogènes chauffent comme des grille-pain. Des projecteurs LED, ça s'amortit sur huit ans…", "when": {"missing_upgrade": "projecteurs_led", "phase": ["situation", "programmation", "gestion"]}},
+    {"priority": 2, "who": "bastien", "text": "L'équipe est épuisée. Il faudrait souffler un peu, ou les former pour qu'ils travaillent plus sereinement.", "when": {"stat_max": {"equipe": 40}}},
+    {"who": "bastien", "text": "Ce soir, tout le monde à son poste. Je croise les doigts… et les câbles.", "when": {"phase": ["evenement"]}},
+
+    {"who": "ines", "text": "J'ai trois écoles et une maison de quartier qui n'attendent qu'un signe pour venir !", "when": {"stat_max": {"diversite": 50}}},
+    {"who": "ines", "text": "Chaque atelier en classe, c'est un futur spectateur. Et parfois toute sa famille.", "when": {}},
+    {"who": "ines", "text": "Les publics nous connaissent de mieux en mieux. On entend parler de la Lanterne au marché !", "when": {"stat_min": {"fidelite": 60}}},
+    {"who": "ines", "text": "Un vrai foyer avec un bar, ce serait l'endroit idéal pour les bords de plateau.", "when": {"missing_upgrade": "foyer_bar"}},
+    {"who": "ines", "text": "Le nouveau foyer est plein après chaque spectacle. Les gens restent discuter avec les artistes.", "when": {"has_upgrade": "foyer_bar"}},
+    {"who": "ines", "text": "Si vous voulez que je parte à la rencontre des écoles et des associations cette période, dites-le moi !", "when": {"phase": ["gestion"]}},
+
+    {"who": "pommier", "text": "La Ville suit vos chiffres de fréquentation avec attention. Avec bienveillance, mais avec attention.", "when": {}},
+    {"who": "pommier", "text": "L'éducation artistique et culturelle est une priorité de notre convention. N'oubliez pas les scolaires !", "when": {}},
+    {"who": "pommier", "text": "Une salle accessible à tous, c'est une obligation… et un très beau symbole pour une inauguration.", "when": {"missing_upgrade": "accessibilite"}},
+    {"who": "pommier", "text": "Bravo pour l'accessibilité. Le maire a adoré couper le ruban.", "when": {"has_upgrade": "accessibilite"}},
+    {"priority": 2, "who": "pommier", "text": "Nos relations sont un peu fraîches ces temps-ci. Un petit bilan d'étape serait apprécié.", "when": {"stat_max": {"relations": 40}}},
+    {"who": "pommier", "text": "Si vous voulez développer des partenariats avec les entreprises et les associations, je peux ouvrir quelques portes.", "when": {"phase": ["gestion"]}},
+
+    {"who": "louison", "text": "Une saison sans risque, c'est une saison sans souvenir !", "when": {}},
+    {"who": "louison", "text": "Les critiques commencent à parler de nous. Il faut tenir l'exigence !", "when": {"stat_min": {"reputation": 60}}},
+    {"who": "louison", "text": "Personne ne parle de notre travail… Programmez de la création, je vous en supplie.", "when": {"stat_max": {"reputation": 40}}},
+    {"who": "louison", "text": "Des loges chauffées ! Je vais enfin pouvoir répéter sans écharpe.", "when": {"has_upgrade": "loges"}},
+    {"who": "louison", "text": "Il fait un froid de canard dans ces loges. L'atelier mériterait un coup de neuf.", "when": {"missing_upgrade": "loges"}},
+
+    {"who": "accueil", "text": "Les gens demandent souvent le programme du mois prochain. Bon signe, non ?", "when": {"stat_min": {"fidelite": 50}}},
+    {"who": "accueil", "text": "Calme plat à la billetterie… On pourrait rendre le hall plus accueillant.", "when": {"stat_max": {"fidelite": 40}}},
+    {"who": "accueil", "text": "Billetterie ouverte du mardi au samedi. Et les soirs de spectacle, évidemment !", "when": {}},
+
+    {"who": "passant", "text": "J'ai vu l'affiche du Théâtre de la Lanterne, ça a l'air bien !", "when": {"stat_min": {"communication": 50}}},
+    {"who": "passant", "text": "Il y a un théâtre ici ? Je n'avais jamais remarqué.", "when": {"stat_max": {"communication": 30}}},
+    {"who": "passant", "text": "Ma fille a fait un atelier théâtre à l'école. Elle ne parle plus que de ça.", "when": {"stat_min": {"diversite": 55}}},
+    {"who": "passant", "text": "C'est cher, le théâtre ? Ah, il y a un tarif réduit ? Je note.", "when": {}},
+    {"who": "passant", "text": "Belle journée pour flâner sur la place.", "when": {}},
+    {"who": "passant", "text": "Brrr ! Un bon spectacle au chaud, ce serait parfait ce soir.", "when": {"period_tags": ["hiver"]}},
+    {"who": "passant", "text": "Les illuminations de Noël sont magnifiques cette année !", "when": {"period_tags": ["fetes"]}},
+    {"who": "passant", "text": "L'enseigne lumineuse du théâtre se voit de loin. Impossible de rater le programme !", "when": {"has_upgrade": "enseigne"}},
+
+    {"who": "cafe", "text": "Le Café des Artistes : les comédiens y refont le monde après chaque première. Ça sent le café et le décor fraîchement peint.", "when": {}},
+    {"who": "fontaine", "text": "Une vieille fontaine en pierre. Quelqu'un y a laissé un ticket de spectacle de 1987.", "when": {}},
+    {"who": "fontaine", "text": "L'eau de la fontaine est gelée. Les enfants glissent dessus en riant.", "when": {"period_tags": ["hiver"]}},
+    {"who": "regie", "text": "La régie son et lumière : une console, deux écrans et beaucoup trop de câbles.", "when": {}},
+    {"who": "loges", "text": "Des miroirs entourés d'ampoules, des pots de fond de teint et un mot : « Merde pour ce soir ! »", "when": {}},
+    {"who": "costumes", "text": "Un portant de costumes : une cape, trois chapeaux et une robe de bal un peu mitée.", "when": {}},
+    {"who": "mairie", "text": "La mairie. L'adjoint à la culture y reçoit sur rendez-vous… ou sur la place, s'il fait beau.", "when": {}}
+  ]
+}

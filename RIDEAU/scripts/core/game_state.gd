@@ -40,6 +40,7 @@ var seen_events: Array = []
 var reports: Array = []
 var history: Array = []         ## instantanés par fin de période (graphiques)
 var key_decisions: Array = []
+var upgrades: Array = []        ## ids des rénovations réalisées (investissements)
 var totals: Dictionary = {"attendance_total": 0, "eac_count": 0, "art_count": 0, "shows_count": 0}
 
 var bankrupt: bool = false
@@ -90,6 +91,7 @@ func to_dict() -> Dictionary:
 		"finished": finished,
 		"ending": ending.duplicate(true),
 		"tutorial_seen": tutorial_seen.duplicate(true),
+		"upgrades": upgrades.duplicate(),
 	}
 
 
@@ -118,6 +120,7 @@ static func from_dict(d: Dictionary) -> GameState:
 		"offers": TYPE_ARRAY, "programmed": TYPE_ARRAY, "actions": TYPE_ARRAY, "stat_log": TYPE_ARRAY,
 		"played_shows": TYPE_ARRAY, "genre_history": TYPE_ARRAY, "seen_events": TYPE_ARRAY,
 		"reports": TYPE_ARRAY, "history": TYPE_ARRAY, "key_decisions": TYPE_ARRAY,
+		"upgrades": TYPE_ARRAY,
 	}
 	for key: String in optional:
 		if d.has(key) and typeof(d[key]) != optional[key]:
@@ -162,6 +165,10 @@ static func from_dict(d: Dictionary) -> GameState:
 	s.finished = bool(d.get("finished", false))
 	s.ending = d.get("ending", {})
 	s.tutorial_seen = d.get("tutorial_seen", {})
+	for id: Variant in d.get("upgrades", []):
+		if not id is String:
+			return null
+		s.upgrades.append(id)
 	return s
 
 
