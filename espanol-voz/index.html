@@ -1,0 +1,815 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Charla — Espagnol à voix haute</title>
+<meta name="theme-color" content="#1b3a8c">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Mise en page : une seule colonne façon messagerie, gros bouton micro ancré en bas. Palette azulejo : cobalt, blanc chaulé, jaune safran. */
+:root {
+  --bg: #f3f5fb;
+  --surface: #ffffff;
+  --ink: #142048;
+  --muted: #5b6690;
+  --line: #dde2f0;
+  --cobalt: #1b3a8c;
+  --cobalt-soft: #e4eaf9;
+  --saffron: #f2b705;
+  --saffron-ink: #3b2c00;
+  --fix-bg: #fff6d6;
+  --fix-line: #ecd17a;
+  --danger: #b3261e;
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0c1330;
+    --surface: #141d44;
+    --ink: #eef1fb;
+    --muted: #9aa5cf;
+    --line: #26326a;
+    --cobalt: #8fa8ff;
+    --cobalt-soft: #1d2a63;
+    --saffron: #f5c435;
+    --saffron-ink: #2a1f00;
+    --fix-bg: #2e2810;
+    --fix-line: #6b5a1c;
+    --danger: #ff8a80;
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 16px/1.5 var(--font-body);
+  display: flex;
+  flex-direction: column;
+  padding-top: env(safe-area-inset-top, 0px);
+}
+button, select, input, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid var(--saffron); outline-offset: 2px; }
+[hidden] { display: none !important; }
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-block: 12px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+.brand { font: 700 1.35rem/1 var(--font-display); letter-spacing: -0.01em; color: var(--cobalt); }
+.brand small { display: block; font: 400 0.75rem/1.3 var(--font-body); color: var(--muted); letter-spacing: 0.02em; }
+.spacer { flex: 1; }
+.icon-btn {
+  border: 1px solid var(--line);
+  background: transparent;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+}
+.icon-btn:hover { background: var(--cobalt-soft); }
+
+.setup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-block: 10px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  border-bottom: 1px solid var(--line);
+}
+.setup label { display: flex; flex-direction: column; gap: 2px; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.setup select {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 6px 8px;
+  font-size: 0.95rem;
+  text-transform: none;
+  letter-spacing: 0;
+  max-width: 60vw;
+}
+
+main {
+  flex: 1;
+  overflow-y: auto;
+  padding-block: 16px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.thread { max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
+
+.intro {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 18px;
+}
+.intro h1 { font: 700 1.5rem/1.15 var(--font-display); margin: 0 0 8px; text-wrap: balance; }
+.intro p { margin: 0 0 8px; color: var(--muted); }
+.intro ol { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
+
+.msg { display: flex; flex-direction: column; gap: 6px; max-width: 88%; min-width: 0; }
+.msg.me { align-self: flex-end; align-items: flex-end; }
+.msg.bot { align-self: flex-start; }
+.bubble { padding: 10px 14px; border-radius: 16px; overflow-wrap: anywhere; }
+.me .bubble { background: var(--cobalt); color: var(--surface); border-bottom-right-radius: 4px; }
+.bot .bubble { background: var(--surface); border: 1px solid var(--line); border-bottom-left-radius: 4px; font-size: 1.08rem; }
+.bubble .tr { display: block; margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--line); color: var(--muted); font-size: 0.92rem; }
+.tools { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.chip:hover { color: var(--ink); border-color: var(--cobalt); }
+
+.fixes {
+  background: var(--fix-bg);
+  border: 1px solid var(--fix-line);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 0.9rem;
+  max-width: 100%;
+}
+.fixes b.lbl { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; display: block; margin-bottom: 4px; }
+.fix + .fix { margin-top: 6px; }
+.fix s { opacity: 0.7; }
+.fix .ok { font-weight: 700; }
+.fix .why { display: block; color: var(--muted); }
+.praise { color: var(--muted); font-size: 0.85rem; }
+
+.typing { display: inline-flex; gap: 4px; }
+.typing i { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); animation: blink 1.2s infinite; }
+.typing i:nth-child(2) { animation-delay: 0.2s; }
+.typing i:nth-child(3) { animation-delay: 0.4s; }
+@keyframes blink { 0%, 80%, 100% { opacity: 0.25; } 40% { opacity: 1; } }
+
+.error { color: var(--danger); font-size: 0.9rem; }
+
+footer {
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+  padding-top: 10px;
+  padding-bottom: max(12px, env(safe-area-inset-bottom, 0px));
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.controls { max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.live { min-height: 1.5em; color: var(--muted); font-style: italic; text-align: center; overflow-wrap: anywhere; }
+.row { display: flex; align-items: center; gap: 14px; width: 100%; justify-content: center; }
+.mic {
+  width: 78px; height: 78px;
+  border-radius: 50%;
+  border: none;
+  background: var(--saffron);
+  color: var(--saffron-ink);
+  display: grid; place-items: center;
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.18);
+  transition: transform 0.15s;
+}
+.mic svg { width: 34px; height: 34px; }
+.mic:active { transform: scale(0.95); }
+.mic.listening { animation: pulse 1.4s infinite; }
+.mic.busy { opacity: 0.55; }
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--saffron) 70%, transparent); }
+  70% { box-shadow: 0 0 0 18px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+.side { width: 92px; display: flex; justify-content: center; }
+.toggle { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; color: var(--muted); text-align: center; }
+.typebox { display: flex; gap: 8px; width: 100%; }
+.typebox input {
+  flex: 1; min-width: 0;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  border-radius: 10px;
+  padding: 8px 12px;
+}
+.typebox button { border: none; background: var(--cobalt); color: var(--surface); border-radius: 10px; padding: 8px 14px; }
+
+dialog {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+  color: var(--ink);
+  width: min(520px, calc(100vw - 32px));
+  padding: 20px;
+}
+dialog::backdrop { background: rgb(8 12 30 / 0.55); }
+dialog h2 { font: 700 1.25rem/1.2 var(--font-display); margin: 0 0 12px; }
+.field { display: flex; flex-direction: column; gap: 4px; margin-bottom: 14px; }
+.field > span { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.field input, .field select {
+  border: 1px solid var(--line);
+  background: var(--bg);
+  border-radius: 8px;
+  padding: 8px 10px;
+  width: 100%;
+}
+.hint { font-size: 0.82rem; color: var(--muted); margin: 0; }
+.actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; }
+.primary { border: none; background: var(--cobalt); color: var(--surface); border-radius: 10px; padding: 8px 16px; }
+.vocab-list { list-style: none; margin: 0 0 12px; padding: 0; max-height: 55vh; overflow-y: auto; }
+.vocab-list li { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.vocab-list li span:first-child { font-weight: 700; }
+.vocab-list li span:last-child { color: var(--muted); text-align: right; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mic.listening, .typing i { animation: none; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">Charla<small>Ton partenaire de conversation en espagnol</small></div>
+  <div class="spacer"></div>
+  <button class="icon-btn" id="vocabBtn" type="button">Carnet</button>
+  <button class="icon-btn" id="settingsBtn" type="button">Réglages</button>
+</header>
+
+<div class="setup">
+  <label>Niveau
+    <select id="level">
+      <option value="A1">A1 · débutant</option>
+      <option value="A2" selected>A2 · élémentaire</option>
+      <option value="B1">B1 · intermédiaire</option>
+      <option value="B2">B2 · avancé</option>
+      <option value="C1">C1 · autonome</option>
+    </select>
+  </label>
+  <label>Situation
+    <select id="scenario">
+      <option value="libre">Discussion libre</option>
+      <option value="cafe">Commander dans un bar à tapas</option>
+      <option value="voyage">Demander son chemin à Madrid</option>
+      <option value="hotel">Arriver à l'hôtel</option>
+      <option value="medecin">Chez le médecin</option>
+      <option value="travail">Entretien d'embauche</option>
+      <option value="amis">Rencontrer des amis d'amis</option>
+      <option value="debat">Débat d'actualité</option>
+    </select>
+  </label>
+  <label>Accent
+    <select id="accent">
+      <option value="es-ES">Espagne</option>
+      <option value="es-MX">Mexique</option>
+      <option value="es-AR">Argentine</option>
+      <option value="es-CO">Colombie</option>
+    </select>
+  </label>
+</div>
+
+<main id="scroller">
+  <div class="thread" id="thread">
+    <section class="intro" id="intro">
+      <h1>Parle, Charla te répond en espagnol.</h1>
+      <p>Chaque réponse est lue à voix haute. Tes erreurs sont corrigées en français juste sous ta phrase, sans couper la conversation.</p>
+      <ol>
+        <li>Ouvre <b>Réglages</b> et colle ta clé API Anthropic (une seule fois).</li>
+        <li>Choisis ton niveau et une situation.</li>
+        <li>Appuie sur le bouton jaune et parle. Exemple : « Hola, ¿qué tal? Me llamo Mateo. »</li>
+      </ol>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="controls">
+    <div class="live" id="live" aria-live="polite">Appuie sur le micro pour parler</div>
+    <div class="row">
+      <div class="side">
+        <label class="toggle"><input type="checkbox" id="handsfree"> Mains libres</label>
+      </div>
+      <button class="mic" id="mic" type="button" aria-label="Parler">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+      </button>
+      <div class="side">
+        <button class="chip" id="newChat" type="button">Nouvelle</button>
+      </div>
+    </div>
+    <form class="typebox" id="typebox">
+      <input id="typed" type="text" placeholder="…ou écris ta phrase en espagnol" autocomplete="off" lang="es">
+      <button type="submit">Envoyer</button>
+    </form>
+  </div>
+</footer>
+
+<dialog id="settings">
+  <h2>Réglages</h2>
+  <label class="field"><span>Clé API Anthropic</span>
+    <input id="apiKey" type="password" placeholder="sk-ant-…" autocomplete="off">
+  </label>
+  <p class="hint" style="margin:-8px 0 14px">Stockée uniquement dans ce navigateur. Crée-la sur console.anthropic.com → API Keys.</p>
+  <label class="field"><span>Voix</span>
+    <select id="voice"></select>
+  </label>
+  <label class="field"><span>Vitesse de parole : <b id="rateVal">0.9</b></span>
+    <input id="rate" type="range" min="0.6" max="1.3" step="0.05" value="0.9">
+  </label>
+  <label class="field"><span>Corrections</span>
+    <select id="strict">
+      <option value="normal">Erreurs importantes seulement</option>
+      <option value="strict">Toutes les erreurs, même petites</option>
+      <option value="off">Aucune correction</option>
+    </select>
+  </label>
+  <div class="actions">
+    <button class="icon-btn" id="testVoice" type="button">Tester la voix</button>
+    <button class="primary" id="saveSettings" type="button">Enregistrer</button>
+  </div>
+</dialog>
+
+<dialog id="vocab">
+  <h2>Carnet de vocabulaire</h2>
+  <ul class="vocab-list" id="vocabList"></ul>
+  <p class="hint" id="vocabEmpty">Les mots nouveaux et les corrections apparaîtront ici au fil des conversations.</p>
+  <div class="actions">
+    <button class="icon-btn" id="clearVocab" type="button">Vider</button>
+    <button class="primary" id="closeVocab" type="button">Fermer</button>
+  </div>
+</dialog>
+
+<script type="module">
+import Anthropic from "https://cdn.jsdelivr.net/npm/@anthropic-ai/sdk@0.132.1/+esm";
+
+const MODEL = "claude-opus-5-5";
+const $ = (id) => document.getElementById(id);
+
+// ---------- Stockage local ----------
+const store = {
+  get(key, fallback) {
+    try { const v = localStorage.getItem("charla." + key); return v === null ? fallback : JSON.parse(v); }
+    catch { return fallback; }
+  },
+  set(key, value) {
+    try { localStorage.setItem("charla." + key, JSON.stringify(value)); } catch {}
+  },
+};
+
+const settings = {
+  apiKey: store.get("apiKey", ""),
+  voiceURI: store.get("voiceURI", ""),
+  rate: store.get("rate", 0.9),
+  strict: store.get("strict", "normal"),
+  level: store.get("level", "A2"),
+  scenario: store.get("scenario", "libre"),
+  accent: store.get("accent", "es-ES"),
+  handsfree: store.get("handsfree", false),
+};
+let vocab = store.get("vocab", []);
+
+$("level").value = settings.level;
+$("scenario").value = settings.scenario;
+$("accent").value = settings.accent;
+$("handsfree").checked = settings.handsfree;
+for (const id of ["level", "scenario", "accent"]) {
+  $(id).addEventListener("change", () => {
+    settings[id] = $(id).value;
+    store.set(id, settings[id]);
+    if (id === "accent") pickDefaultVoice(true);
+    if (id !== "accent" && history.length) resetConversation();
+  });
+}
+$("handsfree").addEventListener("change", () => {
+  settings.handsfree = $("handsfree").checked;
+  store.set("handsfree", settings.handsfree);
+});
+
+// ---------- Synthèse vocale ----------
+let voices = [];
+function loadVoices() {
+  voices = speechSynthesis.getVoices().filter((v) => v.lang.toLowerCase().startsWith("es"));
+  const sel = $("voice");
+  sel.innerHTML = "";
+  if (!voices.length) {
+    sel.innerHTML = "<option value=''>Aucune voix espagnole trouvée sur cet appareil</option>";
+    return;
+  }
+  for (const v of voices) {
+    const o = document.createElement("option");
+    o.value = v.voiceURI;
+    o.textContent = `${v.name} (${v.lang})`;
+    sel.appendChild(o);
+  }
+  pickDefaultVoice(false);
+}
+function pickDefaultVoice(force) {
+  if (!voices.length) return;
+  let v = !force && voices.find((x) => x.voiceURI === settings.voiceURI);
+  if (!v) {
+    const accent = settings.accent.toLowerCase();
+    const same = voices.filter((x) => x.lang.toLowerCase().replace("_", "-") === accent);
+    const pool = same.length ? same : voices;
+    // Les voix "naturelles"/"premium" sonnent nettement mieux quand elles existent.
+    v = pool.find((x) => /natural|premium|enhanced|neural|google/i.test(x.name)) || pool[0];
+  }
+  settings.voiceURI = v.voiceURI;
+  $("voice").value = v.voiceURI;
+}
+if ("speechSynthesis" in window) {
+  loadVoices();
+  speechSynthesis.onvoiceschanged = loadVoices;
+}
+
+function speak(text, onEnd) {
+  if (!("speechSynthesis" in window)) { onEnd?.(); return; }
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  const v = voices.find((x) => x.voiceURI === settings.voiceURI);
+  if (v) u.voice = v;
+  u.lang = v?.lang || settings.accent;
+  u.rate = settings.rate;
+  u.onend = () => onEnd?.();
+  u.onerror = () => onEnd?.();
+  speechSynthesis.speak(u);
+}
+
+// ---------- Reconnaissance vocale ----------
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recognizer = null;
+let listening = false;
+let busy = false;
+
+function setLive(text) { $("live").textContent = text; }
+
+function startListening() {
+  if (!SR) {
+    setLive("La reconnaissance vocale n'est pas disponible dans ce navigateur. Utilise Chrome ou Safari, ou écris ta phrase.");
+    return;
+  }
+  if (listening || busy) return;
+  speechSynthesis.cancel();
+  recognizer = new SR();
+  recognizer.lang = settings.accent;
+  recognizer.interimResults = true;
+  recognizer.continuous = false;
+  recognizer.maxAlternatives = 1;
+  let finalText = "";
+  recognizer.onresult = (e) => {
+    let interim = "";
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      const r = e.results[i];
+      if (r.isFinal) finalText += r[0].transcript;
+      else interim += r[0].transcript;
+    }
+    setLive((finalText + " " + interim).trim() || "J'écoute…");
+  };
+  recognizer.onerror = (e) => {
+    if (e.error === "not-allowed" || e.error === "service-not-allowed") {
+      setLive("Accès au micro refusé. Autorise le micro pour ce site dans ton navigateur.");
+    } else if (e.error === "no-speech") {
+      setLive("Je n'ai rien entendu. Appuie et parle un peu plus fort.");
+    } else {
+      setLive("Le micro s'est interrompu (" + e.error + "). Réessaie.");
+    }
+  };
+  recognizer.onend = () => {
+    listening = false;
+    $("mic").classList.remove("listening");
+    const text = finalText.trim();
+    if (text) send(text);
+  };
+  recognizer.start();
+  listening = true;
+  $("mic").classList.add("listening");
+  setLive("J'écoute… parle en espagnol");
+}
+function stopListening() { recognizer?.stop(); }
+
+$("mic").addEventListener("click", () => {
+  if (listening) stopListening();
+  else startListening();
+});
+
+// ---------- Claude ----------
+const SCENARIOS = {
+  libre: "Conversation libre et amicale. Pose des questions sur la vie, les goûts et les projets de l'apprenant.",
+  cafe: "Tu es serveur dans un bar à tapas à Séville. L'apprenant est client : il commande à boire et à manger, demande des conseils et l'addition.",
+  voyage: "Tu es un passant à Madrid. L'apprenant est un touriste perdu qui cherche son chemin et des transports.",
+  hotel: "Tu es réceptionniste dans un hôtel à Barcelone. L'apprenant arrive pour son check-in et a quelques demandes.",
+  medecin: "Tu es médecin généraliste. L'apprenant vient en consultation et doit décrire ses symptômes.",
+  travail: "Tu es recruteur pour une entreprise espagnole. Tu fais passer un entretien d'embauche à l'apprenant.",
+  amis: "Tu es un ami d'amis rencontré à une fête à Valence. Vous faites connaissance.",
+  debat: "Tu animes un petit débat sur un sujet de société ou d'actualité. Défends parfois un avis opposé pour faire argumenter l'apprenant.",
+};
+const ACCENTS = {
+  "es-ES": "espagnol d'Espagne (vosotros, vocabulaire péninsulaire)",
+  "es-MX": "espagnol du Mexique (ustedes, vocabulaire mexicain)",
+  "es-AR": "espagnol d'Argentine (voseo, vocabulaire rioplatense)",
+  "es-CO": "espagnol de Colombie (vocabulaire colombien)",
+};
+const STRICTNESS = {
+  normal: "Corrige les erreurs qui gênent la compréhension ou qui sont importantes pour son niveau. Ignore les détails mineurs.",
+  strict: "Corrige toutes les erreurs, y compris les petites (accords, prépositions, accents à l'oral, tournures peu naturelles).",
+  off: "Ne corrige rien : renvoie toujours une liste de corrections vide.",
+};
+
+function systemPrompt() {
+  return `Tu es Charla, un partenaire de conversation pour un francophone qui apprend l'espagnol à l'oral.
+
+Situation : ${SCENARIOS[settings.scenario]}
+Niveau de l'apprenant (CECRL) : ${settings.level}. Adapte ton vocabulaire, tes temps verbaux et la longueur de tes phrases à ce niveau.
+Variante à utiliser : ${ACCENTS[settings.accent]}.
+
+Ta réponse est lue à voix haute par une synthèse vocale :
+- reply_es : 1 à 3 phrases courtes et naturelles en espagnol, sans emoji, sans liste ni mise en forme. Termine le plus souvent par une question pour faire parler l'apprenant.
+- Si l'apprenant écrit en français ou bloque, aide-le en lui donnant la phrase en espagnol, puis relance.
+- Le texte de l'apprenant vient d'une reconnaissance vocale : ignore la ponctuation, les majuscules et les accents écrits manquants. Ne corrige que ce qui s'entendrait à l'oral.
+
+Champs à remplir :
+- translation_fr : traduction française de reply_es.
+- corrections : erreurs dans le DERNIER message de l'apprenant. ${STRICTNESS[settings.strict]} Pour chaque erreur : original (ce qu'il a dit), corrected (la bonne forme), explanation_fr (une phrase simple en français).
+- new_words : 0 à 3 mots ou expressions de reply_es qui sont probablement nouveaux pour ce niveau, avec leur traduction.
+- encouragement_fr : une très courte remarque positive en français si la phrase était réussie, sinon chaîne vide.
+
+Si c'est le tout début de la conversation (message "[inicio]"), lance toi-même la situation par une première phrase.`;
+}
+
+const RESPONSE_SCHEMA = {
+  type: "object",
+  properties: {
+    reply_es: { type: "string" },
+    translation_fr: { type: "string" },
+    corrections: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          original: { type: "string" },
+          corrected: { type: "string" },
+          explanation_fr: { type: "string" },
+        },
+        required: ["original", "corrected", "explanation_fr"],
+        additionalProperties: false,
+      },
+    },
+    new_words: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: { es: { type: "string" }, fr: { type: "string" } },
+        required: ["es", "fr"],
+        additionalProperties: false,
+      },
+    },
+    encouragement_fr: { type: "string" },
+  },
+  required: ["reply_es", "translation_fr", "corrections", "new_words", "encouragement_fr"],
+  additionalProperties: false,
+};
+
+// Historique envoyé à l'API : on renvoie le contenu de chaque réponse tel quel (append-only).
+let history = [];
+
+function client() {
+  return new Anthropic({ apiKey: settings.apiKey, dangerouslyAllowBrowser: true });
+}
+
+async function askClaude(userText) {
+  const messages = [...history, { role: "user", content: userText }];
+  const response = await client().beta.messages.create({
+    model: MODEL,
+    max_tokens: 4000,
+    betas: ["server-side-fallback-2026-07-01"],
+    fallbacks: "default",
+    output_config: {
+      effort: "low",
+      format: { type: "json_schema", schema: RESPONSE_SCHEMA },
+    },
+    system: systemPrompt(),
+    messages,
+  });
+  if (response.stop_reason === "refusal") {
+    throw new Error("Claude a refusé de répondre à ce message. Reformule ta phrase.");
+  }
+  const textBlock = response.content.findLast((b) => b.type === "text");
+  if (!textBlock) throw new Error("Réponse vide. Réessaie.");
+  const data = JSON.parse(textBlock.text);
+  history = [...messages, { role: "assistant", content: response.content }];
+  return data;
+}
+
+function explainError(err) {
+  if (err instanceof Anthropic.AuthenticationError) return "Clé API invalide. Vérifie-la dans Réglages.";
+  if (err instanceof Anthropic.PermissionDeniedError) return "Cette clé API n'a pas accès au modèle. Vérifie ton compte Anthropic.";
+  if (err instanceof Anthropic.RateLimitError) return "Trop de requêtes d'un coup. Attends quelques secondes et réessaie.";
+  if (err instanceof Anthropic.APIConnectionError) return "Impossible de joindre l'API. Vérifie ta connexion internet.";
+  if (err instanceof Anthropic.APIError) return "Erreur de l'API (" + (err.status ?? "?") + ") : " + err.message;
+  return err.message || String(err);
+}
+
+// ---------- Affichage ----------
+const thread = $("thread");
+function scrollDown() { const s = $("scroller"); s.scrollTop = s.scrollHeight; }
+
+function el(tag, cls, text) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+
+function addUserMessage(text) {
+  $("intro").hidden = true;
+  const wrap = el("div", "msg me");
+  wrap.appendChild(el("div", "bubble", text));
+  thread.appendChild(wrap);
+  scrollDown();
+  return wrap;
+}
+
+function addCorrections(wrap, data) {
+  if (data.corrections.length) {
+    const box = el("div", "fixes");
+    box.appendChild(el("b", "lbl", "Correction"));
+    for (const c of data.corrections) {
+      const f = el("div", "fix");
+      f.appendChild(el("s", "", c.original));
+      f.appendChild(document.createTextNode(" → "));
+      f.appendChild(el("span", "ok", c.corrected));
+      f.appendChild(el("span", "why", c.explanation_fr));
+      box.appendChild(f);
+    }
+    wrap.appendChild(box);
+  } else if (data.encouragement_fr) {
+    wrap.appendChild(el("div", "praise", data.encouragement_fr));
+  }
+}
+
+function addBotMessage(data) {
+  const wrap = el("div", "msg bot");
+  const bubble = el("div", "bubble");
+  bubble.lang = "es";
+  bubble.appendChild(document.createTextNode(data.reply_es));
+  const tr = el("span", "tr", data.translation_fr);
+  tr.lang = "fr";
+  tr.hidden = true;
+  bubble.appendChild(tr);
+  wrap.appendChild(bubble);
+
+  const tools = el("div", "tools");
+  const again = el("button", "chip", "Réécouter");
+  again.type = "button";
+  again.onclick = () => speak(data.reply_es);
+  const slow = el("button", "chip", "Plus lentement");
+  slow.type = "button";
+  slow.onclick = () => {
+    const r = settings.rate;
+    settings.rate = Math.max(0.5, r - 0.25);
+    speak(data.reply_es);
+    settings.rate = r;
+  };
+  const show = el("button", "chip", "Traduire");
+  show.type = "button";
+  show.onclick = () => { tr.hidden = !tr.hidden; show.textContent = tr.hidden ? "Traduire" : "Masquer"; };
+  tools.append(again, slow, show);
+  wrap.appendChild(tools);
+  thread.appendChild(wrap);
+  scrollDown();
+}
+
+function addTyping() {
+  const wrap = el("div", "msg bot");
+  const b = el("div", "bubble");
+  b.innerHTML = '<span class="typing" aria-label="Charla réfléchit"><i></i><i></i><i></i></span>';
+  wrap.appendChild(b);
+  thread.appendChild(wrap);
+  scrollDown();
+  return wrap;
+}
+
+function saveWords(data) {
+  const fresh = [
+    ...data.corrections.map((c) => ({ es: c.corrected, fr: c.explanation_fr })),
+    ...data.new_words,
+  ];
+  for (const w of fresh) {
+    if (!vocab.some((v) => v.es.toLowerCase() === w.es.toLowerCase())) vocab.unshift(w);
+  }
+  vocab = vocab.slice(0, 500);
+  store.set("vocab", vocab);
+}
+
+// ---------- Boucle de conversation ----------
+async function send(text, { silentUser = false } = {}) {
+  if (busy) return;
+  if (!settings.apiKey) {
+    setLive("Ajoute d'abord ta clé API dans Réglages.");
+    $("settings").showModal();
+    return;
+  }
+  busy = true;
+  $("mic").classList.add("busy");
+  const userWrap = silentUser ? null : addUserMessage(text);
+  const typing = addTyping();
+  setLive("Charla réfléchit…");
+  try {
+    const data = await askClaude(text);
+    typing.remove();
+    if (userWrap) addCorrections(userWrap, data);
+    addBotMessage(data);
+    saveWords(data);
+    setLive(settings.handsfree ? "Charla parle… je t'écoute juste après" : "Appuie sur le micro pour répondre");
+    busy = false;
+    $("mic").classList.remove("busy");
+    speak(data.reply_es, () => {
+      if (settings.handsfree && !busy) startListening();
+    });
+  } catch (err) {
+    typing.remove();
+    const e = el("div", "error", explainError(err));
+    thread.appendChild(e);
+    scrollDown();
+    setLive("Appuie sur le micro pour réessayer");
+    busy = false;
+    $("mic").classList.remove("busy");
+  }
+}
+
+function resetConversation() {
+  speechSynthesis.cancel();
+  stopListening();
+  history = [];
+  thread.querySelectorAll(".msg, .error").forEach((n) => n.remove());
+  $("intro").hidden = false;
+  setLive("Appuie sur le micro pour parler");
+}
+
+$("newChat").addEventListener("click", () => {
+  resetConversation();
+  // Charla ouvre la scène elle-même dans les situations de jeu de rôle.
+  if (settings.scenario !== "libre" && settings.apiKey) send("[inicio]", { silentUser: true });
+});
+
+$("typebox").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const text = $("typed").value.trim();
+  if (!text) return;
+  $("typed").value = "";
+  send(text);
+});
+
+// ---------- Dialogues ----------
+$("settingsBtn").addEventListener("click", () => {
+  $("apiKey").value = settings.apiKey;
+  $("rate").value = settings.rate;
+  $("rateVal").textContent = settings.rate;
+  $("strict").value = settings.strict;
+  $("settings").showModal();
+});
+$("rate").addEventListener("input", () => { $("rateVal").textContent = $("rate").value; });
+$("testVoice").addEventListener("click", () => {
+  settings.voiceURI = $("voice").value;
+  settings.rate = Number($("rate").value);
+  speak("Hola, soy Charla. ¿Practicamos un poco de español?");
+});
+$("saveSettings").addEventListener("click", () => {
+  settings.apiKey = $("apiKey").value.trim();
+  settings.voiceURI = $("voice").value;
+  settings.rate = Number($("rate").value);
+  settings.strict = $("strict").value;
+  for (const k of ["apiKey", "voiceURI", "rate", "strict"]) store.set(k, settings[k]);
+  $("settings").close();
+  setLive(settings.apiKey ? "C'est prêt. Appuie sur le micro pour parler" : "Ajoute ta clé API pour commencer");
+});
+
+function renderVocab() {
+  const list = $("vocabList");
+  list.innerHTML = "";
+  for (const w of vocab) {
+    const li = el("li");
+    const es = el("span", "", w.es);
+    es.lang = "es";
+    li.append(es, el("span", "", w.fr));
+    li.addEventListener("click", () => speak(w.es));
+    list.appendChild(li);
+  }
+  $("vocabEmpty").hidden = vocab.length > 0;
+}
+$("vocabBtn").addEventListener("click", () => { renderVocab(); $("vocab").showModal(); });
+$("closeVocab").addEventListener("click", () => $("vocab").close());
+$("clearVocab").addEventListener("click", () => { vocab = []; store.set("vocab", vocab); renderVocab(); });
+
+if (!SR) setLive("Micro indisponible ici : utilise Chrome (ordinateur/Android) ou Safari (iPhone), ou écris ta phrase.");
+</script>
+</body>
+</html>
