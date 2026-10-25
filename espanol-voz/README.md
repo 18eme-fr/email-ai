@@ -9,7 +9,8 @@ Application web vocale : tu parles en espagnol, Claude te répond à voix haute,
 - **Niveaux A1 à C1** : vocabulaire et longueur des phrases adaptés.
 - **Situations** : discussion libre, bar à tapas, demander son chemin, hôtel, médecin, entretien d'embauche, soirée, débat.
 - **Accents** : Espagne, Mexique, Argentine, Colombie.
-- **Corrections** en français (au choix : importantes, toutes ou aucune), traduction de chaque réponse sur demande, bouton « plus lentement ».
+- **Lecture surlignée** : la réplique de Charla s'affiche en grand et chaque mot s'allume pendant qu'il est prononcé.
+- **Corrections au stylo rouge** : la faute est barrée et la bonne forme écrite au-dessus, avec l'explication en français (au choix : importantes, toutes ou aucune), traduction de chaque réponse sur demande, bouton « plus lentement ».
 - **Carnet de vocabulaire** : les mots nouveaux et les corrections sont enregistrés ; touche un mot pour l'écouter.
 
 ## Utilisation
@@ -28,7 +29,8 @@ Le workflow `.github/workflows/deploy-espanol-voz.yml` publie le dossier sur Git
 
 ## Technique
 
-- Un seul fichier `index.html`, sans build.
+- `artifact.html` est la source : c'est la version artefact claude.ai (Claude via le compte de l'utilisateur).
+- `index.html` (GitHub Pages, micro direct, clé API) est généré à partir d'elle : `python3 espanol-voz/tools/build.py`. Modifier `artifact.html`, puis relancer le script.
 - Modèle : `claude-opus-5-5`, effort `low` pour des réponses rapides, sortie JSON structurée (réponse, traduction, corrections, vocabulaire).
 - Repli automatique côté serveur (`fallbacks: "default"`) si une requête est refusée.
 - La clé API est appelée directement depuis le navigateur : à garder pour un usage personnel. Pour partager l'appli, il faudrait passer par un petit serveur qui garde la clé.
