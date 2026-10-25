@@ -71,7 +71,7 @@ func _ready() -> void:
 	left.add_child(UiKit.rich("Trésorerie finale [b]%s[/b] · Entrées [b]%s[/b] · Rayonnement [b]%d[/b] · Fidélité [b]%d[/b] · Diversité [b]%d[/b]" % [
 		Format.money(s.cash), Format.thousands(int(s.totals["attendance_total"])), roundi(Rules.rayonnement(session.data, s)), roundi(s.stat("fidelite")), roundi(s.stat("diversite"))]))
 	var chart := LineChart.new()
-	chart.custom_minimum_size = Vector2(520, 120)
+	chart.custom_minimum_size = Vector2(520, 110)
 	var pts: Array[float] = [float(session.data.balance["start"]["cash"]) * float(session.data.difficulty(s.difficulty).get("cash_mult", 1.0))]
 	var att: Array[float] = []
 	for h: Dictionary in s.history:
@@ -82,7 +82,7 @@ func _ready() -> void:
 	left.add_child(chart)
 	if att.size() >= 2:
 		var chart2 := LineChart.new()
-		chart2.custom_minimum_size = Vector2(520, 90)
+		chart2.custom_minimum_size = Vector2(520, 84)
 		chart2.series = att
 		chart2.labels_from = 1
 		chart2.zero_line = false

@@ -25,7 +25,7 @@ func _ready() -> void:
 	var head := UiKit.hbox([UiKit.label("Programmation", "HeaderLabel"), UiKit.spacer(), UiKit.notion_link("programmation", "Programmer ?")])
 	add_child(head)
 	add_child(UiKit.label("Propositions reçues pour %s. Cliquez sur une affiche pour lire sa fiche." % session.period_name().to_lower(), "SmallLabel", true))
-	_cards = UiKit.hbox([], 6)
+	_cards = UiKit.hbox([], 5)
 	add_child(_cards)
 	var scroll := ScrollContainer.new()
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -79,7 +79,7 @@ func _build_cards() -> void:
 		var show: Dictionary = data.shows[id]
 		var chosen := _is_selected(id)
 		var card := Button.new()
-		card.custom_minimum_size = Vector2(104, 172)
+		card.custom_minimum_size = Vector2(100, 172)
 		card.theme_type_variation = "FlatButton"
 		card.toggle_mode = false
 		card.tooltip_text = "%s\n%s" % [show["title"], show["pitch"]]
@@ -259,7 +259,9 @@ func _price_row(id: String, show: Dictionary) -> Control:
 		return row
 	var group := ButtonGroup.new()
 	for level: Dictionary in session.data.balance["price_levels"]:
-		var b := UiKit.button("%s : %s" % [level["label"], Format.money(roundi(float(show["price"]) * float(level["mult"])))], "SecondaryButton")
+		var short := {"reduit": "Solidaire", "normal": "Normal", "plein": "Élevé"}
+		var b := UiKit.button("%s %s" % [short.get(level["id"], level["label"]), Format.money(roundi(float(show["price"]) * float(level["mult"])))], "SecondaryButton")
+		b.tooltip_text = str(level["label"])
 		b.toggle_mode = true
 		b.button_group = group
 		b.button_pressed = prices.get(id, "normal") == level["id"]

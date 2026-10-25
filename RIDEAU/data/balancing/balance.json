@@ -248,11 +248,11 @@
     "exigeant": {
       "label": "Exigeant",
       "description": "Trésorerie serrée, publics capricieux.",
-      "cash_mult": 0.8,
-      "fixed_mult": 1.05,
-      "subsidy_mult": 0.92,
-      "noise_mult": 1.25,
-      "demand_mult": 0.95
+      "cash_mult": 0.85,
+      "fixed_mult": 1.0,
+      "subsidy_mult": 0.95,
+      "noise_mult": 1.2,
+      "demand_mult": 0.97
     }
   }
 }

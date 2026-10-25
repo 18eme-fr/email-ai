@@ -139,10 +139,15 @@ func confirm_actions(actions: Array) -> String:
 	return ""
 
 
+## Refuse une dépense qui ferait passer la trésorerie sous le découvert autorisé.
+## Ne rien programmer reste toujours possible : si les seules charges fixes
+## suffisent à dépasser la limite, la faillite sera la conséquence de la période,
+## mais le joueur n'est jamais bloqué.
 func _affordability_error(programmed: Array, actions: Array) -> String:
 	var limit := int(data.balance.get("overdraft_limit", -6000))
 	var projection := projected_cash(programmed, actions)
-	if projection["low"] < limit:
+	var baseline := projected_cash([], [])
+	if projection["low"] < limit and projection["low"] < baseline["low"]:
 		return "Dépenses refusées : dans le pire des cas, la trésorerie tomberait à %s, sous la limite du découvert (%s). Allégez la programmation ou les actions." % [Format.money(projection["low"]), Format.money(limit)]
 	return ""
 

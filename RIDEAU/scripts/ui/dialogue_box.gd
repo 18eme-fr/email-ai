@@ -40,7 +40,10 @@ func _init() -> void:
 	_role = UiKit.label("", "PaperLabel")
 	_role.add_theme_font_size_override("font_size", 14)
 	_role.add_theme_color_override("font_color", Color("6e5a4a"))
-	col.add_child(UiKit.hbox([_name, _role], 10))
+	_role.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_role.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_role.custom_minimum_size.x = 40
+	col.add_child(UiKit.vbox([_name, _role], 0))
 	_label = DialogueLabel.new()
 	_label.theme_type_variation = "PaperRichText"
 	_label.fit_content = true

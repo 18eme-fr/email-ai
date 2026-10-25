@@ -18,8 +18,7 @@ func _ready() -> void:
 	add_theme_constant_override("separation", 8)
 	size_flags_vertical = Control.SIZE_EXPAND_FILL
 	var event := session.current_event()
-	var head := UiKit.hbox([UiKit.label(str(event.get("title", "Une période calme")), "HeaderLabel")])
-	head.add_child(UiKit.spacer())
+	var head := UiKit.hbox([UiKit.label(str(event.get("title", "Une période calme")), "HeaderLabel", true)])
 	if event.has("notion"):
 		head.add_child(UiKit.notion_link(str(event["notion"]), "Comprendre l'enjeu"))
 	add_child(head)
@@ -72,6 +71,8 @@ func _on_responses(responses: Array) -> void:
 		card.add_child(col)
 		var b := UiKit.button(response.text, "" if reason == "" else "SecondaryButton")
 		b.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		b.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		b.custom_minimum_size.x = 40
 		b.disabled = reason != ""
 		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		b.pressed.connect(func() -> void: _choose(response, cid))

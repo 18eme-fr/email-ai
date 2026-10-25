@@ -35,13 +35,11 @@ func play_turn(session: GameSession) -> void:
 	session.open_programming()
 	var programmed := choose_programming(session)
 	while session.confirm_programming(programmed) != "":
-		if programmed.is_empty():
-			break
+		assert(not programmed.is_empty(), "Une programmation vide doit toujours être acceptée.")
 		programmed.pop_back()
 	var actions := choose_actions(session)
 	while session.confirm_actions(actions) != "":
-		if actions.is_empty():
-			break
+		assert(not actions.is_empty(), "Une absence d'action doit toujours être acceptée.")
 		actions.pop_back()
 	if session.state.current_event != "":
 		session.choose_event(choose_event(session))
