@@ -4,14 +4,15 @@ Application web vocale : tu parles en espagnol, Claude te répond à voix haute,
 
 ## Fonctionnalités
 
-- **Conversation vocale** : reconnaissance vocale du navigateur (Web Speech API) et réponses lues par une voix espagnole.
-- **Mode mains libres** : le micro se relance tout seul après chaque réponse, pour enchaîner sans toucher l'écran.
-- **Niveaux A1 à C1** : vocabulaire et longueur des phrases adaptés.
-- **Situations** : discussion libre, bar à tapas, demander son chemin, hôtel, médecin, entretien d'embauche, soirée, débat.
-- **Accents** : Espagne, Mexique, Argentine, Colombie.
-- **Lecture surlignée** : la réplique de Charla s'affiche en grand et chaque mot s'allume pendant qu'il est prononcé.
-- **Corrections au stylo rouge** : la faute est barrée et la bonne forme écrite au-dessus, avec l'explication en français (au choix : importantes, toutes ou aucune), traduction de chaque réponse sur demande, bouton « plus lentement ».
-- **Carnet de vocabulaire** : les mots nouveaux et les corrections sont enregistrés ; touche un mot pour l'écouter.
+Inspirée de Darij AI : on apprend en parlant, avec un prof IA.
+
+- **Leçons** : un parcours de 18 leçons (A1 à B1) en 6 unités. Chaque leçon a trois étapes : découvrir 4 expressions (avec audio), les utiliser dans une conversation jouée avec Charla (elles se cochent quand tu les dis), puis un bilan noté de 1 à 3 étoiles avec tes corrections. Le niveau choisi au départ ouvre les leçons correspondantes.
+- **Discuter** : conversation libre ou en situation (bar, hôtel, médecin, entretien…) avec Charla, la prof bienveillante, ou Paco, le Madrilène provocateur qui te taquine et te lance des défis.
+- **Traduire** : français → espagnol ou espagnol → français, à la voix ou au clavier, avec une variante, une remarque et l'écoute.
+- **Carnet** : les expressions des leçons, les mots nouveaux et tes corrections s'y ajoutent. Révision en cartes avec répétition espacée (les mots reviennent après 1, 3, 7, 16, 35 jours).
+- **Série de jours** : le compteur augmente chaque jour où tu pratiques.
+- **Voix** : réponses lues à voix haute avec surlignage mot à mot, mode mains libres, bouton « plus lentement », 4 accents (Espagne, Mexique, Argentine, Colombie).
+- **Corrections au stylo rouge** au-dessus de ta phrase, avec l'explication en français.
 
 ## Utilisation
 
@@ -29,7 +30,8 @@ Le workflow `.github/workflows/deploy-espanol-voz.yml` publie le dossier sur Git
 
 ## Technique
 
-- `artifact.html` est la source : c'est la version artefact claude.ai (Claude via le compte de l'utilisateur).
+- `artifact.html` est la source : c'est la version artefact claude.ai (Claude via le compte de l'utilisateur, progression enregistrée sur le compte).
+- La version GitHub Pages garde la progression dans le navigateur (localStorage).
 - `index.html` (GitHub Pages, micro direct, clé API) est généré à partir d'elle : `python3 espanol-voz/tools/build.py`. Modifier `artifact.html`, puis relancer le script.
 - Modèle : `claude-opus-5-5`, effort `low` pour des réponses rapides, sortie JSON structurée (réponse, traduction, corrections, vocabulaire).
 - Repli automatique côté serveur (`fallbacks: "default"`) si une requête est refusée.

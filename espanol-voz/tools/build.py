@@ -6,64 +6,26 @@ src = (root / "artifact.html").read_text()
 
 backend = '''const MODEL = "claude-opus-5-5";
 
-const RESPONSE_SCHEMA = {
-  type: "object",
-  properties: {
-    reply_es: { type: "string" },
-    translation_fr: { type: "string" },
-    corrections: {
-      type: "array",
-      items: {
-        type: "object",
-        properties: {
-          original: { type: "string" },
-          corrected: { type: "string" },
-          explanation_fr: { type: "string" },
-        },
-        required: ["original", "corrected", "explanation_fr"],
-        additionalProperties: false,
-      },
-    },
-    new_words: {
-      type: "array",
-      items: {
-        type: "object",
-        properties: { es: { type: "string" }, fr: { type: "string" } },
-        required: ["es", "fr"],
-        additionalProperties: false,
-      },
-    },
-    encouragement_fr: { type: "string" },
-  },
-  required: ["reply_es", "translation_fr", "corrections", "new_words", "encouragement_fr"],
-  additionalProperties: false,
-};
-
-// Messages envoyés à l'API : le contenu de chaque réponse est renvoyé tel quel (append-only).
-let apiMessages = [];
-
-async function askClaude(userText) {
-  if (!turns.length) apiMessages = [];
-  const messages = [...apiMessages, { role: "user", content: userText }];
+// Chaque appel est indépendant : la page envoie la consigne et l'historique dans le prompt.
+async function askJSON(prompt) {
   const client = new Anthropic({ apiKey: settings.apiKey, dangerouslyAllowBrowser: true });
   const response = await client.beta.messages.create({
     model: MODEL,
     max_tokens: 4000,
     betas: ["server-side-fallback-2026-07-01"],
     fallbacks: "default",
-    output_config: {
-      effort: "low",
-      format: { type: "json_schema", schema: RESPONSE_SCHEMA },
-    },
-    system: instructions(),
-    messages,
+    output_config: { effort: "low" },
+    messages: [{ role: "user", content: prompt }],
   });
   if (response.stop_reason === "refusal") throw new Error("Claude n'a pas répondu à ce message. Reformule ta phrase.");
-  const textBlock = response.content.findLast((b) => b.type === "text");
-  if (!textBlock) throw new Error("La réponse est arrivée vide.");
-  const data = JSON.parse(textBlock.text);
-  apiMessages = [...messages, { role: "assistant", content: response.content }];
-  return data;
+  const text = response.content.filter((b) => b.type === "text").map((b) => b.text).join("");
+  try {
+    return JSON.parse(text);
+  } catch {
+    const a = text.indexOf("{"), b = text.lastIndexOf("}");
+    if (a < 0 || b <= a) throw new Error("La réponse est arrivée incomplète.");
+    return JSON.parse(text.slice(a, b + 1));
+  }
 }
 
 function explainError(err) {

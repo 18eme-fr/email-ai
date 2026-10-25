@@ -10,8 +10,9 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600&family=Figtree:wght@400;600;700&family=Kalam:wght@400;700&display=swap">
 <style>
 :root { padding-top: env(safe-area-inset-top, 0px); }
-/* Mise en page : appli plein écran en une colonne. En haut, les réglages en pastilles ; au centre, le fil où la dernière réplique de Charla s'affiche en grand et s'allume mot à mot pendant la lecture ; en bas, la saisie et le micro.
-   Matières : papier d'école (corrections au stylo rouge, manuscrites), sable d'arène pour le micro, vert azulejo pour l'interface. */
+/* Mise en page : appli plein écran en une colonne, barre d'onglets en bas (Leçons, Discuter, Traduire, Carnet).
+   Les leçons forment un parcours vertical par unités ; chaque leçon passe par Découvrir, Parler, Bilan.
+   Matières : papier d'école (corrections au stylo rouge, manuscrites), sable d'arène pour le micro et les étoiles, vert azulejo pour l'interface. */
 :root {
   --paper: #f4f7fa;
   --surface: #ffffff;
@@ -83,13 +84,17 @@ button { cursor: pointer; }
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
+h2, h3 { text-wrap: balance; }
 
 /* ---------- En-tête ---------- */
-header { padding-block: 12px 8px; }
+header { padding-block: 10px; border-bottom: 1px solid var(--line); background: var(--surface); }
 .top { display: flex; align-items: center; gap: 8px; }
-.brand { font: 600 1.6rem/1 var(--font-es); letter-spacing: -0.02em; margin: 0; }
-.brand span { color: var(--pen); font-family: var(--font-pen); font-weight: 700; font-size: 0.8em; margin-left: 2px; }
+.brand { font: 600 1.5rem/1 var(--font-es); letter-spacing: -0.02em; margin: 0; }
+.brand span { color: var(--pen); font-family: var(--font-pen); font-weight: 700; font-size: 0.78em; margin-left: 2px; }
 .spacer { flex: 1; }
+.streak { display: inline-flex; align-items: center; gap: 4px; font-weight: 700; font-size: 0.9rem; padding: 0 10px; min-height: 36px; border-radius: 999px; background: var(--paper); }
+.streak svg { width: 18px; height: 18px; color: var(--albero); }
+.streak.cold svg { color: var(--muted); }
 .ghost {
   min-height: 44px;
   padding: 0 14px;
@@ -101,34 +106,107 @@ header { padding-block: 12px 8px; }
   transition: border-color var(--t-fast) var(--ease);
 }
 .ghost:hover { border-color: var(--teal); }
-
-.pills { display: flex; gap: 8px; margin-top: 10px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
-.pills::-webkit-scrollbar { display: none; }
-.pill {
-  flex: none;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  min-height: 40px;
-  padding: 0 4px 0 12px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: var(--surface);
-  font-size: 0.85rem;
-}
-.pill > span { color: var(--muted); }
-.pill select {
+.primary {
+  min-height: 48px;
+  padding: 0 20px;
   border: none;
-  background: transparent;
-  font-weight: 600;
-  padding: 6px 8px 6px 0;
-  max-width: 52vw;
+  border-radius: var(--r-s);
+  background: var(--teal);
+  color: var(--surface);
+  font-weight: 700;
 }
+.primary.big { width: 100%; font-size: 1.05rem; }
+.link { border: none; background: none; padding: 8px 0; min-height: 36px; font-size: 0.88rem; font-weight: 600; color: var(--teal); }
 
-/* ---------- Fil de conversation ---------- */
+/* ---------- Vues ---------- */
 main { flex: 1; overflow-y: auto; overscroll-behavior: contain; }
-.thread { display: flex; flex-direction: column; gap: 18px; padding-block: 20px 28px; }
+.view { padding-block: 18px 28px; display: flex; flex-direction: column; gap: 18px; }
+.view-title { font: 600 1.6rem/1.15 var(--font-es); margin: 0; letter-spacing: -0.01em; }
+.lead { margin: 0; color: var(--muted); }
 
+/* Leçons : résumé et parcours */
+.summary { display: flex; flex-wrap: wrap; gap: 8px 20px; color: var(--muted); font-size: 0.92rem; }
+.summary b { color: var(--ink); font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+.next {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-m);
+  padding: 16px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.next .kicker { font-size: 0.85rem; color: var(--muted); margin: 0; }
+.next h3 { font: 600 1.35rem/1.2 var(--font-es); margin: 0; }
+.unit { display: flex; flex-direction: column; gap: 4px; }
+.unit-head { display: flex; align-items: baseline; gap: 10px; margin: 6px 0 4px; }
+.unit-head h3 { font: 600 1.15rem/1.2 var(--font-es); margin: 0; }
+.lvl { font-size: 0.78rem; font-weight: 700; color: var(--teal); border: 1px solid var(--teal); border-radius: 999px; padding: 1px 8px; }
+.lesson-row {
+  display: flex; align-items: center; gap: 12px;
+  width: 100%;
+  min-height: 56px;
+  padding: 8px 12px;
+  border: 1px solid transparent;
+  border-radius: var(--r-m);
+  background: transparent;
+  text-align: left;
+}
+.lesson-row:not(:disabled):hover { background: var(--surface); border-color: var(--line); }
+.lesson-row:disabled { cursor: default; opacity: 0.55; }
+.dot {
+  flex: none;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--line);
+  display: grid; place-items: center;
+  font-size: 0.8rem; font-weight: 700; color: var(--muted);
+  background: var(--surface);
+}
+.lesson-row.done .dot { background: var(--teal); border-color: var(--teal); color: var(--surface); }
+.lesson-row.current .dot { border-color: var(--albero); color: var(--ink); }
+.lesson-row .txt { flex: 1; min-width: 0; }
+.lesson-row .t { display: block; font-weight: 600; }
+.lesson-row .s { display: block; font-size: 0.85rem; color: var(--muted); }
+.stars { color: var(--albero); letter-spacing: 1px; font-size: 0.95rem; white-space: nowrap; }
+.stars .off { color: var(--line); }
+
+/* Leçon en cours */
+.lesson-bar { display: flex; align-items: center; gap: 10px; }
+.steps { display: flex; gap: 6px; flex: 1; }
+.steps i { flex: 1; height: 6px; border-radius: 999px; background: var(--line); }
+.steps i.on { background: var(--teal); }
+.goal { font-size: 1rem; margin: 0; }
+.targets { display: flex; flex-direction: column; gap: 2px; }
+.target {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+.target .es-t { font: 600 1.15rem/1.3 var(--font-es); }
+.target .fr-t { display: block; color: var(--muted); font-size: 0.9rem; }
+.target .txt { flex: 1; min-width: 0; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px dashed var(--muted);
+  font: 400 0.92rem/1.3 var(--font-es);
+  color: var(--muted);
+}
+.chip.used { border-style: solid; border-color: var(--teal); background: var(--teal-soft); color: var(--ink); }
+.chip.used::before { content: "✓"; font-family: var(--font-ui); font-weight: 700; color: var(--teal); }
+.finish { display: flex; flex-direction: column; gap: 8px; align-items: stretch; }
+.result { text-align: center; display: flex; flex-direction: column; gap: 10px; align-items: center; padding-top: 10px; }
+.result .big-stars { font-size: 2.6rem; letter-spacing: 6px; color: var(--albero); line-height: 1; }
+.result .big-stars .off { color: var(--line); }
+.result h2 { font: 600 1.7rem/1.15 var(--font-es); margin: 0; }
+.recap { width: 100%; text-align: left; display: flex; flex-direction: column; gap: 6px; }
+.recap h3 { font-size: 1rem; margin: 8px 0 0; }
+.recap li { font: 400 1rem/1.4 var(--font-pen); color: var(--pen); }
+.recap ul { margin: 0; padding-left: 18px; }
+
+/* Conversation */
+.thread { display: flex; flex-direction: column; gap: 18px; }
 .turn-me { align-self: flex-end; max-width: 86%; min-width: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
 .said {
   background: var(--surface);
@@ -141,17 +219,13 @@ main { flex: 1; overflow-y: auto; overscroll-behavior: contain; }
 }
 .said ruby { ruby-position: over; }
 .said ruby s { text-decoration-color: var(--pen); text-decoration-thickness: 2px; color: var(--muted); }
-.said rt {
-  font: 700 0.95rem/1 var(--font-pen);
-  color: var(--pen);
-  transform: rotate(-2deg);
-}
+.said rt { font: 700 0.95rem/1 var(--font-pen); color: var(--pen); }
 .notes { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; text-align: right; }
 .notes li { font: 400 0.98rem/1.35 var(--font-pen); color: var(--pen); }
 .notes b { font-weight: 700; }
 .kudos { font: 400 0.98rem/1.35 var(--font-pen); color: var(--teal); }
-
 .turn-bot { align-self: flex-start; max-width: 100%; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.who { font-size: 0.8rem; font-weight: 700; color: var(--muted); }
 .es {
   font-family: var(--font-es);
   font-size: 1.12rem;
@@ -159,10 +233,9 @@ main { flex: 1; overflow-y: auto; overscroll-behavior: contain; }
   margin: 0;
   overflow-wrap: anywhere;
   color: var(--muted);
-  transition: color var(--t-med) var(--ease);
 }
 .turn-bot.latest .es {
-  font-size: clamp(1.55rem, 5.2vw, 2.1rem);
+  font-size: clamp(1.45rem, 5vw, 2rem);
   line-height: 1.3;
   letter-spacing: -0.01em;
   color: var(--ink);
@@ -183,15 +256,12 @@ main { flex: 1; overflow-y: auto; overscroll-behavior: contain; }
   font-weight: 600;
   color: var(--teal);
 }
-.act:hover { background: var(--teal-soft); border-color: var(--teal); }
-.act[aria-pressed="true"] { background: var(--teal-soft); border-color: var(--teal); }
-
+.act:hover, .act[aria-pressed="true"] { background: var(--teal-soft); border-color: var(--teal); }
 .dots { display: inline-flex; gap: 6px; padding: 10px 0; }
 .dots i { width: 9px; height: 9px; border-radius: 50%; background: var(--muted); animation: dot 1.1s infinite var(--ease); }
 .dots i:nth-child(2) { animation-delay: 0.15s; }
 .dots i:nth-child(3) { animation-delay: 0.3s; }
 @keyframes dot { 0%, 80%, 100% { opacity: 0.25; transform: translateY(0); } 40% { opacity: 1; transform: translateY(-4px); } }
-
 .problem {
   border: 1px solid var(--pen);
   border-radius: var(--r-m);
@@ -201,10 +271,23 @@ main { flex: 1; overflow-y: auto; overscroll-behavior: contain; }
 }
 .problem p { margin: 0; flex: 1; min-width: 12rem; }
 
-/* Premier écran */
-.welcome { display: flex; flex-direction: column; gap: 14px; padding-top: 6px; }
-.welcome .es { font-size: clamp(1.8rem, 7vw, 2.6rem); color: var(--ink); line-height: 1.15; letter-spacing: -0.02em; }
-.welcome p { margin: 0; color: var(--muted); max-width: 34rem; }
+/* Discuter */
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; background: var(--surface); gap: 2px; flex-wrap: wrap; }
+.seg button { min-height: 38px; padding: 0 14px; border: none; border-radius: 999px; background: transparent; font-weight: 600; font-size: 0.9rem; color: var(--muted); }
+.seg button[aria-pressed="true"] { background: var(--teal); color: var(--surface); }
+.persona-note { margin: 0; color: var(--muted); font-size: 0.9rem; }
+.chat-tools { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  min-height: 40px;
+  padding: 0 4px 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 0.85rem;
+}
+.pill > span { color: var(--muted); }
+.pill select { border: none; background: transparent; font-weight: 600; padding: 6px 8px 6px 0; max-width: 56vw; }
 .starters { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
 .starter {
   min-height: 44px;
@@ -214,22 +297,60 @@ main { flex: 1; overflow-y: auto; overscroll-behavior: contain; }
   background: var(--surface);
   font: 400 1.05rem/1.3 var(--font-es);
   text-align: left;
-  transition: border-color var(--t-fast) var(--ease);
 }
 .starter:hover { border-color: var(--teal); }
 
-/* ---------- Pied : saisie et micro ---------- */
-footer {
+/* Traduire */
+.tr-item { display: flex; flex-direction: column; gap: 6px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+.tr-src { margin: 0; color: var(--muted); font-size: 0.95rem; }
+.tr-out { margin: 0; font: 600 1.5rem/1.3 var(--font-es); overflow-wrap: anywhere; }
+.tr-out.fr-out { font-family: var(--font-ui); font-weight: 600; font-size: 1.3rem; }
+.tr-note { margin: 0; font-size: 0.9rem; color: var(--muted); }
+.tr-alt { margin: 0; font: 400 1rem/1.4 var(--font-es); color: var(--muted); }
+.hint { font-size: 0.82rem; color: var(--muted); margin: 0; }
+
+/* Carnet */
+.words { list-style: none; margin: 0; padding: 0; }
+.words li { border-bottom: 1px solid var(--line); }
+.words button {
+  width: 100%;
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  padding: 10px 0;
+  border: none; background: none; text-align: left;
+  min-height: 48px;
+}
+.words .w-es { font: 600 1.05rem/1.3 var(--font-es); }
+.words .w-fr { color: var(--muted); text-align: right; font-size: 0.9rem; }
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 28px 20px;
+  min-height: 240px;
+  display: flex; flex-direction: column; gap: 14px; align-items: center; justify-content: center;
+  text-align: center;
+}
+.card .front { font: 600 clamp(1.6rem, 6vw, 2.2rem)/1.2 var(--font-es); margin: 0; overflow-wrap: anywhere; }
+.card .back { font-size: 1.1rem; margin: 0; color: var(--muted); }
+.grade { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.grade button { min-height: 52px; border-radius: var(--r-s); font-weight: 700; }
+.again { border: 1px solid var(--pen); color: var(--pen); background: transparent; }
+.knew { border: none; background: var(--teal); color: var(--surface); }
+.danger { color: var(--pen); }
+.empty { background: var(--surface); border: 1px dashed var(--line); border-radius: var(--r-m); padding: 18px; color: var(--muted); }
+.empty p { margin: 0 0 10px; }
+
+/* ---------- Saisie et micro ---------- */
+#dock {
   border-top: 1px solid var(--line);
   background: var(--surface);
   padding-top: 10px;
-  padding-bottom: max(12px, env(safe-area-inset-bottom, 0px));
+  padding-bottom: 10px;
 }
-.dock { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: end; }
-.status { grid-column: 1 / -1; margin: 0; min-height: 1.4em; font-size: 0.88rem; color: var(--muted); overflow-wrap: anywhere; }
+.dock { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; }
+.status { grid-column: 1 / -1; margin: 0; min-height: 1.3em; font-size: 0.86rem; color: var(--muted); overflow-wrap: anywhere; }
 .status.heard { font-family: var(--font-es); font-style: italic; color: var(--ink); font-size: 1rem; }
-.compose { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
-.field { display: flex; gap: 6px; }
+.field { display: flex; gap: 6px; min-width: 0; }
 .field input {
   flex: 1; min-width: 0;
   min-height: 48px;
@@ -241,26 +362,16 @@ footer {
   font-size: 1.05rem;
 }
 .field input:focus { border-color: var(--teal); outline: none; box-shadow: 0 0 0 3px var(--teal-soft); }
-.send {
-  min-height: 48px;
-  padding: 0 16px;
-  border: none;
-  border-radius: var(--r-s);
-  background: var(--teal);
-  color: var(--surface);
-  font-weight: 700;
-}
-.under { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+.send { min-height: 48px; padding: 0 14px; border: none; border-radius: var(--r-s); background: var(--teal); color: var(--surface); font-weight: 700; }
+.dock-extra { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
 .switch { display: inline-flex; align-items: center; gap: 8px; min-height: 36px; font-size: 0.85rem; color: var(--muted); cursor: pointer; }
 .switch input { appearance: none; width: 34px; height: 20px; border-radius: 999px; background: var(--line); position: relative; margin: 0; cursor: pointer; transition: background-color var(--t-fast) var(--ease); }
 .switch input::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--surface); transition: transform var(--t-med) var(--ease); }
 .switch input:checked { background: var(--teal); }
 .switch input:checked::after { transform: translateX(14px); }
-.link { border: none; background: none; padding: 8px 0; min-height: 36px; font-size: 0.85rem; font-weight: 600; color: var(--teal); }
-
 .mic {
   position: relative;
-  width: 76px; height: 76px;
+  width: 64px; height: 64px;
   border-radius: 50%;
   border: none;
   background: var(--albero);
@@ -268,16 +379,9 @@ footer {
   display: grid; place-items: center;
   transition: transform var(--t-fast) var(--ease), opacity var(--t-med) var(--ease);
 }
-.mic svg { width: 32px; height: 32px; position: relative; }
+.mic svg { width: 28px; height: 28px; position: relative; }
 .mic:active { transform: scale(0.94); }
-.mic::before, .mic::after {
-  content: "";
-  position: absolute; inset: 0;
-  border-radius: 50%;
-  border: 2px solid var(--albero);
-  opacity: 0;
-  pointer-events: none;
-}
+.mic::before, .mic::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--albero); opacity: 0; pointer-events: none; }
 .mic.listening::before { animation: ring 1.6s infinite var(--ease); }
 .mic.listening::after { animation: ring 1.6s 0.8s infinite var(--ease); }
 @keyframes ring { 0% { transform: scale(1); opacity: 0.7; } 100% { transform: scale(1.7); opacity: 0; } }
@@ -286,20 +390,37 @@ footer {
 .mic.speaking .mic-ico { display: none; }
 .mic.speaking .stop { display: block; }
 
-/* ---------- Feuilles (réglages, carnet) ---------- */
+/* ---------- Onglets ---------- */
+nav.tabs {
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.tabs .wrap { display: grid; grid-template-columns: repeat(4, 1fr); }
+.tab {
+  min-height: 56px;
+  border: none; background: none;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  font-size: 0.75rem; font-weight: 600; color: var(--muted);
+}
+.tab svg { width: 22px; height: 22px; }
+.tab[aria-current="page"] { color: var(--teal); }
+.tab .badge { font-size: 0.68rem; background: var(--albero); color: var(--albero-ink); border-radius: 999px; padding: 0 6px; margin-left: 2px; }
+
+/* ---------- Feuilles ---------- */
 dialog {
   border: 1px solid var(--line);
   border-radius: 18px;
   background: var(--surface);
   color: var(--ink);
   width: min(520px, calc(100vw - 24px));
-  max-height: 86vh;
+  max-height: 88vh;
   padding: 20px;
 }
 dialog::backdrop { background: rgb(6 12 24 / 0.5); }
 dialog[open] { animation: sheet var(--t-med) var(--ease); }
 @keyframes sheet { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
-dialog h2 { font: 600 1.35rem/1.2 var(--font-es); margin: 0 0 16px; }
+dialog h2 { font: 600 1.35rem/1.2 var(--font-es); margin: 0 0 14px; }
 .row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
 .row > span { font-size: 0.85rem; font-weight: 600; }
 .row select, .row input[type="text"], .row input[type="password"] {
@@ -311,21 +432,19 @@ dialog h2 { font: 600 1.35rem/1.2 var(--font-es); margin: 0 0 16px; }
   width: 100%;
 }
 .row input[type="range"] { width: 100%; accent-color: var(--teal); }
-.hint { font-size: 0.82rem; color: var(--muted); margin: 0; }
 .bar { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
-.primary { min-height: 44px; padding: 0 18px; border: none; border-radius: var(--r-s); background: var(--teal); color: var(--surface); font-weight: 700; }
-.words { list-style: none; margin: 0 0 12px; padding: 0; }
-.words li { border-bottom: 1px solid var(--line); }
-.words button {
-  width: 100%;
-  display: flex; justify-content: space-between; gap: 12px;
-  padding: 10px 0;
-  border: none; background: none; text-align: left;
-  min-height: 44px;
+.levels { display: flex; flex-direction: column; gap: 8px; }
+.level-btn {
+  min-height: 56px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-m);
+  background: var(--paper);
+  text-align: left;
 }
-.words .w-es { font: 600 1.05rem/1.3 var(--font-es); }
-.words .w-fr { color: var(--muted); text-align: right; font-size: 0.9rem; }
-.danger { color: var(--pen); }
+.level-btn:hover { border-color: var(--teal); }
+.level-btn b { display: block; }
+.level-btn span { font-size: 0.88rem; color: var(--muted); }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -335,23 +454,41 @@ dialog h2 { font: 600 1.35rem/1.2 var(--font-es); margin: 0 0 16px; }
 <body>
 
 <header class="gutter">
-  <div class="wrap">
-    <div class="top">
-      <h1 class="brand">Charla<span>¡olé!</span></h1>
-      <div class="spacer"></div>
-      <button class="ghost" id="vocabBtn" type="button">Carnet</button>
-      <button class="ghost" id="settingsBtn" type="button">Réglages</button>
+  <div class="wrap top">
+    <h1 class="brand">Charla<span>¡olé!</span></h1>
+    <div class="spacer"></div>
+    <span class="streak cold" id="streak" title="Jours d'affilée">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2c1 3.5-1.5 5-1.5 8 0 1.4.9 2.5 2 2.5 1.4 0 2.2-1.2 2-3 2 1.6 3.5 4 3.5 6.5A6 6 0 0 1 6 16c0-4 3-6 4-9.5.4-1.5.8-3 2-4.5Z"/></svg>
+      <span id="streakNum">0</span>
+    </span>
+    <button class="ghost" id="settingsBtn" type="button">Réglages</button>
+  </div>
+</header>
+
+<main id="scroller" class="gutter">
+  <!-- Leçons -->
+  <section class="wrap view" id="view-lessons">
+    <div class="summary" id="summary"></div>
+    <div class="next" id="nextCard"></div>
+    <div id="path"></div>
+  </section>
+
+  <!-- Leçon en cours -->
+  <section class="wrap view" id="view-lesson" hidden>
+    <div class="lesson-bar">
+      <button class="link" id="quitLesson" type="button">Quitter</button>
+      <div class="steps" aria-hidden="true"><i></i><i></i><i></i></div>
     </div>
-    <div class="pills">
-      <label class="pill"><span>Niveau</span>
-        <select id="level">
-          <option value="A1">A1 débutant</option>
-          <option value="A2" selected>A2 élémentaire</option>
-          <option value="B1">B1 intermédiaire</option>
-          <option value="B2">B2 avancé</option>
-          <option value="C1">C1 autonome</option>
-        </select>
-      </label>
+    <div id="lessonBody"></div>
+  </section>
+
+  <!-- Discuter -->
+  <section class="wrap view" id="view-chat" hidden>
+    <div class="chat-tools">
+      <div class="seg" role="group" aria-label="Avec qui parler">
+        <button type="button" data-persona="charla" aria-pressed="true">Charla, la prof</button>
+        <button type="button" data-persona="paco" aria-pressed="false">Paco, le provocateur</button>
+      </div>
       <label class="pill"><span>Situation</span>
         <select id="scenario">
           <option value="libre">Discussion libre</option>
@@ -364,51 +501,82 @@ dialog h2 { font: 600 1.35rem/1.2 var(--font-es); margin: 0 0 16px; }
           <option value="debat">Débat d'actualité</option>
         </select>
       </label>
-      <label class="pill"><span>Accent</span>
-        <select id="accent">
-          <option value="es-ES">Espagne</option>
-          <option value="es-MX">Mexique</option>
-          <option value="es-AR">Argentine</option>
-          <option value="es-CO">Colombie</option>
-        </select>
-      </label>
+      <button class="link" id="newChat" type="button">Recommencer</button>
     </div>
-  </div>
-</header>
-
-<main id="scroller" class="gutter">
-  <div class="wrap thread" id="thread">
-    <section class="welcome" id="welcome">
-      <p class="es" lang="es">¡Hola! Soy Charla. ¿Hablamos un rato?</p>
-      <p>Parle en espagnol, je te réponds à voix haute. Tes fautes sont corrigées au stylo rouge au-dessus de ta phrase. Pour commencer, touche une phrase :</p>
-      <div class="starters" id="starters">
-        <button class="starter" type="button" lang="es">Hola, ¿qué tal? Me llamo Mateo.</button>
-        <button class="starter" type="button" lang="es">Quiero practicar para un viaje a España.</button>
-        <button class="starter" type="button" lang="es">No sé qué decir, ¿me haces una pregunta?</button>
+    <div class="thread" id="chatThread">
+      <div id="chatWelcome" class="starters-wrap">
+        <p class="persona-note" id="personaNote"></p>
+        <div class="starters" id="starters"></div>
       </div>
-    </section>
-  </div>
+    </div>
+  </section>
+
+  <!-- Traduire -->
+  <section class="wrap view" id="view-translate" hidden>
+    <h2 class="view-title">Traduire</h2>
+    <div class="seg" role="group" aria-label="Sens de traduction">
+      <button type="button" data-dir="fr-es" aria-pressed="true">Français → Espagnol</button>
+      <button type="button" data-dir="es-fr" aria-pressed="false">Espagnol → Français</button>
+    </div>
+    <p class="hint">Dis ou écris une phrase en bas. La traduction est faite par l'IA : elle peut manquer de contexte ou se tromper.</p>
+    <div id="trList" class="thread"></div>
+  </section>
+
+  <!-- Carnet -->
+  <section class="wrap view" id="view-carnet" hidden>
+    <h2 class="view-title">Carnet</h2>
+    <div id="carnetBody"></div>
+  </section>
 </main>
 
-<footer class="gutter">
+<div id="dock" class="gutter" hidden>
   <div class="wrap dock">
     <p class="status" id="status" aria-live="polite"></p>
-    <div class="compose">
-      <form class="field" id="typebox">
-        <input id="typed" type="text" placeholder="Hola, me llamo…" autocomplete="off" autocapitalize="sentences" lang="es" aria-label="Ta phrase en espagnol">
-        <button class="send" type="submit">Envoyer</button>
-      </form>
-      <div class="under">
-        <label class="switch"><input type="checkbox" id="handsfree"> Mains libres</label>
-        <button class="link" id="newChat" type="button">Recommencer</button>
-      </div>
-    </div>
+    <form class="field" id="typebox">
+      <input id="typed" type="text" autocomplete="off" autocapitalize="sentences" lang="es" aria-label="Ta phrase">
+      <button class="send" type="submit">Envoyer</button>
+    </form>
     <button class="mic" id="mic" type="button" aria-label="Parler">
       <svg class="mic-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
       <svg class="stop" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="2" fill="currentColor"/></svg>
     </button>
+    <div class="dock-extra" id="dockExtra">
+      <label class="switch"><input type="checkbox" id="handsfree"> Mains libres</label>
+    </div>
   </div>
-</footer>
+</div>
+
+<nav class="tabs gutter" id="tabs" aria-label="Sections">
+  <div class="wrap">
+    <button class="tab" type="button" data-tab="lessons" aria-current="page">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2Z"/><path d="M4 19V5M9 7h6"/></svg>
+      Leçons
+    </button>
+    <button class="tab" type="button" data-tab="chat">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z"/></svg>
+      Discuter
+    </button>
+    <button class="tab" type="button" data-tab="translate">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h11M11 3l4 4-4 4M20 17H9M13 13l-4 4 4 4"/></svg>
+      Traduire
+    </button>
+    <button class="tab" type="button" data-tab="carnet">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="14" height="15" rx="2"/><path d="M7 3h12a2 2 0 0 1 2 2v12"/></svg>
+      <span>Carnet<span class="badge" id="dueBadge" hidden></span></span>
+    </button>
+  </div>
+</nav>
+
+<dialog id="onboard" aria-labelledby="onboardTitle">
+  <h2 id="onboardTitle">Ton niveau en espagnol</h2>
+  <p class="hint" style="margin:-6px 0 14px">Les leçons de ton niveau et des niveaux en dessous seront ouvertes. Tu pourras le changer dans Réglages.</p>
+  <div class="levels" id="levelChoices">
+    <button class="level-btn" type="button" data-level="A1"><b>Je débute</b><span>A1 · premiers mots, se présenter</span></button>
+    <button class="level-btn" type="button" data-level="A2"><b>Je me débrouille</b><span>A2 · situations simples du quotidien</span></button>
+    <button class="level-btn" type="button" data-level="B1"><b>Je tiens une conversation</b><span>B1 · raconter, donner son avis</span></button>
+    <button class="level-btn" type="button" data-level="B2"><b>Je suis à l'aise</b><span>B2 · débattre, nuancer</span></button>
+  </div>
+</dialog>
 
 <dialog id="settings" aria-labelledby="settingsTitle">
   <h2 id="settingsTitle">Réglages</h2>
@@ -416,6 +584,23 @@ dialog h2 { font: 600 1.35rem/1.2 var(--font-es); margin: 0 0 16px; }
     <input id="apiKey" type="password" placeholder="sk-ant-…" autocomplete="off">
   </label>
   <p class="hint" style="margin:-8px 0 16px">Gardée uniquement dans ce navigateur. Crée-la sur console.anthropic.com, rubrique API Keys.</p>
+  <label class="row"><span>Niveau</span>
+    <select id="level">
+      <option value="A1">A1 · débutant</option>
+      <option value="A2">A2 · élémentaire</option>
+      <option value="B1">B1 · intermédiaire</option>
+      <option value="B2">B2 · avancé</option>
+      <option value="C1">C1 · autonome</option>
+    </select>
+  </label>
+  <label class="row"><span>Accent</span>
+    <select id="accent">
+      <option value="es-ES">Espagne</option>
+      <option value="es-MX">Mexique</option>
+      <option value="es-AR">Argentine</option>
+      <option value="es-CO">Colombie</option>
+    </select>
+  </label>
   <label class="row"><span>Voix</span>
     <select id="voice"></select>
   </label>
@@ -435,22 +620,85 @@ dialog h2 { font: 600 1.35rem/1.2 var(--font-es); margin: 0 0 16px; }
   </div>
 </dialog>
 
-<dialog id="vocab" aria-labelledby="vocabTitle">
-  <h2 id="vocabTitle">Carnet</h2>
-  <ul class="words" id="vocabList"></ul>
-  <p class="hint" id="vocabEmpty">Les mots nouveaux et tes corrections s'ajoutent ici pendant les conversations. Touche un mot pour l'écouter.</p>
-  <div class="bar">
-    <button class="ghost danger" id="clearVocab" type="button">Vider le carnet</button>
-    <button class="primary" id="closeVocab" type="button">Fermer</button>
-  </div>
-</dialog>
-
 <script type="module">
 import Anthropic from "https://cdn.jsdelivr.net/npm/@anthropic-ai/sdk@0.132.1/+esm";
 const $ = (id) => document.getElementById(id);
+const LEVELS = ["A1", "A2", "B1", "B2", "C1"];
+const levelRank = (l) => LEVELS.indexOf(l);
 
-// ---------- Stockage local ----------
-const store = {
+// ---------- Parcours de leçons ----------
+const UNITS = [
+  { id: "u1", level: "A1", title: "Se présenter", lessons: [
+    { id: "u1l1", title: "Saluer et dire son nom", goal: "Saluer quelqu'un, dire comment tu t'appelles et lui demander son prénom.",
+      scene: "Tu rencontres l'apprenant pour la première fois dans un café de langues à Madrid.",
+      targets: [["Hola, ¿qué tal?", "Salut, ça va ?"], ["Me llamo…", "Je m'appelle…"], ["¿Cómo te llamas?", "Comment tu t'appelles ?"], ["Mucho gusto", "Enchanté(e)"]] },
+    { id: "u1l2", title: "Dire d'où tu viens", goal: "Dire d'où tu viens, où tu habites et quelles langues tu parles.",
+      scene: "Tu discutes avec l'apprenant pendant une pause dans une auberge de jeunesse à Grenade.",
+      targets: [["¿De dónde eres?", "D'où viens-tu ?"], ["Soy de…", "Je suis de…"], ["Vivo en…", "J'habite à…"], ["Hablo francés", "Je parle français"]] },
+    { id: "u1l3", title: "Âge et métier", goal: "Dire ton âge et ce que tu fais dans la vie.",
+      scene: "Tu fais connaissance avec l'apprenant à un barbecue entre voisins.",
+      targets: [["Tengo … años", "J'ai … ans"], ["¿A qué te dedicas?", "Qu'est-ce que tu fais dans la vie ?"], ["Trabajo en…", "Je travaille dans…"], ["Estudio…", "J'étudie…"]] },
+  ]},
+  { id: "u2", level: "A1", title: "Au bar", lessons: [
+    { id: "u2l1", title: "Commander à boire et à manger", goal: "Commander une boisson et quelques tapas poliment.",
+      scene: "Tu es serveur dans un bar à tapas à Séville. L'apprenant est client.",
+      targets: [["Quería…", "Je voudrais…"], ["Un café con leche, por favor", "Un café au lait, s'il vous plaît"], ["¿Qué me recomienda?", "Que me conseillez-vous ?"], ["Para mí…", "Pour moi…"]] },
+    { id: "u2l2", title: "Demander l'addition", goal: "Demander l'addition, le prix, et payer.",
+      scene: "Tu es serveur ; l'apprenant a fini de manger et veut payer.",
+      targets: [["La cuenta, por favor", "L'addition, s'il vous plaît"], ["¿Cuánto es?", "C'est combien ?"], ["¿Puedo pagar con tarjeta?", "Je peux payer par carte ?"], ["Quédese con el cambio", "Gardez la monnaie"]] },
+    { id: "u2l3", title: "Dire ce que tu aimes", goal: "Parler de tes goûts : ce que tu aimes, adores ou n'aimes pas.",
+      scene: "Tu partages des tapas avec l'apprenant et vous parlez de nourriture.",
+      targets: [["Me gusta…", "J'aime…"], ["No me gusta nada…", "Je n'aime pas du tout…"], ["Me encanta…", "J'adore…"], ["Prefiero…", "Je préfère…"]] },
+  ]},
+  { id: "u3", level: "A1", title: "En voyage", lessons: [
+    { id: "u3l1", title: "Demander son chemin", goal: "Demander où se trouve un lieu et comprendre la direction.",
+      scene: "Tu es un passant à Madrid ; l'apprenant cherche le musée du Prado.",
+      targets: [["Perdone, ¿dónde está…?", "Excusez-moi, où est… ?"], ["Todo recto", "Tout droit"], ["A la derecha", "À droite"], ["¿Está lejos?", "C'est loin ?"]] },
+    { id: "u3l2", title: "Prendre le train", goal: "Acheter un billet et demander les horaires.",
+      scene: "Tu travailles au guichet de la gare d'Atocha.",
+      targets: [["Un billete para…", "Un billet pour…"], ["De ida y vuelta", "Aller-retour"], ["¿A qué hora sale?", "À quelle heure part-il ?"], ["¿De qué andén?", "De quel quai ?"]] },
+    { id: "u3l3", title: "Arriver à l'hôtel", goal: "Faire ton check-in et poser des questions sur la chambre.",
+      scene: "Tu es réceptionniste dans un hôtel de Barcelone.",
+      targets: [["Tengo una reserva", "J'ai une réservation"], ["Una habitación doble", "Une chambre double"], ["¿Está incluido el desayuno?", "Le petit-déjeuner est inclus ?"], ["¿Hay wifi?", "Il y a le wifi ?"]] },
+  ]},
+  { id: "u4", level: "A2", title: "Ma vie", lessons: [
+    { id: "u4l1", title: "Raconter ta journée", goal: "Décrire ta routine : à quelle heure tu te lèves, ce que tu fais.",
+      scene: "Tu es un nouveau collègue espagnol qui s'intéresse au quotidien de l'apprenant.",
+      targets: [["Me levanto a las…", "Je me lève à…"], ["Normalmente…", "D'habitude…"], ["Después de comer…", "Après manger…"], ["Los fines de semana…", "Le week-end…"]] },
+    { id: "u4l2", title: "Raconter ton week-end", goal: "Raconter ce que tu as fait au passé.",
+      scene: "C'est lundi matin, tu demandes à l'apprenant comment s'est passé son week-end.",
+      targets: [["El sábado fui a…", "Samedi je suis allé(e) à…"], ["Comí…", "J'ai mangé…"], ["Me lo pasé genial", "Je me suis super bien amusé(e)"], ["¿Y tú qué hiciste?", "Et toi, qu'est-ce que tu as fait ?"]] },
+    { id: "u4l3", title: "Parler de ta famille", goal: "Présenter les membres de ta famille.",
+      scene: "Tu regardes des photos de famille avec l'apprenant.",
+      targets: [["Tengo un hermano / una hermana", "J'ai un frère / une sœur"], ["Mis padres viven en…", "Mes parents habitent à…"], ["Se llama…", "Il / elle s'appelle…"], ["Nos llevamos muy bien", "On s'entend très bien"]] },
+  ]},
+  { id: "u5", level: "A2", title: "Sorties et projets", lessons: [
+    { id: "u5l1", title: "Proposer une sortie", goal: "Proposer un rendez-vous, accepter ou refuser.",
+      scene: "Tu es un ami espagnol ; vous organisez votre samedi soir par téléphone.",
+      targets: [["¿Te apetece…?", "Ça te dit de… ?"], ["¿Quedamos a las…?", "On se retrouve à… ?"], ["¡Vale, perfecto!", "D'accord, parfait !"], ["Lo siento, no puedo", "Désolé(e), je ne peux pas"]] },
+    { id: "u5l2", title: "Parler de tes projets", goal: "Parler de ce que tu vas faire et de ce dont tu as envie.",
+      scene: "Vous parlez des prochaines vacances d'été.",
+      targets: [["Voy a…", "Je vais…"], ["El próximo verano…", "L'été prochain…"], ["Tengo ganas de…", "J'ai envie de…"], ["Me gustaría…", "J'aimerais…"]] },
+    { id: "u5l3", title: "Chez le médecin", goal: "Expliquer où tu as mal et depuis quand.",
+      scene: "Tu es médecin généraliste ; l'apprenant vient en consultation.",
+      targets: [["Me duele…", "J'ai mal à…"], ["Tengo fiebre", "J'ai de la fièvre"], ["Desde hace dos días", "Depuis deux jours"], ["¿Qué me recomienda?", "Que me conseillez-vous ?"]] },
+  ]},
+  { id: "u6", level: "B1", title: "Donner son avis", lessons: [
+    { id: "u6l1", title: "Dire ce que tu penses", goal: "Exprimer ton opinion, être d'accord ou non.",
+      scene: "Vous débattez : vaut-il mieux vivre en ville ou à la campagne ?",
+      targets: [["Creo que…", "Je crois que…"], ["En mi opinión…", "À mon avis…"], ["Estoy de acuerdo", "Je suis d'accord"], ["No lo tengo claro", "Je n'en suis pas sûr(e)"]] },
+    { id: "u6l2", title: "Raconter une anecdote", goal: "Raconter une histoire surprenante qui t'est arrivée.",
+      scene: "Vous vous racontez vos pires galères de voyage autour d'un verre.",
+      targets: [["Una vez…", "Une fois…"], ["De repente…", "Tout à coup…"], ["Al final…", "Finalement…"], ["¡No te lo vas a creer!", "Tu ne vas pas le croire !"]] },
+    { id: "u6l3", title: "Imaginer et souhaiter", goal: "Parler de situations imaginaires et de souhaits.",
+      scene: "Vous imaginez ce que vous feriez si vous gagniez au loto.",
+      targets: [["Si tuviera…", "Si j'avais…"], ["Me encantaría…", "J'adorerais…"], ["Ojalá…", "Pourvu que… / Si seulement…"], ["Depende de…", "Ça dépend de…"]] },
+  ]},
+];
+const ALL_LESSONS = UNITS.flatMap((u) => u.lessons.map((l) => ({ ...l, unit: u })));
+
+// ---------- Réglages (préférences de cet appareil) ----------
+const local = {
   get(key, fallback) {
     try { const v = localStorage.getItem("charla." + key); return v === null ? fallback : JSON.parse(v); }
     catch { return fallback; }
@@ -459,41 +707,86 @@ const store = {
     try { localStorage.setItem("charla." + key, JSON.stringify(value)); } catch {}
   },
 };
-
 const settings = {
-  apiKey: store.get("apiKey", ""),
-  voiceURI: store.get("voiceURI", ""),
-  rate: store.get("rate", 0.9),
-  strict: store.get("strict", "normal"),
-  level: store.get("level", "A2"),
-  scenario: store.get("scenario", "libre"),
-  accent: store.get("accent", "es-ES"),
-  handsfree: store.get("handsfree", false),
+  apiKey: local.get("apiKey", ""),
+  voiceURI: local.get("voiceURI", ""),
+  rate: local.get("rate", 0.9),
+  strict: local.get("strict", "normal"),
+  accent: local.get("accent", "es-ES"),
+  handsfree: local.get("handsfree", false),
+  scenario: local.get("scenario", "libre"),
+  persona: local.get("persona", "charla"),
 };
-let vocab = store.get("vocab", []);
 
-$("level").value = settings.level;
-$("scenario").value = settings.scenario;
-$("accent").value = settings.accent;
-$("handsfree").checked = settings.handsfree;
-for (const id of ["level", "scenario", "accent"]) {
-  $(id).addEventListener("change", () => {
-    settings[id] = $(id).value;
-    store.set(id, settings[id]);
-    if (id === "accent") pickDefaultVoice(true);
-    if (id !== "accent" && turns.length) resetConversation();
-  });
-}
-$("handsfree").addEventListener("change", () => {
-  settings.handsfree = $("handsfree").checked;
-  store.set("handsfree", settings.handsfree);
-});
+// ---------- Progression (enregistrée sur le compte quand c'est possible) ----------
+const progress = Object.assign(
+  { level: null, lessons: {}, vocab: [], streak: { count: 0, last: "" } },
+  local.get("progress", {})
+);
+let progressDoc = null;
+let saving = false;
+let saveAgain = false;
+let saveTimer = null;
 
-const statusEl = $("status");
-function setStatus(text, heard = false) {
-  statusEl.textContent = text;
-  statusEl.classList.toggle("heard", heard);
+function saveProgress() {
+  local.set("progress", progress);
+  if (!progressDoc) return;
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(flush, 600);
 }
+async function flush() {
+  if (saving) { saveAgain = true; return; }
+  saving = true;
+  try { await progressDoc.set(JSON.parse(JSON.stringify(progress))); } catch {}
+  saving = false;
+  if (saveAgain) { saveAgain = false; flush(); }
+}
+async function connectAccount() {
+  if (!window.claude?.use) return;
+  const [db, user] = await Promise.all([window.claude.use("db"), window.claude.use("user")]);
+  if (!db || !user) return;
+  const id = await user.id();
+  if (!id) return;
+  const ref = db.doc(`data/users/${id}/charla`);
+  try {
+    const snap = await ref.get();
+    if (snap.exists) Object.assign(progress, snap.data());
+    progressDoc = ref;
+    if (!snap.exists && (progress.level || progress.vocab.length)) flush();
+    local.set("progress", progress);
+    renderAll();
+    if (!progress.level) $("onboard").showModal();
+  } catch {}
+}
+
+const today = () => new Date().toISOString().slice(0, 10);
+const addDays = (n) => new Date(Date.now() + n * 864e5).toISOString().slice(0, 10);
+function markActive() {
+  const t = today();
+  if (progress.streak.last === t) return;
+  progress.streak.count = progress.streak.last === addDays(-1) ? progress.streak.count + 1 : 1;
+  progress.streak.last = t;
+  saveProgress();
+  renderStreak();
+}
+function currentStreak() {
+  const s = progress.streak;
+  return s.last === today() || s.last === addDays(-1) ? s.count : 0;
+}
+
+// Répétition espacée : chaque bonne réponse envoie la carte plus loin.
+const INTERVALS = [0, 1, 3, 7, 16, 35];
+function addWords(items) {
+  for (const w of items) {
+    if (!w?.es) continue;
+    if (progress.vocab.some((v) => v.es.toLowerCase() === w.es.toLowerCase())) continue;
+    progress.vocab.unshift({ es: w.es, fr: w.fr || "", box: 0, due: today() });
+  }
+  progress.vocab = progress.vocab.slice(0, 600);
+  saveProgress();
+  renderBadge();
+}
+const dueWords = () => progress.vocab.filter((v) => v.due <= today());
 
 // ---------- Synthèse vocale, avec surlignage mot à mot ----------
 let voices = [];
@@ -545,7 +838,7 @@ function stopSpeaking() {
 function speak(text, { el = null, rate = settings.rate, onEnd } = {}) {
   if (!("speechSynthesis" in window)) { onEnd?.(); return; }
   stopSpeaking();
-  const u = new SpeechSynthesisUtterance(text);
+  const u = new SpeechSynthesisUtterance(text.replace(/…/g, ""));
   const v = voices.find((x) => x.voiceURI === settings.voiceURI);
   if (v) u.voice = v;
   u.lang = v?.lang || settings.accent;
@@ -569,7 +862,7 @@ function speak(text, { el = null, rate = settings.rate, onEnd } = {}) {
   speechSynthesis.speak(u);
 }
 
-// Découpe la réplique en mots repérés par leur position, pour le surlignage.
+// Découpe une réplique en mots repérés par leur position, pour le surlignage.
 function fillWords(el, text) {
   el.textContent = "";
   let at = 0;
@@ -587,25 +880,40 @@ function fillWords(el, text) {
   }
 }
 
-// ---------- Reconnaissance vocale ----------
+// ---------- Saisie : dictée, micro, clavier ----------
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
 let recognizer = null;
 let listening = false;
 let busy = false;
 let micBlocked = !SR;
+// La vue active décide quoi faire d'une phrase et dans quelle langue écouter.
+let handler = null;
+
+const statusEl = $("status");
+function setStatus(text, heard = false) {
+  statusEl.textContent = text;
+  statusEl.classList.toggle("heard", heard);
+}
+function idleStatus() {
+  if (!handler) return;
+  setStatus(handler.idle || (micBlocked
+    ? "Pour parler : touche le champ, puis le micro de ton clavier"
+    : "Touche le micro jaune et parle"));
+}
 
 function useKeyboard(msg) {
   micBlocked = true;
-  setStatus(msg || "Touche le champ, puis le micro de ton clavier pour dicter en espagnol.");
+  setStatus(msg || "Touche le champ, puis le micro de ton clavier pour dicter.");
   $("typed").focus();
 }
 
 function startListening() {
+  if (!handler) return;
   if (micBlocked) { useKeyboard(); return; }
   if (listening || busy) return;
   stopSpeaking();
   recognizer = new SR();
-  recognizer.lang = settings.accent;
+  recognizer.lang = handler.lang?.() || settings.accent;
   recognizer.interimResults = true;
   recognizer.continuous = false;
   let finalText = "";
@@ -632,12 +940,12 @@ function startListening() {
     listening = false;
     $("mic").classList.remove("listening");
     const text = finalText.trim();
-    if (text) send(text);
+    if (text) handler?.submit(text);
   };
   try { recognizer.start(); } catch { useKeyboard(); return; }
   listening = true;
   $("mic").classList.add("listening");
-  setStatus("J'écoute… parle en espagnol");
+  setStatus("J'écoute…");
 }
 
 $("mic").addEventListener("click", () => {
@@ -645,18 +953,39 @@ $("mic").addEventListener("click", () => {
   if (listening) recognizer?.stop();
   else startListening();
 });
+$("typebox").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const text = $("typed").value.trim();
+  if (!text) { $("typed").focus(); return; }
+  $("typed").value = "";
+  handler?.submit(text);
+});
+$("handsfree").checked = settings.handsfree;
+$("handsfree").addEventListener("change", () => {
+  settings.handsfree = $("handsfree").checked;
+  local.set("handsfree", settings.handsfree);
+});
+function afterSpeech() {
+  if (!settings.handsfree || busy || !handler?.conversation) return;
+  if (micBlocked) $("typed").focus();
+  else startListening();
+}
+
+function setDock(h) {
+  handler = h;
+  $("dock").hidden = !h;
+  if (!h) return;
+  $("typed").placeholder = h.placeholder;
+  $("typed").lang = h.inputLang || "es";
+  $("dockExtra").hidden = !h.conversation;
+  idleStatus();
+}
+function setBusy(on) {
+  busy = on;
+  $("mic").classList.toggle("busy", on);
+}
 
 // ---------- Consignes pour Claude ----------
-const SCENARIOS = {
-  libre: "Conversation libre et amicale. Pose des questions sur la vie, les goûts et les projets de l'apprenant.",
-  cafe: "Tu es serveur dans un bar à tapas à Séville. L'apprenant est client : il commande à boire et à manger, demande des conseils et l'addition.",
-  voyage: "Tu es un passant à Madrid. L'apprenant est un touriste perdu qui cherche son chemin et des transports.",
-  hotel: "Tu es réceptionniste dans un hôtel à Barcelone. L'apprenant arrive pour son check-in et a quelques demandes.",
-  medecin: "Tu es médecin généraliste. L'apprenant vient en consultation et doit décrire ses symptômes.",
-  travail: "Tu es recruteur pour une entreprise espagnole. Tu fais passer un entretien d'embauche à l'apprenant.",
-  amis: "Tu es un ami d'amis rencontré à une fête à Valence. Vous faites connaissance.",
-  debat: "Tu animes un petit débat sur un sujet de société ou d'actualité. Défends parfois un avis opposé pour faire argumenter l'apprenant.",
-};
 const ACCENTS = {
   "es-ES": "espagnol d'Espagne (vosotros, vocabulaire péninsulaire)",
   "es-MX": "espagnol du Mexique (ustedes, vocabulaire mexicain)",
@@ -668,91 +997,78 @@ const STRICTNESS = {
   strict: "Corrige toutes les erreurs, y compris les petites (accords, prépositions, tournures peu naturelles).",
   off: "Ne corrige rien : renvoie toujours une liste de corrections vide.",
 };
+const SCENARIOS = {
+  libre: "Conversation libre. Pose des questions sur la vie, les goûts et les projets de l'apprenant.",
+  cafe: "Tu es serveur dans un bar à tapas à Séville. L'apprenant est client.",
+  voyage: "Tu es un passant à Madrid. L'apprenant est un touriste qui cherche son chemin.",
+  hotel: "Tu es réceptionniste dans un hôtel à Barcelone. L'apprenant arrive pour son check-in.",
+  medecin: "Tu es médecin généraliste. L'apprenant vient décrire ses symptômes.",
+  travail: "Tu es recruteur pour une entreprise espagnole et tu fais passer un entretien d'embauche.",
+  amis: "Tu es un ami d'amis rencontré à une fête à Valence. Vous faites connaissance.",
+  debat: "Tu animes un débat sur un sujet de société et défends parfois l'avis opposé pour faire argumenter l'apprenant.",
+};
+const PERSONAS = {
+  charla: {
+    name: "Charla",
+    note: "Charla est ta prof : patiente, encourageante, elle adapte son espagnol à ton niveau.",
+    prompt: "Tu es Charla, une prof d'espagnol chaleureuse et patiente.",
+    starters: ["Hola, ¿qué tal? Me llamo Mateo.", "Quiero practicar para un viaje a España.", "No sé qué decir, ¿me haces una pregunta?"],
+  },
+  paco: {
+    name: "Paco",
+    note: "Paco est un Madrilène blagueur qui te taquine, a des avis sur tout et te lance des défis. Provoque-le, il répond.",
+    prompt: "Tu es Paco, un Madrilène blagueur, un peu provocateur et plein de caractère : tu taquines gentiment l'apprenant, tu as des avis tranchés et drôles (sur le foot, la tortilla avec ou sans oignon, les Français…), tu lances des petits défis et tu réagis avec humour quand on te provoque. Jamais méchant, jamais vulgaire, et toujours au niveau de l'apprenant.",
+    starters: ["Paco, ¿la tortilla con cebolla o sin cebolla?", "¡Los franceses cocinan mejor que los españoles!", "Paco, cuéntame un chiste."],
+  },
+};
 
-function instructions() {
-  return `Tu es Charla, un partenaire de conversation pour un francophone qui apprend l'espagnol à l'oral.
+const REPLY_FORMAT = `Format de sortie : réponds uniquement par un objet JSON avec exactement ces clés :
+{"reply_es": string, "translation_fr": string, "corrections": [{"original": string, "corrected": string, "explanation_fr": string}], "new_words": [{"es": string, "fr": string}], "encouragement_fr": string, "used_targets": [number]}`;
 
-Situation : ${SCENARIOS[settings.scenario]}
-Niveau de l'apprenant (CECRL) : ${settings.level}. Adapte ton vocabulaire, tes temps verbaux et la longueur de tes phrases à ce niveau.
+function commonRules() {
+  return `L'apprenant est francophone et apprend l'espagnol à l'oral. Niveau (CECRL) : ${progress.level || "A1"}. Adapte ton vocabulaire, tes temps verbaux et la longueur de tes phrases à ce niveau.
 Variante à utiliser : ${ACCENTS[settings.accent]}.
 
-Ta réponse est lue à voix haute par une synthèse vocale :
+Ta réponse est lue à voix haute :
 - reply_es : 1 à 3 phrases courtes et naturelles en espagnol, sans emoji, sans liste ni mise en forme. Termine le plus souvent par une question pour faire parler l'apprenant.
 - Si l'apprenant écrit en français ou bloque, donne-lui la phrase en espagnol, puis relance.
-- Le texte de l'apprenant vient souvent d'une dictée vocale : ignore la ponctuation, les majuscules et les accents écrits manquants. Ne corrige que ce qui s'entendrait à l'oral.
+- Son texte vient souvent d'une dictée vocale : ignore la ponctuation, les majuscules et les accents écrits manquants. Ne corrige que ce qui s'entendrait à l'oral.
 
-Champs à remplir :
+Champs :
 - translation_fr : traduction française de reply_es.
 - corrections : erreurs dans le DERNIER message de l'apprenant. ${STRICTNESS[settings.strict]} Pour chaque erreur : original (le passage exact tel qu'il l'a écrit, copié mot pour mot), corrected (la bonne forme), explanation_fr (une phrase simple en français).
 - new_words : 0 à 3 mots ou expressions de reply_es probablement nouveaux pour ce niveau, avec leur traduction.
 - encouragement_fr : une très courte remarque positive en français si la phrase était réussie, sinon chaîne vide.
-
-Si le dernier message est "[inicio]", c'est le début : lance toi-même la situation par une première phrase.`;
+- used_targets : voir plus bas, sinon liste vide.
+Si le dernier message est "[inicio]", c'est le début : ouvre toi-même la conversation par une première phrase.`;
 }
 
-// Historique de la conversation, gardé par la page.
-let turns = [];
+function transcript(turns) {
+  return turns.map((t) => (t.role === "user" ? "Apprenant : " : "Toi : ") + t.text).join("\n") || "(aucune)";
+}
 
 const MODEL = "claude-opus-5-5";
 
-const RESPONSE_SCHEMA = {
-  type: "object",
-  properties: {
-    reply_es: { type: "string" },
-    translation_fr: { type: "string" },
-    corrections: {
-      type: "array",
-      items: {
-        type: "object",
-        properties: {
-          original: { type: "string" },
-          corrected: { type: "string" },
-          explanation_fr: { type: "string" },
-        },
-        required: ["original", "corrected", "explanation_fr"],
-        additionalProperties: false,
-      },
-    },
-    new_words: {
-      type: "array",
-      items: {
-        type: "object",
-        properties: { es: { type: "string" }, fr: { type: "string" } },
-        required: ["es", "fr"],
-        additionalProperties: false,
-      },
-    },
-    encouragement_fr: { type: "string" },
-  },
-  required: ["reply_es", "translation_fr", "corrections", "new_words", "encouragement_fr"],
-  additionalProperties: false,
-};
-
-// Messages envoyés à l'API : le contenu de chaque réponse est renvoyé tel quel (append-only).
-let apiMessages = [];
-
-async function askClaude(userText) {
-  if (!turns.length) apiMessages = [];
-  const messages = [...apiMessages, { role: "user", content: userText }];
+// Chaque appel est indépendant : la page envoie la consigne et l'historique dans le prompt.
+async function askJSON(prompt) {
   const client = new Anthropic({ apiKey: settings.apiKey, dangerouslyAllowBrowser: true });
   const response = await client.beta.messages.create({
     model: MODEL,
     max_tokens: 4000,
     betas: ["server-side-fallback-2026-07-01"],
     fallbacks: "default",
-    output_config: {
-      effort: "low",
-      format: { type: "json_schema", schema: RESPONSE_SCHEMA },
-    },
-    system: instructions(),
-    messages,
+    output_config: { effort: "low" },
+    messages: [{ role: "user", content: prompt }],
   });
   if (response.stop_reason === "refusal") throw new Error("Claude n'a pas répondu à ce message. Reformule ta phrase.");
-  const textBlock = response.content.findLast((b) => b.type === "text");
-  if (!textBlock) throw new Error("La réponse est arrivée vide.");
-  const data = JSON.parse(textBlock.text);
-  apiMessages = [...messages, { role: "assistant", content: response.content }];
-  return data;
+  const text = response.content.filter((b) => b.type === "text").map((b) => b.text).join("");
+  try {
+    return JSON.parse(text);
+  } catch {
+    const a = text.indexOf("{"), b = text.lastIndexOf("}");
+    if (a < 0 || b <= a) throw new Error("La réponse est arrivée incomplète.");
+    return JSON.parse(text.slice(a, b + 1));
+  }
 }
 
 function explainError(err) {
@@ -772,220 +1088,703 @@ function needsSetup() {
   return true;
 }
 
-// ---------- Affichage ----------
-const thread = $("thread");
-function scrollDown() { const s = $("scroller"); s.scrollTo({ top: s.scrollHeight, behavior: "smooth" }); }
+function normalizeReply(raw) {
+  if (!raw || typeof raw.reply_es !== "string") throw { code: "invalid_json" };
+  return {
+    reply_es: raw.reply_es,
+    translation_fr: raw.translation_fr || "",
+    corrections: Array.isArray(raw.corrections) ? raw.corrections.filter((c) => c?.corrected) : [],
+    new_words: Array.isArray(raw.new_words) ? raw.new_words : [],
+    encouragement_fr: raw.encouragement_fr || "",
+    used_targets: Array.isArray(raw.used_targets) ? raw.used_targets.map(Number).filter(Number.isInteger) : [],
+  };
+}
+
+// ---------- Fil de conversation (partagé par Discuter et les leçons) ----------
 function el(tag, cls, text) {
   const e = document.createElement(tag);
   if (cls) e.className = cls;
   if (text !== undefined) e.textContent = text;
   return e;
 }
+function scrollDown() { const s = $("scroller"); s.scrollTo({ top: s.scrollHeight, behavior: "smooth" }); }
 
-function addUserTurn(text) {
-  $("welcome").hidden = true;
-  const wrap = el("div", "turn-me");
-  const said = el("div", "said", text);
-  said.lang = "es";
-  wrap.appendChild(said);
-  thread.appendChild(wrap);
-  scrollDown();
-  return wrap;
-}
+function createConversation(threadEl, { buildPrompt, onReply, speaker }) {
+  const convo = { turns: [], corrections: [] };
 
-// Corrections au stylo rouge : la faute est barrée et la bonne forme écrite au-dessus.
-function annotate(wrap, text, data) {
-  const said = wrap.querySelector(".said");
-  const placed = [];
-  let segs = [{ text, fix: null }];
-  for (const c of data.corrections) {
-    const needle = (c.original || "").trim().toLowerCase();
-    if (!needle) continue;
-    let done = false;
-    segs = segs.flatMap((seg) => {
-      if (done || seg.fix) return [seg];
-      const i = seg.text.toLowerCase().indexOf(needle);
-      if (i < 0) return [seg];
-      done = true;
-      return [
-        { text: seg.text.slice(0, i), fix: null },
-        { text: seg.text.slice(i, i + needle.length), fix: c },
-        { text: seg.text.slice(i + needle.length), fix: null },
-      ];
-    });
-    if (done) placed.push(c);
+  function addUserTurn(text) {
+    const wrap = el("div", "turn-me");
+    const said = el("div", "said", text);
+    said.lang = "es";
+    wrap.appendChild(said);
+    threadEl.appendChild(wrap);
+    scrollDown();
+    return wrap;
   }
-  said.textContent = "";
-  for (const seg of segs) {
-    if (!seg.fix) { said.appendChild(document.createTextNode(seg.text)); continue; }
-    const ruby = document.createElement("ruby");
-    ruby.appendChild(el("s", "", seg.text));
-    const rt = document.createElement("rt");
-    rt.textContent = seg.fix.corrected;
-    ruby.appendChild(rt);
-    said.appendChild(ruby);
-  }
-  if (data.corrections.length) {
-    const notes = el("ul", "notes");
+
+  // Corrections au stylo rouge : la faute est barrée et la bonne forme écrite au-dessus.
+  function annotate(wrap, text, data) {
+    const said = wrap.querySelector(".said");
+    const placed = [];
+    let segs = [{ text, fix: null }];
     for (const c of data.corrections) {
-      const li = el("li");
-      if (!placed.includes(c)) li.appendChild(el("b", "", c.corrected + " : "));
-      li.appendChild(document.createTextNode(c.explanation_fr));
-      notes.appendChild(li);
+      const needle = (c.original || "").trim().toLowerCase();
+      if (!needle) continue;
+      let done = false;
+      segs = segs.flatMap((seg) => {
+        if (done || seg.fix) return [seg];
+        const i = seg.text.toLowerCase().indexOf(needle);
+        if (i < 0) return [seg];
+        done = true;
+        return [
+          { text: seg.text.slice(0, i), fix: null },
+          { text: seg.text.slice(i, i + needle.length), fix: c },
+          { text: seg.text.slice(i + needle.length), fix: null },
+        ];
+      });
+      if (done) placed.push(c);
     }
-    wrap.appendChild(notes);
-  } else if (data.encouragement_fr) {
-    wrap.appendChild(el("div", "kudos", data.encouragement_fr));
+    said.textContent = "";
+    for (const seg of segs) {
+      if (!seg.fix) { said.appendChild(document.createTextNode(seg.text)); continue; }
+      const ruby = document.createElement("ruby");
+      ruby.appendChild(el("s", "", seg.text));
+      const rt = document.createElement("rt");
+      rt.textContent = seg.fix.corrected;
+      ruby.appendChild(rt);
+      said.appendChild(ruby);
+    }
+    if (data.corrections.length) {
+      const notes = el("ul", "notes");
+      for (const c of data.corrections) {
+        const li = el("li");
+        if (!placed.includes(c)) li.appendChild(el("b", "", c.corrected + " : "));
+        li.appendChild(document.createTextNode(c.explanation_fr || ""));
+        notes.appendChild(li);
+      }
+      wrap.appendChild(notes);
+    } else if (data.encouragement_fr) {
+      wrap.appendChild(el("div", "kudos", data.encouragement_fr));
+    }
   }
-}
 
-function addBotTurn(data) {
-  thread.querySelectorAll(".turn-bot.latest").forEach((n) => n.classList.remove("latest"));
-  const wrap = el("div", "turn-bot latest");
-  const es = el("p", "es");
-  es.lang = "es";
-  fillWords(es, data.reply_es);
-  const fr = el("p", "fr", data.translation_fr);
-  fr.lang = "fr";
-  fr.hidden = true;
+  function addBotTurn(data) {
+    threadEl.querySelectorAll(".turn-bot.latest").forEach((n) => n.classList.remove("latest"));
+    const wrap = el("div", "turn-bot latest");
+    if (speaker) wrap.appendChild(el("span", "who", speaker()));
+    const es = el("p", "es");
+    es.lang = "es";
+    fillWords(es, data.reply_es);
+    const fr = el("p", "fr", data.translation_fr);
+    fr.lang = "fr";
+    fr.hidden = true;
+    const actions = el("div", "actions");
+    const again = el("button", "act", "Réécouter");
+    again.type = "button";
+    again.onclick = () => speak(data.reply_es, { el: es });
+    const slow = el("button", "act", "Plus lentement");
+    slow.type = "button";
+    slow.onclick = () => speak(data.reply_es, { el: es, rate: Math.max(0.5, settings.rate - 0.3) });
+    const show = el("button", "act", "Traduire");
+    show.type = "button";
+    show.setAttribute("aria-pressed", "false");
+    show.onclick = () => { fr.hidden = !fr.hidden; show.setAttribute("aria-pressed", String(!fr.hidden)); };
+    actions.append(again, slow, show);
+    wrap.append(es, fr, actions);
+    threadEl.appendChild(wrap);
+    scrollDown();
+    return es;
+  }
 
-  const actions = el("div", "actions");
-  const again = el("button", "act", "Réécouter");
-  again.type = "button";
-  again.onclick = () => speak(data.reply_es, { el: es });
-  const slow = el("button", "act", "Plus lentement");
-  slow.type = "button";
-  slow.onclick = () => speak(data.reply_es, { el: es, rate: Math.max(0.5, settings.rate - 0.3) });
-  const show = el("button", "act", "Traduire");
-  show.type = "button";
-  show.setAttribute("aria-pressed", "false");
-  show.onclick = () => {
-    fr.hidden = !fr.hidden;
-    show.setAttribute("aria-pressed", String(!fr.hidden));
-  };
-  actions.append(again, slow, show);
-  wrap.append(es, fr, actions);
-  thread.appendChild(wrap);
-  scrollDown();
-  return es;
-}
+  function addThinking() {
+    const wrap = el("div", "turn-bot");
+    wrap.innerHTML = '<span class="dots" role="status" aria-label="Réponse en cours"><i></i><i></i><i></i></span>';
+    threadEl.appendChild(wrap);
+    scrollDown();
+    return wrap;
+  }
 
-function addThinking() {
-  const wrap = el("div", "turn-bot");
-  wrap.innerHTML = '<span class="dots" role="status" aria-label="Charla réfléchit"><i></i><i></i><i></i></span>';
-  thread.appendChild(wrap);
-  scrollDown();
-  return wrap;
-}
-
-function addProblem(message, retry) {
-  const box = el("div", "problem");
-  box.appendChild(el("p", "", message));
-  if (retry) {
+  function addProblem(message, retry) {
+    const box = el("div", "problem");
+    box.appendChild(el("p", "", message));
     const b = el("button", "act", "Renvoyer");
     b.type = "button";
     b.onclick = () => { box.remove(); retry(); };
     box.appendChild(b);
+    threadEl.appendChild(box);
+    scrollDown();
   }
-  thread.appendChild(box);
-  scrollDown();
+
+  convo.send = async (text, { opening = false, userWrap = null } = {}) => {
+    if (busy || needsSetup()) return;
+    setBusy(true);
+    const wrap = opening ? null : userWrap || addUserTurn(text);
+    const thinking = addThinking();
+    setStatus("Réponse en cours…");
+    try {
+      const data = normalizeReply(await askJSON(buildPrompt(convo.turns, text)));
+      thinking.remove();
+      if (!opening) { convo.turns.push({ role: "user", text }); markActive(); }
+      convo.turns.push({ role: "assistant", text: data.reply_es });
+      convo.turns = convo.turns.slice(-30);
+      convo.corrections.push(...data.corrections);
+      if (wrap) annotate(wrap, text, data);
+      const es = addBotTurn(data);
+      addWords([...data.corrections.map((c) => ({ es: c.corrected, fr: c.explanation_fr })), ...data.new_words]);
+      setBusy(false);
+      idleStatus();
+      onReply?.(data);
+      speak(data.reply_es, { el: es, onEnd: afterSpeech });
+    } catch (err) {
+      thinking.remove();
+      setBusy(false);
+      setStatus("");
+      addProblem(explainError(err), () => convo.send(text, { opening, userWrap: wrap }));
+    }
+  };
+  convo.reset = () => {
+    convo.turns = [];
+    convo.corrections = [];
+    threadEl.querySelectorAll(".turn-me, .turn-bot, .problem").forEach((n) => n.remove());
+  };
+  return convo;
 }
 
-function saveWords(data) {
-  const fresh = [
-    ...data.corrections.map((c) => ({ es: c.corrected, fr: c.explanation_fr })),
-    ...data.new_words,
-  ];
-  for (const w of fresh) {
-    if (w.es && !vocab.some((v) => v.es.toLowerCase() === w.es.toLowerCase())) vocab.unshift(w);
-  }
-  vocab = vocab.slice(0, 500);
-  store.set("vocab", vocab);
-}
-
-function setBusy(on) {
-  busy = on;
-  $("mic").classList.toggle("busy", on);
-}
-
-// ---------- Boucle de conversation ----------
-async function send(text, { opening = false, userWrap = null } = {}) {
-  if (busy) return;
-  if (needsSetup()) return;
-  setBusy(true);
-  const wrap = opening ? null : userWrap || addUserTurn(text);
-  const thinking = addThinking();
-  setStatus("Charla réfléchit…");
-  try {
-    const raw = await askClaude(text);
-    const data = {
-      reply_es: raw.reply_es,
-      translation_fr: raw.translation_fr || "",
-      corrections: Array.isArray(raw.corrections) ? raw.corrections : [],
-      new_words: Array.isArray(raw.new_words) ? raw.new_words : [],
-      encouragement_fr: raw.encouragement_fr || "",
-    };
-    thinking.remove();
-    if (!opening) turns.push({ role: "user", text });
-    turns.push({ role: "assistant", text: data.reply_es });
-    turns = turns.slice(-40);
-    if (wrap) annotate(wrap, text, data);
-    const es = addBotTurn(data);
-    saveWords(data);
-    setStatus(settings.handsfree ? "Charla parle, je t'écoute juste après" : "À toi : touche le micro ou écris ta réponse");
-    setBusy(false);
-    speak(data.reply_es, {
-      el: es,
-      onEnd: () => {
-        if (!settings.handsfree || busy) return;
-        if (micBlocked) $("typed").focus();
-        else startListening();
-      },
-    });
-  } catch (err) {
-    thinking.remove();
-    setBusy(false);
-    setStatus("");
-    addProblem(explainError(err), () => send(text, { opening, userWrap: wrap }));
-  }
-}
-
-function resetConversation() {
+// ---------- Onglets ----------
+const VIEWS = ["lessons", "lesson", "chat", "translate", "carnet"];
+let currentTab = "lessons";
+function show(view) {
   stopSpeaking();
   recognizer?.stop();
-  turns = [];
-  thread.querySelectorAll(".turn-me, .turn-bot, .problem").forEach((n) => n.remove());
-  $("welcome").hidden = false;
-  setStatus("");
+  for (const v of VIEWS) $("view-" + v).hidden = v !== view;
+  $("tabs").hidden = view === "lesson";
+  if (view !== "lesson") {
+    currentTab = view;
+    document.querySelectorAll(".tab").forEach((t) => t.toggleAttribute("aria-current", t.dataset.tab === view));
+    document.querySelectorAll(".tab[aria-current]").forEach((t) => t.setAttribute("aria-current", "page"));
+  }
+  if (view === "lessons") { renderLessons(); setDock(null); }
+  if (view === "chat") { renderChatIntro(); setDock(chatHandler); }
+  if (view === "translate") setDock(translateHandler);
+  if (view === "carnet") { renderCarnet(); setDock(null); }
+  $("scroller").scrollTop = 0;
+}
+document.querySelectorAll(".tab").forEach((t) => t.addEventListener("click", () => show(t.dataset.tab)));
+
+// ---------- Leçons ----------
+const starsHTML = (n) => "★".repeat(n) + `<span class="off">${"★".repeat(3 - n)}</span>`;
+function isUnlocked(i) {
+  const l = ALL_LESSONS[i];
+  if (i === 0 || progress.lessons[ALL_LESSONS[i - 1].id]) return true;
+  return levelRank(l.unit.level) <= levelRank(progress.level || "A1");
+}
+function nextLessonIndex() {
+  const i = ALL_LESSONS.findIndex((l, k) => isUnlocked(k) && !progress.lessons[l.id]);
+  return i < 0 ? 0 : i;
 }
 
-$("newChat").addEventListener("click", () => {
-  resetConversation();
-  // Dans les jeux de rôle, Charla ouvre la scène elle-même.
-  if (settings.scenario !== "libre") send("[inicio]", { opening: true });
-});
+function renderLessons() {
+  const done = ALL_LESSONS.filter((l) => progress.lessons[l.id]).length;
+  $("summary").innerHTML = "";
+  const facts = [
+    [currentStreak(), currentStreak() > 1 ? "jours d'affilée" : "jour d'affilée"],
+    [`${done}/${ALL_LESSONS.length}`, "leçons terminées"],
+    [progress.vocab.length, "mots dans ton carnet"],
+  ];
+  for (const [n, label] of facts) {
+    const s = el("span");
+    s.append(el("b", "", String(n)), document.createTextNode(" " + label));
+    $("summary").appendChild(s);
+  }
 
-$("starters").addEventListener("click", (e) => {
-  const b = e.target.closest(".starter");
-  if (b) send(b.textContent);
-});
+  const ni = nextLessonIndex();
+  const nl = ALL_LESSONS[ni];
+  const card = $("nextCard");
+  card.innerHTML = "";
+  card.append(
+    el("p", "kicker", (done ? "Leçon suivante" : "Ta première leçon") + ` · ${nl.unit.title} · ${nl.unit.level}`),
+    el("h3", "", nl.title),
+    el("p", "lead", nl.goal)
+  );
+  const go = el("button", "primary big", done ? "Continuer" : "Commencer");
+  go.type = "button";
+  go.onclick = () => openLesson(ni);
+  card.appendChild(go);
 
-$("typebox").addEventListener("submit", (e) => {
-  e.preventDefault();
-  const text = $("typed").value.trim();
-  if (!text) { $("typed").focus(); return; }
-  $("typed").value = "";
-  send(text);
-});
+  const path = $("path");
+  path.innerHTML = "";
+  let k = 0;
+  for (const u of UNITS) {
+    const unit = el("div", "unit");
+    const head = el("div", "unit-head");
+    head.append(el("h3", "", u.title), el("span", "lvl", u.level));
+    unit.appendChild(head);
+    for (const l of u.lessons) {
+      const i = k++;
+      const res = progress.lessons[l.id];
+      const unlocked = isUnlocked(i);
+      const row = el("button", "lesson-row" + (res ? " done" : i === ni ? " current" : ""));
+      row.type = "button";
+      row.disabled = !unlocked;
+      const dot = el("span", "dot", res ? "✓" : String(i + 1));
+      const txt = el("span", "txt");
+      txt.append(el("span", "t", l.title), el("span", "s", unlocked ? l.goal : "Termine la leçon d'avant pour l'ouvrir"));
+      row.append(dot, txt);
+      if (res) { const st = el("span", "stars"); st.innerHTML = starsHTML(res.stars); row.appendChild(st); }
+      row.onclick = () => openLesson(i);
+      unit.appendChild(row);
+    }
+    path.appendChild(unit);
+  }
+}
 
-// ---------- Réglages et carnet ----------
+// Une leçon : Découvrir les expressions, Parler avec Charla, Bilan.
+let lesson = null;
+function setSteps(n) {
+  document.querySelectorAll(".steps i").forEach((s, i) => s.classList.toggle("on", i < n));
+}
+function openLesson(i) {
+  lesson = { index: i, data: ALL_LESSONS[i], used: new Set(), learnerTurns: 0, convo: null };
+  show("lesson");
+  setDock(null);
+  renderDiscover();
+}
+$("quitLesson").addEventListener("click", () => { lesson = null; show("lessons"); });
+
+function renderDiscover() {
+  setSteps(1);
+  const l = lesson.data;
+  const body = $("lessonBody");
+  body.innerHTML = "";
+  body.append(el("p", "kicker hint", `${l.unit.title} · ${l.unit.level}`), el("h2", "view-title", l.title), el("p", "goal", l.goal));
+  body.appendChild(el("p", "lead", "Écoute ces expressions. Tu vas les utiliser tout de suite dans une conversation."));
+  const list = el("div", "targets");
+  for (const [es, fr] of l.targets) {
+    const row = el("div", "target");
+    const txt = el("div", "txt");
+    const e = el("span", "es-t", es);
+    e.lang = "es";
+    txt.append(e, el("span", "fr-t", fr));
+    const b = el("button", "act", "Écouter");
+    b.type = "button";
+    b.onclick = () => speak(es);
+    row.append(txt, b);
+    list.appendChild(row);
+  }
+  body.appendChild(list);
+  const go = el("button", "primary big", "Passer à la conversation");
+  go.type = "button";
+  go.onclick = renderPractice;
+  body.appendChild(go);
+  $("scroller").scrollTop = 0;
+}
+
+function lessonPrompt(turns, text) {
+  const l = lesson.data;
+  const targets = l.targets.map(([es, fr], i) => `${i}. "${es}" (${fr})`).join("\n");
+  return `Tu es Charla, une prof d'espagnol chaleureuse et patiente. Tu donnes une leçon par la conversation.
+
+Leçon : ${l.title}. Objectif : ${l.goal}
+Mise en situation : ${l.scene}
+Expressions à faire utiliser par l'apprenant :
+${targets}
+
+Joue la scène de façon naturelle et amène l'apprenant, question après question, à utiliser chacune de ces expressions. Si une expression n'a pas encore été utilisée, crée une occasion de la dire. S'il bloque, montre-lui l'expression dans ta réplique et invite-le à la répéter.
+used_targets : numéros des expressions que l'apprenant a correctement utilisées (même adaptées : "Me llamo Mateo" compte pour "Me llamo…") dans son DERNIER message.
+
+${commonRules()}
+
+${REPLY_FORMAT}
+
+Conversation jusqu'ici :
+${transcript(turns)}
+
+Dernier message de l'apprenant : ${text}`;
+}
+
+function renderPractice() {
+  setSteps(2);
+  const l = lesson.data;
+  const body = $("lessonBody");
+  body.innerHTML = "";
+  body.append(el("h2", "view-title", l.title), el("p", "lead", "Utilise chaque expression pendant la conversation. Elles se cochent quand tu les dis."));
+  const chips = el("div", "chips");
+  l.targets.forEach(([es], i) => {
+    const c = el("span", "chip", es);
+    c.lang = "es";
+    c.dataset.i = i;
+    chips.appendChild(c);
+  });
+  const thread = el("div", "thread");
+  const finish = el("div", "finish");
+  finish.hidden = true;
+  const end = el("button", "primary big", "Terminer la leçon");
+  end.type = "button";
+  end.onclick = renderResult;
+  finish.appendChild(end);
+  body.append(chips, thread, finish);
+
+  lesson.convo = createConversation(thread, {
+    buildPrompt: lessonPrompt,
+    speaker: () => "Charla",
+    onReply: (data) => {
+      for (const i of data.used_targets) if (i >= 0 && i < l.targets.length) lesson.used.add(i);
+      chips.querySelectorAll(".chip").forEach((c) => c.classList.toggle("used", lesson.used.has(Number(c.dataset.i))));
+      const all = lesson.used.size === l.targets.length;
+      if (all || lesson.learnerTurns >= 3) finish.hidden = false;
+      end.textContent = all ? "Terminer la leçon" : "Terminer maintenant";
+      if (all) setStatus("Bravo, tu as utilisé toutes les expressions. Termine la leçon ou continue à parler.");
+    },
+  });
+  setDock({
+    conversation: true,
+    placeholder: "Réponds en espagnol…",
+    submit: (text) => { lesson.learnerTurns++; lesson.convo.send(text); },
+  });
+  lesson.convo.send("[inicio]", { opening: true });
+}
+
+function renderResult() {
+  setSteps(3);
+  stopSpeaking();
+  setDock(null);
+  const l = lesson.data;
+  const used = lesson.used.size;
+  const total = l.targets.length;
+  const errors = lesson.convo?.corrections.length || 0;
+  const stars = used === total ? (errors <= 2 ? 3 : 2) : used >= total / 2 ? 2 : 1;
+  const prev = progress.lessons[l.id]?.stars || 0;
+  progress.lessons[l.id] = { stars: Math.max(prev, stars), at: today() };
+  addWords(l.targets.map(([es, fr]) => ({ es, fr })));
+  markActive();
+  saveProgress();
+
+  const body = $("lessonBody");
+  body.innerHTML = "";
+  const r = el("div", "result");
+  const s = el("div", "big-stars");
+  s.innerHTML = starsHTML(stars);
+  s.setAttribute("aria-label", `${stars} étoiles sur 3`);
+  r.append(s, el("h2", "", stars === 3 ? "¡Perfecto!" : stars === 2 ? "¡Muy bien!" : "¡Buen comienzo!"));
+  r.appendChild(el("p", "lead", `Tu as utilisé ${used} expression${used > 1 ? "s" : ""} sur ${total}. Elles sont maintenant dans ton carnet pour la révision.`));
+  if (errors) {
+    const recap = el("div", "recap");
+    recap.appendChild(el("h3", "", "Tes corrections"));
+    const ul = el("ul");
+    for (const c of lesson.convo.corrections.slice(0, 8)) ul.appendChild(el("li", "", `${c.original} → ${c.corrected}`));
+    recap.appendChild(ul);
+    r.appendChild(recap);
+  }
+  const nextI = lesson.index + 1 < ALL_LESSONS.length ? lesson.index + 1 : null;
+  if (nextI !== null) {
+    const n = el("button", "primary big", "Leçon suivante : " + ALL_LESSONS[nextI].title);
+    n.type = "button";
+    n.onclick = () => openLesson(nextI);
+    r.appendChild(n);
+  }
+  const again = el("button", "ghost", "Refaire la leçon");
+  again.type = "button";
+  again.onclick = () => openLesson(lesson.index);
+  const back = el("button", "link", "Retour au parcours");
+  back.type = "button";
+  back.onclick = () => { lesson = null; show("lessons"); };
+  r.append(again, back);
+  body.appendChild(r);
+  $("scroller").scrollTop = 0;
+}
+
+// ---------- Discuter ----------
+function chatPrompt(turns, text) {
+  const p = PERSONAS[settings.persona];
+  return `${p.prompt}
+
+Situation : ${SCENARIOS[settings.scenario]}
+
+${commonRules()}
+
+${REPLY_FORMAT}
+
+Conversation jusqu'ici :
+${transcript(turns)}
+
+Dernier message de l'apprenant : ${text}`;
+}
+const chat = createConversation($("chatThread"), {
+  buildPrompt: chatPrompt,
+  speaker: () => PERSONAS[settings.persona].name,
+});
+const chatHandler = {
+  conversation: true,
+  placeholder: "Hola, me llamo…",
+  submit: (text) => { $("chatWelcome").hidden = true; chat.send(text); },
+};
+function renderChatIntro() {
+  const p = PERSONAS[settings.persona];
+  document.querySelectorAll("[data-persona]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.persona === settings.persona)));
+  $("personaNote").textContent = p.note;
+  const st = $("starters");
+  st.innerHTML = "";
+  for (const s of p.starters) {
+    const b = el("button", "starter", s);
+    b.type = "button";
+    b.lang = "es";
+    b.onclick = () => chatHandler.submit(s);
+    st.appendChild(b);
+  }
+}
+function resetChat({ open = false } = {}) {
+  stopSpeaking();
+  chat.reset();
+  $("chatWelcome").hidden = false;
+  renderChatIntro();
+  idleStatus();
+  if (open) { $("chatWelcome").hidden = true; chat.send("[inicio]", { opening: true }); }
+}
+document.querySelectorAll("[data-persona]").forEach((b) => b.addEventListener("click", () => {
+  settings.persona = b.dataset.persona;
+  local.set("persona", settings.persona);
+  resetChat();
+}));
+$("scenario").value = settings.scenario;
+$("scenario").addEventListener("change", () => {
+  settings.scenario = $("scenario").value;
+  local.set("scenario", settings.scenario);
+  resetChat({ open: settings.scenario !== "libre" });
+});
+$("newChat").addEventListener("click", () => resetChat({ open: settings.scenario !== "libre" }));
+
+// ---------- Traduire ----------
+let trDir = local.get("trDir", "fr-es");
+const translateHandler = {
+  conversation: false,
+  get placeholder() { return trDir === "fr-es" ? "Phrase en français…" : "Frase en español…"; },
+  get inputLang() { return trDir === "fr-es" ? "fr" : "es"; },
+  get idle() { return micBlocked ? "Dicte avec le micro de ton clavier ou écris ta phrase" : "Touche le micro et dis ta phrase"; },
+  lang: () => (trDir === "fr-es" ? "fr-FR" : settings.accent),
+  submit: (text) => translate(text),
+};
+function renderDir() {
+  document.querySelectorAll("[data-dir]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.dir === trDir)));
+  if (handler === translateHandler) setDock(translateHandler);
+}
+document.querySelectorAll("[data-dir]").forEach((b) => b.addEventListener("click", () => {
+  trDir = b.dataset.dir;
+  local.set("trDir", trDir);
+  renderDir();
+}));
+renderDir();
+
+async function translate(text) {
+  if (busy || needsSetup()) return;
+  const toEs = trDir === "fr-es";
+  const item = el("div", "tr-item");
+  item.appendChild(el("p", "tr-src", text));
+  const thinking = el("span", "dots");
+  thinking.innerHTML = "<i></i><i></i><i></i>";
+  item.appendChild(thinking);
+  $("trList").prepend(item);
+  setBusy(true);
+  setStatus("Traduction en cours…");
+  const prompt = `Tu es un traducteur ${toEs ? "français → espagnol" : "espagnol → français"} pour un francophone qui apprend l'espagnol (variante : ${ACCENTS[settings.accent]}).
+Traduis la phrase de façon naturelle, comme on la dirait à l'oral.
+Réponds uniquement par un objet JSON : {"translation": string, "alternative": string, "note_fr": string}
+- translation : la traduction.
+- alternative : une autre façon courante de le dire ${toEs ? "en espagnol" : "en français"}, ou chaîne vide.
+- note_fr : une courte remarque utile en français (registre, piège, grammaire), ou chaîne vide.
+
+Phrase : ${text}`;
+  try {
+    const raw = await askJSON(prompt);
+    if (!raw || typeof raw.translation !== "string") throw { code: "invalid_json" };
+    thinking.remove();
+    const out = el("p", "tr-out" + (toEs ? "" : " fr-out"), raw.translation);
+    out.lang = toEs ? "es" : "fr";
+    item.appendChild(out);
+    if (raw.alternative) { const a = el("p", "tr-alt", "Ou : " + raw.alternative); a.lang = toEs ? "es" : "fr"; item.appendChild(a); }
+    if (raw.note_fr) item.appendChild(el("p", "tr-note", raw.note_fr));
+    const es = toEs ? raw.translation : text;
+    const fr = toEs ? text : raw.translation;
+    const actions = el("div", "actions");
+    const listen = el("button", "act", "Écouter en espagnol");
+    listen.type = "button";
+    listen.onclick = () => speak(es);
+    const save = el("button", "act", "Ajouter au carnet");
+    save.type = "button";
+    save.onclick = () => { addWords([{ es, fr }]); save.textContent = "Ajouté au carnet"; save.disabled = true; };
+    actions.append(listen, save);
+    item.appendChild(actions);
+    markActive();
+    if (toEs) speak(es);
+  } catch (err) {
+    thinking.remove();
+    const p = el("p", "tr-note danger", explainError(err));
+    item.appendChild(p);
+  }
+  setBusy(false);
+  idleStatus();
+}
+
+// ---------- Carnet et révision ----------
+let reviewing = null;
+function renderBadge() {
+  const n = dueWords().length;
+  $("dueBadge").hidden = n === 0;
+  $("dueBadge").textContent = n > 99 ? "99+" : String(n);
+}
+function renderCarnet() {
+  const body = $("carnetBody");
+  body.innerHTML = "";
+  if (reviewing) { renderCard(); return; }
+  if (!progress.vocab.length) {
+    const e = el("div", "empty");
+    e.appendChild(el("p", "", "Ton carnet est vide. Les expressions de chaque leçon, les mots nouveaux et tes corrections s'ajoutent ici automatiquement."));
+    const b = el("button", "primary", "Faire une leçon");
+    b.type = "button";
+    b.onclick = () => show("lessons");
+    e.appendChild(b);
+    body.appendChild(e);
+    return;
+  }
+  const due = dueWords();
+  const head = el("div", "next");
+  head.appendChild(el("p", "kicker", `${progress.vocab.length} mots et expressions`));
+  head.appendChild(el("h3", "", due.length ? `${due.length} à réviser aujourd'hui` : "Rien à réviser pour aujourd'hui"));
+  if (due.length) {
+    const go = el("button", "primary big", "Réviser");
+    go.type = "button";
+    go.onclick = () => { reviewing = { queue: due.slice(0, 20), shown: false, done: 0 }; renderCarnet(); };
+    head.appendChild(go);
+  } else {
+    head.appendChild(el("p", "lead", "Reviens demain : les mots reviennent au bon moment pour que tu les retiennes."));
+  }
+  body.appendChild(head);
+  const ul = el("ul", "words");
+  for (const w of progress.vocab) {
+    const li = el("li");
+    const b = el("button");
+    b.type = "button";
+    const es = el("span", "w-es", w.es);
+    es.lang = "es";
+    b.append(es, el("span", "w-fr", w.fr));
+    b.addEventListener("click", () => speak(w.es));
+    li.appendChild(b);
+    ul.appendChild(li);
+  }
+  body.appendChild(ul);
+  const clear = el("button", "link danger", "Vider le carnet");
+  clear.type = "button";
+  clear.onclick = () => {
+    if (clear.dataset.confirm !== "1") {
+      clear.dataset.confirm = "1";
+      clear.textContent = `Supprimer les ${progress.vocab.length} mots`;
+      return;
+    }
+    progress.vocab = [];
+    saveProgress();
+    renderBadge();
+    renderCarnet();
+  };
+  body.appendChild(clear);
+}
+function renderCard() {
+  const body = $("carnetBody");
+  const r = reviewing;
+  const w = r.queue[0];
+  if (!w) {
+    body.innerHTML = "";
+    const e = el("div", "card");
+    e.append(el("p", "front", "¡Hecho!"), el("p", "back", `${r.done} carte${r.done > 1 ? "s" : ""} révisée${r.done > 1 ? "s" : ""}.`));
+    const b = el("button", "primary", "Retour au carnet");
+    b.type = "button";
+    b.onclick = () => { reviewing = null; renderCarnet(); };
+    e.appendChild(b);
+    body.appendChild(e);
+    markActive();
+    return;
+  }
+  body.innerHTML = "";
+  body.appendChild(el("p", "hint", `Carte ${r.done + 1} sur ${r.done + r.queue.length}`));
+  const card = el("div", "card");
+  const front = el("p", "front", w.es);
+  front.lang = "es";
+  const listen = el("button", "act", "Écouter");
+  listen.type = "button";
+  listen.onclick = () => speak(w.es);
+  card.append(front, listen);
+  if (r.shown) card.appendChild(el("p", "back", w.fr));
+  body.appendChild(card);
+  if (!r.shown) {
+    const reveal = el("button", "primary big", "Voir la traduction");
+    reveal.type = "button";
+    reveal.onclick = () => { r.shown = true; renderCard(); };
+    body.appendChild(reveal);
+    speak(w.es);
+  } else {
+    const g = el("div", "grade");
+    const again = el("button", "again", "À revoir");
+    again.type = "button";
+    again.onclick = () => grade(false);
+    const knew = el("button", "knew", "Je savais");
+    knew.type = "button";
+    knew.onclick = () => grade(true);
+    g.append(again, knew);
+    body.appendChild(g);
+  }
+  const stop = el("button", "link", "Arrêter la révision");
+  stop.type = "button";
+  stop.onclick = () => { reviewing = null; renderCarnet(); };
+  body.appendChild(stop);
+}
+function grade(knew) {
+  const r = reviewing;
+  const w = r.queue.shift();
+  const item = progress.vocab.find((v) => v.es === w.es);
+  if (item) {
+    item.box = knew ? Math.min(item.box + 1, INTERVALS.length - 1) : 0;
+    item.due = addDays(knew ? INTERVALS[item.box] : 0);
+  }
+  if (!knew) r.queue.push(w);
+  else r.done++;
+  r.shown = false;
+  saveProgress();
+  renderBadge();
+  renderCard();
+}
+
+// ---------- En-tête, réglages, premier lancement ----------
+function renderStreak() {
+  const n = currentStreak();
+  $("streakNum").textContent = n;
+  $("streak").classList.toggle("cold", progress.streak.last !== today());
+  $("streak").title = n > 1 ? `${n} jours d'affilée` : n === 1 ? "1 jour d'affilée" : "Parle aujourd'hui pour lancer ta série";
+}
+function renderAll() {
+  renderStreak();
+  renderBadge();
+  if (currentTab === "lessons" && !lesson) renderLessons();
+  if (currentTab === "carnet") renderCarnet();
+}
+
+$("levelChoices").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-level]");
+  if (!b) return;
+  progress.level = b.dataset.level;
+  saveProgress();
+  $("onboard").close();
+  renderLessons();
+});
+$("onboard").addEventListener("cancel", (e) => e.preventDefault());
+
 $("settingsBtn").addEventListener("click", () => {
   if ($("apiKey")) $("apiKey").value = settings.apiKey;
+  $("level").value = progress.level || "A1";
+  $("accent").value = settings.accent;
   $("rate").value = settings.rate;
   $("rateVal").textContent = settings.rate;
   $("strict").value = settings.strict;
   $("settings").showModal();
 });
+$("accent").addEventListener("change", () => { settings.accent = $("accent").value; pickDefaultVoice(true); });
 $("rate").addEventListener("input", () => { $("rateVal").textContent = $("rate").value; });
 $("testVoice").addEventListener("click", () => {
   settings.voiceURI = $("voice").value;
@@ -996,50 +1795,19 @@ $("saveSettings").addEventListener("click", () => {
   settings.voiceURI = $("voice").value;
   settings.rate = Number($("rate").value);
   settings.strict = $("strict").value;
-  for (const k of ["apiKey", "voiceURI", "rate", "strict"]) store.set(k, settings[k]);
+  settings.accent = $("accent").value;
+  for (const k of ["apiKey", "voiceURI", "rate", "strict", "accent"]) local.set(k, settings[k]);
+  if (progress.level !== $("level").value) { progress.level = $("level").value; saveProgress(); }
   $("settings").close();
-  setStatus("Réglages enregistrés");
+  renderAll();
 });
 
-function renderVocab() {
-  const list = $("vocabList");
-  list.innerHTML = "";
-  for (const w of vocab) {
-    const li = el("li");
-    const b = el("button");
-    b.type = "button";
-    const es = el("span", "w-es", w.es);
-    es.lang = "es";
-    b.append(es, el("span", "w-fr", w.fr));
-    b.addEventListener("click", () => speak(w.es));
-    li.appendChild(b);
-    list.appendChild(li);
-  }
-  $("vocabEmpty").hidden = vocab.length > 0;
-  $("clearVocab").hidden = vocab.length === 0;
-}
-function resetClearButton() {
-  delete $("clearVocab").dataset.confirm;
-  $("clearVocab").textContent = "Vider le carnet";
-}
-$("vocabBtn").addEventListener("click", () => { renderVocab(); $("vocab").showModal(); });
-$("closeVocab").addEventListener("click", () => $("vocab").close());
-$("clearVocab").addEventListener("click", () => {
-  if ($("clearVocab").dataset.confirm !== "1") {
-    $("clearVocab").dataset.confirm = "1";
-    $("clearVocab").textContent = `Supprimer les ${vocab.length} mots`;
-    return;
-  }
-  resetClearButton();
-  vocab = [];
-  store.set("vocab", vocab);
-  renderVocab();
+show("lessons");
+renderAll();
+if (!progress.level && !window.claude?.use) $("onboard").showModal();
+connectAccount().finally(() => {
+  if (!progress.level && !$("onboard").open) $("onboard").showModal();
 });
-$("vocab").addEventListener("close", resetClearButton);
-
-setStatus(micBlocked
-  ? "Pour parler : touche le champ, puis le micro de ton clavier"
-  : "Touche le micro jaune et parle en espagnol");
 </script>
 </body>
 </html>
