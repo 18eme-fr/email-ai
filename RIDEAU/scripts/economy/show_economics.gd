@@ -3,7 +3,6 @@ extends RefCounted
 ## Modèle de demande et compte d'exploitation d'un spectacle.
 ## Fonctions pures : elles lisent l'état mais ne le modifient jamais.
 
-const SCHOOL_PRICE := 6
 const WIDE_AUDIENCES: Array[String] = ["familles", "scolaires", "jeunes", "amateurs"]
 
 
@@ -34,19 +33,23 @@ static func expected_fill(data: GameData, state: GameState, show: Dictionary, pr
 	fill *= float(diff.get("demand_mult", 1.0))
 	fill *= float(state.turn_mods.get("demand_mult", 1.0))
 	if state.has_flag("billetterie_en_ligne"):
-		fill *= 1.05
+		fill *= float(data.balance["online_ticketing"]["demand_bonus"])
 	return clampf(fill, float(d["min_fill"]), 1.2)
 
 
 ## Remplissage attendu d'une séance scolaire.
 static func school_fill(data: GameData, state: GameState) -> float:
-	var d: Dictionary = data.balance["demand"]
-	var fill := 0.45
+	var sc: Dictionary = data.balance["school"]
+	var fill := float(sc["base_fill"])
 	if state.has_flag("partenariat_scolaire"):
-		fill += float(d["school_bonus"]) + 0.05
-	fill += 0.2 * (state.stat("relations") - 50.0) / 50.0
-	fill += 0.1 * (state.stat("diversite") - 30.0) / 70.0
+		fill += float(sc["partnership_bonus"])
+	fill += float(sc["relations_weight"]) * (state.stat("relations") - 50.0) / 50.0
+	fill += float(sc["diversity_weight"]) * (state.stat("diversite") - 30.0) / 70.0
 	return clampf(fill, 0.15, 1.0)
+
+
+static func school_price(data: GameData) -> int:
+	return int(data.balance["school"]["price"])
 
 
 ## Nombre de fois où ce genre a été programmé lors des deux périodes précédentes.
@@ -83,7 +86,7 @@ static func rep_plan(data: GameData, state: GameState, show: Dictionary, price_l
 	var reps := representations(state, show, index)
 	for r in reps:
 		if bool(show.get("school", false)) and r == 0:
-			plan.append({"kind": "scolaire", "price": mini(SCHOOL_PRICE, price), "fill": school_fill(data, state), "capacity": capacity})
+			plan.append({"kind": "scolaire", "price": mini(school_price(data), price), "fill": school_fill(data, state), "capacity": capacity})
 		else:
 			plan.append({"kind": "tout_public", "price": price, "fill": expected_fill(data, state, show, price_level_id), "capacity": capacity})
 	return plan
@@ -145,13 +148,16 @@ static func estimate(data: GameData, state: GameState, show: Dictionary, price_l
 			gross[key] += n * int(rep["price"])
 	var reps := plan.size()
 	var fin_expected := finance(data, show, gross["expected"], reps)
+	var fin_low := finance(data, show, gross["low"], reps)
 	return {
 		"reps": reps,
 		"capacity_total": capacity_total,
 		"seats_low": seats["low"], "seats": seats["expected"], "seats_high": seats["high"],
 		"gross": gross["expected"],
 		"finance": fin_expected,
-		"margin_low": finance(data, show, gross["low"], reps)["margin"],
+		"gross_low": gross["low"],
+		"finance_low": fin_low,
+		"margin_low": fin_low["margin"],
 		"margin": fin_expected["margin"],
 		"margin_high": finance(data, show, gross["high"], reps)["margin"],
 		"incident_risk": incident_probability(data, state, show),

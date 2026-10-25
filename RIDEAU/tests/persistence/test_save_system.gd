@@ -91,6 +91,23 @@ func test_incomplete_state_is_rejected() -> void:
 	assert_int(int(result["status"])).is_equal(SaveSystem.Status.CORRUPTED)
 
 
+func test_downgrading_version_does_not_bypass_checksum() -> void:
+	var s := _played_session(1)
+	var text := SaveSystem.serialize(s.state).replace("\"version\": 1", "\"version\": 0")
+	text = text.replace("\"cash\": %d" % s.state.cash, "\"cash\": 999999")
+	assert_int(int(SaveSystem.deserialize(text)["status"])).is_equal(SaveSystem.Status.CORRUPTED)
+
+
+func test_wrong_field_types_are_rejected_without_crash() -> void:
+	var s := _played_session(1)
+	var d := s.state.to_dict()
+	d["flags"] = []
+	assert_object(GameState.from_dict(d)).is_null()
+	d = s.state.to_dict()
+	d["ledger"] = [42]
+	assert_object(GameState.from_dict(d)).is_null()
+
+
 func test_future_version_is_not_loaded() -> void:
 	var s := _played_session(1)
 	var text := SaveSystem.serialize(s.state).replace("\"version\": 1", "\"version\": 99")
@@ -102,8 +119,9 @@ func test_old_version_is_migrated() -> void:
 	var d := s.state.to_dict()
 	d.erase("stat_log")
 	d.erase("totals")
-	var envelope := {"format": SaveSystem.FORMAT_ID, "version": 0, "state": d}
-	var result := SaveSystem.deserialize(JSON.stringify(envelope))
+	var envelope := {"format": SaveSystem.FORMAT_ID, "version": 0, "state": d, "checksum": SaveSystem.checksum(d)}
+	# Pleine précision, comme SaveSystem.serialize, pour que la somme de contrôle corresponde.
+	var result := SaveSystem.deserialize(JSON.stringify(envelope, "", true, true))
 	assert_int(int(result["status"])).is_equal(SaveSystem.Status.OK)
 	assert_int(int((result["state"] as GameState).totals["attendance_total"])).is_equal(0)
 

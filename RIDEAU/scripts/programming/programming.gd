@@ -70,7 +70,7 @@ static func unavailable_reason(data: GameData, state: GameState, show_id: String
 static func validate(data: GameData, state: GameState, programmed: Array) -> String:
 	var slots: Dictionary = data.balance["slots"]
 	if programmed.size() > int(slots["total"]):
-		return "Trois créneaux au maximum par période."
+		return "%d créneaux au maximum par période." % int(slots["total"])
 	var hall := 0
 	var seen: Array = []
 	for entry: Dictionary in programmed:
@@ -86,7 +86,7 @@ static func validate(data: GameData, state: GameState, programmed: Array) -> Str
 		if data.uses_hall(data.shows[id]):
 			hall += 1
 	if hall > int(slots["hall_max"]):
-		return "Deux créneaux au maximum en grande salle (résidence comprise)."
+		return "%d créneau(x) au maximum en grande salle (résidence comprise)." % int(slots["hall_max"])
 	return ""
 
 

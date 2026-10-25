@@ -90,17 +90,15 @@ func projected_cash(programmed: Array = state.programmed, actions: Array = state
 	for entry: Dictionary in programmed:
 		var show: Dictionary = data.shows[entry["show_id"]]
 		var est := ShowEconomics.estimate(data, state, show, str(entry["price_level"]))
-		var fin: Dictionary = est["finance"]
-		# En trésorerie, la TVA et les droits d'auteur partent à la période suivante.
-		var cash_costs := int(fin["fee"]) + int(fin["tech"]) + int(fin["hosting"])
-		var share := float(show.get("company_share", 0.0)) if show.get("contract") == "corealisation" else 0.0
-		var gross_low := 0
-		for rep: Dictionary in est["plan"]:
-			var sigma := ShowEconomics.noise_sigma(data, state, show) * (0.5 if rep["kind"] == "scolaire" else 1.0)
-			gross_low += clampi(roundi(int(rep["capacity"]) * float(rep["fill"]) * exp(-1.28 * sigma)), 0, int(rep["capacity"])) * int(rep["price"])
-		expected += int(est["gross"]) - cash_costs - roundi(float(fin["net"]) * share)
-		low += gross_low - cash_costs - roundi(float(gross_low) * share)
+		# En trésorerie, la TVA et les droits d'auteur partent à la période suivante :
+		# on compte la recette TTC moins ce qui est payé dans la période.
+		expected += _cash_effect(int(est["gross"]), est["finance"])
+		low += _cash_effect(int(est["gross_low"]), est["finance_low"])
 	return {"expected": expected, "low": low}
+
+
+static func _cash_effect(gross: int, fin: Dictionary) -> int:
+	return gross - int(fin["fee"]) - int(fin["tech"]) - int(fin["hosting"]) - int(fin["company_share"])
 
 
 # --- Décisions -------------------------------------------------------------------
@@ -112,6 +110,8 @@ func open_programming() -> void:
 
 ## Valide et enregistre la programmation. Retourne "" ou un message d'erreur.
 func confirm_programming(programmed: Array) -> String:
+	if state.phase != GameState.PHASE_PROGRAMMING:
+		return "La programmation n'est pas ouverte à cette étape."
 	var err := Programming.validate(data, state, programmed)
 	if err != "":
 		return err
@@ -125,6 +125,8 @@ func confirm_programming(programmed: Array) -> String:
 
 ## Valide les actions, puis tire l'événement de la période.
 func confirm_actions(actions: Array) -> String:
+	if state.phase != GameState.PHASE_MANAGEMENT:
+		return "Les actions de gestion ne sont pas ouvertes à cette étape."
 	var err := Programming.validate_actions(data, state, actions)
 	if err != "":
 		return err
@@ -158,8 +160,8 @@ func current_event() -> Dictionary:
 
 ## Applique le choix fait pendant l'événement. Retourne le résumé des effets.
 func choose_event(choice_id: String) -> Dictionary:
-	if state.current_event == "" or state.event_choice != "":
-		return {}
+	if state.phase != GameState.PHASE_EVENT or state.current_event == "" or state.event_choice != "":
+		return {"error": "Aucun événement en attente de décision."}
 	var reason := EventSystem.choice_block_reason(data, state, state.current_event, choice_id)
 	if reason != "":
 		return {"error": reason}
@@ -183,6 +185,8 @@ func event_resolved() -> bool:
 func resolve_turn() -> Dictionary:
 	if state.phase == GameState.PHASE_REPORT or state.phase == GameState.PHASE_FINISHED:
 		return last_report
+	if state.phase != GameState.PHASE_EVENT or not event_resolved():
+		return {"error": "La période ne peut être lancée qu'après l'événement."}
 	for entry: Dictionary in state.programmed:
 		state.key_decisions.append({"turn": state.turn, "text": "Programmation : %s" % data.shows[entry["show_id"]]["title"], "kind": "show"})
 	var report := TurnResolver.resolve(data, state)

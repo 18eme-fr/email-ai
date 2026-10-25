@@ -32,7 +32,8 @@ static func pick(data: GameData, state: GameState) -> String:
 	for id: String in candidates:
 		weights.append(float(data.events[id].get("weight", 5)))
 	var rng := SeededRng.make(state.game_seed, state.turn, SeededRng.CHANNEL_EVENT)
-	return str(SeededRng.weighted_pick(rng, candidates, weights))
+	var picked: Variant = SeededRng.weighted_pick(rng, candidates, weights)
+	return "" if picked == null else str(picked)
 
 
 static func find_choice(data: GameData, event_id: String, choice_id: String) -> Dictionary:

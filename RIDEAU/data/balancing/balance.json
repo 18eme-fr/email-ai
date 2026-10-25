@@ -159,8 +159,7 @@
     "elasticity": 1.0,
     "fatigue": 0.85,
     "noise": 0.32,
-    "min_fill": 0.03,
-    "school_bonus": 0.25
+    "min_fill": 0.03
   },
   "quality": {
     "base": 0.55,
@@ -179,7 +178,9 @@
   "incident": {
     "threshold": 45,
     "per_point": 0.012,
-    "repair_cost": 900
+    "repair_cost": 900,
+    "quality_penalty": 0.15,
+    "fidelity_penalty": 2
   },
   "overdraft_limit": -6000,
   "rayonnement_weights": {
@@ -254,5 +255,28 @@
       "noise_mult": 1.2,
       "demand_mult": 0.97
     }
-  }
+  },
+  "school": {
+    "price": 6,
+    "base_fill": 0.45,
+    "partnership_bonus": 0.3,
+    "relations_weight": 0.2,
+    "diversity_weight": 0.1
+  },
+  "online_ticketing": {
+    "demand_bonus": 1.05,
+    "communication_floor_bonus": 5
+  },
+  "soft_cap": {
+    "offset": 1.25,
+    "divisor": 80,
+    "minimum": 0.15,
+    "stats": [
+      "reputation",
+      "fidelite",
+      "diversite",
+      "relations"
+    ]
+  },
+  "critics_art_threshold": 0.6
 }

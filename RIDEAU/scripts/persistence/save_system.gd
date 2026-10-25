@@ -63,11 +63,10 @@ static func deserialize(text: String) -> Dictionary:
 	var version := int(envelope.get("version", 0))
 	if version > CURRENT_VERSION:
 		return _fail(Status.INCOMPATIBLE, "Cette sauvegarde provient d'une version plus récente du jeu.")
+	# La somme de contrôle porte sur l'état tel qu'enregistré, quelle que soit sa version.
+	if str(envelope.get("checksum", "")) != checksum(envelope["state"]):
+		return _fail(Status.CORRUPTED, "La sauvegarde a été modifiée ou endommagée (somme de contrôle invalide).")
 	var state_dict: Dictionary = migrate(envelope["state"], version)
-	if version == CURRENT_VERSION:
-		var expected := str(envelope.get("checksum", ""))
-		if expected != checksum(envelope["state"]):
-			return _fail(Status.CORRUPTED, "La sauvegarde a été modifiée ou endommagée (somme de contrôle invalide).")
 	var state := GameState.from_dict(state_dict)
 	if state == null:
 		return _fail(Status.CORRUPTED, "La sauvegarde est incomplète.")

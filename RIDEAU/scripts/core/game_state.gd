@@ -111,6 +111,23 @@ static func from_dict(d: Dictionary) -> GameState:
 				return null
 		elif actual != expected:
 			return null
+	# Champs facultatifs : s'ils sont présents, leur type doit être le bon.
+	var optional := {
+		"flags": TYPE_DICTIONARY, "turn_mods": TYPE_DICTIONARY, "event_outcome": TYPE_DICTIONARY,
+		"totals": TYPE_DICTIONARY, "ending": TYPE_DICTIONARY, "tutorial_seen": TYPE_DICTIONARY,
+		"offers": TYPE_ARRAY, "programmed": TYPE_ARRAY, "actions": TYPE_ARRAY, "stat_log": TYPE_ARRAY,
+		"played_shows": TYPE_ARRAY, "genre_history": TYPE_ARRAY, "seen_events": TYPE_ARRAY,
+		"reports": TYPE_ARRAY, "history": TYPE_ARRAY, "key_decisions": TYPE_ARRAY,
+	}
+	for key: String in optional:
+		if d.has(key) and typeof(d[key]) != optional[key]:
+			return null
+	for entry: Variant in d["ledger"]:
+		if not entry is Dictionary:
+			return null
+		for key: String in ["amount", "direction", "turn_engaged", "due_turn", "label", "settled"]:
+			if not (entry as Dictionary).has(key):
+				return null
 	var s := GameState.new()
 	s.game_seed = int(d["seed"])
 	s.difficulty = str(d["difficulty"])

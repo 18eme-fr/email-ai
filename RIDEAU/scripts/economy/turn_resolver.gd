@@ -41,7 +41,7 @@ static func resolve(data: GameData, state: GameState) -> Dictionary:
 		var cost := int(action["cost"])
 		if cost > 0:
 			Ledger.add(state, str(action["label"]), "action", cost, Ledger.EXPENSE, turn, turn + int(action.get("payment_delay", 0)), {"source": id})
-		Rules.apply(action.get("effects", {}), data, state, str(action["label"]))
+		Rules.apply(action.get("effects", {}), data, state, str(action["label"]), hash(id))
 		report["actions"].append({"id": id, "label": action["label"], "cost": cost, "delay": int(action.get("payment_delay", 0))})
 
 	# 3. Représentations.
@@ -125,9 +125,10 @@ static func _perform(data: GameData, state: GameState, show: Dictionary, price_l
 	var p_incident := ShowEconomics.incident_probability(data, state, show)
 	if p_incident > 0.0 and SeededRng.make(state.game_seed, turn, SeededRng.CHANNEL_INCIDENT, index).randf() < p_incident:
 		incident = true
-		q -= 0.15
-		Ledger.add(state, "Réparation d'urgence — %s" % title, "technique", int(data.balance["incident"]["repair_cost"]), Ledger.EXPENSE, turn, turn, {"source": show["id"]})
-		Rules.change_stat(state, "fidelite", -2.0, "Incident technique")
+		var inc: Dictionary = data.balance["incident"]
+		q -= float(inc["quality_penalty"])
+		Ledger.add(state, "Réparation d'urgence — %s" % title, "technique", int(inc["repair_cost"]), Ledger.EXPENSE, turn, turn, {"source": show["id"]})
+		Rules.change_stat(state, "fidelite", -float(inc["fidelity_penalty"]), "Incident technique")
 	q = clampf(q, 0.0, 1.0)
 
 	# Écritures comptables.
@@ -209,7 +210,9 @@ static func _decide_conditional_subsidy(data: GameData, state: GameState) -> Dic
 static func _drift(data: GameData, state: GameState, report: Dictionary) -> void:
 	var dr: Dictionary = data.balance["drift"]
 	var comm := state.stat("communication")
-	var floor_v := float(dr["communication_floor"]) + (5.0 if state.has_flag("billetterie_en_ligne") else 0.0)
+	var floor_v := float(dr["communication_floor"])
+	if state.has_flag("billetterie_en_ligne"):
+		floor_v += float(data.balance["online_ticketing"]["communication_floor_bonus"])
 	if comm > floor_v:
 		Rules.change_stat(state, "communication", -(comm - floor_v) * float(dr["communication_decay"]), "Effet de la communication qui s'estompe")
 	var team := state.stat("equipe")

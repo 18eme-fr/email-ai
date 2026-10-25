@@ -288,7 +288,7 @@ func _estimate_block(show: Dictionary, est: Dictionary, fin: Dictionary) -> Cont
 	col.add_child(UiKit.hbox([UiKit.label("Estimation (budget prévisionnel)", "SubHeaderLabel"), UiKit.notion_link("budget_previsionnel")]))
 	var seats_txt := "Places vendues : entre [b]%d[/b] et [b]%d[/b] (attendu %d) sur %d." % [int(est["seats_low"]), int(est["seats_high"]), int(est["seats"]), int(est["capacity_total"])]
 	if bool(show.get("school", false)):
-		seats_txt += " Dont une séance scolaire à %s." % Format.money(ShowEconomics.SCHOOL_PRICE)
+		seats_txt += " Dont une séance scolaire à %s." % Format.money(ShowEconomics.school_price(session.data))
 	col.add_child(UiKit.rich(seats_txt))
 	var lines := "Recette nette attendue %s (TVA déduite)" % Format.money(int(fin["net"]))
 	lines += "  ·  coûts %s" % Format.money(int(fin["costs"]))

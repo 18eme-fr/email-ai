@@ -42,8 +42,10 @@ func play_turn(session: GameSession) -> void:
 		assert(not actions.is_empty(), "Une absence d'action doit toujours être acceptée.")
 		actions.pop_back()
 	if session.state.current_event != "":
-		session.choose_event(choose_event(session))
-	session.resolve_turn()
+		var result := session.choose_event(choose_event(session))
+		assert(not result.has("error"), "Le bot doit toujours trouver un choix possible.")
+	var report := session.resolve_turn()
+	assert(not report.has("error"), "La période doit pouvoir être résolue.")
 	session.next_turn()
 
 

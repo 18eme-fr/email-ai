@@ -73,8 +73,15 @@ func test_choice_applies_cash_and_stats() -> void:
 	assert_bool(found).is_true()
 
 
+func _to_event_phase(s: GameSession) -> void:
+	s.open_programming()
+	s.confirm_programming([])
+	s.confirm_actions([])
+
+
 func test_choice_cannot_be_made_twice() -> void:
 	var s := _session()
+	_to_event_phase(s)
 	s.state.current_event = "journaliste"
 	s.state.event_choice = ""
 	s.choose_event("decliner")
@@ -86,6 +93,7 @@ func test_choice_cannot_be_made_twice() -> void:
 
 func test_blocked_choice_is_refused() -> void:
 	var s := _session()
+	_to_event_phase(s)
 	s.state.stats["relations"] = 20.0
 	s.state.current_event = "appel_projets"
 	s.state.event_choice = ""
@@ -99,12 +107,28 @@ func test_chance_outcome_is_reproducible() -> void:
 	var outcomes: Array = []
 	for i in 2:
 		var s := _session(77)
+		_to_event_phase(s)
 		s.state.turn = 3
 		s.state.current_event = "journaliste"
 		s.state.event_choice = ""
 		s.choose_event("creation")
 		outcomes.append(s.state.event_outcome["success"])
 	assert_bool(outcomes[0] == outcomes[1]).is_true()
+
+
+func test_steps_must_happen_in_order() -> void:
+	var s := _session()
+	assert_str(s.confirm_actions([])).is_not_empty()           # pas encore en gestion
+	assert_dict(s.resolve_turn()).contains_keys(["error"])    # pas encore d'événement
+	s.open_programming()
+	assert_str(s.confirm_programming([])).is_empty()
+	assert_str(s.confirm_programming([])).is_not_empty()      # double validation refusée
+	assert_str(s.confirm_actions([])).is_empty()
+	var seen := s.state.seen_events.size()
+	assert_str(s.confirm_actions([])).is_not_empty()          # l'événement n'est pas tiré deux fois
+	assert_int(s.state.seen_events.size()).is_equal(seen)
+	if s.state.current_event != "":
+		assert_dict(s.resolve_turn()).contains_keys(["error"])  # décision obligatoire
 
 
 func test_conditional_subsidy_depends_on_objectives() -> void:

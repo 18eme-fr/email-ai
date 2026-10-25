@@ -6,7 +6,7 @@ Généré par `tools/simulate.gd` — 100 saisons par stratégie, difficulté «
 |---|---|---|---|---|---|---|---|---|---|
 | prudente | 5 672 € | 2 422 € | −678 € | 13 142 € | 0 % | 0 % | 46.8 | 1771 | 50.3 |
 | artistique | 2 210 € | 3 439 € | −6 089 € | 8 913 € | 75 % | 1 % | 77.2 | 3730 | 66.8 |
-| publics | 982 € | 2 406 € | −7 058 € | 6 833 € | 78 % | 3 % | 75.4 | 3391 | 66.7 |
+| publics | 971 € | 2 406 € | −7 058 € | 6 833 € | 78 % | 3 % | 75.4 | 3392 | 66.7 |
 | equilibre | 5 449 € | 2 759 € | 220 € | 11 171 € | 100 % | 0 % | 84.0 | 3755 | 66.9 |
 | aleatoire | −206 € | 4 184 € | −11 296 € | 10 042 € | 33 % | 8 % | 49.1 | 1575 | 57.0 |
 | passive | 6 041 € | 1 319 € | 3 300 € | 9 720 € | 0 % | 0 % | 27.5 | 0 | 42.6 |
@@ -15,7 +15,7 @@ Généré par `tools/simulate.gd` — 100 saisons par stratégie, difficulté «
 
 - **prudente** — caisse_pleine : 97, demi_teinte : 1, dans_le_rouge : 2
 - **artistique** — dans_le_rouge : 24, reference : 10, laboratoire : 59, maison_publics : 6, faillite : 1
-- **publics** — dans_le_rouge : 19, reference : 58, maison_publics : 20, faillite : 3
+- **publics** — dans_le_rouge : 19, reference : 59, maison_publics : 19, faillite : 3
 - **equilibre** — maison_publics : 42, reference : 58
 - **aleatoire** — faillite : 8, laboratoire : 7, dans_le_rouge : 46, maison_publics : 5, caisse_pleine : 1, demi_teinte : 12, equilibre : 20, populaire : 1
 - **passive** — caisse_pleine : 82, demi_teinte : 18
@@ -57,7 +57,7 @@ Généré par `tools/simulate.gd` — 100 saisons par stratégie, difficulté «
 | Chansons d'en face | 314 | −598 € | 84 % |
 | Terres rares | 333 | −685 € | 46 % |
 | Les Heures blanches | 349 | −693 € | 50 % |
-| Lignes de fuite | 229 | −741 € | 47 % |
+| Lignes de fuite | 230 | −741 € | 47 % |
 | Hamlet en 45 minutes | 308 | −746 € | 72 % |
 | Résidence : la Compagnie du Fil | 373 | −900 € | 58 % |
 | Bascule | 332 | −1 227 € | 88 % |

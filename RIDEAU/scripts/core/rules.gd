@@ -101,7 +101,7 @@ static func hall_show_index(data: GameData, state: GameState) -> int:
 static func art_show_index(data: GameData, state: GameState) -> int:
 	for i in state.programmed.size():
 		var show: Dictionary = data.shows.get(state.programmed[i]["show_id"], {})
-		if show.get("format", "") == "salle" and float(show.get("art", 0.0)) >= 0.6:
+		if show.get("format", "") == "salle" and float(show.get("art", 0.0)) >= float(data.balance.get("critics_art_threshold", 0.6)):
 			return i
 	return -1
 
@@ -116,17 +116,15 @@ static func tech_show_index(data: GameData, state: GameState, min_level: int) ->
 
 # --- Effets -----------------------------------------------------------------------
 
-## Indicateurs « de réputation » : plus ils sont hauts, plus il est difficile
-## de les faire progresser (rendements décroissants).
-const SOFT_CAPPED: Array[String] = ["reputation", "fidelite", "diversite", "relations"]
-
-
+## Les indicateurs « de réputation » (balance.soft_cap.stats) progressent de plus
+## en plus lentement quand ils sont hauts (rendements décroissants).
 static func change_stat(state: GameState, id: String, delta: float, source: String) -> void:
 	if not id in GameState.STAT_IDS or is_zero_approx(delta):
 		return
 	var before := state.stat(id)
-	if delta > 0.0 and id in SOFT_CAPPED:
-		delta *= clampf(1.25 - before / 80.0, 0.15, 1.0)
+	var cap: Dictionary = GameData.get_default().balance.get("soft_cap", {})
+	if delta > 0.0 and id in cap.get("stats", []):
+		delta *= clampf(float(cap["offset"]) - before / float(cap["divisor"]), float(cap["minimum"]), 1.0)
 	state.set_stat(id, before + delta)
 	var applied := state.stat(id) - before
 	if not is_zero_approx(applied):

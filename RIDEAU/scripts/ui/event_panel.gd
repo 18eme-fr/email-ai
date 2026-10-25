@@ -126,6 +126,10 @@ func _on_launch() -> void:
 		return
 	_launch.disabled = true
 	var report := session.resolve_turn()
+	if report.has("error"):
+		screen.toast(str(report["error"]), "error")
+		_launch.disabled = false
+		return
 	var ratio := 0.0
 	for s: Dictionary in report.get("shows", []):
 		if not s.get("cancelled", false) and session.data.shows[s["show_id"]].get("format", "") == "salle":
