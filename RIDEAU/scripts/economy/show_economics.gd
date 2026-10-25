@@ -65,9 +65,11 @@ static func noise_sigma(data: GameData, state: GameState, show: Dictionary) -> f
 	return float(data.balance["demand"]["noise"]) * (0.5 + float(show.get("risk", 0.2))) * float(diff.get("noise_mult", 1.0))
 
 
+## Nombre de représentations. `index` est la position du spectacle dans la
+## programmation (−1 pour une simple estimation hors programmation).
 static func representations(state: GameState, show: Dictionary, index: int) -> int:
 	var reps := int(show.get("representations", 1))
-	if int(state.turn_mods.get("add_representation_index", -1)) == index:
+	if index >= 0 and state.turn_mods.has("add_representation_index") and int(state.turn_mods["add_representation_index"]) == index:
 		reps += 1
 	return reps
 

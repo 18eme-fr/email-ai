@@ -65,9 +65,9 @@ Visibles en permanence : **Trésorerie**, **Publics** (fidélité, total des ent
 
 | Stratégie | Idée | Résultat typique (Standard) |
 |---|---|---|
-| Équilibrée | Un spectacle populaire, une œuvre exigeante, une petite forme, médiation + communication | Convention renouvelée ~98 % ; fins « Une scène qui compte » / « La maison de tous les publics » |
-| Artistique | Œuvres exigeantes, communication, formation | ~93 % ; fin « Le laboratoire » |
-| Publics | Familles, jeune public, tarif solidaire, médiation, accueil | ~70 % ; plus risquée financièrement |
+| Équilibrée | Un spectacle populaire, une œuvre exigeante, une petite forme, médiation + communication | Convention renouvelée ~100 % ; fins « Une scène qui compte » / « La maison de tous les publics » |
+| Artistique | Œuvres exigeantes, communication, formation | ~75 % ; fin « Le laboratoire » |
+| Publics | Familles, jeune public, tarif solidaire, médiation, accueil | ~78 % ; plus risquée financièrement |
 | Prudente | Seulement ce qui rapporte | 0 % : comptes sains mais missions non tenues (« Caisse pleine, convention vide ») |
 | Passive / aléatoire | — | Échec (passive) ou résultats très dispersés |
 

@@ -42,7 +42,7 @@ func _ready() -> void:
 	p.custom_minimum_size = Vector2(72, 72)
 	p.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	vrow.add_child(p)
-	var vt := UiKit.rich("[b]%s[/b]  %s\n[color=#6e5a4a]%s[/color]" % [
+	var vt := UiKit.rich("[b]%s[/b]  %s\n[color=#5a4636]%s[/color]" % [
 		"Convention renouvelée !" if e.get("renewed", false) else ("Faillite." if s.bankrupt else "Convention non renouvelée."),
 		e.get("text", ""), "Saison jouée en mode %s, graine %d." % [session.data.difficulty(s.difficulty).get("label", s.difficulty), s.game_seed]])
 	vt.theme_type_variation = "PaperRichText"

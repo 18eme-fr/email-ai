@@ -168,7 +168,7 @@ func _refresh_stepper() -> void:
 		var l := UiKit.label(step[1], "SmallLabel" if not active else "PaperLabel")
 		l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		if not active and not reached:
-			l.add_theme_color_override("font_color", Color("6e6880"))
+			l.add_theme_color_override("font_color", Color("908aa6"))
 		chip.add_child(l)
 		chip.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		_stepper.add_child(chip)

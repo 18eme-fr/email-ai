@@ -23,8 +23,8 @@ func _ready() -> void:
 		selected.append(entry.duplicate())
 		prices[entry["show_id"]] = entry["price_level"]
 	var head := UiKit.hbox([UiKit.label("Programmation", "HeaderLabel"), UiKit.spacer(), UiKit.notion_link("programmation", "Programmer ?")])
+	head.tooltip_text = "Propositions reçues pour %s. Cliquez sur une affiche pour lire sa fiche." % session.period_name().to_lower()
 	add_child(head)
-	add_child(UiKit.label("Propositions reçues pour %s. Cliquez sur une affiche pour lire sa fiche." % session.period_name().to_lower(), "SmallLabel", true))
 	_cards = UiKit.hbox([], 5)
 	add_child(_cards)
 	var scroll := ScrollContainer.new()
@@ -35,6 +35,8 @@ func _ready() -> void:
 	_detail.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.add_child(_detail)
 	_summary = UiKit.rich("")
+	_summary.add_theme_font_size_override("normal_font_size", 15)
+	_summary.add_theme_font_size_override("bold_font_size", 15)
 	add_child(_summary)
 	_error = UiKit.label("", "MutedLabel", true)
 	_error.add_theme_color_override("font_color", UiKit.BAD)
@@ -79,7 +81,7 @@ func _build_cards() -> void:
 		var show: Dictionary = data.shows[id]
 		var chosen := _is_selected(id)
 		var card := Button.new()
-		card.custom_minimum_size = Vector2(100, 172)
+		card.custom_minimum_size = Vector2(100, 146)
 		card.theme_type_variation = "FlatButton"
 		card.toggle_mode = false
 		card.tooltip_text = "%s\n%s" % [show["title"], show["pitch"]]
@@ -140,11 +142,11 @@ func _show_detail(id: String) -> void:
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title_row.add_child(title)
 	var genre := UiKit.label(data.genre_label(show), "PaperLabel")
-	genre.add_theme_color_override("font_color", Color(data.genres.get(show["genre"], {}).get("color", "#6e5a4a")).darkened(0.35))
+	genre.add_theme_color_override("font_color", Color(data.genres.get(show["genre"], {}).get("color", "#5a4636")).darkened(0.35))
 	title_row.add_child(genre)
 	col.add_child(title_row)
 	var company := UiKit.label(str(show["company"]), "PaperLabel")
-	company.add_theme_color_override("font_color", Color("6e5a4a"))
+	company.add_theme_color_override("font_color", Color("5a4636"))
 	col.add_child(company)
 	var desc := UiKit.rich(str(show["description"]))
 	desc.theme_type_variation = "PaperRichText"
@@ -181,9 +183,10 @@ func _show_detail(id: String) -> void:
 
 func _fact(grid: GridContainer, key: String, value: String, notion: String) -> void:
 	var k := UiKit.label(key, "SmallLabel")
+	k.add_theme_color_override("font_color", Color("5a4636"))
 	var row := UiKit.hbox([k], 2)
 	if notion != "":
-		row.add_child(UiKit.notion_link(notion))
+		row.add_child(UiKit.notion_link(notion, "?", true))
 	grid.add_child(row)
 	var v := UiKit.label(value, "", true)
 	v.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -347,8 +350,8 @@ func _refresh_summary() -> void:
 			hall += 1
 	var proj := session.projected_cash(selected, [])
 	var slots: Dictionary = data.balance["slots"]
-	var txt := "Créneaux : [b]%d / %d[/b] (grande salle %d / %d)   ·   " % [selected.size(), int(slots["total"]), hall, int(slots["hall_max"])]
-	txt += "Trésorerie prévue en fin de période : %s [color=#b9b0c8](si public faible : %s)[/color]" % [_money_colored(int(proj["expected"])), Format.money(int(proj["low"]))]
+	var txt := "Créneaux [b]%d/%d[/b] (grande salle %d/%d) · Trésorerie fin de période : %s [color=#b9b0c8](public faible : %s)[/color]" % [
+		selected.size(), int(slots["total"]), hall, int(slots["hall_max"]), _money_colored(int(proj["expected"])), Format.money(int(proj["low"]))]
 	_summary.text = txt
 	_validate.text = "Valider la programmation" if not selected.is_empty() else "Faire relâche cette période"
 

@@ -104,3 +104,16 @@ func test_incident_probability_only_when_equipment_is_low() -> void:
 	assert_float(ShowEconomics.incident_probability(data, session.state, show)).is_equal(0.0)
 	session.state.stats["equipement"] = 20.0
 	assert_float(ShowEconomics.incident_probability(data, session.state, show)).is_greater(0.0)
+
+
+func test_estimate_uses_exact_number_of_representations() -> void:
+	# Non-régression : une estimation hors programmation ne doit pas ajouter de représentation.
+	var session := _session()
+	for id: String in data.show_order:
+		var est := ShowEconomics.estimate(data, session.state, data.shows[id], "normal")
+		assert_int(int(est["reps"])).override_failure_message(id).is_equal(int(data.shows[id]["representations"]))
+	# Une représentation ajoutée par un événement ne concerne que le spectacle visé.
+	session.state.turn_mods["add_representation_index"] = 1
+	assert_int(ShowEconomics.representations(session.state, data.shows["comedie_diner"], 1)).is_equal(3)
+	assert_int(ShowEconomics.representations(session.state, data.shows["comedie_diner"], 0)).is_equal(2)
+	assert_int(ShowEconomics.representations(session.state, data.shows["comedie_diner"], -1)).is_equal(2)

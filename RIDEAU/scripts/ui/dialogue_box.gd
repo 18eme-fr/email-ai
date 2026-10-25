@@ -39,7 +39,7 @@ func _init() -> void:
 	_name = UiKit.label("", "PaperTitleLabel")
 	_role = UiKit.label("", "PaperLabel")
 	_role.add_theme_font_size_override("font_size", 14)
-	_role.add_theme_color_override("font_color", Color("6e5a4a"))
+	_role.add_theme_color_override("font_color", Color("5a4636"))
 	_role.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_role.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_role.custom_minimum_size.x = 40
@@ -54,6 +54,11 @@ func _init() -> void:
 	col.add_child(_label)
 	_next = UiKit.button("Suite", "FlatButton")
 	_next.size_flags_horizontal = Control.SIZE_SHRINK_END
+	# Sur fond papier, le bouton plat doit être foncé pour rester lisible.
+	_next.add_theme_color_override("font_color", Color("7a1a2e"))
+	_next.add_theme_color_override("font_hover_color", Color("b02a3a"))
+	_next.add_theme_color_override("font_focus_color", Color("7a1a2e"))
+	_next.add_theme_color_override("font_pressed_color", Color("4a0f1f"))
 	_next.pressed.connect(_advance)
 	col.add_child(UiKit.spacer(false))
 	col.add_child(_next)

@@ -95,10 +95,10 @@ func _card(id: String) -> Control:
 	if a.get("effects", {}).has("eac"):
 		effects.append("action EAC")
 	var e := UiKit.label(", ".join(effects), "SmallLabel", true)
-	e.add_theme_color_override("font_color", Color("2f6b3a") if on else UiKit.GOOD)
+	e.add_theme_color_override("font_color", Color("24552d") if on else UiKit.GOOD)
 	col.add_child(e)
 	var row := UiKit.hbox()
-	row.add_child(UiKit.notion_link(str(a.get("notion", "")), "En savoir plus"))
+	row.add_child(UiKit.notion_link(str(a.get("notion", "")), "En savoir plus", on))
 	row.add_child(UiKit.spacer())
 	var b := UiKit.button("Retirer" if on else "Choisir", "SecondaryButton" if on else "")
 	b.tooltip_text = str(a["description"])

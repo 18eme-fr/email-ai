@@ -72,7 +72,7 @@ func _brief_card(brief: Dictionary) -> Control:
 	p.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	row.add_child(p)
 	var data := GameData.get_default()
-	var text := UiKit.rich("[b]%s[/b]  [color=#6e5a4a]%s[/color]\n%s" % [data.character_name(brief["character"]), data.characters[brief["character"]]["role"], brief["text"]])
+	var text := UiKit.rich("[b]%s[/b]  [color=#5a4636]%s[/color]\n%s" % [data.character_name(brief["character"]), data.characters[brief["character"]]["role"], brief["text"]])
 	text.theme_type_variation = "PaperRichText"
 	text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(text)

@@ -149,9 +149,10 @@ def export(out_dir: str) -> None:
         "button2_normal": button(P["navy"], P["blue"], P["night2"], P["steel"]),
         "button2_hover": button(P["blue"], P["steel"], P["navy"], P["sky"]),
         "button2_pressed": button(P["night2"], P["navy"], P["night"], P["steel"], pressed=True),
-        "button_gold_normal": button(P["gold1"], P["gold2"], P["gold0"], P["gold3"]),
-        "button_gold_hover": button(P["gold2"], P["gold3"], P["gold1"], P["light"]),
-        "button_gold_pressed": button(P["gold0"], P["gold1"], P["wood1"], P["gold2"], pressed=True),
+        # Fond or clair : le texte encre y atteint un contraste ≥ 4,5:1 (WCAG AA).
+        "button_gold_normal": button(P["gold2"], P["gold3"], P["gold1"], P["gold3"]),
+        "button_gold_hover": button(P["gold3"], P["light"], P["gold2"], P["light"]),
+        "button_gold_pressed": button(P["gold1"], P["gold2"], P["gold0"], P["gold2"], pressed=True),
         "focus": focus_ring(),
         "chip": chip(),
         "bar_bg": bar_bg(),

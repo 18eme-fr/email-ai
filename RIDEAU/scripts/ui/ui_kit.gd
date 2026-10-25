@@ -200,7 +200,8 @@ static func primary(text: String, icon_name: String = "play") -> Button:
 
 
 ## Petit bouton « ? » qui ouvre le Carnet du directeur sur une notion.
-static func notion_link(notion_id: String, text: String = "?") -> Button:
+## `on_paper` : couleurs foncées pour rester lisible sur les panneaux papier.
+static func notion_link(notion_id: String, text: String = "?", on_paper: bool = false) -> Button:
 	var data := GameData.get_default()
 	var notion: Dictionary = data.glossary.get(notion_id, {})
 	var b := Button.new()
@@ -208,6 +209,10 @@ static func notion_link(notion_id: String, text: String = "?") -> Button:
 	b.theme_type_variation = "FlatButton"
 	b.focus_mode = Control.FOCUS_ALL
 	b.tooltip_text = "%s : %s\n(cliquer pour en savoir plus)" % [notion.get("title", notion_id), notion.get("short", "")]
+	if on_paper:
+		b.add_theme_color_override("font_color", Color("7a1a2e"))
+		b.add_theme_color_override("font_hover_color", Color("b02a3a"))
+		b.add_theme_color_override("font_focus_color", Color("7a1a2e"))
 	b.pressed.connect(func() -> void:
 		AudioDirector.play_sfx("page")
 		var scene := b.get_tree().current_scene

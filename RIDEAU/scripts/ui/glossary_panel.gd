@@ -45,5 +45,5 @@ static func notion_bbcode(data: GameData, id: String) -> String:
 		out += "\n[i]Le jeu simplifie cette notion : les règles réelles sont plus nuancées.[/i]\n"
 	var sources: Array = n.get("sources", [])
 	if not sources.is_empty():
-		out += "\n[color=#6e5a4a]Sources : %s (voir SOURCES.md)[/color]" % ", ".join(sources)
+		out += "\n[color=#5a4636]Sources : %s (voir SOURCES.md)[/color]" % ", ".join(sources)
 	return out
