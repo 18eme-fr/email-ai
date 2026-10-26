@@ -1,13 +1,13 @@
-# Rapport d'assurance qualité — RIDEAU ! v0.9.0
+# Rapport d'assurance qualité — RIDEAU ! v0.10.0
 
-Date : 25 octobre 2026. Environnement : conteneur Linux, **Godot 4.7.2-stable compilé depuis les
+Date : 26 octobre 2026 (v0.10.0 : monde explorable et rénovations ; v0.9.0 le 25 octobre). Environnement : conteneur Linux, **Godot 4.7.2-stable compilé depuis les
 sources**, rendu réel OpenGL (Mesa llvmpipe) sous Xvfb, Chromium (Playwright) pour la version Web.
 **Tout ce qui est indiqué « réussi » a été réellement exécuté.**
 
 ## 1. Tests automatisés (GdUnit4 6.2.2)
 
 Commande : `GODOT_BIN=… xvfb-run -a ./addons/gdUnit4/runtest.sh -a res://tests -c`
-Résultat de la dernière exécution : **87 cas, 0 échec, 0 erreur, 0 orphelin.**
+Résultat de la dernière exécution : **112 cas, 0 échec, 0 erreur, 0 orphelin.**
 
 | Suite | Cas | Ce qui est vérifié |
 |---|---|---|
@@ -17,29 +17,40 @@ Résultat de la dernière exécution : **87 cas, 0 échec, 0 erreur, 0 orphelin.
 | `gameplay/test_game_session.gd` | 12 | Début de partie, difficultés, saison complète de 8 rapports, saison « passive » résolue sans blocage, même graine = même saison, graines différentes = saisons différentes, règles de programmation, capacité d'actions, dépenses impossibles refusées **mais « ne rien faire » toujours permis**, effets des actions, offres renouvelées, pas de double résolution |
 | `gameplay/test_events.gd` | 12 | Événements forcés (bilan de mi-saison, alerte de trésorerie), événements uniques, conditions, **chaque choix a des effets différents**, effets appliqués, pas de double choix, choix bloqués, paris reproductibles, solde conditionnel de subvention, ordre des étapes imposé, retour en arrière |
 | `gameplay/test_strategies.gd` | 5 | Stratégies équilibrée et artistique viables ; ne rien faire ne gagne jamais ; stratégie purement rentable échoue aux missions ; jeu aléatoire rarement gagnant ; ≥ 5 fins atteignables |
-| `persistence/test_save_system.gd` | 11 | Aller-retour exact, partie rechargée qui se poursuit à l'identique, fichier corrompu → copie de secours **avec message**, fichier modifié détecté, sauvegarde absente, état incomplet, types invalides sans plantage, version future refusée, migration d'ancienne version, rétrogradation de version sans contourner la somme de contrôle, écriture ratée sans perte |
+| `persistence/test_save_system.gd` | 13 | Aller-retour exact, partie rechargée qui se poursuit à l'identique, fichier corrompu → copie de secours **avec message**, fichier modifié détecté, sauvegarde absente, état incomplet, types invalides sans plantage, version future refusée, migration d'ancienne version, rétrogradation de version sans contourner la somme de contrôle, écriture ratée sans perte, **sauvegarde 0.9 migrée (rénovations vides)**, rénovations conservées |
 | `data/test_data_integrity.gd` | 9 | Chargement des JSON, champs et bornes des spectacles, actions, correspondance événements ↔ dialogues, compilation des `.dialogue` par Dialogue Manager, réponses disponibles pour chaque événement, notions et sources, portraits, fins |
+| `economy/test_upgrades.gd` | 7 | Rénovations : le prix touche la trésorerie et **jamais le résultat**, l'amortissement touche le résultat et **jamais la trésorerie** ; achat unique et seulement avant l'événement ; refus si le découvert serait dépassé ; effets et recettes à chaque période ; achat tardif amorti sur les seules périodes restantes |
+| `world/test_world.gd` | 11 | Cartes rectangulaires et légende, portes praticables avec retour, **tout objet, personnage et porte accessible à pied**, chemins qui contournent les personnages, chaque action et rénovation a un lieu, saisons, répliques pour tous, réplique la plus spécifique choisie, objectif qui suit les étapes, actions décidées une à une (capacité, étape) |
+| `ui/test_world_screen.gd` | 5 | **Une période complète jouée à pied** (bureau, Hélène, porte, événement qui vient au joueur, soirée dans la salle, bilan, retour au bureau) ; **une saison entière à travers le monde** (4 saisons, fin de saison) ; rénovation achetée sur place et pas deux fois ; clic pour marcher ; objectif et période affichés |
 | `ui/test_ui.gd` | 13 | Formatage des nombres, boutons du menu, Paramètres et Crédits, « Continuer » activé après sauvegarde, **une période complète jouée à travers l'interface**, montant affiché, fenêtres ouvertes/fermées au clavier (Échap), Entrée inactive sous une fenêtre modale, chaque étape se construit, **tous les écrans tiennent en 1280×720 (police pixel et police lisible)**, tailles de texte ≥ 13 px, écran de fin |
 
 ## 2. Simulation d'équilibrage (`tools/simulate.gd`)
 
-100 saisons par stratégie en Standard, 60 en Découverte et Exigeant (rapports complets dans `docs/`).
+200 saisons par stratégie et par difficulté (rapports complets dans `docs/`, relancés pour la v0.10).
 
 | Stratégie | Découverte | **Standard** | Exigeant |
 |---|---|---|---|
-| Équilibrée | 100 % | **100 %** | 72 % |
-| Artistique | 100 % | **75 %** | 27 % |
-| Publics | 100 % | **78 %** | 15 % |
+| Équilibrée | 100 % | **99 %** | 71 % |
+| Bâtisseuse (équilibrée + toutes les rénovations) | 100 % | **90 %** | 54 % |
+| Artistique | 100 % | **71 %** | 21 % |
+| Publics | 100 % | **74 %** | 15 % |
 | Prudente (rentabilité seule) | 0 % | **0 %** | 0 % |
-| Aléatoire | 50 % | **33 %** | 15 % |
+| Aléatoire | 42 % | **33 %** | 15 % |
 | Passive | 0 % | **0 %** | 0 % |
 
 (pourcentage de conventions renouvelées). Aucune stratégie triviale ne gagne ; plusieurs styles
-différents gagnent avec des fins différentes ; la difficulté Exigeant est un vrai défi.
+différents gagnent avec des fins différentes ; la difficulté Exigeant est un vrai défi. Les
+rénovations sont un arbitrage, pas un passage obligé : elles améliorent un peu les indicateurs mais
+pèsent sur la trésorerie (5 % de faillites en Exigeant pour qui rénove tout).
 
 ## 3. Vérifications manuelles et visuelles
 
-- Captures réelles de chaque écran (`docs/screenshots/`), relues une à une.
+- Captures réelles de chaque écran (`docs/screenshots/`), relues une à une, dont le monde
+  explorable : bureau, hall, place en automne et en hiver (fêtes, enseigne), coulisses, dialogue
+  avec réponses, fenêtre d'étape, soirée dans la salle, menu.
+- Défauts trouvés sur ces captures et corrigés : lettres absentes de la petite police des
+  enseignes (« AIRIE »), cadre d'affiche masquant le panneau de la billetterie, objectif hors
+  écran, boîte de dialogue débordant en bas, menu trop court, mur mal dessiné dans la salle.
 - Contrastes des couleurs de texte calculés : **toutes les paires de texte ≥ 4,5:1 (WCAG AA)**,
   sauf boutons désactivés (exemptés).
 - Couverture des glyphes : toutes les lettres accentuées françaises présentes ; symboles (flèches,
@@ -51,8 +62,8 @@ différents gagnent avec des fins différentes ; la difficulté Exigeant est un 
 
 | Plateforme | Produit | Vérification réelle |
 |---|---|---|
-| Linux x86_64 | `RIDEAU.x86_64` (93 Mo) | **Autotest** (`-- --smoke-test`) : données, dialogue, saison complète, sauvegarde → SUCCÈS ; démarrage graphique sans erreur |
-| Web (WebGL 2, sans threads) | `index.html` + `.wasm` + `.pck` | Chargé dans Chromium : menu, nouvelle saison, tutoriel — **0 erreur console** |
+| Linux x86_64 | `RIDEAU.x86_64` (93 Mo) | **Autotest** (`-- --smoke-test`) : données, dialogue, **monde (5 cartes, 51 répliques, images, scène)**, saison complète, sauvegarde → SUCCÈS (v0.10.0) |
+| Web (WebGL 2, sans threads) | `index.html` + `.wasm` + `.pck` | Chargé dans Chromium (v0.10.0) : menu, nouvelle saison, accueil d'Hélène dans le monde, touches — **0 erreur console** ; publié en lien privé (moteur découpé en 3 morceaux de moins de 15 Mo, réassemblés au chargement) |
 | Windows x86_64 | `RIDEAU.exe` (86 Mo) | Export sans erreur. **Non lancé** : pas de Windows dans l'environnement |
 | macOS | préréglage fourni | **Non produit** : nécessite un Mac (modèles et signature Apple) |
 
@@ -70,3 +81,8 @@ inutile en rendu Compatibilité).
 - À très petite taille, le « î » de la police pixel ressemble à un « i » (option « police très
   lisible » disponible).
 - Le serveur MCP Godot recommandé n'a pas été installé (voir `PLUGINS_AUDIT.md`).
+- Monde explorable : les déplacements ont été testés par programme et sur captures, pas encore
+  « à la manette » par un humain ; la sensation de déplacement (vitesse, réactivité) est à valider
+  en jouant. Pas de manette prise en charge pour l'instant (clavier et souris uniquement).
+- La position du joueur dans le monde n'est pas sauvegardée : une partie reprise recommence au
+  bureau (l'étape de gestion, elle, est bien conservée).

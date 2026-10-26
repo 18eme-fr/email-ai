@@ -1,64 +1,68 @@
 # Rapport d'équilibrage automatique
 
-Généré par `tools/simulate.gd` — 60 saisons par stratégie, difficulté « decouverte », graines 1000 à 1059.
+Généré par `tools/simulate.gd` — 200 saisons par stratégie, difficulté « decouverte », graines 1000 à 1199.
 
 | Stratégie | Trésorerie finale moy. | Écart-type | Min | Max | Convention renouvelée | Faillite | Score moy. | Spectateurs moy. | Rayonnement moy. |
 |---|---|---|---|---|---|---|---|---|---|
-| prudente | 13 672 € | 2 394 € | 8 845 € | 20 414 € | 0 % | 0 % | 48.7 | 2158 | 50.3 |
-| artistique | 10 949 € | 2 605 € | 4 859 € | 15 757 € | 100 % | 0 % | 85.1 | 4073 | 67.9 |
-| publics | 8 279 € | 2 817 € | 1 250 € | 14 966 € | 100 % | 0 % | 86.2 | 3687 | 68.8 |
-| equilibre | 14 764 € | 2 719 € | 8 740 € | 19 603 € | 100 % | 0 % | 86.0 | 3982 | 67.7 |
-| aleatoire | 8 310 € | 4 411 € | −1 630 € | 18 448 € | 50 % | 0 % | 62.0 | 1719 | 57.3 |
-| passive | 13 459 € | 1 409 € | 10 660 € | 17 080 € | 0 % | 0 % | 27.6 | 0 | 42.8 |
+| prudente | 13 674 € | 2 356 € | 7 332 € | 20 414 € | 0 % | 0 % | 49.5 | 2218 | 50.7 |
+| artistique | 10 359 € | 2 822 € | 3 768 € | 17 804 € | 100 % | 0 % | 85.3 | 4103 | 68.2 |
+| publics | 8 233 € | 2 656 € | 1 250 € | 15 784 € | 100 % | 0 % | 86.1 | 3701 | 69.0 |
+| equilibre | 14 359 € | 2 718 € | 6 734 € | 21 068 € | 100 % | 0 % | 86.1 | 4009 | 68.1 |
+| batisseur | 10 679 € | 2 671 € | 2 170 € | 17 132 € | 100 % | 0 % | 87.8 | 4200 | 69.6 |
+| aleatoire | 7 964 € | 4 036 € | −3 499 € | 18 448 € | 42 % | 0 % | 61.1 | 1700 | 57.1 |
+| passive | 13 491 € | 1 556 € | 10 160 € | 20 460 € | 0 % | 0 % | 27.4 | 0 | 42.6 |
 
 ## Fins obtenues
 
-- **prudente** — caisse_pleine : 59, demi_teinte : 1
-- **artistique** — laboratoire : 46, reference : 11, maison_publics : 3
-- **publics** — reference : 56, maison_publics : 4
-- **equilibre** — reference : 48, maison_publics : 12
-- **aleatoire** — demi_teinte : 26, laboratoire : 5, maison_publics : 7, caisse_pleine : 1, equilibre : 18, dans_le_rouge : 3
-- **passive** — caisse_pleine : 49, demi_teinte : 11
+- **prudente** — caisse_pleine : 192, demi_teinte : 8
+- **artistique** — laboratoire : 153, reference : 43, maison_publics : 4
+- **publics** — reference : 192, maison_publics : 8
+- **equilibre** — reference : 172, maison_publics : 28
+- **batisseur** — reference : 197, maison_publics : 3
+- **aleatoire** — demi_teinte : 108, laboratoire : 20, maison_publics : 15, caisse_pleine : 4, equilibre : 46, dans_le_rouge : 5, populaire : 1, reference : 1
+- **passive** — caisse_pleine : 160, demi_teinte : 40
 
 ## Indicateurs internes moyens en fin de saison
 
-- **prudente** — reputation 39, fidelite 63, diversite 62, equipe 55, equipement 50, communication 74, relations 62
-- **artistique** — reputation 72, fidelite 58, diversite 63, equipe 67, equipement 57, communication 75, relations 64
-- **publics** — reputation 60, fidelite 72, diversite 85, equipe 46, equipement 49, communication 22, relations 71
-- **equilibre** — reputation 60, fidelite 62, diversite 81, equipe 45, equipement 48, communication 56, relations 71
-- **aleatoire** — reputation 58, fidelite 48, diversite 53, equipe 56, equipement 51, communication 32, relations 60
-- **passive** — reputation 41, fidelite 12, diversite 39, equipe 62, equipement 45, communication 20, relations 51
+- **prudente** — reputation 39, fidelite 63, diversite 63, equipe 54, equipement 50, communication 74, relations 62
+- **artistique** — reputation 73, fidelite 58, diversite 63, equipe 67, equipement 58, communication 75, relations 64
+- **publics** — reputation 60, fidelite 72, diversite 85, equipe 47, equipement 49, communication 22, relations 71
+- **equilibre** — reputation 60, fidelite 63, diversite 81, equipe 46, equipement 48, communication 53, relations 71
+- **batisseur** — reputation 61, fidelite 69, diversite 84, equipe 47, equipement 56, communication 63, relations 73
+- **aleatoire** — reputation 58, fidelite 48, diversite 54, equipe 57, equipement 50, communication 32, relations 60
+- **passive** — reputation 41, fidelite 12, diversite 38, equipe 62, equipement 46, communication 20, relations 50
 
-## Objectifs atteints (sur 60 saisons)
+## Objectifs atteints (sur 200 saisons)
 
-- **prudente** — equilibre 60, publics 0, eac 9, exigence 0
-- **artistique** — equilibre 60, publics 59, eac 60, exigence 60
-- **publics** — equilibre 60, publics 45, eac 60, exigence 60
-- **equilibre** — equilibre 60, publics 60, eac 60, exigence 60
-- **aleatoire** — equilibre 57, publics 0, eac 42, exigence 37
-- **passive** — equilibre 60, publics 0, eac 0, exigence 0
+- **prudente** — equilibre 200, publics 0, eac 36, exigence 0
+- **artistique** — equilibre 200, publics 199, eac 200, exigence 200
+- **publics** — equilibre 200, publics 145, eac 200, exigence 200
+- **equilibre** — equilibre 200, publics 197, eac 200, exigence 200
+- **batisseur** — equilibre 200, publics 200, eac 200, exigence 200
+- **aleatoire** — equilibre 195, publics 0, eac 138, exigence 105
+- **passive** — equilibre 200, publics 0, eac 0, exigence 0
 
 ## Marge moyenne par spectacle (toutes stratégies)
 
 | Spectacle | Programmations | Marge moyenne | Remplissage moyen |
 |---|---|---|---|
-| Le Dîner des quiproquos | 281 | 1 887 € | 85 % |
-| Réveillon chez les Morel | 272 | 1 634 € | 85 % |
-| Match d'impro : Bretelles contre Chaussettes | 277 | 611 € | 74 % |
-| Le Grand Voyage de Pipo | 252 | 536 € | 94 % |
-| Mon banquier, ma bataille | 263 | 488 € | 92 % |
-| Petite Ourse ne dort pas | 233 | −213 € | 77 % |
-| Atelier du samedi | 280 | −270 € | 89 % |
-| Le Malade (presque) imaginaire | 226 | −276 € | 81 % |
-| Veillée de contes | 277 | −276 € | 79 % |
-| Écrire le théâtre aujourd'hui | 227 | −400 € | 69 % |
-| Chansons d'en face | 249 | −442 € | 89 % |
-| Les Fils invisibles | 214 | −477 € | 52 % |
-| Voix d'elles | 225 | −489 € | 58 % |
-| Terres rares | 223 | −662 € | 48 % |
-| Les Heures blanches | 215 | −682 € | 51 % |
-| Hamlet en 45 minutes | 203 | −736 € | 73 % |
-| Lignes de fuite | 200 | −738 € | 48 % |
-| Résidence : la Compagnie du Fil | 226 | −900 € | 61 % |
-| Bascule | 218 | −1 091 € | 91 % |
-| Machine Ø | 76 | −4 247 € | 36 % |
+| Le Dîner des quiproquos | 1120 | 2 056 € | 88 % |
+| Réveillon chez les Morel | 1102 | 1 815 € | 87 % |
+| Match d'impro : Bretelles contre Chaussettes | 1117 | 637 € | 76 % |
+| Le Grand Voyage de Pipo | 1041 | 624 € | 95 % |
+| Mon banquier, ma bataille | 1090 | 558 € | 94 % |
+| Petite Ourse ne dort pas | 976 | −185 € | 77 % |
+| Le Malade (presque) imaginaire | 950 | −228 € | 80 % |
+| Atelier du samedi | 1138 | −268 € | 89 % |
+| Veillée de contes | 1150 | −271 € | 78 % |
+| Chansons d'en face | 1038 | −378 € | 91 % |
+| Écrire le théâtre aujourd'hui | 960 | −400 € | 72 % |
+| Les Fils invisibles | 902 | −460 € | 55 % |
+| Voix d'elles | 958 | −475 € | 61 % |
+| Terres rares | 913 | −616 € | 52 % |
+| Les Heures blanches | 922 | −633 € | 55 % |
+| Lignes de fuite | 815 | −713 € | 51 % |
+| Hamlet en 45 minutes | 867 | −746 € | 72 % |
+| Bascule | 948 | −886 € | 93 % |
+| Résidence : la Compagnie du Fil | 950 | −900 € | 62 % |
+| Machine Ø | 250 | −4 176 € | 38 % |

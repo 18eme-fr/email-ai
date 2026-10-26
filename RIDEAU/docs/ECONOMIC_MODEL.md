@@ -24,6 +24,21 @@ c'est ce qui garantit qu'aucune somme n'est comptée deux fois (vérifié par le
 | **Résultat** de la période | produits engagés − charges engagées (hors neutres) |
 | **Variation de trésorerie** | encaissements − décaissements de la période |
 
+### Investissements et amortissement (rénovations)
+
+Une rénovation crée deux sortes d'écritures :
+
+- **le prix**, en dépense *neutre* (il fait bouger la trésorerie à la date de paiement, mais ne
+  compte pas dans le résultat) ;
+- **la dotation aux amortissements**, à chaque période de la date d'achat à la fin de la saison :
+  prix ÷ (durée d'utilisation en années × 8 périodes), en écriture *sans mouvement d'argent*
+  (`non_cash` : elle compte dans le résultat mais ne touche jamais la trésorerie et n'apparaît pas
+  dans « à payer »).
+
+Exemple : des projecteurs LED à 2 400 € utilisés 8 ans coûtent 38 € par période au résultat ; la
+trésorerie, elle, perd 2 400 € à la période suivante (facture à 30 jours). La valeur restante en fin
+de saison n'est pas suivie (simplification). Sources : S15, S12.
+
 ## 2. Charges fixes (par période, mode Standard)
 
 | Poste | Montant |

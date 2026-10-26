@@ -21,6 +21,15 @@ Contexte pour les prochaines sessions (humaines ou Claude Code).
   Chaque choix d'événement doit exister dans le dialogue sous la forme `[#choice=<id>]`.
 - **Sauvegarde** : si `GameState` change de structure, incrémenter `SaveSystem.CURRENT_VERSION`
   et ajouter une étape dans `SaveSystem.migrate()` + un test.
+- **Monde explorable** (`scripts/world/`) : il n'ajoute aucune règle de gestion, il appelle
+  `GameSession` (dont `plan_action()` et `buy_upgrade()`). Logique testable dans `WorldMap` et
+  `WorldRules` ; affichage dans `WorldScreen`. Les cartes sont des grilles dans
+  `data/world/world.json` : toute modification de grille impose de relancer
+  `python3 tools/art/generate_art.py` (le dessin lit les mêmes grilles) et les tests `tests/world`.
+  Les panneaux d'étape doivent continuer à fonctionner dans les deux écrans (contrat `screen` :
+  `session`, `advance()`, `refresh_all()`, `toast()`, `theatre`).
+- **Rénovations** : prix en écriture neutre, amortissement en écritures `non_cash` (résultat
+  seulement). Ne jamais faire bouger la trésorerie avec une écriture `non_cash`.
 - Interface : construire avec `UiKit` (thème `assets/ui/rideau_theme.tres`, variations
   `WoodPanel`, `PaperPanel`, `InsetPanel`, `GoldButton`, `SecondaryButton`, `FlatButton`,
   `HeaderLabel`, `SmallLabel`…). Les textes à la ligne utilisent `UiKit.label(..., wrap=true)`.

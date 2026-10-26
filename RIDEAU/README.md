@@ -3,11 +3,14 @@
 Jeu vidéo indépendant de **gestion d'un petit théâtre français**, en pixel art 2D, réalisé avec
 **Godot 4.7.2**. Vous dirigez le Théâtre de la Lanterne (fictif) pendant une saison de huit
 périodes : programmer des spectacles, gérer une petite équipe, faire face aux imprévus, tenir les
-comptes et les engagements pris auprès de la Ville. Le jeu fait découvrir, par l'expérience,
+comptes et les engagements pris auprès de la Ville. Depuis la version 0.10, **vous vous déplacez
+dans le théâtre et sur la place**, en vue de dessus façon jeu de rôle : on parle à l'équipe, on
+décide les actions sur place, on rénove le théâtre, on assiste aux soirées dans la salle, au fil
+des saisons. Le jeu fait découvrir, par l'expérience,
 les grandes logiques de l'administration culturelle (budget prévisionnel, billetterie, jauge,
 contrats de cession et de coréalisation, médiation, subventions, mécénat…).
 
-État : **version 0.9.0 jouable de bout en bout** (voir `QA_REPORT.md` et `ROADMAP.md`).
+État : **version 0.10.0 jouable de bout en bout** (voir `QA_REPORT.md` et `ROADMAP.md`).
 
 ## Lancer le jeu sur macOS (le plus simple)
 
@@ -27,12 +30,23 @@ En ligne de commande :
 ```
 
 Des versions prêtes à jouer pour **Linux, Windows et le Web** ont été produites (archives
-`RIDEAU-0.9.0-*.zip` transmises avec la livraison ; le dossier `exports/` n'est pas versionné).
+`RIDEAU-0.10.0-*.zip` transmises avec la livraison ; le dossier `exports/` n'est pas versionné).
 La version Web se lance en servant le dossier décompressé, par exemple :
 `python3 -m http.server` puis <http://localhost:8000> (l'ouvrir directement en `file://` ne marche pas).
 Vérifier une version exportée : `./RIDEAU.x86_64 --headless -- --smoke-test`.
 
 ## Commandes de jeu
+
+Dans le monde explorable (écran par défaut) :
+
+| Action | Souris | Clavier |
+|---|---|---|
+| Marcher | clic sur la destination | flèches ou Z Q S D (W A S D en QWERTY) |
+| Parler, utiliser un objet | clic dessus | Entrée, Espace ou E, face à lui |
+| Menu, carnet, budget, bilans | boutons en haut à droite | Échap, F1 |
+
+La flèche dorée indique toujours la prochaine étape. Le paramètre « vue tableau de bord » permet de
+jouer sans se déplacer, avec l'écran de gestion :
 
 | Action | Souris | Clavier |
 |---|---|---|
@@ -79,12 +93,14 @@ godot --headless --path . --export-release "macOS" exports/macos/RIDEAU.zip
 RIDEAU/
 ├── project.godot, export_presets.cfg
 ├── addons/        Dialogue Manager 4.1.0 (dialogues), GdUnit4 6.2.2 (tests)
-├── assets/        pixel_art/, ui/ (thème), audio/, fonts/  — tous générés ou sous licence libre
-├── data/          balancing/, performances/, events/, actions/, characters/, pedagogy/  (JSON)
+├── assets/        pixel_art/, world/ (cartes, personnages), ui/ (thème), audio/, fonts/
+│                  — tous générés ou sous licence libre
+├── data/          balancing/, performances/, events/, actions/, characters/, pedagogy/,
+│                  upgrades/ (rénovations), world/ (cartes et répliques)  (JSON)
 ├── dialogue/      textes des personnages (format Dialogue Manager)
-├── scenes/        menus/, management/, reports/
-├── scripts/       core/, economy/, programming/, events/, persistence/, ui/, audio/
-├── tests/         economy/, gameplay/, persistence/, data/, ui/
+├── scenes/        menus/, management/, world/, reports/
+├── scripts/       core/, economy/, programming/, events/, persistence/, ui/, world/, audio/
+├── tests/         economy/, gameplay/, persistence/, data/, ui/, world/
 ├── tools/         simulation, captures, génération d'images et de sons, thème
 └── docs/          modèle économique, format des données, rapports d'équilibrage, captures
 ```

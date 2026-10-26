@@ -39,6 +39,37 @@ Tout le contenu du jeu se modifie sans toucher au code. Après une modification,
 `id`, `label`, `cost`, `payment_delay` (0 = payé dans la période), `summary`, `description`,
 `effects` (format ci-dessous), `notion`.
 
+## `data/upgrades/upgrades.json` — rénovations (investissements)
+
+`periods_per_year` (8 : une saison compte pour une année d'amortissement), puis pour chaque
+rénovation : `id`, `label`, `icon`, `place` (carte où elle se voit et se décide), `character`
+(qui la présente), `cost`, `payment_delay`, `useful_life_years`, `summary`, `description`,
+`effects` (à l'achat, format des actions), `per_turn` (`stats` à chaque période, `income` et
+`income_label` pour une petite recette), `notion`. Le décor correspondant est
+`assets/world/maps/<place>_upgrade_<id>.png` (généré par `tools/art/world.py`).
+
+## `data/world/world.json` — monde explorable
+
+- `legend` : pour chaque caractère des grilles, son nom et `walk` (praticable ou non).
+- `start` : carte, case et direction du joueur en début de période.
+- `maps.<id>` : `name`, `outdoor`, `grid` (lignes de même longueur, une case = 16 px), `doors`
+  (`cell` → `to`, `to_cell`, `facing` à l'arrivée), `spots` (objets : `id`, `cells`, `label`,
+  `kind` ∈ desk, glossary, budget, reports, posters, action, upgrade, flavor, place ; plus
+  `action` ou `upgrade` selon le cas), `npcs` (`id`, `cell`, `radius` de promenade),
+  `performance` (salle : place du joueur et rangées de fauteuils).
+- `people` : sprite, action de gestion éventuelle, carte d'origine de chaque personne.
+- `seasons` (période → automne, hiver, printemps, ete), `festive_turns`.
+
+Les grilles servent à la fois aux collisions (jeu) et au dessin (`tools/art/world.py`) :
+après modification, relancer `python3 tools/art/generate_art.py`. Les tests
+`tests/world/test_world.gd` vérifient que tout reste accessible à pied.
+
+## `data/world/barks.json` — répliques
+
+`who` (personne, `passant`, ou identifiant d'objet), `text`, `when` (conditions au format
+ci-dessous, plus `phase`, `has_upgrade`, `missing_upgrade`), `priority` facultative. La réplique
+la plus spécifique (nombre de conditions + priorité) est choisie.
+
 ## `data/events/events.json` — événements
 
 | Champ | Rôle |

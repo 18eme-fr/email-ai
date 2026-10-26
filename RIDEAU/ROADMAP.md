@@ -12,6 +12,13 @@
 - [x] Phase 7 — Livraison : projet exécutable ; exports Linux (vérifié), Web (vérifié dans Chromium),
   Windows (produit, non lancé) ; export macOS à faire depuis un Mac
 
+## Réalisé (v0.10.0)
+
+- [x] Monde explorable (place + 4 lieux), déplacements clavier/souris, dialogues sur place
+- [x] Saisons, fêtes, nuit, affiches, foule ; personnages qui se promènent et réagissent
+- [x] Rénovations du théâtre (investissement / amortissement)
+- [x] Soirées de représentation dans la salle ; interface façon jeu de rôle
+
 ## Prochaines étapes proposées
 
 1. **Tests de jeu humains** : faire jouer 5 à 10 personnes (dont des non-initiés) et noter où elles

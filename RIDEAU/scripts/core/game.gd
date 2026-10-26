@@ -38,6 +38,11 @@ func _smoke_test() -> void:
 	var line: DialogueLine = await DialogueManager.get_next_dialogue_line(dialogue, "journaliste") if dialogue else null
 	print("[autotest] dialogue : ", line.text if line else "INTROUVABLE")
 	ok = ok and line != null
+	var world_data := WorldData.get_default()
+	var world_ok := world_data.maps.size() == 5 and load("res://assets/world/maps/rue_hiver_base.png") != null \
+			and load("res://assets/world/people/directeur.png") != null and load(WORLD) != null
+	print("[autotest] monde : %d cartes, %d répliques, images et scène %s" % [world_data.maps.size(), world_data.barks.size(), "OK" if world_ok else "MANQUANTES"])
+	ok = ok and world_ok
 	var s := GameSession.new(d)
 	s.new_game(2024, "standard")
 	StrategyBot.new("equilibre", 2024).play_season(s)

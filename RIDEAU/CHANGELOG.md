@@ -2,6 +2,34 @@
 
 Format inspiré de « Keep a Changelog ». Versions du jeu (`application/config/version`).
 
+## [0.10.0] — 2026-10-26 — Le théâtre à explorer
+
+### Ajouté
+- **Monde explorable** en vue de dessus (pixel art 16 bits) : place de la Lanterne (mairie, café,
+  imprimerie, colonne Morris, fontaine), hall, grande salle, coulisses, bureau. Déplacement case
+  par case au clavier (flèches, ZQSD) ou à la souris (chemin automatique), portes, caméra.
+- **Les étapes se jouent sur place** : cahier de la période au bureau ; actions décidées auprès
+  d'Inès, Bastien, Hélène, M. Pommier, de l'imprimerie et de la billetterie ; le personnage de
+  l'événement vient trouver le joueur ; **soirée de représentation dans la salle** (public assis
+  selon le remplissage réel, comédiens, projecteurs) ; bilan à la nuit tombée.
+- **Environnements qui changent** : quatre saisons (feuilles, neige, fleurs, été) avec particules,
+  guirlandes des fêtes, nuit les soirs de spectacle, affiches de la programmation sur la façade,
+  la colonne Morris et dans le hall, foule du hall selon la fidélité.
+- **Personnages vivants** : promenades, répliques selon l'état du théâtre (48 répliques).
+- **Rénovations** (5 investissements) : projecteurs LED, foyer-bar, accessibilité, enseigne
+  lumineuse, loges et atelier. Prix en trésorerie, amortissement dans le résultat, effets
+  durables, décor modifié. Nouvelle notion « Investissement et amortissement » (source S15).
+- **Interface façon jeu de rôle** : boîte de dialogue avec portrait et réponses, objectif toujours
+  affiché avec flèche dorée, bulles « ! », coches et marteaux, menu, fenêtre « État du théâtre ».
+- Accueil guidé d'Hélène au premier lancement ; paramètre **« vue tableau de bord »** pour jouer
+  sans se déplacer.
+- Stratégie de simulation « batisseur » ; tests du monde (accessibilité à pied, période complète
+  jouée à pied, saison entière, rénovation, clic) : **112 tests**.
+
+### Modifié
+- Sauvegarde en version 2 (rénovations), avec migration automatique des parties 0.9.
+- Grand livre : écritures « sans mouvement d'argent » (amortissements).
+
 ## [0.9.0] — 2026-10-25 — Première version complète
 
 ### Ajouté
