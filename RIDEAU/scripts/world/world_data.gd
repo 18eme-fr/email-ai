@@ -54,3 +54,16 @@ func person_start(person_id: String) -> Dictionary:
 		if n["id"] == person_id:
 			return n
 	return {}
+
+
+## Clé des répliques d'une personne : les passants et spectateurs partagent
+## les leurs ; certains habitants aussi (champ « bark » : enfant, footballeur…).
+func bark_key(person_id: String) -> String:
+	if person_id.begins_with("passant") or person_id.begins_with("spectateur"):
+		return "passant"
+	return str(people.get(person_id, {}).get("bark", person_id))
+
+
+## Clé des répliques d'un objet (champ « flavor » commun, sinon son identifiant).
+static func spot_bark_key(spot: Dictionary) -> String:
+	return str(spot.get("flavor", spot.get("id", "")))

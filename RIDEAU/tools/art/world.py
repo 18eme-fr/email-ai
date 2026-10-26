@@ -1063,6 +1063,26 @@ PEOPLE = {
     "spectateur_a": {"skin": P["skin2"], "hair": P["velvet1"], "hair_style": "long", "top": P["gold1"], "legs": P["night"], "accent": P["cream"]},
     "spectateur_b": {"skin": P["skin4"], "hair": P["ink"], "hair_style": "short", "top": P["blue"], "legs": P["night"], "accent": P["cream"]},
     "spectateur_c": {"skin": P["skin0"], "hair": P["wood2"], "hair_style": "bob", "top": P["green0"], "legs": P["grey1"], "accent": P["gold3"]},
+    # Habitants de Bréval-sur-Ondine (grande ville)
+    "passant_e": {"skin": P["skin2"], "hair": P["velvet1"], "hair_style": "bob", "top": P["sky"], "legs": P["navy"], "accent": P["cream"]},
+    "passant_f": {"skin": P["skin4"], "hair": P["ink"], "hair_style": "beanie", "top": P["velvet3"], "legs": P["grey0"], "accent": P["cream"]},
+    "voyageur": {"skin": P["skin1"], "hair": P["wood2"], "hair_style": "short", "top": P["wood3"], "legs": P["navy"], "accent": P["teal"], "scarf": True},
+    "principale": {"skin": P["skin5"], "hair": P["ink"], "hair_style": "curly", "top": P["teal"], "legs": P["night"], "accent": P["gold2"], "glasses": True},
+    "animateur": {"skin": P["skin3"], "hair": P["ink"], "hair_style": "short", "top": P["orange"], "legs": P["blue"], "accent": P["cream"], "beard": True},
+    "directrice": {"skin": P["skin0"], "hair": P["gold2"], "hair_style": "bob", "top": P["grey1"], "legs": P["grey0"], "accent": P["teal"], "scarf": True},
+    "chef_gare": {"skin": P["skin1"], "hair": P["grey3"], "hair_style": "bald", "top": P["navy"], "legs": P["navy"], "accent": P["velvet3"], "tie": True},
+    "maraichere": {"skin": P["skin2"], "hair": P["wood1"], "hair_style": "long", "top": P["green1"], "legs": P["wood2"], "accent": P["paper"], "scarf": True},
+    "musicien": {"skin": P["skin4"], "hair": P["ink"], "hair_style": "swoop", "top": P["purple0"], "legs": P["night"], "accent": P["gold3"]},
+    "bibliothecaire": {"skin": P["skin0"], "hair": P["grey2"], "hair_style": "bob", "top": P["purple1"], "legs": P["grey1"], "accent": P["cream"], "glasses": True},
+    "pecheur": {"skin": P["skin1"], "hair": P["green0"], "hair_style": "beanie", "top": P["gold1"], "legs": P["green0"], "accent": P["cream"], "beard": True},
+    "sportif_a": {"skin": P["skin3"], "hair": P["ink"], "hair_style": "short", "top": P["velvet4"], "legs": P["white"], "accent": P["white"]},
+    "sportif_b": {"skin": P["skin1"], "hair": P["gold1"], "hair_style": "short", "top": P["blue"], "legs": P["white"], "accent": P["white"]},
+    "jardiniere": {"skin": P["skin2"], "hair": P["grey3"], "hair_style": "long", "top": P["green2"], "legs": P["wood1"], "accent": P["gold2"]},
+    "libraire": {"skin": P["skin1"], "hair": P["wood0"], "hair_style": "short", "top": P["paper3"], "legs": P["wood1"], "accent": P["velvet3"], "glasses": True, "scarf": True},
+    "projectionniste": {"skin": P["skin4"], "hair": P["grey2"], "hair_style": "beanie", "top": P["ink"], "legs": P["grey0"], "accent": P["velvet3"]},
+    "enfant_a": {"skin": P["skin2"], "hair": P["wood1"], "hair_style": "curly", "top": P["gold2"], "legs": P["blue"], "accent": P["cream"], "child": True},
+    "enfant_b": {"skin": P["skin0"], "hair": P["gold1"], "hair_style": "bob", "top": P["velvet4"], "legs": P["navy"], "accent": P["cream"], "child": True},
+    "touriste": {"skin": P["skin0"], "hair": P["velvet1"], "hair_style": "short", "top": P["white"], "legs": P["wood3"], "accent": P["sky"], "glasses": True},
 }
 
 DIRS = ["down", "up", "left", "right"]
@@ -1204,7 +1224,27 @@ def person_frame(spec, direction, frame):
             if spec.get("tie"):
                 o.hline(6, 9, hy + 7, hd)  # moustache
     o.outline(P["ink"])
+    if spec.get("child"):
+        return _shrink_child(o)
     return o
+
+
+def _shrink_child(o):
+    """Version enfant : même tête, corps raccourci (le sprite garde 16×24, pieds en bas)."""
+    c = Canvas(16, 24)
+    # tête et épaules (lignes 0..12) descendues de 5 px, corps (13..23) tassé sur 6 lignes
+    for y in range(13):
+        for x in range(16):
+            px = o.get(x, y)
+            if px[3]:
+                c.set(x, y + 5, px[:3], px[3])
+    for i in range(6):
+        sy = 13 + int(i * 11 / 6)
+        for x in range(16):
+            px = o.get(x, sy)
+            if px[3]:
+                c.set(x, 18 + i, px[:3], px[3])
+    return c
 
 
 def person_sheet(spec):
@@ -1297,6 +1337,27 @@ def fx_assets():
     arrow.outline(P["ink"])
     out["arrow"] = arrow
 
+    # Petite faune de la ville : canards de l'étang, pigeons de la place (2 images chacun)
+    for f in range(2):
+        duck = Canvas(10, 8)
+        duck.ellipse(5, 5, 4, 2.5, P["white"])
+        duck.ellipse(7.5, 2.5, 2, 2, P["green1"])
+        duck.set(9, 3, P["orange"])
+        duck.set(8, 2, P["ink"])
+        duck.rect(2, 4 + f, 3, 1, P["grey3"])
+        duck.hline(1, 8, 7, (120, 170, 220), 160)
+        duck.outline(P["ink"])
+        out["duck_%d" % f] = duck
+        pigeon = Canvas(8, 7)
+        pigeon.ellipse(4, 4, 3, 2, P["grey2"])
+        pigeon.ellipse(6, 2 + f, 1.5, 1.5, P["grey1"])
+        pigeon.set(7, 2 + f, P["orange"])
+        pigeon.rect(1, 3, 3, 1, P["grey1"])
+        pigeon.set(3, 6, P["velvet4"])
+        pigeon.set(5, 6, P["velvet4"])
+        pigeon.outline(P["ink"])
+        out["pigeon_%d" % f] = pigeon
+
     shadow = Canvas(14, 5)
     shadow.ellipse(7, 2.5, 6, 2, P["ink"], 110)
     out["shadow"] = shadow
@@ -1311,16 +1372,10 @@ def generate(root, out_dir):
     for d in (maps_dir, people_dir, fx_dir):
         os.makedirs(d, exist_ok=True)
     meta = {"poster_slots": {}, "variants": {}}
-    # Rue : une variante par saison, plus les fêtes
-    for season in SEASONS:
-        base, top = street(world, season)
-        base.save(os.path.join(maps_dir, f"rue_{season}_base.png"))
-        top.save(os.path.join(maps_dir, f"rue_{season}_top.png"))
-    _, festive_top = street(world, "hiver", festive=True)
-    festive_top.save(os.path.join(maps_dir, "rue_hiver_fetes_top.png"))
-    street_lights(world).save(os.path.join(maps_dir, "rue_lights.png"))
+    # Rue : la grande ville de Bréval-sur-Ondine (tools/art/city.py), une variante par saison
+    import city
     meta["variants"]["rue"] = SEASONS
-    meta["poster_slots"]["rue"] = [[14 * T + 52, 8 * T - 32, 22, 26], [14 * T + 12 * T - 74, 8 * T - 32, 22, 26], [9 * T + 3, 9 * T - 4, 10, 13]]
+    meta["poster_slots"]["rue"] = city.generate(root, maps_dir)
     for map_id in ("hall", "salle", "coulisses", "bureau"):
         base, top = interior(world, map_id)
         if map_id == "bureau":
@@ -1341,6 +1396,8 @@ def generate(root, out_dir):
     meta["poster_slots"]["hall"] = [[5 * T + 6, T - 8, 12, 20], [5 * T + 20, T - 8, 12, 20], [5 * T + 34, T - 8, 12, 20],
                                     [15 * T + 4, T - 8, 12, 20], [15 * T + 18, T - 8, 12, 20], [15 * T + 32, T - 8, 12, 20]]
     for (map_id, upgrade_id), canvas in upgrade_overlays(world).items():
+        if map_id == "rue":
+            continue  # l'enseigne de la ville est dessinée par city.py
         canvas.save(os.path.join(maps_dir, f"{map_id}_upgrade_{upgrade_id}.png"))
     for sprite_id, spec in PEOPLE.items():
         person_sheet(spec).save(os.path.join(people_dir, f"{sprite_id}.png"))

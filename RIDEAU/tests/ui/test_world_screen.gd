@@ -178,9 +178,37 @@ func test_click_to_walk_and_doors_lead_somewhere() -> void:
 	assert_array(screen._path).is_not_empty()
 	assert_bool(await _wait(runner, func() -> bool: return screen.player.cell == Vector2i(3, 6))).is_true()
 	# Objectif hors de la carte : une flèche indique la porte à prendre.
-	screen.load_map("rue", Vector2i(19, 9), "down")
+	screen.load_map("rue", Vector2i(51, 31), "down")
 	await runner.simulate_frames(5)
 	assert_str(str(screen._door_towards("bureau").get("to", ""))).is_equal("hall")
+
+
+func test_city_bus_districts_and_plan() -> void:
+	_new_session(5)
+	var runner := scene_runner(WORLD)
+	await runner.simulate_frames(10)
+	var screen := runner.scene() as WorldScreen
+	screen.load_map("rue", Vector2i(51, 31), "down")
+	await runner.simulate_frames(5)
+	assert_str(screen.hud._place.text).contains("place de la Lanterne")
+	# Prendre le bus jusqu'aux Coteaux.
+	var stop := screen.map.spot("bus_place")
+	screen.use_spot(stop)
+	await runner.simulate_frames(3)
+	var names: Array = []
+	for st: Dictionary in screen.map.bus_stops():
+		if st["id"] != "bus_place":
+			names.append(st["id"])
+	await _answer(runner, screen, names.find("bus_coteaux"))
+	assert_bool(await _wait(runner, func() -> bool: return screen.player.cell == WorldMap.to_cell(screen.map.spot("bus_coteaux")["arrive"]) and not screen._busy)).is_true()
+	assert_str(screen.hud._place.text).contains("Coteaux")
+	# Le plan de la ville s'ouvre (touche M) et se referme.
+	screen.open_city_plan()
+	await runner.simulate_frames(3)
+	assert_int(screen.overlay.get_child_count()).is_equal(1)
+	(screen.overlay.get_child(0) as Modal).close_modal()
+	await runner.simulate_frames(3)
+	assert_int(screen.overlay.get_child_count()).is_equal(0)
 
 
 func test_objective_and_hud_are_shown() -> void:

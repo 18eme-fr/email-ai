@@ -2,6 +2,36 @@
 
 Format inspiré de « Keep a Changelog ». Versions du jeu (`application/config/version`).
 
+## [0.12.0] — 2026-10-26 — Bréval-sur-Ondine, une grande ville à explorer
+
+### Ajouté
+- **La place devient une ville entière** (112 × 80 cases, 14 fois l'ancienne place) : quartier de
+  la Gare (train, friche culturelle La Fabrique, hôtel), bords de l'Ondine (rivière, ponts,
+  bateaux, pêcheur), parc (étang et canards, kiosque à musique, aire de jeux, buvette), centre-ville
+  autour de la place de la Lanterne (mairie, café, imprimerie, boulangerie, marché, kiosque à
+  journaux, statue), quartier des Arts (cinéma Le Rex, conservatoire, librairie, fleuriste,
+  disquaire, galerie), boulevard Louise-Michel (médiathèque, halle, école, siège d'Ondine Énergie)
+  et quartier des Coteaux (résidences, collège, maison de quartier, city stade, jardins partagés,
+  fresque participative).
+- **28 bâtiments dessinés**, tous différents, avec enseignes ; rangées de maisons (façades, volets,
+  cheminées), voitures, étals, abribus, vélos, bancs, poubelles, haies… en 4 saisons, illuminations
+  des fêtes et éclairage de nuit ; reflets animés de l'eau, étang gelé en hiver, pigeons sur la place.
+- **29 habitants**, dont 15 nouveaux personnages (principale du collège, animateur de la maison de
+  quartier, directrice d'Ondine Énergie, chef de gare, maraîchère, bibliothécaire, libraire,
+  programmateur du cinéma, enfants…) et **76 nouvelles répliques** qui glissent des notions du
+  secteur : friche et tiers-lieu, résidence, label Art et Essai, conservatoires classés, prix
+  unique du livre, PEAC et pass Culture, mécénat (60 %), droits culturels, éducation populaire,
+  mobilité des publics…
+- **Bus** : 5 arrêts reliant les quartiers (voyage instantané).
+- **Plan de la ville** (touche M ou bouton « plan ») : quartiers, théâtre, arrêts, position du
+  joueur et objectif. Le nom du quartier s'affiche quand on y entre.
+
+### Modifié
+- Icônes des raccourcis en haut à droite agrandies (elles étaient trop petites).
+- Particules de saison (feuilles, neige, pétales) qui suivent la caméra.
+- `tools/art/city_layout.py` écrit le plan de la ville dans `data/world/world.json` ;
+  `tools/art/city.py` le dessine (appelé par `generate_art.py`).
+
 ## [0.11.0] — 2026-10-26 — Une vraie saison de jeu, pensée pour la formation
 
 ### Ajouté

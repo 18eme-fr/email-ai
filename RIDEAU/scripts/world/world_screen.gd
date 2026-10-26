@@ -49,6 +49,11 @@ var _rng := RandomNumberGenerator.new()
 var _performing := false
 var _spot_markers: Array[Sprite2D] = []
 var _debrief: Array = []          ## missions terminées à commenter en début de période
+var _water: Sprite2D               ## reflets animés de la rivière (deux images alternées)
+var _water_frames: Array[Texture2D] = []
+var _water_time := 0.0
+var _weather: CPUParticles2D
+var _district := ""                ## quartier de la ville où se trouve le joueur
 
 
 func _ready() -> void:
@@ -97,6 +102,7 @@ func _build() -> void:
 	hud.budget_pressed.connect(func() -> void: BudgetPanel.open(overlay, session))
 	hud.reports_pressed.connect(func() -> void: ReportsHistory.open(overlay, session))
 	hud.journal_pressed.connect(open_journal)
+	hud.plan_pressed.connect(open_city_plan)
 	root.add_child(hud)
 	speech = SpeechBox.new()
 	speech.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
@@ -157,6 +163,7 @@ func load_map(map_id: String, cell: Vector2i, facing: String) -> void:
 	var variants: Array = _meta.get("variants", {}).get(map_id, [])
 	var base_path := MAPS_DIR + ("%s_%s_base.png" % [map_id, season] if season in variants else "%s_base.png" % map_id)
 	_map_root.add_child(_sprite(_texture(base_path), -10))
+	_add_water(map_id, season)
 	for u: String in session.state.upgrades:
 		var tex := _texture(MAPS_DIR + "%s_upgrade_%s.png" % [map_id, u])
 		if tex:
@@ -173,6 +180,7 @@ func load_map(map_id: String, cell: Vector2i, facing: String) -> void:
 	player.step_time = 0.16
 	_actors.add_child(player)
 	_spawn_people()
+	_add_fauna(season)
 	var top_path := MAPS_DIR + ("%s_%s_top.png" % [map_id, "hiver_fetes" if festive and season == "hiver" else season] if season in variants and map_id == "rue" else "%s_top.png" % map_id)
 	_top = _sprite(_texture(top_path), 20)
 	_map_root.add_child(_top)
@@ -188,7 +196,70 @@ func load_map(map_id: String, cell: Vector2i, facing: String) -> void:
 	_add_weather(season)
 	_setup_camera()
 	_path.clear()
+	_district = ""
+	_update_district(false)
 	refresh_all()
+
+
+func _add_water(map_id: String, season: String) -> void:
+	_water = null
+	_water_frames.clear()
+	var stem := MAPS_DIR + "%s_water%s_" % [map_id, "_hiver" if season == "hiver" else ""]
+	for f: String in ["a", "b"]:
+		var tex := _texture(stem + f + ".png")
+		if tex != null:
+			_water_frames.append(tex)
+	if _water_frames.size() == 2:
+		_water = _sprite(_water_frames[0], -10)
+		_map_root.add_child(_water)
+
+
+## Canards sur l'étang (sauf quand il gèle) et pigeons sur la place.
+func _add_fauna(season: String) -> void:
+	if not map.outdoor:
+		return
+	var duck: Array[Texture2D] = [_texture("res://assets/world/fx/duck_0.png"), _texture("res://assets/world/fx/duck_1.png")]
+	var pigeon: Array[Texture2D] = [_texture("res://assets/world/fx/pigeon_0.png"), _texture("res://assets/world/fx/pigeon_1.png")]
+	for d: Dictionary in map.decor:
+		if str(d.get("kind", "")) != "ducks" or season == "hiver" or duck[0] == null:
+			continue
+		var r: Array = d["rect"]
+		var area := Rect2(float(r[0]) * T + 6, float(r[1]) * T + 6, float(r[2]) * T - 22, float(r[3]) * T - 20)
+		for i in 3:
+			_critter(duck, area, 7.0, -6)
+	var place := Rect2i()
+	for dist: Dictionary in map.districts:
+		if dist["id"] == "centre":
+			place = dist["rect"]
+	if pigeon[0] == null or place.size == Vector2i.ZERO:
+		return
+	var cells: Array = []
+	for y in range(place.position.y, place.end.y):
+		for x in range(place.position.x, place.end.x):
+			if map.char_at(Vector2i(x, y)) == "+":
+				cells.append(Vector2i(x, y))
+	for i in mini(6, cells.size()):
+		var c: Vector2i = cells[_rng.randi_range(0, cells.size() - 1)]
+		var area := Rect2(Vector2(c * T) - Vector2(10, 10), Vector2(36, 30))
+		_critter(pigeon, area, 2.5, -6)
+
+
+func _critter(frames: Array[Texture2D], area: Rect2, speed: float, z: int) -> void:
+	var s := _sprite(frames[0], z)
+	s.position = area.position + Vector2(_rng.randf() * area.size.x, _rng.randf() * area.size.y)
+	_map_root.add_child(s)
+	if Settings.reduce_motion():
+		return
+	var tw := s.create_tween().set_loops()
+	for i in 4:
+		var to := area.position + Vector2(_rng.randf() * area.size.x, _rng.randf() * area.size.y)
+		var flip := to.x < s.position.x
+		tw.tween_callback(func() -> void:
+			s.flip_h = flip
+			s.texture = frames[1])
+		tw.tween_property(s, "position", to, maxf(0.6, s.position.distance_to(to) / speed))
+		tw.tween_callback(func() -> void: s.texture = frames[0])
+		tw.tween_interval(_rng.randf_range(0.8, 3.0))
 
 
 func _add_posters(map_id: String) -> void:
@@ -255,6 +326,7 @@ func _apply_light() -> void:
 
 
 func _add_weather(season: String) -> void:
+	_weather = null
 	if not map.outdoor or Settings.reduce_motion():
 		return
 	var tex_name: String = {"automne": "leaf", "hiver": "snow", "printemps": "petal", "ete": "mote"}[season]
@@ -264,7 +336,9 @@ func _add_weather(season: String) -> void:
 	p.lifetime = 9.0
 	p.preprocess = 9.0
 	p.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
-	p.emission_rect_extents = Vector2(map.size.x * T / 2.0, 4)
+	# Les particules suivent la caméra (la ville est bien plus grande que l'écran).
+	p.local_coords = false
+	p.emission_rect_extents = Vector2(VIEW.x * 0.75, 4)
 	p.position = Vector2(map.size.x * T / 2.0, -8)
 	p.direction = Vector2(0.3, 1)
 	p.spread = 15.0
@@ -275,10 +349,18 @@ func _add_weather(season: String) -> void:
 	p.angular_velocity_max = 90.0
 	if season == "ete":
 		p.gravity = Vector2(2, -2)
-		p.position.y = map.size.y * T * 0.6
-		p.emission_rect_extents.y = map.size.y * T * 0.4
+		p.emission_rect_extents.y = VIEW.y * 0.5
 		p.color = Color(1, 1, 1, 0.6)
 	_fx.add_child(p)
+	_weather = p
+	_follow_weather()
+
+
+func _follow_weather() -> void:
+	if not is_instance_valid(_weather) or player == null:
+		return
+	var y := player.position.y - VIEW.y * 0.6 if _weather.gravity.y > 0.0 else player.position.y
+	_weather.position = Vector2(player.position.x, y)
 
 
 func _setup_camera() -> void:
@@ -315,9 +397,28 @@ func refresh_all() -> void:
 		pass
 	elif str(obj["map"]) != map.id:
 		text += "\n→ Direction : %s." % world.map(str(obj["map"])).name
-	hud.refresh(session, map.name, WorldRules.SEASON_LABELS.get(_season(), ""), text)
+	hud.refresh(session, _place_name(), WorldRules.SEASON_LABELS.get(_season(), ""), text)
 	hud.set_missions(session)
 	_refresh_markers(obj)
+
+
+func _place_name() -> String:
+	var d := map.district_at(player.cell) if player != null else {}
+	return map.name if d.is_empty() else "%s · %s" % [map.name, d["name"]]
+
+
+## Annonce le quartier quand le joueur en change.
+func _update_district(announce: bool = true) -> void:
+	if player == null or map.districts.is_empty():
+		return
+	var d := map.district_at(player.cell)
+	var id := str(d.get("id", ""))
+	if id == _district:
+		return
+	_district = id
+	hud.set_place(_place_name())
+	if announce and id != "":
+		hud.announce_place(str(d["name"]))
 
 
 func _refresh_markers(obj: Dictionary) -> void:
@@ -751,6 +852,12 @@ func _process(delta: float) -> void:
 	if map == null or player == null:
 		return
 	_camera.position = player.position + Vector2(0, -8)
+	_follow_weather()
+	if _water != null and not Settings.reduce_motion():
+		_water_time += delta
+		if _water_time >= 0.7:
+			_water_time = 0.0
+			_water.texture = _water_frames[1] if _water.texture == _water_frames[0] else _water_frames[0]
 	_wander(delta)
 	if _blocked() or player.moving:
 		return
@@ -781,6 +888,7 @@ func _try_step(dir: String) -> void:
 func _step_player(target: Vector2i) -> void:
 	player.step_to(target)
 	await player.step_finished
+	_update_district()
 	var door := map.door_at(player.cell)
 	if not door.is_empty():
 		_path.clear()
@@ -837,6 +945,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("rideau_journal"):
 		get_viewport().set_input_as_handled()
 		open_journal()
+	elif event.is_action_pressed("rideau_map"):
+		get_viewport().set_input_as_handled()
+		open_city_plan()
 	elif event.is_action_pressed("ui_accept") or event.is_action_pressed("rideau_interact"):
 		get_viewport().set_input_as_handled()
 		if not player.moving:
@@ -941,8 +1052,7 @@ func talk_to(npc: WorldActor) -> void:
 	if action != "" and session.state.phase == GameState.PHASE_MANAGEMENT:
 		await _offer_action(_speaker_name(who), _portrait(who), action)
 	else:
-		var key := "passant" if who.begins_with("passant") or who.begins_with("spectateur") else who
-		var line := WorldRules.bark(session.data, session.state, world, key, _rng.randf())
+		var line := WorldRules.bark(session.data, session.state, world, world.bark_key(who), _rng.randf())
 		await speech.say(_speaker_name(who), _portrait(who), line)
 		if action != "" and session.state.phase in [GameState.PHASE_SITUATION, GameState.PHASE_PROGRAMMING]:
 			await speech.say(_speaker_name(who), _portrait(who),
@@ -1060,15 +1170,73 @@ func use_spot(spot: Dictionary) -> void:
 				await speech.say(str(spot["label"]), null, "%s\n(À décider une fois la programmation signée : « %s ».)" % [session.data.actions[action]["summary"], session.data.actions[action]["label"]])
 		"upgrade":
 			await _offer_upgrade(spot)
+		"bus":
+			var dest := await _ask_bus(spot)
+			if not dest.is_empty():
+				speech.close()
+				await _ride_bus(dest)
+				_busy = false
+				return
 		_:
 			var who := str(spot.get("character", spot["id"]))
-			var line := WorldRules.bark(session.data, session.state, world, str(spot["id"]), _rng.randf())
+			var line := WorldRules.bark(session.data, session.state, world, WorldData.spot_bark_key(spot), _rng.randf())
 			if line == "":
 				line = WorldRules.bark(session.data, session.state, world, who, _rng.randf())
 			await speech.say(str(spot["label"]), null, line)
 	speech.close()
 	_busy = false
 	refresh_all()
+
+
+## Choix de la destination à un arrêt de bus ({} pour rester).
+func _ask_bus(spot: Dictionary) -> Dictionary:
+	var others: Array = []
+	var names: Array = []
+	for stop: Dictionary in map.bus_stops():
+		if stop["id"] != spot["id"]:
+			others.append(stop)
+			names.append(str(stop.get("stop", stop["label"])))
+	names.append("Rester ici")
+	var pick := await speech.ask(str(spot["label"]), null, "La ligne 1 dessert tous les quartiers de Bréval, et le ticket est gratuit pour les habitants le week-end. Où allez-vous ?", names)
+	return others[pick] if pick < others.size() else {}
+
+
+func _ride_bus(stop: Dictionary) -> void:
+	_busy = true
+	_path.clear()
+	_on_arrival = Callable()
+	AudioDirector.play_sfx("page", 0.1)
+	await _fade_to(1.0)
+	var arrive := WorldMap.to_cell(stop.get("arrive", (stop["cells"] as Array)[0]))
+	for a: WorldActor in npcs.values():
+		if a.cell == arrive:
+			a.place(a.home)  # un habitant libère la place
+	player.place(arrive)
+	player.face("down")
+	_camera.position = player.position
+	_camera.reset_smoothing()
+	_district = ""
+	_update_district(false)
+	refresh_all()
+	await _fade_to(0.0)
+	toast("Arrêt « %s »." % stop.get("stop", stop["label"]))
+	_busy = false
+
+
+## Plan de la ville (touche M), aussi accessible depuis l'intérieur du théâtre.
+func open_city_plan() -> void:
+	var city := world.map("rue")
+	if city == null:
+		return
+	var here := player.cell if map.id == "rue" else Vector2i(-1, -1)
+	var target := Vector2i(-1, -1)
+	var obj := WorldRules.objective(session)
+	if str(obj["map"]) == "rue":
+		if obj["kind"] == "npc":
+			target = (world.person_start(str(obj["id"])) as Dictionary).get("cell", target)
+		elif not city.spot(str(obj["id"])).is_empty():
+			target = (city.spot(str(obj["id"]))["cells"] as Array)[0]
+	CityPlan.open(overlay, city, here, target)
 
 
 func _offer_upgrade(spot: Dictionary) -> void:

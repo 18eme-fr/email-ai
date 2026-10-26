@@ -8,6 +8,7 @@ signal glossary_pressed
 signal budget_pressed
 signal reports_pressed
 signal journal_pressed
+signal plan_pressed
 
 var _period: Label
 var _place: Label
@@ -20,6 +21,8 @@ var _toast_tween: Tween
 var _hint: Label
 var _missions_panel: PanelContainer
 var _missions_list: VBoxContainer
+var _place_banner: Label
+var _place_tween: Tween
 
 
 func _init() -> void:
@@ -40,7 +43,7 @@ func _init() -> void:
 	col.add_child(_chips)
 	# Objectif, en haut au centre-droit.
 	_objective_panel = UiKit.panel("PaperPanel")
-	_objective_panel.position = Vector2(1280 - 12 - 470 - 242, 10)
+	_objective_panel.position = Vector2(1280 - 12 - 470 - 290, 10)
 	_objective_panel.custom_minimum_size = Vector2(470, 0)
 	_objective_panel.size = Vector2(470, 0)
 	_objective_panel.mouse_filter = Control.MOUSE_FILTER_PASS
@@ -62,28 +65,49 @@ func _init() -> void:
 	add_child(_missions_panel)
 	_missions_list = UiKit.vbox([], 0)
 	_missions_panel.add_child(_missions_list)
-	buttons.position.x -= 46
-	for spec: Array in [["book", "Journal de bord : missions, compétences, trophées (J)", journal_pressed], ["question", "Carnet du directeur (F1)", glossary_pressed], ["cash", "Budget et trésorerie", budget_pressed],
+	buttons.position.x -= 92
+	for spec: Array in [["map", "Plan de la ville (M)", plan_pressed], ["book", "Journal de bord : missions, compétences, trophées (J)", journal_pressed], ["question", "Carnet du directeur (F1)", glossary_pressed], ["cash", "Budget et trésorerie", budget_pressed],
 			["chart", "Bilans des périodes", reports_pressed], ["gear", "Menu (Échap)", menu_pressed]]:
 		var b := Button.new()
-		b.icon = UiKit.icon(spec[0])
 		b.tooltip_text = spec[1]
 		b.accessibility_name = spec[1]
 		b.focus_mode = Control.FOCUS_NONE
 		b.custom_minimum_size = Vector2(42, 42)
-		b.expand_icon = true
+		# Icône dessinée par-dessus le bouton : les marges du thème la réduisaient trop.
+		var pic := TextureRect.new()
+		pic.texture = UiKit.icon(spec[0])
+		pic.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		pic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		pic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		pic.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		pic.offset_left = 7
+		pic.offset_top = 6
+		pic.offset_right = -7
+		pic.offset_bottom = -8
+		pic.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		b.add_child(pic)
 		var sig: Signal = spec[2]
 		b.pressed.connect(func() -> void:
 			AudioDirector.play_sfx("click")
 			sig.emit())
 		buttons.add_child(b)
 	# Aide aux commandes, en bas à gauche.
-	_hint = UiKit.label("Flèches ou ZQSD : marcher   ·   Entrée / E : parler, utiliser   ·   Clic : aller   ·   Échap : menu", "SmallLabel")
+	_hint = UiKit.label("Flèches ou ZQSD : marcher   ·   Entrée / E : parler, utiliser   ·   Clic : aller   ·   M : plan   ·   Échap : menu", "SmallLabel")
 	_hint.position = Vector2(14, 720 - 30)
 	_hint.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.8))
 	_hint.add_theme_constant_override("shadow_offset_x", 1)
 	_hint.add_theme_constant_override("shadow_offset_y", 1)
 	add_child(_hint)
+	# Nom du quartier, quand on en change.
+	_place_banner = UiKit.label("", "HeaderLabel")
+	_place_banner.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_place_banner.position = Vector2(340, 150)
+	_place_banner.size = Vector2(600, 40)
+	_place_banner.add_theme_color_override("font_color", Color(1, 0.96, 0.84))
+	_place_banner.add_theme_color_override("font_outline_color", Color(0.09, 0.06, 0.12))
+	_place_banner.add_theme_constant_override("outline_size", 8)
+	_place_banner.visible = false
+	add_child(_place_banner)
 	# Message éphémère.
 	_toast = UiKit.panel("InsetPanel")
 	_toast.visible = false
@@ -164,3 +188,21 @@ func toast(message: String, kind: String = "info") -> void:
 	_toast_tween.tween_interval(3.5 if kind != "warning" else 7.0)
 	_toast_tween.tween_property(_toast, "modulate:a", 0.0, 0.4)
 	_toast_tween.tween_callback(func() -> void: _toast.visible = false)
+
+
+func set_place(place: String) -> void:
+	_place.text = place
+
+
+## Bandeau éphémère au nom du quartier où l'on entre.
+func announce_place(name: String) -> void:
+	_place_banner.text = name
+	_place_banner.visible = true
+	_place_banner.modulate.a = 0.0
+	if _place_tween:
+		_place_tween.kill()
+	_place_tween = create_tween()
+	_place_tween.tween_property(_place_banner, "modulate:a", 1.0, 0.25)
+	_place_tween.tween_interval(1.6)
+	_place_tween.tween_property(_place_banner, "modulate:a", 0.0, 0.5)
+	_place_tween.tween_callback(func() -> void: _place_banner.visible = false)

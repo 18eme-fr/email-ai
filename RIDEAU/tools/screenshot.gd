@@ -84,6 +84,8 @@ func _do_action(action: String) -> void:
 			scene.interact()
 		"journal":
 			scene.open_journal()
+		"plan":
+			scene.open_city_plan()
 		"case":
 			load("res://scripts/ui/case_study.gd").open(scene.overlay, root.get_node("Game").session)
 		"dossier":

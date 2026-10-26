@@ -107,7 +107,7 @@
    "walk": false
   },
   "r": {
-   "name": "marches",
+   "name": "ballast",
    "walk": true
   },
   "s": {
@@ -137,6 +137,74 @@
   "b": {
    "name": "bibliothèque",
    "walk": false
+  },
+  "+": {
+   "name": "pavés",
+   "walk": true
+  },
+  ":": {
+   "name": "terrain de sport",
+   "walk": true
+  },
+  "P": {
+   "name": "pont",
+   "walk": true
+  },
+  "~": {
+   "name": "eau",
+   "walk": false
+  },
+  "h": {
+   "name": "haie",
+   "walk": false
+  },
+  "v": {
+   "name": "voiture garée",
+   "walk": false
+  },
+  "M": {
+   "name": "étal de marché",
+   "walk": false
+  },
+  "A": {
+   "name": "arrêt de bus",
+   "walk": false
+  },
+  "Y": {
+   "name": "statue",
+   "walk": false
+  },
+  "Q": {
+   "name": "kiosque à musique",
+   "walk": false
+  },
+  "J": {
+   "name": "jeux d'enfants",
+   "walk": false
+  },
+  "E": {
+   "name": "poubelle",
+   "walk": false
+  },
+  "V": {
+   "name": "vélos",
+   "walk": false
+  },
+  "W": {
+   "name": "clôture ou muret",
+   "walk": false
+  },
+  "G": {
+   "name": "potager",
+   "walk": false
+  },
+  "|": {
+   "name": "voie ferrée",
+   "walk": false
+  },
+  "N": {
+   "name": "kiosque",
+   "walk": false
   }
  },
  "start": {
@@ -149,33 +217,95 @@
  },
  "maps": {
   "rue": {
-   "name": "Place de la Lanterne",
+   "name": "Bréval-sur-Ondine",
    "outdoor": true,
    "grid": [
-    "XXXXXXXXXXXXXXHHHHHHHHHHHHXXXXXXXXXXXXXX",
-    "XHHHHHHHHHHXXXHHHHHHHHHHHHXXXXXXXXXXXXXX",
-    "XHHHHHHHHHHXXXHHHHHHHHHHHHXXHHHHHHXHHHHH",
-    "XHHHHHHHHHHXXXHHHHHHHHHHHHXXHHHHHHXHHHHH",
-    "XHHHHHHHHHHXXXHHHHHHHHHHHHXXHHHHHHXHHHHH",
-    "XHHHHHHHHHHXXXHHHHHHHHHHHHXXHHHHHHXHHHHH",
-    "XHHHHHHHHHHXXXHHHHHHHHHHHHXXHHHHHHXHHHHH",
-    "XHHHHddHHHHXXXHHHHHDDHHHHHXXHHdHHHXHHdHH",
-    "____________L______________L______L_____",
-    "_________K___________________t__t_______",
-    "===================zz===================",
-    "===================zz===================",
-    "===================zz===================",
-    "________________________________________",
-    "TgggggggfggggggggggggggggggggggfgggggggT",
-    "TggggffggggTggBBgggFFgggBBggTggggffggggT",
-    "gggggggggggggggggggFFggggggggggggggggggg",
-    "TggTggTggTggTggTggTggTggTggTggTggTggTggT"
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "X||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||X",
+    "X||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||X",
+    "X++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++X",
+    "XX=====================XXX_===_XXXXXXXXXHHHHHHHHHHHHHHHHHHXXXXHHHHHHHHHHHHXXXX_===_XXXHHHHHHHHHHXXXXXXXXXXXXXXXX",
+    "XX=vv=vv====vv=vv=vv=vvXXX_===_XXXXXXXXXHHHHHHHHHHHHHHHHHHXXXXHHHHHHHHHHHHXXXX_===_XXXHHHHHHHHHHXXXXXXXXXXXXXXXX",
+    "XX=====================XXX_===_XXXXXXXXXHHHHHHHHHHHHHHHHHHXXXXHHHHHHHHHHHHXXXX_===_XXXHHHHHHHHHHXXXXXXXXXXXXXXXX",
+    "XX=vv=vv=vv====vv======XXX_===_XXXXXXXXXHHHHHHHHHHHHHHHHHHXXXXHHHHHHHHHHHHXXXX_===_XXXHHHHHHHHHHXXXXXXXXXXXXXXXX",
+    "XX=====================XXX_===_XXXXXXXXXHHHHHHHHddHHHHHHHHXXXXHHHHHddHHHHHXXXX_===_XXXHHHHdHHHHHXXXXXXXXXXXXXXXX",
+    "X___L________T________L____===_T________L___A______________________T________L__===___T________L________T_______X",
+    "X=========================_zzz_=================zz============================_zzz_============================X",
+    "X=========================_zzz_=================zz============================_zzz_============================X",
+    "X=========================_zzz_=================zz============================_zzz_============================X",
+    "X___L________T____________PPPPPT________L_________________L________T________L_PPPPP__T________L________T_______X",
+    "X~~~~~~~~~~~~~~~~~~~~~~~~~PPPPP~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~PPPPP~~~~~~~~~~~~~~~~~~~~~~~~~~~~X",
+    "X~~~~~~~~~~~~~~~~~~~~~~~~~PPPPP~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~PPPPP~~~~~~~~~~~~~~~~~~~~~~~~~~~~X",
+    "X~~~~~~~~~~~~~~~~~~~~~~~~~PPPPP~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~PPPPP~~~~~~~~~~~~~~~~~~~~~~~~~~~~X",
+    "X___L_________________L___PPPPP___________________________L________T________L_PPPPP__T________L________T_______X",
+    "X=========================_===_z===================zz=========================_===_============================X",
+    "X=========================_===_z===================zz=========================_===_============================X",
+    "X=========================_===_z===================zz=========================_===_============================X",
+    "X___L________T______E_L____===__________L________T________L________T__E________===___T________L________T_______X",
+    "Xhhhhhhhhhhhh+hhhhhhhhhhhh_===_XHHHHHHHHHHXXXXHHHHHHHHHHHHXXXXXXXXXXXXXXXXXXXX_===_XHHHHHHHHHHXXHHHHHHHHHHHHXXXX",
+    "Xgggggggggggg+gggggggTgggg_===_XHHHHHHHHHHXXXXHHHHHHHHHHHHXXXXXXXXXXXXXXXXXXXX_===_XHHHHHHHHHHXXHHHHHHHHHHHHXXXX",
+    "Xgg~~~~~~~~gg+gBgggggggggg_===_XHHHHHHHHHHXXXXHHHHHHHHHHHHXXHHHHHHXHHHHHXHHHHH_===_XHHHHHHHHHHXXHHHHHHHHHHHHXXXX",
+    "Xgg~~~~~~~~gg+gBgggggggggg_===_XHHHHHHHHHHXXXXHHHHHHHHHHHHXXHHHHHHXHHHHHXHHHHH_===_XHHHHHHHHHHXXHHHHHHHHHHHHXXXX",
+    "Xgg~~~~~~~~gg+gggQQQgggTgg_===_XHHHHHHHHHHXXXXHHHHHHHHHHHHXXHHHHHHXHHHHHXHHHHH_===_XHHHHHHHHHHXXHHHHHHHHHHHHXXXX",
+    "Xgg~~~~~~~~gg+gggQQQgggggg_===_XHHHHHHHHHHXXXXHHHHHHHHHHHHXXHHHHHHXHHHHHXHHHHH_===_XHHHHHHHHHHXXHHHHHHHHHHHHXXXX",
+    "Xgg~~~~~~~~gg+gggQQQgggggg_===_XHHHHHHHHHHXXXXHHHHHHHHHHHHXXHHHHHHXHHHHHXHHHHH_===_XHHHHHHHHHHXXHHHHHHHHHHHHXXXX",
+    "Xgg~~~~~~~~gg+gggggggggggg_===_XHHHHddHHHHXXXXHHHHHDDHHHHHXXHHdHHHXHHdHHXHHdHH_===_XHHHHddHHHHXXHHHHHddHHHHHXXXX",
+    "Xgg~~~~~~~~gg+gggggTgggggg_===_L+++++++++++++++++++++++++++++++++++++++++++++L_===_____________________________X",
+    "Xgggggggggggg+ggggggggggTg_===_+++++++++++++L++++++++++++++Lt+++t+++++++++++++_===_z===========================X",
+    "Xgggggggggggg+ggggggggggggA===_++T++++++K++++T+++++++++++Y++++++++K++++++++T++_===_z===========================X",
+    "Xgggggggggggg+ggffggggTggg_===_+++++++++++E+++++++++++++++++++++++++E+++++++++_===_z===========================X",
+    "Xggggggggfggg+gggggggggggg_===_o+++++++++++++++++++++FF+++++++++++++++++++++++_===_____________________________X",
+    "Xgggggggggggg+ggggggfggggg_===_++++BB++++++++++++++++FF++++++++++++++++++++++N_===_XHHHHHHXHHHHHXHHHHHHHHHHHHXXX",
+    "XgggggggggBBL+Lggggggggggg_===Ao++++++L+++++++++++++++++++++++++++++++L+++++++_===_XHHHHHHXHHHHHXHHHHHHHHHHHHXXX",
+    "X+++++++++++++++++++++++++_===_++++++++++++++++BB++++++++++BB++++++++++++++++o_===_XHHHHHHXHHHHHXHHHHHHHHHHHHXXX",
+    "XgggggggggggL+LgBBgggggggg_===_++T+++++++++++T+++++++++++++++++T+++++++++++T++_===_XHHHHHHXHHHHHXHHHHHHHHHHHHXXX",
+    "XggggggggTggg+gggggggggggg_===_+++MMMMMMMMMM++++++E+++++++++++++++++++++VV++++_===_XHHHHHHXHHHHHXHHHHHHHHHHHHXXX",
+    "XgTgggfgggggg+gggggggggggg_===_+++++++++++++++++++++++++++++++++++++++++++++++_===_XHHdHHHXHHdHHXHHdHHHHHdHHHXXX",
+    "Xgggggggggggg+gggggYgggggg_____T________L________T________L_________________L________T__VV____L_____A__________X",
+    "Xgggggggggggg+gTgggggggggg==========================zz=======================z=================================X",
+    "XggJJJJJggggg+ggggggggTggg==========================zz=======================z=================================X",
+    "XggJJJJJggggg+gggggggggggg==========================zz=======================z=================================X",
+    "XggJJJJJggggg+gggggggggggg_____T_________________T________L_E______T________L__________________E_______________X",
+    "XggJJJJJggggg+gggggggggggg_===_HHHHHHHHHHHHXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXggggg_===_XXHHHHHHHHHHHHHHHHXXXXXXXXXXX",
+    "XgggggggggTgg+ggTgTggNgggg_===_HHHHHHHHHHHHXXHHHHHHHHHHHHHHXXHHHHHHHHHHHHgTggg_===_XXHHHHHHHHHHHHHHHHX========XX",
+    "Xgggggggggggg+gggggggggTgg_===_HHHHHHHHHHHHXXHHHHHHHHHHHHHHXXHHHHHHHHHHHHggggg_===_XXHHHHHHHHHHHHHHHHX=vv=vv==XX",
+    "XggTgTggggggg+gggggggggggg_===_HHHHHHHHHHHHXXHHHHHHHHHHHHHHXXHHHHHHHHHHHHgggTg_===_XXHHHHHHHHHHHHHHHHX========XX",
+    "XggggggggggBg+ggggggTggggg_===_HHHHHHHHHHHHXXHHHHHHHHHHHHHHXXHHHHHHHHHHHHggBBg_===_XXHHHHHHHHHHHHHHHHX========XX",
+    "XggggggggggBg+ggTgggggTggg_===_HHHHHHHHHHHHXXHHHHHHHHHHHHHHXXHHHHHHHHHHHHggggg_===_XXHHHHHHHHHHHHHHHHX=vv=vv==XX",
+    "XggggggTgTggg+gggggggggggg_===_HHHHHHHHHHHHXXHHHHHHHHHHHHHHXXHHHHHHHHHHHHgTggg_===_XXHHHHHHHHHHHHHHHHX========XX",
+    "Xgggggggggggg+gggggggggggg_===_HHHHHddHHHHHXXHHHHHHddHHHHHHXXHHHHHddHHHHHggggg_===_XXHHHHHHHddHHHHHHHX========XX",
+    "X___L________T________L__________________________T________L________T________L________T________L________T_______X",
+    "X=======================================zz==========================zz=========================================X",
+    "X=======================================zz==========================zz=========================================X",
+    "X=======================================zz==========================zz=========================================X",
+    "X___L_____E__T_________________T_________________T__________A______T________L________T_________________________X",
+    "Xggggggggggggggggggggggggg_____gggggggggggggggggggggggggggggggWWWWWWWWWWWWWWWg_____ggggggggggggggggggggggggggggX",
+    "XggHHHHHHHHgggHHHHHHHHgggg_____gHHHHHHHHHHHHHHHHggggggggggggggW:::::::::::::Wg_____gggHHHHHHHHggggHHHHHHHHgggggX",
+    "XggHHHHHHHHgggHHHHHHHHgggg_____gHHHHHHHHHHHHHHHHgggHHHHHHHHgggW:::::::::::::Wg_____gggHHHHHHHHggggHHHHHHHHgggggX",
+    "XggHHHHHHHHgggHHHHHHHHgggg_____gHHHHHHHHHHHHHHHHgggHHHHHHHHgggW:::::::::::::Wg_____gggHHHHHHHHggggHHHHHHHHgggggX",
+    "XggHHHHHHHHgggHHHHHHHHgggg_____gHHHHHHHHHHHHHHHHgggHHHHHHHHgggW:::::::::::::Wg_____gggHHHHHHHHggggHHHHHHHHgggggX",
+    "XggHHHHHHHHgggHHHHHHHHggEg_____gHHHHHHHHHHHHHHHHgggHHHHHHHHgggW:::::::::::::Wg_____gggHHHHHHHHggggHHHHHHHHgggggX",
+    "XggHHHHHHHHgggHHHHHHHHgggg_____gHHHHHHHHHHHHHHHHgTgHHHHHHHHgggW:::::::::::::Wg_____gggHHHHHHHHggggHHHHHHHHgggggX",
+    "XggHHHHHHHHgggHHHHHHHHgBBg_____gHHHHHHHHHHHHHHHHgggHHHHHHHHgggW:::::::::::::Wg_____gggHHHHHHHHggggHHHHHHHHgggggX",
+    "XggHHHdHHHHgggHHHdHHHHgggg_____gHHHHHHHddHHHHHHHgggHHHddHHHgggWWWWWWW::WWWWWWg_____gggHHHdHHHHggggHHHdHHHHgggggX",
+    "X___________L________________________________L______________________________________L___________L______________X",
+    "Xggggggggggggggggggggggggg_____ggggggggggggggggggggggggggggggggggggggggggggggg_____gggggggBBgggggggggggggggggggX",
+    "XggHHHHHHHHgggHHHHHHHHgggg_____ggggggggggggggggggggggggggggggggggggggggggggggg_____gggHHHHHHHHggggHHHHHHHHgggggX",
+    "XggHHHHHHHHgggHHHHHHHHggTg_____gGGGGGGGGGGGGGGGGgggJJJJJJgggWWWWWWWWWWWWWWWWWg_____gggHHHHHHHHggggHHHHHHHHgggggX",
+    "XggHHHHHHHHgggHHHHHHHHgggg_____gGGGGGGGGGGGGGGGGgggJJJJJJggggggggggggggggggggg_____gggHHHHHHHHggggHHHHHHHHgggggX",
+    "XggHHHHHHHHgggHHHHHHHHgggg_____ggggggggngggggggggggJJJJJJggggTgggggggggggggggg_____gggHHHHHHHHggggHHHHHHHHgggggX",
+    "XggHHHHHHHHgggHHHHHHHHgggg_____ggggggggggggggggggggJJJJJJggggggggggggTgggggggg_____gggHHHHHHHHggggHHHHHHHHgggggX",
+    "XggHHHHHHHHgggHHHHHHHHgggg_____gGGGGGGGGGGGGGGGGgggggggggggggggggggggggggggggg_____gggHHHHHHHHggggHHHHHHHHgggggX",
+    "XggHHHHHHHHgggHHHHHHHHgggg_____gGGGGGGGGGGGGGGGGggggggggggBBgggggggggggggggggg_____gggHHHHHHHHggggHHHHHHHHgggggX",
+    "XggHHHdHHHHgggHHHdHHHHgggg_____ggggggggggggggggggEgggggggggggggggggggggggggggg_____EggHHHdHHHHggggHHHdHHHHgggggX",
+    "X___________L_______________________________________________L___________________________________L______________X",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
    ],
    "doors": [
     {
      "cell": [
-      19,
-      7
+      51,
+      29
      ],
      "to": "hall",
      "to_cell": [
@@ -186,8 +316,8 @@
     },
     {
      "cell": [
-      20,
-      7
+      52,
+      29
      ],
      "to": "hall",
      "to_cell": [
@@ -199,15 +329,56 @@
    ],
    "spots": [
     {
+     "id": "gare",
+     "cells": [
+      [
+       48,
+       8
+      ],
+      [
+       49,
+       8
+      ]
+     ],
+     "label": "Gare de Bréval",
+     "kind": "flavor"
+    },
+    {
+     "id": "fabrique",
+     "cells": [
+      [
+       67,
+       8
+      ],
+      [
+       68,
+       8
+      ]
+     ],
+     "label": "La Fabrique (friche culturelle)",
+     "kind": "flavor"
+    },
+    {
+     "id": "hotel",
+     "cells": [
+      [
+       90,
+       8
+      ]
+     ],
+     "label": "Hôtel du Commerce",
+     "kind": "flavor"
+    },
+    {
      "id": "mairie",
      "cells": [
       [
-       5,
-       7
+       36,
+       29
       ],
       [
-       6,
-       7
+       37,
+       29
       ]
      ],
      "label": "Mairie",
@@ -218,8 +389,8 @@
      "id": "cafe",
      "cells": [
       [
-       30,
-       7
+       62,
+       29
       ]
      ],
      "label": "Café des Artistes",
@@ -229,8 +400,8 @@
      "id": "imprimerie",
      "cells": [
       [
-       37,
-       7
+       69,
+       29
       ]
      ],
      "label": "Imprimerie Lebrun",
@@ -238,26 +409,26 @@
      "action": "communication"
     },
     {
-     "id": "colonne",
+     "id": "boulangerie",
      "cells": [
       [
-       9,
-       9
+       75,
+       29
       ]
      ],
-     "label": "Colonne Morris",
-     "kind": "posters"
+     "label": "Boulangerie",
+     "kind": "flavor"
     },
     {
      "id": "facade",
      "cells": [
       [
-       18,
-       7
+       50,
+       29
       ],
       [
-       21,
-       7
+       53,
+       29
       ]
      ],
      "label": "Façade du théâtre",
@@ -265,69 +436,1566 @@
      "upgrade": "enseigne"
     },
     {
+     "id": "cinema",
+     "cells": [
+      [
+       88,
+       29
+      ],
+      [
+       89,
+       29
+      ]
+     ],
+     "label": "Cinéma Le Rex",
+     "kind": "flavor"
+    },
+    {
+     "id": "conservatoire",
+     "cells": [
+      [
+       101,
+       29
+      ],
+      [
+       102,
+       29
+      ]
+     ],
+     "label": "Conservatoire",
+     "kind": "flavor"
+    },
+    {
+     "id": "librairie",
+     "cells": [
+      [
+       86,
+       40
+      ]
+     ],
+     "label": "Librairie La Plume",
+     "kind": "flavor"
+    },
+    {
+     "id": "fleuriste",
+     "cells": [
+      [
+       93,
+       40
+      ]
+     ],
+     "label": "Fleuriste",
+     "kind": "flavor"
+    },
+    {
+     "id": "disquaire",
+     "cells": [
+      [
+       99,
+       40
+      ]
+     ],
+     "label": "Disquaire",
+     "kind": "flavor"
+    },
+    {
+     "id": "galerie",
+     "cells": [
+      [
+       105,
+       40
+      ]
+     ],
+     "label": "Galerie d'art",
+     "kind": "flavor"
+    },
+    {
      "id": "fontaine",
      "cells": [
       [
-       19,
-       15
+       53,
+       34
       ],
       [
-       20,
-       15
+       54,
+       34
       ],
       [
-       19,
-       16
+       53,
+       35
       ],
       [
-       20,
-       16
+       54,
+       35
       ]
      ],
-     "label": "Fontaine",
+     "label": "Fontaine d'Ondine",
      "kind": "flavor"
+    },
+    {
+     "id": "colonne",
+     "cells": [
+      [
+       40,
+       32
+      ]
+     ],
+     "label": "Colonne Morris",
+     "kind": "posters"
+    },
+    {
+     "id": "colonne_est",
+     "cells": [
+      [
+       66,
+       32
+      ]
+     ],
+     "label": "Colonne Morris",
+     "kind": "posters"
+    },
+    {
+     "id": "marche",
+     "cells": [
+      [
+       34,
+       39
+      ],
+      [
+       35,
+       39
+      ],
+      [
+       36,
+       39
+      ],
+      [
+       37,
+       39
+      ],
+      [
+       38,
+       39
+      ],
+      [
+       39,
+       39
+      ],
+      [
+       40,
+       39
+      ],
+      [
+       41,
+       39
+      ],
+      [
+       42,
+       39
+      ],
+      [
+       43,
+       39
+      ]
+     ],
+     "label": "Marché du samedi",
+     "kind": "flavor"
+    },
+    {
+     "id": "kiosque_presse",
+     "cells": [
+      [
+       77,
+       35
+      ]
+     ],
+     "label": "Kiosque à journaux",
+     "kind": "flavor"
+    },
+    {
+     "id": "statue_place",
+     "cells": [
+      [
+       57,
+       32
+      ]
+     ],
+     "label": "Statue du poète Anselme Brévalois",
+     "kind": "flavor"
+    },
+    {
+     "id": "mediatheque",
+     "cells": [
+      [
+       36,
+       53
+      ],
+      [
+       37,
+       53
+      ]
+     ],
+     "label": "Médiathèque Louise-Michel",
+     "kind": "flavor"
+    },
+    {
+     "id": "halle",
+     "cells": [
+      [
+       51,
+       53
+      ],
+      [
+       52,
+       53
+      ]
+     ],
+     "label": "Halle du marché",
+     "kind": "flavor"
+    },
+    {
+     "id": "ecole",
+     "cells": [
+      [
+       66,
+       53
+      ],
+      [
+       67,
+       53
+      ]
+     ],
+     "label": "École des Tilleuls",
+     "kind": "flavor"
+    },
+    {
+     "id": "ondine",
+     "cells": [
+      [
+       92,
+       53
+      ],
+      [
+       93,
+       53
+      ]
+     ],
+     "label": "Ondine Énergie (siège)",
+     "kind": "flavor"
+    },
+    {
+     "id": "etang",
+     "cells": [
+      [
+       3,
+       31
+      ],
+      [
+       4,
+       31
+      ],
+      [
+       5,
+       31
+      ],
+      [
+       6,
+       31
+      ],
+      [
+       7,
+       31
+      ],
+      [
+       8,
+       31
+      ],
+      [
+       9,
+       31
+      ],
+      [
+       10,
+       31
+      ]
+     ],
+     "label": "Étang du parc",
+     "kind": "flavor"
+    },
+    {
+     "id": "kiosque",
+     "cells": [
+      [
+       17,
+       28
+      ],
+      [
+       18,
+       28
+      ],
+      [
+       19,
+       28
+      ]
+     ],
+     "label": "Kiosque à musique",
+     "kind": "flavor"
+    },
+    {
+     "id": "jeux_parc",
+     "cells": [
+      [
+       5,
+       46
+      ]
+     ],
+     "label": "Aire de jeux",
+     "kind": "flavor"
+    },
+    {
+     "id": "statue_parc",
+     "cells": [
+      [
+       19,
+       41
+      ]
+     ],
+     "label": "Statue d'Ondine",
+     "kind": "flavor"
+    },
+    {
+     "id": "buvette",
+     "cells": [
+      [
+       21,
+       47
+      ]
+     ],
+     "label": "Buvette du parc",
+     "kind": "flavor"
+    },
+    {
+     "id": "tour_a",
+     "cells": [
+      [
+       6,
+       67
+      ]
+     ],
+     "label": "Résidence des Coteaux",
+     "kind": "flavor",
+     "flavor": "tour"
+    },
+    {
+     "id": "tour_b",
+     "cells": [
+      [
+       17,
+       67
+      ]
+     ],
+     "label": "Résidence des Coteaux",
+     "kind": "flavor",
+     "flavor": "tour"
+    },
+    {
+     "id": "tour_e",
+     "cells": [
+      [
+       6,
+       77
+      ]
+     ],
+     "label": "Résidence des Coteaux",
+     "kind": "flavor",
+     "flavor": "tour"
+    },
+    {
+     "id": "tour_f",
+     "cells": [
+      [
+       17,
+       77
+      ]
+     ],
+     "label": "Résidence des Coteaux",
+     "kind": "flavor",
+     "flavor": "tour"
+    },
+    {
+     "id": "tour_c",
+     "cells": [
+      [
+       89,
+       67
+      ]
+     ],
+     "label": "Résidence des Coteaux",
+     "kind": "flavor",
+     "flavor": "tour"
+    },
+    {
+     "id": "tour_d",
+     "cells": [
+      [
+       101,
+       67
+      ]
+     ],
+     "label": "Résidence des Coteaux",
+     "kind": "flavor",
+     "flavor": "tour"
+    },
+    {
+     "id": "tour_g",
+     "cells": [
+      [
+       89,
+       77
+      ]
+     ],
+     "label": "Résidence des Coteaux",
+     "kind": "flavor",
+     "flavor": "tour"
+    },
+    {
+     "id": "tour_h",
+     "cells": [
+      [
+       101,
+       77
+      ]
+     ],
+     "label": "Résidence des Coteaux",
+     "kind": "flavor",
+     "flavor": "tour"
+    },
+    {
+     "id": "college",
+     "cells": [
+      [
+       39,
+       67
+      ],
+      [
+       40,
+       67
+      ]
+     ],
+     "label": "Collège des Coteaux",
+     "kind": "flavor"
+    },
+    {
+     "id": "maison_quartier",
+     "cells": [
+      [
+       54,
+       67
+      ],
+      [
+       55,
+       67
+      ]
+     ],
+     "label": "Maison de quartier des Coteaux",
+     "kind": "flavor"
+    },
+    {
+     "id": "stade",
+     "cells": [
+      [
+       62,
+       63
+      ]
+     ],
+     "label": "City stade",
+     "kind": "flavor"
+    },
+    {
+     "id": "jardins",
+     "cells": [
+      [
+       39,
+       73
+      ]
+     ],
+     "label": "Jardins partagés",
+     "kind": "flavor"
+    },
+    {
+     "id": "jeux_coteaux",
+     "cells": [
+      [
+       53,
+       74
+      ]
+     ],
+     "label": "Aire de jeux des Coteaux",
+     "kind": "flavor"
+    },
+    {
+     "id": "fresque",
+     "cells": [
+      [
+       64,
+       71
+      ],
+      [
+       68,
+       71
+      ],
+      [
+       72,
+       71
+      ]
+     ],
+     "label": "Fresque des Coteaux",
+     "kind": "flavor"
+    },
+    {
+     "id": "bus_gare",
+     "cells": [
+      [
+       44,
+       9
+      ]
+     ],
+     "label": "Arrêt de bus — Gare",
+     "kind": "bus",
+     "stop": "Gare",
+     "arrive": [
+      45,
+      9
+     ]
+    },
+    {
+     "id": "bus_place",
+     "cells": [
+      [
+       30,
+       36
+      ]
+     ],
+     "label": "Arrêt de bus — Place de la Lanterne",
+     "kind": "bus",
+     "stop": "Place de la Lanterne",
+     "arrive": [
+      30,
+      35
+     ]
+    },
+    {
+     "id": "bus_parc",
+     "cells": [
+      [
+       26,
+       32
+      ]
+     ],
+     "label": "Arrêt de bus — Parc de l'Ondine",
+     "kind": "bus",
+     "stop": "Parc de l'Ondine",
+     "arrive": [
+      26,
+      31
+     ]
+    },
+    {
+     "id": "bus_arts",
+     "cells": [
+      [
+       100,
+       41
+      ]
+     ],
+     "label": "Arrêt de bus — Quartier des Arts",
+     "kind": "bus",
+     "stop": "Quartier des Arts",
+     "arrive": [
+      101,
+      41
+     ]
+    },
+    {
+     "id": "bus_coteaux",
+     "cells": [
+      [
+       60,
+       58
+      ]
+     ],
+     "label": "Arrêt de bus — Les Coteaux",
+     "kind": "bus",
+     "stop": "Les Coteaux",
+     "arrive": [
+      61,
+      58
+     ]
     }
    ],
    "npcs": [
     {
      "id": "pommier",
      "cell": [
-      7,
-      8
+      38,
+      31
      ],
      "radius": 2
     },
     {
      "id": "passant_1",
      "cell": [
-      3,
-      13
+      20,
+      38
      ],
      "radius": 6
     },
     {
      "id": "passant_2",
      "cell": [
-      30,
-      14
+      60,
+      35
      ],
-     "radius": 5
+     "radius": 6
     },
     {
      "id": "passant_3",
      "cell": [
-      16,
-      9
+      50,
+      18
      ],
-     "radius": 5
+     "radius": 6
     },
     {
      "id": "passant_4",
      "cell": [
-      36,
-      12
+      96,
+      32
+     ],
+     "radius": 5
+    },
+    {
+     "id": "passant_5",
+     "cell": [
+      15,
+      30
      ],
      "radius": 4
+    },
+    {
+     "id": "passant_6",
+     "cell": [
+      90,
+      42
+     ],
+     "radius": 6
+    },
+    {
+     "id": "passant_7",
+     "cell": [
+      44,
+      55
+     ],
+     "radius": 6
+    },
+    {
+     "id": "passant_8",
+     "cell": [
+      70,
+      74
+     ],
+     "radius": 5
+    },
+    {
+     "id": "passant_9",
+     "cell": [
+      100,
+      69
+     ],
+     "radius": 6
+    },
+    {
+     "id": "passant_10",
+     "cell": [
+      30,
+      10
+     ],
+     "radius": 6
+    },
+    {
+     "id": "passant_11",
+     "cell": [
+      12,
+      64
+     ],
+     "radius": 3
+    },
+    {
+     "id": "passant_12",
+     "cell": [
+      66,
+      10
+     ],
+     "radius": 6
+    },
+    {
+     "id": "principale",
+     "cell": [
+      41,
+      68
+     ],
+     "radius": 2
+    },
+    {
+     "id": "animateur",
+     "cell": [
+      56,
+      68
+     ],
+     "radius": 2
+    },
+    {
+     "id": "directrice",
+     "cell": [
+      95,
+      54
+     ],
+     "radius": 2
+    },
+    {
+     "id": "chef_gare",
+     "cell": [
+      50,
+      3
+     ],
+     "radius": 5
+    },
+    {
+     "id": "maraichere",
+     "cell": [
+      39,
+      38
+     ],
+     "radius": 1
+    },
+    {
+     "id": "musicien",
+     "cell": [
+      18,
+      30
+     ],
+     "radius": 1
+    },
+    {
+     "id": "bibliothecaire",
+     "cell": [
+      38,
+      54
+     ],
+     "radius": 2
+    },
+    {
+     "id": "pecheur",
+     "cell": [
+      96,
+      13
+     ],
+     "radius": 0
+    },
+    {
+     "id": "footballeur_1",
+     "cell": [
+      66,
+      62
+     ],
+     "radius": 3
+    },
+    {
+     "id": "footballeur_2",
+     "cell": [
+      72,
+      64
+     ],
+     "radius": 3
+    },
+    {
+     "id": "jardiniere",
+     "cell": [
+      40,
+      74
+     ],
+     "radius": 2
+    },
+    {
+     "id": "libraire",
+     "cell": [
+      87,
+      41
+     ],
+     "radius": 1
+    },
+    {
+     "id": "projectionniste",
+     "cell": [
+      90,
+      30
+     ],
+     "radius": 1
+    },
+    {
+     "id": "enfant_1",
+     "cell": [
+      6,
+      47
+     ],
+     "radius": 2
+    },
+    {
+     "id": "enfant_2",
+     "cell": [
+      54,
+      75
+     ],
+     "radius": 2
+    },
+    {
+     "id": "touriste",
+     "cell": [
+      54,
+      37
+     ],
+     "radius": 3
+    }
+   ],
+   "ground": [
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrX",
+    "XrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrX",
+    "X++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++X",
+    "XX=====================XXX_===_XXXXXXXXXHHHHHHHHHHHHHHHHHHXXXXHHHHHHHHHHHHXXXX_===_XXXHHHHHHHHHHXXXXXXXXXXXXXXXX",
+    "XX=====================XXX_===_XXXXXXXXXHHHHHHHHHHHHHHHHHHXXXXHHHHHHHHHHHHXXXX_===_XXXHHHHHHHHHHXXXXXXXXXXXXXXXX",
+    "XX=====================XXX_===_XXXXXXXXXHHHHHHHHHHHHHHHHHHXXXXHHHHHHHHHHHHXXXX_===_XXXHHHHHHHHHHXXXXXXXXXXXXXXXX",
+    "XX=====================XXX_===_XXXXXXXXXHHHHHHHHHHHHHHHHHHXXXXHHHHHHHHHHHHXXXX_===_XXXHHHHHHHHHHXXXXXXXXXXXXXXXX",
+    "XX=====================XXX_===_XXXXXXXXXHHHHHHHHHHHHHHHHHHXXXXHHHHHHHHHHHHXXXX_===_XXXHHHHHHHHHHXXXXXXXXXXXXXXXX",
+    "X__________________________===_________________________________________________===_____________________________X",
+    "X=========================_zzz_=================zz============================_zzz_============================X",
+    "X=========================_zzz_=================zz============================_zzz_============================X",
+    "X=========================_zzz_=================zz============================_zzz_============================X",
+    "X_________________________PPPPP_______________________________________________PPPPP____________________________X",
+    "X~~~~~~~~~~~~~~~~~~~~~~~~~PPPPP~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~PPPPP~~~~~~~~~~~~~~~~~~~~~~~~~~~~X",
+    "X~~~~~~~~~~~~~~~~~~~~~~~~~PPPPP~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~PPPPP~~~~~~~~~~~~~~~~~~~~~~~~~~~~X",
+    "X~~~~~~~~~~~~~~~~~~~~~~~~~PPPPP~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~PPPPP~~~~~~~~~~~~~~~~~~~~~~~~~~~~X",
+    "X_________________________PPPPP_______________________________________________PPPPP____________________________X",
+    "X=========================_===_z===================zz=========================_===_============================X",
+    "X=========================_===_z===================zz=========================_===_============================X",
+    "X=========================_===_z===================zz=========================_===_============================X",
+    "X__________________________===_________________________________________________===_____________________________X",
+    "Xgggggggggggg+gggggggggggg_===_XHHHHHHHHHHXXXXHHHHHHHHHHHHXXXXXXXXXXXXXXXXXXXX_===_XHHHHHHHHHHXXHHHHHHHHHHHHXXXX",
+    "Xgggggggggggg+gggggggggggg_===_XHHHHHHHHHHXXXXHHHHHHHHHHHHXXXXXXXXXXXXXXXXXXXX_===_XHHHHHHHHHHXXHHHHHHHHHHHHXXXX",
+    "Xgg~~~~~~~~gg+gggggggggggg_===_XHHHHHHHHHHXXXXHHHHHHHHHHHHXXHHHHHHXHHHHHXHHHHH_===_XHHHHHHHHHHXXHHHHHHHHHHHHXXXX",
+    "Xgg~~~~~~~~gg+gggggggggggg_===_XHHHHHHHHHHXXXXHHHHHHHHHHHHXXHHHHHHXHHHHHXHHHHH_===_XHHHHHHHHHHXXHHHHHHHHHHHHXXXX",
+    "Xgg~~~~~~~~gg+gggggggggggg_===_XHHHHHHHHHHXXXXHHHHHHHHHHHHXXHHHHHHXHHHHHXHHHHH_===_XHHHHHHHHHHXXHHHHHHHHHHHHXXXX",
+    "Xgg~~~~~~~~gg+gggggggggggg_===_XHHHHHHHHHHXXXXHHHHHHHHHHHHXXHHHHHHXHHHHHXHHHHH_===_XHHHHHHHHHHXXHHHHHHHHHHHHXXXX",
+    "Xgg~~~~~~~~gg+gggggggggggg_===_XHHHHHHHHHHXXXXHHHHHHHHHHHHXXHHHHHHXHHHHHXHHHHH_===_XHHHHHHHHHHXXHHHHHHHHHHHHXXXX",
+    "Xgg~~~~~~~~gg+gggggggggggg_===_XHHHHHHHHHHXXXXHHHHHHHHHHHHXXHHHHHHXHHHHHXHHHHH_===_XHHHHHHHHHHXXHHHHHHHHHHHHXXXX",
+    "Xgg~~~~~~~~gg+gggggggggggg_===_+++++++++++++++++++++++++++++++++++++++++++++++_===_____________________________X",
+    "Xgggggggggggg+gggggggggggg_===_+++++++++++++++++++++++++++++++++++++++++++++++_===_z===========================X",
+    "Xgggggggggggg+gggggggggggg_===_+++++++++++++++++++++++++++++++++++++++++++++++_===_z===========================X",
+    "Xgggggggggggg+gggggggggggg_===_+++++++++++++++++++++++++++++++++++++++++++++++_===_z===========================X",
+    "Xgggggggggggg+gggggggggggg_===_+++++++++++++++++++++++++++++++++++++++++++++++_===_____________________________X",
+    "Xgggggggggggg+gggggggggggg_===_+++++++++++++++++++++++++++++++++++++++++++++++_===_XHHHHHHXHHHHHXHHHHHHHHHHHHXXX",
+    "Xgggggggggggg+gggggggggggg_===_+++++++++++++++++++++++++++++++++++++++++++++++_===_XHHHHHHXHHHHHXHHHHHHHHHHHHXXX",
+    "X+++++++++++++++++++++++++_===_+++++++++++++++++++++++++++++++++++++++++++++++_===_XHHHHHHXHHHHHXHHHHHHHHHHHHXXX",
+    "Xgggggggggggg+gggggggggggg_===_+++++++++++++++++++++++++++++++++++++++++++++++_===_XHHHHHHXHHHHHXHHHHHHHHHHHHXXX",
+    "Xgggggggggggg+gggggggggggg_===_+++++++++++++++++++++++++++++++++++++++++++++++_===_XHHHHHHXHHHHHXHHHHHHHHHHHHXXX",
+    "Xgggggggggggg+gggggggggggg_===_+++++++++++++++++++++++++++++++++++++++++++++++_===_XHHHHHHXHHHHHXHHHHHHHHHHHHXXX",
+    "Xgggggggggggg+gggggggggggg_____________________________________________________________________________________X",
+    "Xgggggggggggg+gggggggggggg==========================zz=======================z=================================X",
+    "Xgggggggggggg+gggggggggggg==========================zz=======================z=================================X",
+    "Xgggggggggggg+gggggggggggg==========================zz=======================z=================================X",
+    "Xgggggggggggg+gggggggggggg_____________________________________________________________________________________X",
+    "Xgggggggggggg+gggggggggggg_===_HHHHHHHHHHHHXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXggggg_===_XXHHHHHHHHHHHHHHHHXXXXXXXXXXX",
+    "Xgggggggggggg+gggggggggggg_===_HHHHHHHHHHHHXXHHHHHHHHHHHHHHXXHHHHHHHHHHHHggggg_===_XXHHHHHHHHHHHHHHHHX========XX",
+    "Xgggggggggggg+gggggggggggg_===_HHHHHHHHHHHHXXHHHHHHHHHHHHHHXXHHHHHHHHHHHHggggg_===_XXHHHHHHHHHHHHHHHHX========XX",
+    "Xgggggggggggg+gggggggggggg_===_HHHHHHHHHHHHXXHHHHHHHHHHHHHHXXHHHHHHHHHHHHggggg_===_XXHHHHHHHHHHHHHHHHX========XX",
+    "Xgggggggggggg+gggggggggggg_===_HHHHHHHHHHHHXXHHHHHHHHHHHHHHXXHHHHHHHHHHHHggggg_===_XXHHHHHHHHHHHHHHHHX========XX",
+    "Xgggggggggggg+gggggggggggg_===_HHHHHHHHHHHHXXHHHHHHHHHHHHHHXXHHHHHHHHHHHHggggg_===_XXHHHHHHHHHHHHHHHHX========XX",
+    "Xgggggggggggg+gggggggggggg_===_HHHHHHHHHHHHXXHHHHHHHHHHHHHHXXHHHHHHHHHHHHggggg_===_XXHHHHHHHHHHHHHHHHX========XX",
+    "Xgggggggggggg+gggggggggggg_===_HHHHHHHHHHHHXXHHHHHHHHHHHHHHXXHHHHHHHHHHHHggggg_===_XXHHHHHHHHHHHHHHHHX========XX",
+    "X______________________________________________________________________________________________________________X",
+    "X=======================================zz==========================zz=========================================X",
+    "X=======================================zz==========================zz=========================================X",
+    "X=======================================zz==========================zz=========================================X",
+    "X______________________________________________________________________________________________________________X",
+    "Xggggggggggggggggggggggggg_____ggggggggggggggggggggggggggggggggggggggggggggggg_____ggggggggggggggggggggggggggggX",
+    "XggHHHHHHHHgggHHHHHHHHgggg_____gHHHHHHHHHHHHHHHHggggggggggggggg:::::::::::::gg_____gggHHHHHHHHggggHHHHHHHHgggggX",
+    "XggHHHHHHHHgggHHHHHHHHgggg_____gHHHHHHHHHHHHHHHHgggHHHHHHHHgggg:::::::::::::gg_____gggHHHHHHHHggggHHHHHHHHgggggX",
+    "XggHHHHHHHHgggHHHHHHHHgggg_____gHHHHHHHHHHHHHHHHgggHHHHHHHHgggg:::::::::::::gg_____gggHHHHHHHHggggHHHHHHHHgggggX",
+    "XggHHHHHHHHgggHHHHHHHHgggg_____gHHHHHHHHHHHHHHHHgggHHHHHHHHgggg:::::::::::::gg_____gggHHHHHHHHggggHHHHHHHHgggggX",
+    "XggHHHHHHHHgggHHHHHHHHgggg_____gHHHHHHHHHHHHHHHHgggHHHHHHHHgggg:::::::::::::gg_____gggHHHHHHHHggggHHHHHHHHgggggX",
+    "XggHHHHHHHHgggHHHHHHHHgggg_____gHHHHHHHHHHHHHHHHgggHHHHHHHHgggg:::::::::::::gg_____gggHHHHHHHHggggHHHHHHHHgggggX",
+    "XggHHHHHHHHgggHHHHHHHHgggg_____gHHHHHHHHHHHHHHHHgggHHHHHHHHgggg:::::::::::::gg_____gggHHHHHHHHggggHHHHHHHHgggggX",
+    "XggHHHHHHHHgggHHHHHHHHgggg_____gHHHHHHHHHHHHHHHHgggHHHHHHHHgggggggggg::ggggggg_____gggHHHHHHHHggggHHHHHHHHgggggX",
+    "X______________________________________________________________________________________________________________X",
+    "Xggggggggggggggggggggggggg_____ggggggggggggggggggggggggggggggggggggggggggggggg_____ggggggggggggggggggggggggggggX",
+    "XggHHHHHHHHgggHHHHHHHHgggg_____ggggggggggggggggggggggggggggggggggggggggggggggg_____gggHHHHHHHHggggHHHHHHHHgggggX",
+    "XggHHHHHHHHgggHHHHHHHHgggg_____ggggggggggggggggggggggggggggggggggggggggggggggg_____gggHHHHHHHHggggHHHHHHHHgggggX",
+    "XggHHHHHHHHgggHHHHHHHHgggg_____ggggggggggggggggggggggggggggggggggggggggggggggg_____gggHHHHHHHHggggHHHHHHHHgggggX",
+    "XggHHHHHHHHgggHHHHHHHHgggg_____ggggggggggggggggggggggggggggggggggggggggggggggg_____gggHHHHHHHHggggHHHHHHHHgggggX",
+    "XggHHHHHHHHgggHHHHHHHHgggg_____ggggggggggggggggggggggggggggggggggggggggggggggg_____gggHHHHHHHHggggHHHHHHHHgggggX",
+    "XggHHHHHHHHgggHHHHHHHHgggg_____ggggggggggggggggggggggggggggggggggggggggggggggg_____gggHHHHHHHHggggHHHHHHHHgggggX",
+    "XggHHHHHHHHgggHHHHHHHHgggg_____ggggggggggggggggggggggggggggggggggggggggggggggg_____gggHHHHHHHHggggHHHHHHHHgggggX",
+    "XggHHHHHHHHgggHHHHHHHHgggg_____ggggggggggggggggggggggggggggggggggggggggggggggg_____gggHHHHHHHHggggHHHHHHHHgggggX",
+    "X______________________________________________________________________________________________________________X",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+   ],
+   "buildings": [
+    {
+     "id": "gare",
+     "style": "gare",
+     "rect": [
+      40,
+      4,
+      18,
+      5
+     ],
+     "label": "Gare de Bréval",
+     "doors": [
+      [
+       48,
+       8
+      ],
+      [
+       49,
+       8
+      ]
+     ]
+    },
+    {
+     "id": "fabrique",
+     "style": "fabrique",
+     "rect": [
+      62,
+      4,
+      12,
+      5
+     ],
+     "label": "La Fabrique (friche culturelle)",
+     "doors": [
+      [
+       67,
+       8
+      ],
+      [
+       68,
+       8
+      ]
+     ]
+    },
+    {
+     "id": "hotel",
+     "style": "hotel",
+     "rect": [
+      86,
+      4,
+      10,
+      5
+     ],
+     "label": "Hôtel du Commerce",
+     "doors": [
+      [
+       90,
+       8
+      ]
+     ]
+    },
+    {
+     "id": "mairie",
+     "style": "mairie",
+     "rect": [
+      32,
+      22,
+      10,
+      8
+     ],
+     "label": "Mairie",
+     "doors": [
+      [
+       36,
+       29
+      ],
+      [
+       37,
+       29
+      ]
+     ]
+    },
+    {
+     "id": "theatre",
+     "style": "theatre",
+     "rect": [
+      46,
+      22,
+      12,
+      8
+     ],
+     "label": "Théâtre de la Lanterne",
+     "doors": [
+      [
+       51,
+       29
+      ],
+      [
+       52,
+       29
+      ]
+     ]
+    },
+    {
+     "id": "cafe",
+     "style": "cafe",
+     "rect": [
+      60,
+      24,
+      6,
+      6
+     ],
+     "label": "Café des Artistes",
+     "doors": [
+      [
+       62,
+       29
+      ]
+     ]
+    },
+    {
+     "id": "imprimerie",
+     "style": "imprimerie",
+     "rect": [
+      67,
+      24,
+      5,
+      6
+     ],
+     "label": "Imprimerie Lebrun",
+     "doors": [
+      [
+       69,
+       29
+      ]
+     ]
+    },
+    {
+     "id": "boulangerie",
+     "style": "boulangerie",
+     "rect": [
+      73,
+      24,
+      5,
+      6
+     ],
+     "label": "Boulangerie",
+     "doors": [
+      [
+       75,
+       29
+      ]
+     ]
+    },
+    {
+     "id": "cinema",
+     "style": "cinema",
+     "rect": [
+      84,
+      22,
+      10,
+      8
+     ],
+     "label": "Cinéma Le Rex",
+     "doors": [
+      [
+       88,
+       29
+      ],
+      [
+       89,
+       29
+      ]
+     ]
+    },
+    {
+     "id": "conservatoire",
+     "style": "conservatoire",
+     "rect": [
+      96,
+      22,
+      12,
+      8
+     ],
+     "label": "Conservatoire",
+     "doors": [
+      [
+       101,
+       29
+      ],
+      [
+       102,
+       29
+      ]
+     ]
+    },
+    {
+     "id": "librairie",
+     "style": "librairie",
+     "rect": [
+      84,
+      35,
+      6,
+      6
+     ],
+     "label": "Librairie La Plume",
+     "doors": [
+      [
+       86,
+       40
+      ]
+     ]
+    },
+    {
+     "id": "fleuriste",
+     "style": "fleuriste",
+     "rect": [
+      91,
+      35,
+      5,
+      6
+     ],
+     "label": "Fleuriste",
+     "doors": [
+      [
+       93,
+       40
+      ]
+     ]
+    },
+    {
+     "id": "disquaire",
+     "style": "disquaire",
+     "rect": [
+      97,
+      35,
+      6,
+      6
+     ],
+     "label": "Disquaire",
+     "doors": [
+      [
+       99,
+       40
+      ]
+     ]
+    },
+    {
+     "id": "galerie",
+     "style": "galerie",
+     "rect": [
+      103,
+      35,
+      6,
+      6
+     ],
+     "label": "Galerie d'art",
+     "doors": [
+      [
+       105,
+       40
+      ]
+     ]
+    },
+    {
+     "id": "mediatheque",
+     "style": "mediatheque",
+     "rect": [
+      31,
+      46,
+      12,
+      8
+     ],
+     "label": "Médiathèque Louise-Michel",
+     "doors": [
+      [
+       36,
+       53
+      ],
+      [
+       37,
+       53
+      ]
+     ]
+    },
+    {
+     "id": "halle",
+     "style": "halle",
+     "rect": [
+      45,
+      47,
+      14,
+      7
+     ],
+     "label": "Halle du marché",
+     "doors": [
+      [
+       51,
+       53
+      ],
+      [
+       52,
+       53
+      ]
+     ]
+    },
+    {
+     "id": "ecole",
+     "style": "ecole",
+     "rect": [
+      61,
+      47,
+      12,
+      7
+     ],
+     "label": "École des Tilleuls",
+     "doors": [
+      [
+       66,
+       53
+      ],
+      [
+       67,
+       53
+      ]
+     ]
+    },
+    {
+     "id": "ondine",
+     "style": "siege",
+     "rect": [
+      85,
+      46,
+      16,
+      8
+     ],
+     "label": "Ondine Énergie (siège)",
+     "doors": [
+      [
+       92,
+       53
+      ],
+      [
+       93,
+       53
+      ]
+     ]
+    },
+    {
+     "id": "tour_a",
+     "style": "tour",
+     "rect": [
+      3,
+      60,
+      8,
+      8
+     ],
+     "label": "Résidence des Coteaux",
+     "doors": [
+      [
+       6,
+       67
+      ]
+     ]
+    },
+    {
+     "id": "tour_b",
+     "style": "tour",
+     "rect": [
+      14,
+      60,
+      8,
+      8
+     ],
+     "label": "Résidence des Coteaux",
+     "doors": [
+      [
+       17,
+       67
+      ]
+     ]
+    },
+    {
+     "id": "tour_e",
+     "style": "tour",
+     "rect": [
+      3,
+      70,
+      8,
+      8
+     ],
+     "label": "Résidence des Coteaux",
+     "doors": [
+      [
+       6,
+       77
+      ]
+     ]
+    },
+    {
+     "id": "tour_f",
+     "style": "tour",
+     "rect": [
+      14,
+      70,
+      8,
+      8
+     ],
+     "label": "Résidence des Coteaux",
+     "doors": [
+      [
+       17,
+       77
+      ]
+     ]
+    },
+    {
+     "id": "tour_c",
+     "style": "tour",
+     "rect": [
+      86,
+      60,
+      8,
+      8
+     ],
+     "label": "Résidence des Coteaux",
+     "doors": [
+      [
+       89,
+       67
+      ]
+     ]
+    },
+    {
+     "id": "tour_d",
+     "style": "tour",
+     "rect": [
+      98,
+      60,
+      8,
+      8
+     ],
+     "label": "Résidence des Coteaux",
+     "doors": [
+      [
+       101,
+       67
+      ]
+     ]
+    },
+    {
+     "id": "tour_g",
+     "style": "tour",
+     "rect": [
+      86,
+      70,
+      8,
+      8
+     ],
+     "label": "Résidence des Coteaux",
+     "doors": [
+      [
+       89,
+       77
+      ]
+     ]
+    },
+    {
+     "id": "tour_h",
+     "style": "tour",
+     "rect": [
+      98,
+      70,
+      8,
+      8
+     ],
+     "label": "Résidence des Coteaux",
+     "doors": [
+      [
+       101,
+       77
+      ]
+     ]
+    },
+    {
+     "id": "college",
+     "style": "college",
+     "rect": [
+      32,
+      60,
+      16,
+      8
+     ],
+     "label": "Collège des Coteaux",
+     "doors": [
+      [
+       39,
+       67
+      ],
+      [
+       40,
+       67
+      ]
+     ]
+    },
+    {
+     "id": "maison_quartier",
+     "style": "maison",
+     "rect": [
+      51,
+      61,
+      8,
+      7
+     ],
+     "label": "Maison de quartier des Coteaux",
+     "doors": [
+      [
+       54,
+       67
+      ],
+      [
+       55,
+       67
+      ]
+     ]
+    }
+   ],
+   "decor": [
+    {
+     "kind": "train",
+     "rect": [
+      34,
+      1,
+      26,
+      2
+     ]
+    },
+    {
+     "kind": "boat",
+     "cell": [
+      94,
+      15
+     ]
+    },
+    {
+     "kind": "boat",
+     "cell": [
+      100,
+      14
+     ]
+    },
+    {
+     "kind": "boat",
+     "cell": [
+      8,
+      15
+     ]
+    },
+    {
+     "kind": "ducks",
+     "rect": [
+      3,
+      24,
+      8,
+      7
+     ]
+    }
+   ],
+   "districts": [
+    {
+     "id": "gare",
+     "name": "Quartier de la Gare",
+     "rect": [
+      0,
+      0,
+      112,
+      14
+     ]
+    },
+    {
+     "id": "quais",
+     "name": "Bords de l'Ondine",
+     "rect": [
+      0,
+      14,
+      112,
+      8
+     ]
+    },
+    {
+     "id": "parc",
+     "name": "Parc de l'Ondine",
+     "rect": [
+      0,
+      22,
+      26,
+      32
+     ]
+    },
+    {
+     "id": "centre",
+     "name": "Centre-ville — place de la Lanterne",
+     "rect": [
+      26,
+      22,
+      57,
+      24
+     ]
+    },
+    {
+     "id": "arts",
+     "name": "Quartier des Arts",
+     "rect": [
+      83,
+      22,
+      29,
+      24
+     ]
+    },
+    {
+     "id": "ecoles",
+     "name": "Boulevard Louise-Michel",
+     "rect": [
+      26,
+      46,
+      86,
+      12
+     ]
+    },
+    {
+     "id": "coteaux",
+     "name": "Quartier des Coteaux",
+     "rect": [
+      0,
+      58,
+      112,
+      22
+     ]
+    },
+    {
+     "id": "parc_sud",
+     "name": "Parc de l'Ondine",
+     "rect": [
+      0,
+      54,
+      26,
+      5
+     ]
     }
    ]
   },
@@ -358,8 +2026,8 @@
      ],
      "to": "rue",
      "to_cell": [
-      19,
-      8
+      51,
+      30
      ],
      "facing": "down"
     },
@@ -370,8 +2038,8 @@
      ],
      "to": "rue",
      "to_cell": [
-      20,
-      8
+      52,
+      30
      ],
      "facing": "down"
     },
@@ -963,6 +2631,130 @@
   "passant_4": {
    "sprite": "passant_d",
    "name": "Passant",
+   "home": "rue"
+  },
+  "passant_5": {
+   "sprite": "passant_a",
+   "name": "Promeneuse",
+   "home": "rue"
+  },
+  "passant_6": {
+   "sprite": "passant_b",
+   "name": "Passant",
+   "home": "rue"
+  },
+  "passant_7": {
+   "sprite": "passant_c",
+   "name": "Passante",
+   "home": "rue"
+  },
+  "passant_8": {
+   "sprite": "passant_d",
+   "name": "Habitant des Coteaux",
+   "home": "rue"
+  },
+  "passant_9": {
+   "sprite": "passant_e",
+   "name": "Habitante des Coteaux",
+   "home": "rue"
+  },
+  "passant_10": {
+   "sprite": "voyageur",
+   "name": "Voyageur",
+   "home": "rue"
+  },
+  "passant_11": {
+   "sprite": "passant_f",
+   "name": "Habitant des Coteaux",
+   "home": "rue"
+  },
+  "passant_12": {
+   "sprite": "passant_e",
+   "name": "Passante",
+   "home": "rue"
+  },
+  "principale": {
+   "sprite": "principale",
+   "name": "Mme Diallo, principale du collège",
+   "home": "rue"
+  },
+  "animateur": {
+   "sprite": "animateur",
+   "name": "Karim, animateur de la maison de quartier",
+   "home": "rue"
+  },
+  "directrice": {
+   "sprite": "directrice",
+   "name": "Mme Roux, directrice d'Ondine Énergie",
+   "home": "rue"
+  },
+  "chef_gare": {
+   "sprite": "chef_gare",
+   "name": "Le chef de gare",
+   "home": "rue"
+  },
+  "maraichere": {
+   "sprite": "maraichere",
+   "name": "Josiane, maraîchère",
+   "home": "rue"
+  },
+  "musicien": {
+   "sprite": "musicien",
+   "name": "Musicien de la fanfare",
+   "home": "rue"
+  },
+  "bibliothecaire": {
+   "sprite": "bibliothecaire",
+   "name": "Bibliothécaire",
+   "home": "rue"
+  },
+  "pecheur": {
+   "sprite": "pecheur",
+   "name": "Pêcheur",
+   "home": "rue"
+  },
+  "footballeur_1": {
+   "sprite": "sportif_a",
+   "name": "Joueuse de foot",
+   "home": "rue",
+   "bark": "footballeur"
+  },
+  "footballeur_2": {
+   "sprite": "sportif_b",
+   "name": "Joueur de foot",
+   "home": "rue",
+   "bark": "footballeur"
+  },
+  "jardiniere": {
+   "sprite": "jardiniere",
+   "name": "Jardinière",
+   "home": "rue"
+  },
+  "libraire": {
+   "sprite": "libraire",
+   "name": "Libraire",
+   "home": "rue"
+  },
+  "projectionniste": {
+   "sprite": "projectionniste",
+   "name": "Programmateur du cinéma",
+   "home": "rue"
+  },
+  "enfant_1": {
+   "sprite": "enfant_a",
+   "name": "Enfant",
+   "home": "rue",
+   "bark": "enfant"
+  },
+  "enfant_2": {
+   "sprite": "enfant_b",
+   "name": "Enfant",
+   "home": "rue",
+   "bark": "enfant"
+  },
+  "touriste": {
+   "sprite": "touriste",
+   "name": "Touriste",
    "home": "rue"
   }
  },

@@ -67,6 +67,17 @@ colonne Morris et les murs du hall, spectateurs plus nombreux dans le hall quand
 **Personnages vivants** : ils se promènent, et leurs répliques (`data/world/barks.json`) dépendent
 de l'état du théâtre (matériel usé, trésorerie basse, publics fidèles, rénovations faites…).
 
+**La ville de Bréval-sur-Ondine (depuis la version 0.12)** : en sortant du théâtre, on découvre
+toute la ville, découpée en quartiers qui racontent un territoire culturel : gare et friche
+culturelle au nord, rivière et parc à l'ouest, centre-ville et place de la Lanterne, quartier des
+Arts (cinéma Art et Essai, conservatoire, commerces culturels), boulevard Louise-Michel
+(médiathèque, école, siège du mécène Ondine Énergie) et quartier populaire des Coteaux au sud
+(collège, maison de quartier, résidences). Les habitants et les lieux parlent des **publics
+éloignés, de l'éducation artistique, du mécénat, des droits culturels, de la mobilité** : la
+ville sert de « terrain » au cours. Un bus relie les quartiers ; le plan (touche M) aide à s'y
+retrouver. Explorer reste facultatif : aucune décision de gestion n'y est cachée hors des lieux
+déjà connus (place, théâtre).
+
 ### Rénovations (investissements)
 
 Cinq travaux, une fois chacun, à décider sur place avant l'événement de la période : projecteurs

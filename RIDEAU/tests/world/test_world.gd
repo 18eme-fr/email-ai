@@ -99,14 +99,13 @@ func test_every_period_has_a_season() -> void:
 func test_everyone_has_something_to_say() -> void:
 	var s := GameSession.new()
 	s.new_game(77, "standard")
-	var speakers: Array = ["passant"]
+	var speakers: Array = []
 	for pid: String in world.people:
-		if not pid.begins_with("passant"):
-			speakers.append(pid)
+		speakers.append(world.bark_key(pid))
 	for id: String in world.maps:
 		for sp: Dictionary in (world.maps[id] as WorldMap).spots:
 			if sp["kind"] == "flavor":
-				speakers.append(sp["id"])
+				speakers.append(WorldData.spot_bark_key(sp))
 	for who: String in speakers:
 		for roll in [0.0, 0.5, 0.99]:
 			assert_str(WorldRules.bark(data, s.state, world, who, roll)).override_failure_message("Rien à dire : %s" % who).is_not_empty()
@@ -158,3 +157,31 @@ func test_plan_action_respects_phase_and_capacity() -> void:
 	assert_str(s.plan_action(str(s.state.actions[0]), false)).is_empty()
 	assert_int(s.state.actions.size()).is_equal(cap - 1)
 	assert_str(s.confirm_actions(s.state.actions.duplicate())).is_empty()
+
+
+func test_the_city_has_districts_bus_stops_and_inhabitants() -> void:
+	var city := world.map("rue")
+	assert_int(city.size.x * city.size.y).is_greater_equal(100 * 70)
+	assert_int(city.districts.size()).is_greater_equal(6)
+	assert_int(city.npcs.size()).is_greater_equal(25)
+	# Chaque case praticable appartient à un quartier (le nom s'affiche en marchant).
+	for y in city.size.y:
+		for x in city.size.x:
+			if city.is_walkable(Vector2i(x, y)):
+				assert_bool(city.district_at(Vector2i(x, y)).is_empty()).override_failure_message("case %d,%d hors quartier" % [x, y]).is_false()
+	# Les arrêts de bus mènent à des cases libres, reliées à pied au théâtre.
+	var stops := city.bus_stops()
+	assert_int(stops.size()).is_greater_equal(4)
+	var theatre: Vector2i = city.doors[0]["cell"] + Vector2i(0, 1)
+	for stop: Dictionary in stops:
+		assert_str(str(stop.get("stop", ""))).is_not_empty()
+		var arrive := WorldMap.to_cell(stop["arrive"])
+		assert_bool(city.is_walkable(arrive)).override_failure_message("%s : arrivée bloquée" % stop["id"]).is_true()
+		assert_bool(city.door_at(arrive).is_empty()).is_true()
+		assert_array(city.find_path(theatre, arrive)).override_failure_message("%s inaccessible à pied" % stop["id"]).is_not_empty()
+
+
+func test_every_person_has_a_sprite() -> void:
+	for pid: String in world.people:
+		var sprite := str(world.people[pid].get("sprite", pid))
+		assert_bool(ResourceLoader.exists("res://assets/world/people/%s.png" % sprite)).override_failure_message("Sprite manquant : %s" % sprite).is_true()

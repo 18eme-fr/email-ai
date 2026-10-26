@@ -17,6 +17,8 @@ var doors: Array = []        ## [{cell: Vector2i, to, to_cell: Vector2i, facing}
 var spots: Array = []        ## [{id, cells: [Vector2i], label, kind, ...}]
 var npcs: Array = []         ## [{id, cell: Vector2i, radius}]
 var performance: Dictionary = {}
+var districts: Array = []    ## [{id, name, rect: Rect2i}] (quartiers de la ville)
+var decor: Array = []        ## décors animés : [{kind, rect?, cell?}]
 
 var _astar: AStarGrid2D
 
@@ -48,6 +50,10 @@ static func from_data(world: Dictionary, map_id: String) -> WorldMap:
 	for n: Dictionary in raw.get("npcs", []):
 		m.npcs.append({"id": str(n["id"]), "cell": to_cell(n["cell"]), "radius": int(n.get("radius", 0))})
 	m.performance = raw.get("performance", {})
+	for d: Dictionary in raw.get("districts", []):
+		var r: Array = d["rect"]
+		m.districts.append({"id": str(d["id"]), "name": str(d["name"]), "rect": Rect2i(int(r[0]), int(r[1]), int(r[2]), int(r[3]))})
+	m.decor = raw.get("decor", [])
 	return m
 
 
@@ -90,6 +96,23 @@ func spot(spot_id: String) -> Dictionary:
 		if sp["id"] == spot_id:
 			return sp
 	return {}
+
+
+## Quartier de la ville où se trouve une case ({} hors quartier).
+func district_at(cell: Vector2i) -> Dictionary:
+	for d: Dictionary in districts:
+		if (d["rect"] as Rect2i).has_point(cell):
+			return d
+	return {}
+
+
+## Arrêts de bus de la carte (objets de type « bus »), dans l'ordre des données.
+func bus_stops() -> Array:
+	var out: Array = []
+	for sp: Dictionary in spots:
+		if sp.get("kind", "") == "bus":
+			out.append(sp)
+	return out
 
 
 ## Case où se placer pour utiliser un objet (première case praticable devant lui).

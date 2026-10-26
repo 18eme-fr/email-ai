@@ -54,10 +54,17 @@ rénovation : `id`, `label`, `icon`, `place` (carte où elle se voit et se déci
 - `start` : carte, case et direction du joueur en début de période.
 - `maps.<id>` : `name`, `outdoor`, `grid` (lignes de même longueur, une case = 16 px), `doors`
   (`cell` → `to`, `to_cell`, `facing` à l'arrivée), `spots` (objets : `id`, `cells`, `label`,
-  `kind` ∈ desk, glossary, budget, reports, posters, action, upgrade, flavor, place ; plus
-  `action` ou `upgrade` selon le cas), `npcs` (`id`, `cell`, `radius` de promenade),
-  `performance` (salle : place du joueur et rangées de fauteuils).
-- `people` : sprite, action de gestion éventuelle, carte d'origine de chaque personne.
+  `kind` ∈ desk, glossary, budget, reports, posters, action, upgrade, flavor, place, bus ; plus
+  `action` ou `upgrade` selon le cas ; `flavor` = clé de répliques partagée, par ex. « tour » ;
+  pour un arrêt de bus : `stop` (nom) et `arrive` (case d'arrivée)), `npcs` (`id`, `cell`,
+  `radius` de promenade), `performance` (salle : place du joueur et rangées de fauteuils).
+- Ville (`maps.rue`) : en plus, `ground` (sol sous chaque case, pour le dessin), `buildings`
+  (`id`, `style`, `rect` [x, y, largeur, hauteur], `label`, `doors`), `districts` (`id`, `name`,
+  `rect` : nom affiché quand on entre dans le quartier, plan de la ville) et `decor` (train,
+  bateaux, étang aux canards). **Ce plan est produit par `python3 tools/art/city_layout.py`** :
+  modifier ce script plutôt que le JSON, puis relancer `generate_art.py`.
+- `people` : sprite, action de gestion éventuelle, carte d'origine de chaque personne ; `bark`
+  facultatif = clé de répliques partagée (« enfant », « footballeur »).
 - `seasons` (période → automne, hiver, printemps, ete), `festive_turns`.
 
 Les grilles servent à la fois aux collisions (jeu) et au dessin (`tools/art/world.py`) :
