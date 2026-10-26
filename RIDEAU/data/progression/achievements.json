@@ -1,0 +1,17 @@
+{
+  "_doc": "Trophées, vérifiés à la fin de chaque période. Conditions : metric_min (SeasonEvaluator.metric), fill_min (un spectacle de la période a atteint ce remplissage), missions_done_min, dossier_perfect (un dossier réussi à 100 %), upgrades_min, skill_level_min (une compétence), all_skills_min (toutes les compétences), never_overdraft (fin de saison, jamais de trésorerie négative en fin de période), renewed (fin de saison, convention renouvelée).",
+  "achievements": [
+    {"id": "salle_comble", "title": "Salle comble", "text": "Remplir une salle à 95 % ou plus.", "icon": "people", "when": {"fill_min": 0.95}},
+    {"id": "mille", "title": "Mille spectateurs", "text": "Accueillir 1 000 spectateurs et participants.", "icon": "ticket", "when": {"metric_min": {"attendance_total": 1000}}},
+    {"id": "mission_accomplie", "title": "Mission accomplie", "text": "Réussir une première mission.", "icon": "check", "when": {"missions_done_min": 1}},
+    {"id": "bras_droit", "title": "Pilier de la saison", "text": "Réussir cinq missions.", "icon": "star", "when": {"missions_done_min": 5}},
+    {"id": "sans_faute", "title": "Sans faute", "text": "Réussir un dossier à 100 %.", "icon": "book", "when": {"dossier_perfect": true}},
+    {"id": "expert", "title": "Expertise", "text": "Atteindre le niveau 3 dans une compétence.", "icon": "chart", "when": {"skill_level_min": 3}},
+    {"id": "polyvalence", "title": "Polyvalence", "text": "Atteindre le niveau 2 dans toutes les compétences.", "icon": "team", "when": {"all_skills_min": 2}},
+    {"id": "batisseur", "title": "Bâtisseur·se", "text": "Réaliser trois rénovations.", "icon": "building", "when": {"upgrades_min": 3}},
+    {"id": "passeur", "title": "Passeur de culture", "text": "Mener huit actions d'éducation artistique et culturelle.", "icon": "heart", "when": {"metric_min": {"eac_count": 8}}},
+    {"id": "avant_garde", "title": "Avant-garde", "text": "Présenter six œuvres à forte exigence artistique.", "icon": "mask", "when": {"metric_min": {"art_count": 6}}},
+    {"id": "jamais_rouge", "title": "Jamais dans le rouge", "text": "Finir chaque période de la saison avec une trésorerie positive.", "icon": "cash", "when": {"never_overdraft": true}},
+    {"id": "convention", "title": "Convention renouvelée", "text": "Obtenir le renouvellement de la convention.", "icon": "handshake", "when": {"renewed": true}}
+  ]
+}

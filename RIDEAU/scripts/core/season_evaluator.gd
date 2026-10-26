@@ -15,7 +15,7 @@ static func metric(data: GameData, state: GameState, id: String) -> float:
 
 static func objectives(data: GameData, state: GameState) -> Array:
 	var out: Array = []
-	for obj: Dictionary in data.balance.get("objectives", []):
+	for obj: Dictionary in data.objectives_for(state):
 		var value := metric(data, state, str(obj["metric"]))
 		out.append({
 			"id": obj["id"], "label": obj["label"], "target": float(obj["target"]),
@@ -28,7 +28,7 @@ static func objectives(data: GameData, state: GameState) -> Array:
 ## Le solde de la subvention est versé si assez d'objectifs « missions »
 ## (hors équilibre financier) sont tenus et si les relations restent correctes.
 static func conditional_subsidy_granted(data: GameData, state: GameState) -> bool:
-	var rule: Dictionary = data.balance["renewal_rule"]
+	var rule: Dictionary = data.renewal_rule_for(state)
 	var required: Array = rule.get("required", [])
 	var others := 0
 	for obj: Dictionary in objectives(data, state):
@@ -40,7 +40,7 @@ static func conditional_subsidy_granted(data: GameData, state: GameState) -> boo
 static func renewed(data: GameData, state: GameState) -> bool:
 	if state.bankrupt:
 		return false
-	var rule: Dictionary = data.balance["renewal_rule"]
+	var rule: Dictionary = data.renewal_rule_for(state)
 	var required: Array = rule.get("required", [])
 	for obj: Dictionary in objectives(data, state):
 		if obj["id"] in required and not obj["met"]:

@@ -168,7 +168,7 @@ static func estimate(data: GameData, state: GameState, show: Dictionary, price_l
 static func incident_probability(data: GameData, state: GameState, show: Dictionary) -> float:
 	var inc: Dictionary = data.balance["incident"]
 	var gap := maxf(0.0, float(inc["threshold"]) - state.stat("equipement"))
-	return clampf(gap * float(inc["per_point"]) * float(show.get("tech_level", 0)), 0.0, 0.9)
+	return clampf(gap * float(inc["per_point"]) * float(show.get("tech_level", 0)) * SkillSystem.incident_mult(data, state), 0.0, 0.9)
 
 
 ## Tirage réel des places vendues, représentation par représentation.

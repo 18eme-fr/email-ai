@@ -12,7 +12,7 @@ static func lines(session: GameSession) -> Array:
 	var equipment_threshold := float(data.balance["incident"]["threshold"])
 	var projection := s.cash + Ledger.due_until(s, s.turn) - session.fixed_costs_total()
 	if s.cash < 0:
-		out.append({"character": "helene", "mood": "worried", "text": "Nous sommes à découvert de %s. Chaque dépense compte : la limite autorisée par la banque est de %s." % [Format.money(-s.cash), Format.money(int(data.balance["overdraft_limit"]))]})
+		out.append({"character": "helene", "mood": "worried", "text": "Nous sommes à découvert de %s. Chaque dépense compte : la limite autorisée par la banque est de %s." % [Format.money(-s.cash), Format.money(Rules.overdraft_limit(data, s))]})
 	elif projection < int(w["cash_projection"]):
 		out.append({"character": "helene", "mood": "worried", "text": "Avant toute programmation, la trésorerie prévue en fin de période n'est que de %s. Prudence." % Format.money(projection)})
 	else:

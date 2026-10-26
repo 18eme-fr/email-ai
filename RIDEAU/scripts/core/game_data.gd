@@ -12,6 +12,11 @@ const CHARACTERS_PATH := "res://data/characters/characters.json"
 const GLOSSARY_PATH := "res://data/pedagogy/glossary.json"
 const ENDINGS_PATH := "res://data/pedagogy/endings.json"
 const UPGRADES_PATH := "res://data/upgrades/upgrades.json"
+const SCENARIOS_PATH := "res://data/scenarios/scenarios.json"
+const MISSIONS_PATH := "res://data/missions/missions.json"
+const SKILLS_PATH := "res://data/progression/skills.json"
+const ACHIEVEMENTS_PATH := "res://data/progression/achievements.json"
+const DEFAULT_SCENARIO := "premiere_saison"
 
 static var _default: GameData = null
 
@@ -27,6 +32,15 @@ var characters: Dictionary = {}
 var upgrades: Dictionary = {}       ## id -> rénovation
 var upgrade_order: Array[String] = []
 var periods_per_year: int = 8
+var scenarios: Dictionary = {}      ## id -> scénario (étude de cas)
+var scenario_order: Array = []
+var missions: Dictionary = {}       ## id -> mission
+var mission_order: Array[String] = []
+var missions_max_active: int = 3
+var skills: Dictionary = {}         ## id -> compétence
+var skill_order: Array = []
+var skill_levels: Array = [0]
+var achievements: Array = []
 var glossary: Dictionary = {}
 var endings: Array = []
 var lessons: Array = []
@@ -82,6 +96,21 @@ func load_all() -> void:
 		upgrades[upgrade["id"]] = upgrade
 		upgrade_order.append(upgrade["id"])
 	glossary = _read_dict(GLOSSARY_PATH).get("notions", {})
+	var scen := _read_dict(SCENARIOS_PATH)
+	scenarios = scen.get("scenarios", {})
+	scenario_order = scen.get("order", scenarios.keys())
+	var mis := _read_dict(MISSIONS_PATH)
+	missions.clear()
+	mission_order.clear()
+	missions_max_active = int(mis.get("max_active", 3))
+	for m: Dictionary in mis.get("missions", []):
+		missions[m["id"]] = m
+		mission_order.append(m["id"])
+	var sk := _read_dict(SKILLS_PATH)
+	skills = sk.get("skills", {})
+	skill_order = sk.get("order", skills.keys())
+	skill_levels = sk.get("levels", [0])
+	achievements = _read_dict(ACHIEVEMENTS_PATH).get("achievements", [])
 	var endings_data := _read_dict(ENDINGS_PATH)
 	endings = endings_data.get("endings", [])
 	lessons = endings_data.get("lessons", [])
@@ -139,6 +168,20 @@ func uses_hall(show: Dictionary) -> bool:
 
 func is_artistic(show: Dictionary) -> bool:
 	return float(show.get("art", 0.0)) >= float(balance.get("art_threshold", 0.7))
+
+
+func scenario(id: String) -> Dictionary:
+	return scenarios.get(id, scenarios.get(DEFAULT_SCENARIO, {}))
+
+
+## Objectifs de la convention : ceux du scénario s'il en fixe, sinon ceux de balance.json.
+func objectives_for(state: GameState) -> Array:
+	var sc := scenario(state.scenario)
+	return sc.get("objectives", balance.get("objectives", []))
+
+
+func renewal_rule_for(state: GameState) -> Dictionary:
+	return scenario(state.scenario).get("renewal_rule", balance.get("renewal_rule", {}))
 
 
 func character_name(id: String) -> String:

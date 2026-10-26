@@ -139,4 +139,4 @@ static func upgrade_pitch(session: GameSession, upgrade_id: String) -> String:
 static func action_pitch(session: GameSession, action_id: String) -> String:
 	var a: Dictionary = session.data.actions[action_id]
 	var pay := "payée dans la période" if int(a.get("payment_delay", 0)) == 0 else "facture à 30 jours"
-	return "%s — %s\nCoût : %s (%s)." % [a["label"], a["summary"], Format.money(int(a["cost"])), pay]
+	return "%s — %s\nCoût : %s (%s)." % [a["label"], a["summary"], Format.money(Programming.action_cost(session.data, session.state, action_id)), pay]

@@ -80,7 +80,7 @@ func _card(id: String) -> Control:
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	col.add_child(UiKit.hbox([UiKit.icon_rect(UiKit.ACTION_ICONS.get(id, "star"), 32), title]))
 	var delay := int(a.get("payment_delay", 0))
-	var cost := "%s, payé %s" % [Format.money(int(a["cost"])), "cette période" if delay == 0 else "à la période suivante"]
+	var cost := "%s, payé %s" % [Format.money(Programming.action_cost(session.data, session.state, id)), "cette période" if delay == 0 else "à la période suivante"]
 	var c := UiKit.label(cost, "SmallLabel", true)
 	if on:
 		c.add_theme_color_override("font_color", UiKit.INK)

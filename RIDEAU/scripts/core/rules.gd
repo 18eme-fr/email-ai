@@ -24,6 +24,11 @@ static func rayonnement(data: GameData, state: GameState) -> float:
 	return clampf(total, 0.0, 100.0)
 
 
+## Découvert autorisé par la banque (négatif), compétence « Gestion financière » comprise.
+static func overdraft_limit(data: GameData, state: GameState) -> int:
+	return int(data.balance.get("overdraft_limit", -6000)) - SkillSystem.overdraft_bonus(data, state)
+
+
 static func stat_value(data: GameData, state: GameState, id: String) -> float:
 	if id == "rayonnement":
 		return rayonnement(data, state)

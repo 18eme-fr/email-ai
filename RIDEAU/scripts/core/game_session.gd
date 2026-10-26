@@ -15,15 +15,24 @@ func _init(game_data: GameData = null) -> void:
 	data = game_data if game_data != null else GameData.get_default()
 
 
-func new_game(game_seed: int, difficulty_id: String = "standard") -> void:
+func new_game(game_seed: int, difficulty_id: String = "standard", scenario_id: String = GameData.DEFAULT_SCENARIO) -> void:
 	state = GameState.new()
 	state.game_seed = game_seed
 	state.difficulty = difficulty_id if data.balance.get("difficulties", {}).has(difficulty_id) else "standard"
+	state.scenario = scenario_id if data.scenarios.has(scenario_id) else GameData.DEFAULT_SCENARIO
 	var diff := data.difficulty(state.difficulty)
 	var start: Dictionary = data.balance["start"]
+	var sc_start: Dictionary = data.scenario(state.scenario).get("start", {})
 	state.cash = starting_cash()
 	for id: String in GameState.STAT_IDS:
-		state.stats[id] = float(start["stats"].get(id, 50))
+		state.stats[id] = float(sc_start.get("stats", {}).get(id, start["stats"].get(id, 50)))
+	for skill: String in data.skill_order:
+		state.skills_xp[skill] = 0
+	# Situation de départ du scénario : dettes, avances à rembourser…
+	for item: Dictionary in data.scenario(state.scenario).get("ledger", []):
+		var delay := int(item.get("delay", 0))
+		Ledger.add(state, str(item["label"]), str(item.get("category", "scenario")), int(item["amount"]),
+				int(item.get("direction", -1)), 1 + delay, 1 + delay, {"neutral": bool(item.get("neutral", false)), "source": "scenario"})
 	# Subvention de fonctionnement : versements programmés dès le départ.
 	var sub: Dictionary = data.balance["municipal_subsidy"]
 	var total := float(sub["total"]) * float(diff.get("subsidy_mult", 1.0))
@@ -48,14 +57,87 @@ func start_turn() -> void:
 	state.current_event = ""
 	state.event_choice = ""
 	state.event_outcome = {}
-	state.offers = Programming.draw_offers(data, state)
+	state.offers = Programming.draw_offers(data, state, 5 + SkillSystem.extra_offers(data, state))
+	MissionSystem.refresh_offers(data, state)
+	_include_wanted_shows()
 
 
 # --- Lecture ---------------------------------------------------------------------
 
-## Trésorerie de départ selon la difficulté (premier point des courbes).
+## Trésorerie de départ selon le scénario et la difficulté (premier point des courbes).
 func starting_cash() -> int:
-	return roundi(float(data.balance["start"]["cash"]) * float(data.difficulty(state.difficulty).get("cash_mult", 1.0)))
+	var base := float(data.scenario(state.scenario).get("start", {}).get("cash", data.balance["start"]["cash"]))
+	return roundi(base * float(data.difficulty(state.difficulty).get("cash_mult", 1.0)))
+
+
+func scenario() -> Dictionary:
+	return data.scenario(state.scenario)
+
+
+## Un spectacle demandé par une mission figure parmi les propositions (s'il n'a pas été joué).
+func _include_wanted_shows() -> void:
+	if not state.phase in [GameState.PHASE_SITUATION, GameState.PHASE_PROGRAMMING]:
+		return
+	for show_id: String in MissionSystem.wanted_shows(data, state):
+		if not show_id in state.offers and not show_id in state.played_shows:
+			if state.offers.size() >= 5:
+				state.offers[state.offers.size() - 1] = show_id
+			else:
+				state.offers.append(show_id)
+
+
+# --- Missions, dossiers, compétences ---------------------------------------------------
+
+func accept_mission(mission_id: String) -> String:
+	var err := MissionSystem.accept(data, state, mission_id)
+	if err == "":
+		_include_wanted_shows()
+	return err
+
+
+func decline_mission(mission_id: String) -> void:
+	MissionSystem.decline(state, mission_id)
+
+
+## Prépare un dossier. Les chiffres changent à chaque tentative (hasard reproductible).
+func open_dossier(dossier_id: String, practice: bool = false) -> Dictionary:
+	var attempt := 0
+	for r: Dictionary in state.dossiers:
+		if r["id"] == dossier_id:
+			attempt += 1
+	var rng := SeededRng.make(state.game_seed, state.turn, SeededRng.CHANNEL_DOSSIER, hash([dossier_id, attempt, practice]))
+	var d := Dossiers.generate(dossier_id, data, state, rng)
+	d["practice"] = practice
+	return d
+
+
+## Corrige un dossier. Hors entraînement : expérience gagnée et missions éventuellement réussies.
+## Retourne la correction (voir Dossiers.grade) complétée de {xp, missions}.
+func submit_dossier(dossier: Dictionary, answers: Dictionary) -> Dictionary:
+	var result := Dossiers.grade(dossier, answers)
+	var practice := bool(dossier.get("practice", false))
+	state.dossiers.append({"id": dossier["id"], "turn": state.turn, "score": result["score"], "practice": practice})
+	result["xp"] = 0
+	result["missions"] = []
+	if not practice:
+		var xp := roundi(float(result["score"]) * float(dossier.get("xp", 10)))
+		SkillSystem.add_xp(data, state, str(dossier["skill"]), xp)
+		result["xp"] = xp
+		result["missions"] = MissionSystem.on_dossier(data, state)
+	return result
+
+
+## Messages en attente (missions, niveaux, trophées) ; la liste est vidée.
+func take_notices() -> Array:
+	var out := state.notices.duplicate(true)
+	state.notices.clear()
+	return out
+
+
+## Note qu'une notion du carnet a été consultée (rapport de saison).
+func record_notion(notion_id: String) -> void:
+	if notion_id != "" and not notion_id in state.notions_seen:
+		state.notions_seen.append(notion_id)
 
 
 func period_name() -> String:
@@ -89,7 +171,7 @@ func projected_cash(programmed: Array = state.programmed, actions: Array = state
 	for id: String in actions:
 		var action: Dictionary = data.actions[id]
 		if int(action.get("payment_delay", 0)) == 0:
-			base -= int(action["cost"])
+			base -= Programming.action_cost(data, state, id)
 	var expected := base
 	var low := base
 	for entry: Dictionary in programmed:
@@ -185,7 +267,7 @@ func confirm_actions(actions: Array) -> String:
 ## suffisent à dépasser la limite, la faillite sera la conséquence de la période,
 ## mais le joueur n'est jamais bloqué.
 func _affordability_error(programmed: Array, actions: Array) -> String:
-	var limit := int(data.balance.get("overdraft_limit", -6000))
+	var limit := Rules.overdraft_limit(data, state)
 	var projection := projected_cash(programmed, actions)
 	var baseline := projected_cash([], [])
 	if projection["low"] < limit and projection["low"] < baseline["low"]:
@@ -213,7 +295,7 @@ func upgrade_block_reason(upgrade_id: String) -> String:
 		return "Ces travaux sont déjà faits."
 	if not state.phase in [GameState.PHASE_SITUATION, GameState.PHASE_PROGRAMMING, GameState.PHASE_MANAGEMENT]:
 		return "Les travaux se décident avant l'événement de la période."
-	var limit := int(data.balance.get("overdraft_limit", -6000))
+	var limit := Rules.overdraft_limit(data, state)
 	var low := int(projected_cash(state.programmed, state.actions)["low"]) - int(data.upgrades[upgrade_id]["cost"])
 	if low < limit:
 		return "Trésorerie insuffisante : dans le pire des cas, elle tomberait à %s, sous la limite du découvert (%s)." % [Format.money(low), Format.money(limit)]
@@ -290,6 +372,10 @@ func resolve_turn() -> Dictionary:
 		state.phase = GameState.PHASE_FINISHED
 	else:
 		state.phase = GameState.PHASE_REPORT
+	var won: Array = []
+	for a: Dictionary in AchievementSystem.check(data, state, report):
+		won.append({"id": a["id"], "title": a["title"], "text": a["text"]})
+	report["achievements"] = won
 	return report
 
 

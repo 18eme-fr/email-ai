@@ -1,0 +1,247 @@
+{
+  "_doc": "Scénarios (études de cas). 'start' remplace les valeurs de départ de balance.json (cash, stats) ; 'ledger' ajoute des écritures au départ (dettes, avances) au format des effets ; 'objectives' remplace les objectifs de la convention (même format que balance.objectives ; une métrique peut être un indicateur) ; 'renewal_rule' facultatif ; 'missions' liste les missions proposées (voir data/missions/missions.json) ; 'learning' : notions travaillées. Le texte 'context' est présenté comme une étude de cas.",
+  "order": [
+    "premiere_saison",
+    "redressement",
+    "territoire",
+    "creation"
+  ],
+  "scenarios": {
+    "premiere_saison": {
+      "title": "La première saison",
+      "level": "Découverte",
+      "summary": "Vous prenez la direction d'un théâtre municipal en convention avec la Ville. Situation saine, équipe motivée, public à reconquérir.",
+      "context": "Le Théâtre de la Lanterne (220 places) est géré par une association conventionnée avec la Ville de Bréval-sur-Ondine. Votre prédécesseure part à la retraite après vingt ans : la trésorerie est saine, mais le public vieillit et le matériel aussi. La convention d'objectifs fixe quatre engagements pour la saison. Votre conseil d'administration attend un budget tenu ; la Ville, des publics nombreux et divers.",
+      "question": "Comment construire une première saison qui tienne à la fois le budget et les missions de service public ?",
+      "learning": [
+        "budget_previsionnel",
+        "tresorerie_resultat",
+        "programmation",
+        "convention_objectifs",
+        "eac"
+      ],
+      "start": {},
+      "missions": [
+        "budget_saison",
+        "commission_securite",
+        "parcours_eac",
+        "frequentation_mi_saison",
+        "seuil_rentabilite",
+        "contrat_negociation",
+        "mecenat",
+        "tarif_solidaire",
+        "creation_machine"
+      ]
+    },
+    "redressement": {
+      "title": "Sauver la Lanterne",
+      "level": "Intermédiaire",
+      "summary": "Trésorerie au plus bas, dettes, équipe épuisée et Ville inquiète : redresser la situation en une saison.",
+      "context": "La saison passée s'est mal terminée : un spectacle annulé, des travaux payés sur la trésorerie, des fournisseurs qui attendent. La Ville a consenti une avance qu'il faudra rembourser en janvier. L'équipe est fatiguée et le matériel n'a pas été entretenu. Le conseil d'administration vous demande un plan de redressement : retrouver l'équilibre sans renoncer aux missions de la convention, dont l'adjoint à la culture surveille chaque chiffre.",
+      "question": "Quelles priorités fixer quand trésorerie, équipe et relations institutionnelles sont toutes fragiles ?",
+      "learning": [
+        "tresorerie_resultat",
+        "budget_previsionnel",
+        "charges_fixes_variables",
+        "collectivite",
+        "equipe"
+      ],
+      "start": {
+        "cash": 18500,
+        "stats": {
+          "fidelite": 30,
+          "equipe": 42,
+          "equipement": 40,
+          "relations": 36,
+          "reputation": 36
+        }
+      },
+      "ledger": [
+        {
+          "label": "Factures de travaux de la saison passée",
+          "category": "dette",
+          "amount": 2500,
+          "direction": -1,
+          "delay": 1,
+          "neutral": true
+        },
+        {
+          "label": "Remboursement de l'avance de la Ville",
+          "category": "avance",
+          "amount": 2500,
+          "direction": -1,
+          "delay": 4,
+          "neutral": true
+        }
+      ],
+      "objectives": [
+        {
+          "id": "equilibre",
+          "label": "Terminer la saison avec une trésorerie positive",
+          "metric": "cash",
+          "target": 0,
+          "required": true,
+          "notion": "tresorerie_resultat"
+        },
+        {
+          "id": "publics",
+          "label": "Accueillir au moins 3 000 spectateurs et participants",
+          "metric": "attendance_total",
+          "target": 3000,
+          "notion": "frequentation"
+        },
+        {
+          "id": "eac",
+          "label": "Mener au moins 4 actions d'éducation artistique et de médiation",
+          "metric": "eac_count",
+          "target": 4,
+          "notion": "eac"
+        },
+        {
+          "id": "confiance",
+          "label": "Restaurer la confiance de la Ville (relations ≥ 55)",
+          "metric": "relations",
+          "target": 55,
+          "notion": "collectivite"
+        }
+      ],
+      "missions": [
+        "lecture_tresorerie",
+        "tresorerie_fetes",
+        "budget_saison",
+        "commission_securite",
+        "equipe_reposee",
+        "bilan_mi_parcours",
+        "seuil_rentabilite",
+        "mecenat",
+        "frequentation_mi_saison"
+      ]
+    },
+    "territoire": {
+      "title": "Un théâtre pour tout le quartier",
+      "level": "Intermédiaire",
+      "summary": "La Ville veut que la Lanterne s'ouvre aux quartiers qui n'y viennent jamais. Diversifier les publics sans perdre l'équilibre.",
+      "context": "Le théâtre est situé en centre-ville, à vingt minutes du quartier des Coteaux, classé quartier prioritaire de la politique de la ville. Une enquête montre que 80 % du public vient du centre et a plus de cinquante ans. La nouvelle convention met l'accent sur l'éducation artistique et culturelle, la diversité des publics et le partenariat avec les associations et les écoles. Les moyens n'augmentent pas.",
+      "question": "Comment élargir et diversifier les publics avec des moyens constants ?",
+      "learning": [
+        "mediation",
+        "eac",
+        "diversification",
+        "tarification",
+        "partenariat"
+      ],
+      "start": {
+        "stats": {
+          "diversite": 22,
+          "fidelite": 32,
+          "relations": 46
+        }
+      },
+      "objectives": [
+        {
+          "id": "equilibre",
+          "label": "Terminer la saison avec une trésorerie positive",
+          "metric": "cash",
+          "target": 0,
+          "required": true,
+          "notion": "tresorerie_resultat"
+        },
+        {
+          "id": "publics",
+          "label": "Accueillir au moins 3 200 spectateurs et participants",
+          "metric": "attendance_total",
+          "target": 3200,
+          "notion": "frequentation"
+        },
+        {
+          "id": "eac",
+          "label": "Mener au moins 7 actions d'éducation artistique et de médiation",
+          "metric": "eac_count",
+          "target": 7,
+          "notion": "eac"
+        },
+        {
+          "id": "diversite",
+          "label": "Atteindre une diversité des publics d'au moins 65",
+          "metric": "diversite",
+          "target": 65,
+          "notion": "diversification"
+        }
+      ],
+      "missions": [
+        "parcours_eac",
+        "tarif_solidaire",
+        "nouveaux_publics",
+        "residence",
+        "budget_saison",
+        "commission_securite",
+        "mecenat",
+        "contrat_negociation",
+        "frequentation_mi_saison"
+      ]
+    },
+    "creation": {
+      "title": "Le pari de la création",
+      "level": "Expert",
+      "summary": "La Lanterne veut devenir un lieu de création reconnu : coproduire, accueillir des résidences, convaincre la critique… sans faire faillite.",
+      "context": "Le conseil d'administration a fixé un cap ambitieux : faire de la Lanterne un lieu repéré pour la création contemporaine, première étape vers un label national. Louison Vasseur, artiste associé·e, prépare une création coûteuse. Les spectacles exigeants remplissent moins la salle, la billetterie ne suffira pas : il faudra des partenaires, des coproducteurs et une gestion très fine des risques.",
+      "question": "Comment soutenir la création et le rayonnement artistique quand la billetterie ne peut pas les financer ?",
+      "learning": [
+        "production_diffusion",
+        "residence",
+        "contrat_cession",
+        "corealisation",
+        "mecenat",
+        "rayonnement"
+      ],
+      "start": {
+        "cash": 16000,
+        "stats": {
+          "reputation": 40
+        }
+      },
+      "objectives": [
+        {
+          "id": "equilibre",
+          "label": "Terminer la saison avec une trésorerie positive",
+          "metric": "cash",
+          "target": 0,
+          "required": true,
+          "notion": "tresorerie_resultat"
+        },
+        {
+          "id": "exigence",
+          "label": "Présenter au moins 6 œuvres à forte exigence artistique",
+          "metric": "art_count",
+          "target": 6,
+          "notion": "programmation"
+        },
+        {
+          "id": "reconnaissance",
+          "label": "Atteindre une réputation artistique d'au moins 72",
+          "metric": "reputation",
+          "target": 72,
+          "notion": "rayonnement"
+        },
+        {
+          "id": "publics",
+          "label": "Accueillir au moins 3 000 spectateurs et participants",
+          "metric": "attendance_total",
+          "target": 3000,
+          "notion": "frequentation"
+        }
+      ],
+      "missions": [
+        "creation_machine",
+        "residence",
+        "contrat_negociation",
+        "mecenat",
+        "reconnaissance_critique",
+        "seuil_rentabilite",
+        "budget_saison",
+        "commission_securite",
+        "parcours_eac"
+      ]
+    }
+  }
+}

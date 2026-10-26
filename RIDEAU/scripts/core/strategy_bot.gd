@@ -42,6 +42,8 @@ func play_season(session: GameSession) -> GameState:
 
 
 func play_turn(session: GameSession) -> void:
+	if strategy != "passive":
+		_missions(session)
 	if builds:
 		_build(session)
 	session.open_programming()
@@ -59,6 +61,20 @@ func play_turn(session: GameSession) -> void:
 	var report := session.resolve_turn()
 	assert(not report.has("error"), "La période doit pouvoir être résolue.")
 	session.next_turn()
+
+
+## Accepte les missions proposées et rend les dossiers demandés.
+## Justesse des réponses : 75 % (40 % pour le joueur au hasard).
+func _missions(session: GameSession) -> void:
+	for id: String in MissionSystem.with_status(session.state, "offered"):
+		session.accept_mission(id)
+	var accuracy := 0.4 if strategy == "aleatoire" else 0.75
+	for id: String in MissionSystem.with_status(session.state, "active"):
+		var goal: Dictionary = session.data.missions[id]["goal"]
+		if goal["kind"] == "dossier":
+			var d := session.open_dossier(str(goal["dossier"]))
+			session.submit_dossier(d, Dossiers.auto_answers(d, rng, accuracy))
+	session.take_notices()
 
 
 func _build(session: GameSession) -> void:

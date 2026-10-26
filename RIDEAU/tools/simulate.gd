@@ -3,12 +3,13 @@ extends SceneTree
 ## différentes stratégies et produit un rapport d'équilibrage.
 ##
 ## Usage :
-##   godot --headless --path . -s res://tools/simulate.gd -- --games 200 --difficulty standard --out docs/BALANCE_REPORT.md
+##   godot --headless --path . -s res://tools/simulate.gd -- --games 200 --difficulty standard [--scenario redressement] --out docs/BALANCE_REPORT.md
 ## Chaque partie utilise la graine (base + index) : un problème repéré se
 ## reproduit exactement en relançant la même graine.
 
 var games := 200
 var difficulty := "standard"
+var scenario := "premiere_saison"
 var base_seed := 1000
 var out_path := ""
 
@@ -19,10 +20,10 @@ func _init() -> void:
 	var lines: Array[String] = []
 	lines.append("# Rapport d'équilibrage automatique")
 	lines.append("")
-	lines.append("Généré par `tools/simulate.gd` — %d saisons par stratégie, difficulté « %s », graines %d à %d." % [games, difficulty, base_seed, base_seed + games - 1])
+	lines.append("Généré par `tools/simulate.gd` — %d saisons par stratégie, scénario « %s », difficulté « %s », graines %d à %d." % [games, data.scenario(scenario).get("title", scenario), difficulty, base_seed, base_seed + games - 1])
 	lines.append("")
-	lines.append("| Stratégie | Trésorerie finale moy. | Écart-type | Min | Max | Convention renouvelée | Faillite | Score moy. | Spectateurs moy. | Rayonnement moy. |")
-	lines.append("|---|---|---|---|---|---|---|---|---|---|")
+	lines.append("| Stratégie | Trésorerie finale moy. | Écart-type | Min | Max | Convention renouvelée | Faillite | Score moy. | Spectateurs moy. | Rayonnement moy. | Missions réussies moy. |")
+	lines.append("|---|---|---|---|---|---|---|---|---|---|---|")
 	var endings_by_strategy := {}
 	var show_margins := {}
 	var objectives_by_strategy := {}
@@ -34,12 +35,13 @@ func _init() -> void:
 		var score_sum := 0.0
 		var att_sum := 0.0
 		var ray_sum := 0.0
+		var missions_sum := 0.0
 		var endings := {}
 		var obj_counts := {}
 		var stat_sums := {}
 		for i in games:
 			var session := GameSession.new(data)
-			session.new_game(base_seed + i, difficulty)
+			session.new_game(base_seed + i, difficulty, scenario)
 			var bot := StrategyBot.new(strategy, base_seed + i)
 			var state := bot.play_season(session)
 			cash.append(float(state.cash))
@@ -50,6 +52,7 @@ func _init() -> void:
 			score_sum += float(state.ending.get("score", 0))
 			att_sum += float(state.totals["attendance_total"])
 			ray_sum += Rules.rayonnement(data, state)
+			missions_sum += MissionSystem.with_status(state, "done").size()
 			for sid: String in GameState.STAT_IDS:
 				stat_sums[sid] = float(stat_sums.get(sid, 0.0)) + state.stat(sid)
 			var eid := str(state.ending.get("ending_id", "?"))
@@ -67,11 +70,11 @@ func _init() -> void:
 					acc[2] += float(s["fill"])
 					show_margins[s["show_id"]] = acc
 		var mean := _mean(cash)
-		lines.append("| %s | %s | %s | %s | %s | %d %% | %d %% | %.1f | %d | %.1f |" % [
+		lines.append("| %s | %s | %s | %s | %s | %d %% | %d %% | %.1f | %d | %.1f | %.1f |" % [
 			strategy, Format.money(roundi(mean)), Format.money(roundi(_sd(cash, mean))),
 			Format.money(roundi(cash.min())), Format.money(roundi(cash.max())),
 			roundi(100.0 * renewed / games), roundi(100.0 * bankrupt / games),
-			score_sum / games, roundi(att_sum / games), ray_sum / games])
+			score_sum / games, roundi(att_sum / games), ray_sum / games, missions_sum / games])
 		endings_by_strategy[strategy] = endings
 		var stat_parts: Array[String] = []
 		for sid: String in GameState.STAT_IDS:
@@ -98,7 +101,7 @@ func _init() -> void:
 	for strategy: String in objectives_by_strategy:
 		var parts: Array[String] = []
 		var o: Dictionary = objectives_by_strategy[strategy]
-		for obj: Dictionary in data.balance["objectives"]:
+		for obj: Dictionary in data.scenario(scenario).get("objectives", data.balance["objectives"]):
 			parts.append("%s %d" % [obj["id"], int(o.get(obj["id"], 0))])
 		lines.append("- **%s** — %s" % [strategy, ", ".join(parts)])
 	lines.append("")
@@ -131,6 +134,8 @@ func _parse_args() -> void:
 				games = int(args[i + 1]); i += 1
 			"--difficulty":
 				difficulty = args[i + 1]; i += 1
+			"--scenario":
+				scenario = args[i + 1]; i += 1
 			"--seed":
 				base_seed = int(args[i + 1]); i += 1
 			"--out":

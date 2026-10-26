@@ -41,7 +41,14 @@ var reports: Array = []
 var history: Array = []         ## instantanés par fin de période (graphiques)
 var key_decisions: Array = []
 var upgrades: Array = []        ## ids des rénovations réalisées (investissements)
-var totals: Dictionary = {"attendance_total": 0, "eac_count": 0, "art_count": 0, "shows_count": 0}
+var scenario: String = "premiere_saison"   ## étude de cas jouée
+var missions: Dictionary = {}   ## id -> suivi de mission (voir MissionSystem)
+var skills_xp: Dictionary = {}  ## compétence -> expérience
+var dossiers: Array = []        ## [{id, turn, score, practice}]
+var achievements: Array = []    ## ids des trophées obtenus
+var notions_seen: Array = []    ## notions du carnet consultées
+var notices: Array = []         ## messages à montrer au joueur (missions, niveaux, trophées)
+var totals: Dictionary = {"attendance_total": 0, "eac_count": 0, "art_count": 0, "shows_count": 0, "solidaire_count": 0}
 
 var bankrupt: bool = false
 var finished: bool = false
@@ -92,6 +99,13 @@ func to_dict() -> Dictionary:
 		"ending": ending.duplicate(true),
 		"tutorial_seen": tutorial_seen.duplicate(true),
 		"upgrades": upgrades.duplicate(),
+		"scenario": scenario,
+		"missions": missions.duplicate(true),
+		"skills_xp": skills_xp.duplicate(true),
+		"dossiers": dossiers.duplicate(true),
+		"achievements": achievements.duplicate(),
+		"notions_seen": notions_seen.duplicate(),
+		"notices": notices.duplicate(true),
 	}
 
 
@@ -120,7 +134,9 @@ static func from_dict(d: Dictionary) -> GameState:
 		"offers": TYPE_ARRAY, "programmed": TYPE_ARRAY, "actions": TYPE_ARRAY, "stat_log": TYPE_ARRAY,
 		"played_shows": TYPE_ARRAY, "genre_history": TYPE_ARRAY, "seen_events": TYPE_ARRAY,
 		"reports": TYPE_ARRAY, "history": TYPE_ARRAY, "key_decisions": TYPE_ARRAY,
-		"upgrades": TYPE_ARRAY,
+		"upgrades": TYPE_ARRAY, "scenario": TYPE_STRING, "missions": TYPE_DICTIONARY,
+		"skills_xp": TYPE_DICTIONARY, "dossiers": TYPE_ARRAY, "achievements": TYPE_ARRAY,
+		"notions_seen": TYPE_ARRAY, "notices": TYPE_ARRAY,
 	}
 	for key: String in optional:
 		if d.has(key) and typeof(d[key]) != optional[key]:
@@ -169,6 +185,21 @@ static func from_dict(d: Dictionary) -> GameState:
 		if not id is String:
 			return null
 		s.upgrades.append(id)
+	s.scenario = str(d.get("scenario", "premiere_saison"))
+	s.missions = d.get("missions", {})
+	for id: String in s.missions:
+		var m: Variant = s.missions[id]
+		if not m is Dictionary or not (m as Dictionary).has("status"):
+			return null
+		for key: String in ["offered_turn", "accepted_turn", "deadline", "ended_turn"]:
+			if (m as Dictionary).has(key):
+				m[key] = int(m[key])
+	for skill: String in d.get("skills_xp", {}):
+		s.skills_xp[skill] = int(d["skills_xp"][skill])
+	s.dossiers = d.get("dossiers", [])
+	s.achievements = d.get("achievements", [])
+	s.notions_seen = d.get("notions_seen", [])
+	s.notices = d.get("notices", [])
 	return s
 
 

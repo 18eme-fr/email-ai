@@ -1,0 +1,47 @@
+{
+  "_doc": "Compétences de la direction. 'levels' : expérience nécessaire pour chaque niveau (niveau 1 = départ). 'perks' : avantages débloqués par niveau. Types d'avantage : per_turn (indicateurs à chaque période), offers (propositions supplémentaires), action_discount (coefficient sur le coût des actions ; '*' = toutes), incident_mult (risque d'incident technique), overdraft_bonus (découvert autorisé supplémentaire).",
+  "levels": [0, 30, 75],
+  "order": ["finances", "programmation", "publics", "partenariats", "technique"],
+  "skills": {
+    "finances": {
+      "label": "Gestion financière", "icon": "cash",
+      "description": "Budget, trésorerie, rentabilité : piloter par les chiffres.",
+      "perks": {
+        "2": {"label": "Confiance de la banque", "text": "Découvert autorisé augmenté de 2 000 €.", "overdraft_bonus": 2000},
+        "3": {"label": "Achats négociés", "text": "Toutes les actions de gestion coûtent 10 % de moins.", "action_discount": {"*": 0.9}}
+      }
+    },
+    "programmation": {
+      "label": "Programmation artistique", "icon": "mask",
+      "description": "Choisir, négocier et accompagner les spectacles.",
+      "perks": {
+        "2": {"label": "Réseau de compagnies", "text": "Une proposition de spectacle supplémentaire à chaque période.", "offers": 1},
+        "3": {"label": "Regard reconnu", "text": "Réputation artistique +1 à chaque période.", "per_turn": {"reputation": 1}}
+      }
+    },
+    "publics": {
+      "label": "Développement des publics", "icon": "people",
+      "description": "Médiation, éducation artistique, accueil et tarification.",
+      "perks": {
+        "2": {"label": "Partenaires éducatifs", "text": "Les actions de médiation coûtent 30 % de moins.", "action_discount": {"mediation": 0.7}},
+        "3": {"label": "Public fidèle", "text": "Fidélité des publics +1,5 à chaque période.", "per_turn": {"fidelite": 1.5}}
+      }
+    },
+    "partenariats": {
+      "label": "Relations institutionnelles et partenariats", "icon": "handshake",
+      "description": "Collectivités, mécènes, réseaux et partenaires.",
+      "perks": {
+        "2": {"label": "Interlocuteur de confiance", "text": "Relations partenaires +1 à chaque période.", "per_turn": {"relations": 1}},
+        "3": {"label": "Carnet d'adresses", "text": "L'action « partenariats » coûte moitié moins.", "action_discount": {"partenariats": 0.5}}
+      }
+    },
+    "technique": {
+      "label": "Technique et équipe", "icon": "wrench",
+      "description": "Sécurité, matériel, conditions de travail de l'équipe.",
+      "perks": {
+        "2": {"label": "Maintenance préventive", "text": "Risque d'incident technique réduit de 40 %.", "incident_mult": 0.6},
+        "3": {"label": "Équipe soudée", "text": "Équipe +1,5 à chaque période.", "per_turn": {"equipe": 1.5}}
+      }
+    }
+  }
+}

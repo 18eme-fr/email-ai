@@ -9,7 +9,7 @@ static func open(parent: Node, session: GameSession) -> Modal:
 	var c := m.content
 	c.add_child(UiKit.rich("Trésorerie actuelle : [b]%s[/b]   ·   À recevoir : [b]%s[/b]   ·   À payer : [b]%s[/b]   ·   Découvert autorisé jusqu'à %s" % [
 		Format.money(s.cash), Format.money(Ledger.outstanding_total(s, Ledger.INCOME)),
-		Format.money(Ledger.outstanding_total(s, Ledger.EXPENSE)), Format.money(int(session.data.balance["overdraft_limit"]))]))
+		Format.money(Ledger.outstanding_total(s, Ledger.EXPENSE)), Format.money(Rules.overdraft_limit(session.data, s))]))
 	c.add_child(UiKit.hbox([UiKit.notion_link("tresorerie_resultat", "Trésorerie ou résultat ?"), UiKit.notion_link("subvention", "Subventions"), UiKit.notion_link("convention_objectifs", "Convention d'objectifs")]))
 	if s.history.size() > 0:
 		var chart := LineChart.new()

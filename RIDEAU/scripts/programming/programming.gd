@@ -90,6 +90,11 @@ static func validate(data: GameData, state: GameState, programmed: Array) -> Str
 	return ""
 
 
+## Coût d'une action, après les avantages des compétences.
+static func action_cost(data: GameData, state: GameState, action_id: String) -> int:
+	return roundi(float(data.actions[action_id]["cost"]) * SkillSystem.action_cost_mult(data, state, action_id))
+
+
 ## Nombre d'actions de gestion autorisées cette période.
 static func action_capacity(data: GameData, state: GameState) -> int:
 	var cap := int(data.balance["team_actions_per_turn"])

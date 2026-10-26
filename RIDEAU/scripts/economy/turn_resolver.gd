@@ -38,7 +38,7 @@ static func resolve(data: GameData, state: GameState) -> Dictionary:
 	# 2. Actions de gestion.
 	for id: String in state.actions:
 		var action: Dictionary = data.actions[id]
-		var cost := int(action["cost"])
+		var cost := Programming.action_cost(data, state, id)
 		if cost > 0:
 			Ledger.add(state, str(action["label"]), "action", cost, Ledger.EXPENSE, turn, turn + int(action.get("payment_delay", 0)), {"source": id})
 		Rules.apply(action.get("effects", {}), data, state, str(action["label"]), hash(id))
@@ -53,6 +53,11 @@ static func resolve(data: GameData, state: GameState) -> Dictionary:
 		if int(per.get("income", 0)) > 0:
 			Ledger.add(state, str(per.get("income_label", upgrade["label"])), "renovation", int(per["income"]),
 					Ledger.INCOME, turn, turn, {"source": id})
+
+	# 2 ter. Compétences de la direction : effets durables des avantages débloqués.
+	var perks := SkillSystem.per_turn_stats(data, state)
+	for stat_id: String in perks:
+		Rules.change_stat(state, stat_id, float(perks[stat_id]), "Compétences de la direction")
 
 	# 3. Représentations.
 	var genres_this_turn: Array = []
@@ -72,6 +77,9 @@ static func resolve(data: GameData, state: GameState) -> Dictionary:
 	# 4. Fin de saison : décision sur le solde conditionnel de la subvention.
 	if turn >= data.turns():
 		report["subsidy_decision"] = _decide_conditional_subsidy(data, state)
+
+	# 4 bis. Missions : réussites et échéances (récompenses comprises dans la période).
+	report["missions"] = MissionSystem.end_of_period(data, state)
 
 	# 5. Règlements de la période (seul endroit où la trésorerie bouge).
 	var settled := Ledger.settle_due(state, turn)
@@ -93,7 +101,7 @@ static func resolve(data: GameData, state: GameState) -> Dictionary:
 		"fidelite": state.stat("fidelite"), "rayonnement": Rules.rayonnement(data, state),
 		"resultat": report["finance"]["resultat"],
 	})
-	var limit := int(data.balance.get("overdraft_limit", -6000))
+	var limit := Rules.overdraft_limit(data, state)
 	if state.cash < limit:
 		state.bankrupt = true
 		report["warnings"].append("La trésorerie est passée sous la limite du découvert autorisé (%s)." % Format.money(limit))
@@ -177,6 +185,8 @@ static func _perform(data: GameData, state: GameState, show: Dictionary, price_l
 		state.flags[flag] = turn
 
 	state.totals["attendance_total"] = int(state.totals["attendance_total"]) + sold
+	if price_level == "reduit" and float(show.get("price", 0)) > 0.0:
+		state.totals["solidaire_count"] = int(state.totals.get("solidaire_count", 0)) + 1
 	state.totals["shows_count"] = int(state.totals["shows_count"]) + 1
 	if bool(show.get("eac", false)):
 		state.totals["eac_count"] = int(state.totals["eac_count"]) + 1
