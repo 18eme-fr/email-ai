@@ -21,6 +21,10 @@ CHARACTERS = {
         "skin": P["skin0"], "hair": P["grey2"], "hair_style": "bald", "clothes": P["night2"],
         "accent": P["blue"], "mustache": True, "tie": True, "bg": hex2rgb("#7d9a5b"),
     },
+    "lazare": {
+        "skin": P["skin2"], "hair": P["grey2"], "hair_style": "swoop", "clothes": P["ink"],
+        "accent": P["velvet4"], "round_glasses": True, "scarf": True, "beard": True, "bg": hex2rgb("#3c6e8f"),
+    },
     "louison": {
         "skin": P["skin2"], "hair": P["purple2"], "hair_style": "swoop", "clothes": P["ink"],
         "accent": P["purple1"], "round_glasses": True, "bg": hex2rgb("#9b6bc4"),

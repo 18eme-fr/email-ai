@@ -197,6 +197,40 @@ def music_city_night():
     return norm(reverb(out, 2.0, 0.35, rng), 0.7)
 
 
+def music_paris():
+    """« Paris, place des Lumières » : valse musette à l'accordéon, basse et pompe de guitare
+    (sans balais : rien qui souffle sous la musique)."""
+    rng = np.random.default_rng(14)
+    bpm = 156
+    beat = 60 / bpm
+    bar = 3 * beat
+    prog = [(57, "m"), (52, "7"), (52, "7"), (57, "m"), (57, "m"), (62, "m"), (52, "7"), (57, "m"),
+            (60, "maj"), (55, "7"), (55, "7"), (60, "maj"), (65, "maj"), (52, "7"), (57, "m"), (57, "m")]
+    mel = [76, 75, 76, 77, 76, 74, 71, 0, 68, 69, 0, 0,
+           72, 71, 72, 74, 72, 69, 71, 68, 64, 69, 0, 0,
+           76, 74, 72, 74, 71, 67, 74, 77, 74, 72, 0, 0,
+           72, 74, 77, 76, 74, 71, 72, 71, 69, 69, 0, 0]
+    total = len(prog) * bar
+    out = np.zeros(int(SR * total))
+    for b, (root, kind) in enumerate(prog):
+        t0 = b * bar
+        tones = chord_tones(root, kind)
+        bass = root - 24 if b % 2 == 0 else root - 24 + 7
+        place(out, 0.55 * pluck(midi(bass), beat * 0.9, 0.35, rng), int(SR * t0))
+        for k in (1, 2):  # « pompe » sur les deuxième et troisième temps
+            for i, iv in enumerate(tones[:3]):
+                place(out, 0.11 * pluck(midi(root + iv), beat * 0.45, 0.7, rng), int(SR * (t0 + k * beat + i * 0.007)))
+    for i, m in enumerate(mel):
+        if not m:
+            continue
+        hold = 1
+        while i + hold < len(mel) and mel[i + hold] == 0:
+            hold += 1
+        place(out, reed(midi(m), beat * hold * 0.95, 0.24, vib=6.0), int(SR * i * beat))
+    out = band(out, 0, 6000)
+    return norm(reverb(out, 1.2, 0.2, rng), 0.75)
+
+
 def music_reserve():
     """« La réserve » : boîte à musique et bourdon grave, mystère doux."""
     rng = np.random.default_rng(13)
@@ -492,7 +526,7 @@ def oneshots():
 
 def generate(write, music_dir, amb_dir, sfx_dir):
     music = {"ville_jour": music_city_day(), "ville_fetes": music_city_day(festive=True),
-             "ville_nuit": music_city_night(), "reserve": music_reserve()}
+             "ville_nuit": music_city_night(), "reserve": music_reserve(), "paris": music_paris()}
     for k, v in music.items():
         write(f"{music_dir}/{k}.wav", v)
     # Pas de nappe de bruit continue (ville, vent, salle, coulisses) : sous la musique, on

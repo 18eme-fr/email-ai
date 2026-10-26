@@ -16,6 +16,7 @@ const SCENARIOS_PATH := "res://data/scenarios/scenarios.json"
 const MISSIONS_PATH := "res://data/missions/missions.json"
 const SKILLS_PATH := "res://data/progression/skills.json"
 const ACHIEVEMENTS_PATH := "res://data/progression/achievements.json"
+const CREATION_PATH := "res://data/story/creation.json"
 const DEFAULT_SCENARIO := "premiere_saison"
 
 static var _default: GameData = null
@@ -42,6 +43,7 @@ var skill_order: Array = []
 var skill_levels: Array = [0]
 var achievements: Array = []
 var glossary: Dictionary = {}
+var creation: Dictionary = {}       ## création avec le metteur en scène (CreationSystem)
 var endings: Array = []
 var lessons: Array = []
 var load_errors: PackedStringArray = []
@@ -70,6 +72,7 @@ static func read_json(path: String) -> Variant:
 func load_all() -> void:
 	load_errors.clear()
 	balance = _read_dict(BALANCE_PATH)
+	creation = _read_dict(CREATION_PATH)
 	var catalog := _read_dict(CATALOG_PATH)
 	genres = catalog.get("genres", {})
 	shows.clear()

@@ -20,8 +20,7 @@ var _toast: PanelContainer
 var _toast_text: Label
 var _toast_tween: Tween
 var _hint: Label
-var _missions_panel: PanelContainer
-var _missions_list: VBoxContainer
+var _guide_list: VBoxContainer
 var _place_banner: Label
 var _card_pop: PanelContainer
 var _card_pic: TextureRect
@@ -49,30 +48,32 @@ func _init() -> void:
 	col.add_child(_place)
 	_chips = UiKit.hbox([], 14)
 	col.add_child(_chips)
-	# Objectif, en haut au centre-droit.
+	# Prochaines étapes, en haut au centre-droit : l'étape en cours (étoile), puis le
+	# rendez-vous avec le metteur en scène, les missions et les enquêtes.
 	_objective_panel = UiKit.panel("PaperPanel")
-	_objective_panel.position = Vector2(498, 10)
-	_objective_panel.custom_minimum_size = Vector2(440, 0)
-	_objective_panel.size = Vector2(440, 0)
+	_objective_panel.position = Vector2(484, 8)
+	_objective_panel.custom_minimum_size = Vector2(462, 0)
+	_objective_panel.size = Vector2(462, 0)
 	_objective_panel.mouse_filter = Control.MOUSE_FILTER_PASS
 	add_child(_objective_panel)
-	var orow := UiKit.hbox([UiKit.icon_rect("star", 24)], 8)
-	_objective_panel.add_child(orow)
+	var ocol := UiKit.vbox([], 2)
+	_objective_panel.add_child(ocol)
+	var head := UiKit.label("PROCHAINES ÉTAPES", "SmallLabel")
+	head.add_theme_color_override("font_color", Color("8a5a2b"))
+	head.add_theme_font_size_override("font_size", 13)
+	ocol.add_child(head)
+	var orow := UiKit.hbox([UiKit.icon_rect("star", 22)], 6)
+	ocol.add_child(orow)
 	_objective = UiKit.label("", "PaperLabel", true)
+	_objective.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_objective.add_theme_font_size_override("font_size", 16)
 	orow.add_child(_objective)
+	_guide_list = UiKit.vbox([], 1)
+	ocol.add_child(_guide_list)
 	# Raccourcis, en haut à droite.
 	var buttons := UiKit.hbox([], 4)
 	buttons.position = Vector2(1280 - 12 - 180, 12)
 	add_child(buttons)
-	# Missions en cours, sous la carte de la période.
-	_missions_panel = UiKit.panel("InsetPanel")
-	_missions_panel.position = Vector2(12, 132)
-	_missions_panel.custom_minimum_size = Vector2(460, 0)
-	_missions_panel.mouse_filter = Control.MOUSE_FILTER_PASS
-	_missions_panel.modulate.a = 0.94
-	add_child(_missions_panel)
-	_missions_list = UiKit.vbox([], 0)
-	_missions_panel.add_child(_missions_list)
 	buttons.position.x -= 138
 	for spec: Array in [["album", "Collection de la Lanterne : objets, enquêtes, exposition (C)", album_pressed], ["map", "Plan de la ville (M)", plan_pressed], ["book", "Journal de bord : missions, compétences, trophées (J)", journal_pressed], ["question", "Carnet du directeur (F1)", glossary_pressed], ["cash", "Budget et trésorerie", budget_pressed],
 			["chart", "Bilans des périodes", reports_pressed], ["gear", "Menu (Échap)", menu_pressed]]:
@@ -180,40 +181,18 @@ func refresh(session: GameSession, place: String, season_label: String, objectiv
 	_hint.visible = s.turn <= 2
 
 
-## Missions en cours et propositions en attente.
-func set_missions(session: GameSession) -> void:
-	UiKit.clear(_missions_list)
-	var data := session.data
-	var s := session.state
-	var active := MissionSystem.with_status(s, "active")
-	var offered := MissionSystem.with_status(s, "offered")
-	var quests := Game.collection.active_quests()
-	_missions_panel.visible = not (active.is_empty() and offered.is_empty() and quests.is_empty())
-	for q: Dictionary in quests.slice(0, 2):
-		var ql := UiKit.label("◆ Enquête « %s » : %s" % [q["title"], Game.collection.quest_current_step(q["id"])], "", true)
-		ql.add_theme_font_size_override("font_size", 15)
-		ql.add_theme_color_override("font_color", Color("e8c8f0"))
-		_missions_list.add_child(ql)
-	if active.is_empty() and offered.is_empty():
-		return
-	_missions_list.add_child(UiKit.label("Missions (J : journal)", "SmallLabel"))
-	for id: String in active:
-		var def: Dictionary = data.missions[id]
-		var prog := MissionSystem.progress(data, s, id)
-		var left := int(s.missions[id]["deadline"]) - s.turn
-		var when := "dernière période" if left <= 0 else "%d périodes" % (left + 1)
-		var l := UiKit.label("• %s — %s (%s)" % [def["title"], prog["text"], when], "", true)
-		l.add_theme_font_size_override("font_size", 15)
-		_missions_list.add_child(l)
-	if not offered.is_empty():
-		var names: Array = []
-		for id: String in offered:
-			var first := data.character_name(str(data.missions[id]["giver"])).split(" ")[0]
-			if not first in names:
-				names.append(first)
-		var l := UiKit.label("? Proposées par %s" % ", ".join(names), "SmallLabel", true)
-		l.add_theme_color_override("font_color", UiKit.GOLD)
-		_missions_list.add_child(l)
+## Guide « Prochaines étapes » (WorldRules.guide) : la première entrée est l'étape en
+## cours, déjà affichée en gros ; les suivantes s'ajoutent dessous, plus discrètes.
+func set_guide(entries: Array) -> void:
+	UiKit.clear(_guide_list)
+	for e: Dictionary in entries.slice(1, 6):
+		var row := UiKit.hbox([UiKit.icon_rect(str(e["icon"]), 18)], 6)
+		var l := UiKit.label(str(e["text"]), "PaperLabel", true)
+		l.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		l.add_theme_font_size_override("font_size", 14)
+		l.add_theme_color_override("font_color", Color("6a2a34") if e["tone"] == "todo" else Color("6b5a4a"))
+		row.add_child(l)
+		_guide_list.add_child(row)
 
 
 func _chip(icon_name: String, value: String, color: Color, tip: String) -> Control:

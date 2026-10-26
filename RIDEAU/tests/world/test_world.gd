@@ -12,7 +12,7 @@ func before() -> void:
 
 
 func test_maps_are_rectangular_and_use_the_legend() -> void:
-	assert_int(world.maps.size()).is_equal(33)  # ville, 5 salles du théâtre, 27 intérieurs
+	assert_int(world.maps.size()).is_equal(34)  # ville, 5 salles du théâtre, 27 intérieurs, Paris
 	for id: String in world.maps:
 		var m: WorldMap = world.maps[id]
 		for y in m.size.y:
@@ -40,7 +40,8 @@ func test_doors_lead_to_walkable_cells_and_back() -> void:
 func test_every_spot_and_npc_is_reachable_on_foot() -> void:
 	for id: String in world.maps:
 		var m: WorldMap = world.maps[id]
-		var entry: Vector2i = m.doors[0]["cell"]
+		# Paris n'a pas de porte : on y arrive par le train, devant la gare.
+		var entry: Vector2i = m.doors[0]["cell"] if not m.doors.is_empty() else WorldMap.to_cell(world.raw["maps"][id]["arrival"]["cell"])
 		var origin := entry
 		for dir: Vector2i in WorldMap.DIRS.values():
 			if m.is_walkable(entry + dir) and m.door_at(entry + dir).is_empty():

@@ -48,6 +48,7 @@ var dossiers: Array = []        ## [{id, turn, score, practice}]
 var achievements: Array = []    ## ids des trophées obtenus
 var notions_seen: Array = []    ## notions du carnet consultées
 var notices: Array = []         ## messages à montrer au joueur (missions, niveaux, trophées)
+var creation: Dictionary = {}   ## création avec le metteur en scène (voir CreationSystem)
 var totals: Dictionary = {"attendance_total": 0, "eac_count": 0, "art_count": 0, "shows_count": 0, "solidaire_count": 0}
 
 var bankrupt: bool = false
@@ -106,6 +107,7 @@ func to_dict() -> Dictionary:
 		"achievements": achievements.duplicate(),
 		"notions_seen": notions_seen.duplicate(),
 		"notices": notices.duplicate(true),
+		"creation": creation.duplicate(true),
 	}
 
 
@@ -136,7 +138,7 @@ static func from_dict(d: Dictionary) -> GameState:
 		"reports": TYPE_ARRAY, "history": TYPE_ARRAY, "key_decisions": TYPE_ARRAY,
 		"upgrades": TYPE_ARRAY, "scenario": TYPE_STRING, "missions": TYPE_DICTIONARY,
 		"skills_xp": TYPE_DICTIONARY, "dossiers": TYPE_ARRAY, "achievements": TYPE_ARRAY,
-		"notions_seen": TYPE_ARRAY, "notices": TYPE_ARRAY,
+		"notions_seen": TYPE_ARRAY, "notices": TYPE_ARRAY, "creation": TYPE_DICTIONARY,
 	}
 	for key: String in optional:
 		if d.has(key) and typeof(d[key]) != optional[key]:
@@ -200,6 +202,9 @@ static func from_dict(d: Dictionary) -> GameState:
 	s.achievements = d.get("achievements", [])
 	s.notions_seen = d.get("notions_seen", [])
 	s.notices = d.get("notices", [])
+	s.creation = d.get("creation", {})
+	if s.creation.has("choices") and not s.creation["choices"] is Dictionary:
+		return null
 	return s
 
 

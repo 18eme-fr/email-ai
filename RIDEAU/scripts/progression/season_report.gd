@@ -113,6 +113,17 @@ static func markdown(session: GameSession, player_name: String = "") -> String:
 			labels.append(str(data.upgrades[u]["label"]))
 		L.append("- Rénovations : %s" % ", ".join(labels))
 	L.append("")
+	L.append("## Création avec le metteur en scène")
+	L.append("")
+	for step: Dictionary in CreationSystem.summary(data, s):
+		L.append("- %s : %s%s" % [step["title"], step["label"], " (tranché par le metteur en scène)" if step["defaulted"] else ""])
+	var paris: Dictionary = s.creation.get("paris", {})
+	if not paris.is_empty():
+		L.append("- Première à Paris : %s — %d rappel(s), accueil %d / 100." % [paris["title"], int(paris["calls"]), int(paris["score"])])
+		L.append("- Critique : %s" % paris["critic"])
+	elif CreationSystem.choices(s).is_empty():
+		L.append("Aucune décision prise.")
+	L.append("")
 	L.append("## Notions travaillées")
 	L.append("")
 	var learning: Array = sc.get("learning", [])

@@ -136,6 +136,19 @@ func test_version_1_save_gets_empty_upgrades() -> void:
 	assert_array((result["state"] as GameState).upgrades).is_empty()
 
 
+func test_version_3_save_gets_an_empty_creation_and_choices_survive() -> void:
+	var s := _played_session(1)
+	var d := s.state.to_dict()
+	d.erase("creation")
+	var envelope := {"format": SaveSystem.FORMAT_ID, "version": 3, "state": d, "checksum": SaveSystem.checksum(d)}
+	var result := SaveSystem.deserialize(JSON.stringify(envelope, "", true, true))
+	assert_int(int(result["status"])).is_equal(SaveSystem.Status.OK)
+	assert_dict((result["state"] as GameState).creation).is_empty()
+	assert_str(CreationSystem.choose(s.data, s.state, "sujet", "moliere")).is_empty()
+	var again := SaveSystem.deserialize(SaveSystem.serialize(s.state))
+	assert_str(str(CreationSystem.choices(again["state"] as GameState)["sujet"])).is_equal("moliere")
+
+
 func test_upgrades_survive_a_roundtrip() -> void:
 	var s := _played_session(1)
 	s.next_turn()

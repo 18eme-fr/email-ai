@@ -1,0 +1,442 @@
+{
+  "_doc": "La création de la saison avec le metteur en scène Victor Lazare (scripts/progression/creation.gd). Chaque période, une étape : le joueur choisit une option parmi trois. Chaque option porte une « vision » (classique, moderne, populaire) et deux notes de 0 à 3 : 'critique' (ce que la presse parisienne en pensera) et 'public' (ce que la salle en pensera). La cohérence (plusieurs choix de la même vision) compte autant que les notes. 'locations' : où trouver Lazare à chaque période (map, cell, facing, activité). Les choix n'ont aucun effet sur la gestion du théâtre : ils décident de l'accueil de la première à Paris. Les petites phrases de Lazare entre deux décisions sont dans data/world/barks.json (« lazare »).",
+  "director": {
+    "id": "lazare",
+    "name": "Victor Lazare, metteur en scène",
+    "short": "Victor Lazare"
+  },
+  "visions": {
+    "classique": {
+      "label": "le grand répertoire",
+      "praise": "un classique servi avec une élégance rare"
+    },
+    "moderne": {
+      "label": "l'audace contemporaine",
+      "praise": "une proposition radicale, qui ne ressemble à rien de connu"
+    },
+    "populaire": {
+      "label": "le théâtre des gens d'ici",
+      "praise": "un spectacle porté par toute une ville, généreux et sincère"
+    }
+  },
+  "intro": [
+    "Ah ! Vous voilà enfin. Victor Lazare, metteur en scène. La mairie m'a invité en résidence chez vous pour toute la saison.",
+    "Ensemble, nous allons créer un spectacle. Un vrai, de la première idée à la première représentation. Et si c'est réussi… on le jouera à Paris.",
+    "Chaque mois, je vous demanderai de trancher une question. Je change d'endroit souvent : j'ai besoin de la ville pour inventer. Cherchez-moi !"
+  ],
+  "steps": [
+    {
+      "id": "sujet",
+      "title": "Le sujet",
+      "question": "Commençons par le commencement : de quoi parle notre spectacle ?",
+      "options": [
+        {
+          "id": "moliere",
+          "label": "Un Molière revisité",
+          "vision": "classique",
+          "critique": 2,
+          "public": 3,
+          "reply": "Le Misanthrope ! Alceste a toujours raison contre tout le monde… et c'est pour ça qu'on rit. Un grand texte, ça rassure et ça exige."
+        },
+        {
+          "id": "texte_neuf",
+          "label": "Un texte neuf sur la ville",
+          "vision": "moderne",
+          "critique": 3,
+          "public": 1,
+          "reply": "J'en connais une, d'autrice : elle écrit vite et fort. Une création, c'est un risque : personne ne connaît le titre. Mais si ça prend…"
+        },
+        {
+          "id": "memoire",
+          "label": "La mémoire des habitants",
+          "vision": "populaire",
+          "critique": 2,
+          "public": 3,
+          "reply": "On collectera des récits : la Fabrique, les Coteaux, la gare. Le théâtre documentaire, c'est écouter avant d'écrire."
+        }
+      ]
+    },
+    {
+      "id": "forme",
+      "title": "La forme",
+      "question": "Maintenant, la forme. Comment raconte-t-on cette histoire sur un plateau ?",
+      "options": [
+        {
+          "id": "texte",
+          "label": "Du théâtre de texte",
+          "vision": "classique",
+          "critique": 2,
+          "public": 2,
+          "reply": "Des acteurs, des mots, un plateau. Rien entre le texte et le public. C'est la forme la plus nue… et la plus difficile."
+        },
+        {
+          "id": "marionnettes",
+          "label": "Marionnettes et objets",
+          "vision": "moderne",
+          "critique": 3,
+          "public": 2,
+          "reply": "Des marionnettes à taille humaine ! Les programmateurs adorent : c'est rare, et ça tourne bien dans les petites salles."
+        },
+        {
+          "id": "musical",
+          "label": "Un spectacle musical",
+          "vision": "populaire",
+          "critique": 1,
+          "public": 3,
+          "reply": "Des chansons, un orchestre, des refrains qu'on fredonne en sortant. Ça coûte plus cher en musiciens, mais quelle joie !"
+        }
+      ]
+    },
+    {
+      "id": "distribution",
+      "title": "La distribution",
+      "question": "Qui va jouer ? La distribution, c'est la moitié de la mise en scène.",
+      "options": [
+        {
+          "id": "confirmes",
+          "label": "Des comédiens confirmés",
+          "vision": "classique",
+          "critique": 3,
+          "public": 2,
+          "reply": "J'appelle deux anciens de la Comédie-Française. Ils coûtent cher, mais leur nom sur l'affiche ouvre des portes."
+        },
+        {
+          "id": "jeunes",
+          "label": "Une jeune troupe sortie d'école",
+          "vision": "moderne",
+          "critique": 2,
+          "public": 2,
+          "reply": "Ils ont vingt-cinq ans et une énergie folle. Les insertions professionnelles comptent aussi dans votre convention, vous savez."
+        },
+        {
+          "id": "amateurs",
+          "label": "Amateurs et professionnels mêlés",
+          "vision": "populaire",
+          "critique": 1,
+          "public": 3,
+          "reply": "La boulangère, le CPE, deux lycéennes… et trois pros pour tenir le plateau. Il faudra beaucoup répéter, mais quelle vérité !"
+        }
+      ]
+    },
+    {
+      "id": "decor",
+      "title": "La scénographie",
+      "question": "Parlons décor. Qu'est-ce que le public voit quand le rideau s'ouvre ?",
+      "options": [
+        {
+          "id": "monumental",
+          "label": "Un décor monumental",
+          "vision": "classique",
+          "critique": 2,
+          "public": 3,
+          "reply": "Un salon à colonnes, des lustres, un escalier ! Bastien va râler : il faudra un camion pour la tournée."
+        },
+        {
+          "id": "plateau_nu",
+          "label": "Un plateau nu et de la lumière",
+          "vision": "moderne",
+          "critique": 3,
+          "public": 2,
+          "reply": "Rien que de la lumière qui sculpte l'espace. Ça voyage dans une valise… et ça demande des comédiens immenses."
+        },
+        {
+          "id": "recup",
+          "label": "Un décor de récupération",
+          "vision": "populaire",
+          "critique": 2,
+          "public": 2,
+          "reply": "On fouille la réserve et la Fabrique : de vieilles portes, des chaises, des toiles peintes. L'écoconception, c'est aussi une esthétique."
+        }
+      ]
+    },
+    {
+      "id": "musique",
+      "title": "La musique",
+      "question": "Il nous faut une couleur sonore. Que va-t-on entendre ?",
+      "options": [
+        {
+          "id": "quatuor",
+          "label": "Un quatuor à cordes",
+          "vision": "classique",
+          "critique": 2,
+          "public": 2,
+          "reply": "Les élèves du conservatoire, en direct, au bord du plateau. Leurs professeurs sont ravis : ça compte comme une scène pour eux."
+        },
+        {
+          "id": "electro",
+          "label": "Une création électronique",
+          "vision": "moderne",
+          "critique": 2,
+          "public": 2,
+          "reply": "Des nappes, des pulsations, des voix enregistrées en ville. Le disquaire m'a présenté quelqu'un d'épatant."
+        },
+        {
+          "id": "fanfare",
+          "label": "La fanfare du kiosque",
+          "vision": "populaire",
+          "critique": 1,
+          "public": 3,
+          "reply": "La fanfare de Bréval sur scène ! Ils répètent le mardi. Prévoyez des droits d'auteur pour les reprises, hein."
+        }
+      ]
+    },
+    {
+      "id": "costumes",
+      "title": "Les costumes",
+      "question": "Les costumes, maintenant. Louison attend mes croquis.",
+      "options": [
+        {
+          "id": "epoque",
+          "label": "Des costumes d'époque",
+          "vision": "classique",
+          "critique": 2,
+          "public": 3,
+          "reply": "Perruques, jabots, robes à panier. Louison va passer des nuits à l'atelier, mais ce sera somptueux."
+        },
+        {
+          "id": "contemporains",
+          "label": "Des vêtements d'aujourd'hui",
+          "vision": "moderne",
+          "critique": 3,
+          "public": 2,
+          "reply": "Des jeans, des costumes de bureau, un survêtement. Le texte d'hier dans les habits d'aujourd'hui : ça frappe."
+        },
+        {
+          "id": "atelier",
+          "label": "L'atelier couture des Coteaux",
+          "vision": "populaire",
+          "critique": 2,
+          "public": 3,
+          "reply": "Nadia a monté un atelier couture à la maison de quartier. Les habitantes vont coudre les costumes : quelle fierté le soir de la première !"
+        }
+      ]
+    },
+    {
+      "id": "repetitions",
+      "title": "Les répétitions",
+      "question": "Les répétitions commencent. Comment travaille-t-on ?",
+      "options": [
+        {
+          "id": "huis_clos",
+          "label": "À huis clos, en résidence",
+          "vision": "classique",
+          "critique": 3,
+          "public": 2,
+          "reply": "Six semaines enfermés dans la salle, sans regard extérieur. On polit chaque scène comme un bijou."
+        },
+        {
+          "id": "laboratoire",
+          "label": "Un laboratoire avec les collégiens",
+          "vision": "moderne",
+          "critique": 2,
+          "public": 2,
+          "reply": "On improvise avec une classe du collège, ils réécrivent des scènes avec nous. L'éducation artistique, ça nourrit aussi les artistes."
+        },
+        {
+          "id": "publiques",
+          "label": "Des répétitions ouvertes au public",
+          "vision": "populaire",
+          "critique": 2,
+          "public": 3,
+          "reply": "Portes ouvertes le samedi ! Les gens voient le spectacle naître. Ils seront tous là le soir de la première, vous verrez."
+        }
+      ]
+    },
+    {
+      "id": "titre",
+      "title": "Le titre",
+      "question": "Dernière décision, et pas la moindre : le titre. C'est lui qui sera sur les affiches à Paris.",
+      "options": [
+        {
+          "id": "lanterne_magique",
+          "label": "« La Lanterne magique »",
+          "vision": "classique",
+          "critique": 2,
+          "public": 3,
+          "poster": "LA LANTERNE MAGIQUE",
+          "reply": "Un clin d'œil au théâtre, à son histoire, à la lumière qu'on rallume. Ça sonne comme un classique."
+        },
+        {
+          "id": "nuit_blanche",
+          "label": "« Ondine, nuit blanche »",
+          "vision": "moderne",
+          "critique": 3,
+          "public": 2,
+          "poster": "ONDINE, NUIT BLANCHE",
+          "reply": "Mystérieux, poétique, un peu insolent. Les critiques vont se demander ce que ça veut dire : tant mieux."
+        },
+        {
+          "id": "gens_dici",
+          "label": "« Les Gens d'ici »",
+          "vision": "populaire",
+          "critique": 2,
+          "public": 3,
+          "poster": "LES GENS D'ICI",
+          "reply": "Simple, direct, chaleureux. Tout le monde comprend, et tout le monde se sent concerné."
+        }
+      ]
+    }
+  ],
+  "locations": {
+    "1": {
+      "map": "rue",
+      "cell": [
+        61,
+        32
+      ],
+      "facing": "up",
+      "where": "à la terrasse du Café des Artistes",
+      "doing": "Il griffonne dans un carnet en regardant la place."
+    },
+    "2": {
+      "map": "int_mediatheque",
+      "cell": [
+        12,
+        3
+      ],
+      "facing": "up",
+      "where": "à la médiathèque, au rayon théâtre",
+      "doing": "Il feuillette trois livres à la fois."
+    },
+    "3": {
+      "map": "rue",
+      "cell": [
+        16,
+        28
+      ],
+      "facing": "right",
+      "where": "au parc, près du kiosque à musique",
+      "doing": "Il écoute la fanfare en battant la mesure."
+    },
+    "4": {
+      "map": "int_fabrique",
+      "cell": [
+        11,
+        2
+      ],
+      "facing": "down",
+      "where": "sur la petite scène de la Fabrique",
+      "doing": "Il arpente l'estrade en comptant ses pas."
+    },
+    "5": {
+      "map": "rue",
+      "cell": [
+        97,
+        13
+      ],
+      "facing": "left",
+      "where": "sur les quais de l'Ondine, avec le pêcheur",
+      "doing": "Ils parlent poissons et tragédies grecques."
+    },
+    "6": {
+      "map": "int_maison_quartier",
+      "cell": [
+        13,
+        5
+      ],
+      "facing": "up",
+      "where": "à la maison de quartier des Coteaux",
+      "doing": "Il essaie des tissus avec l'atelier couture."
+    },
+    "7": {
+      "map": "int_cafe",
+      "cell": [
+        2,
+        3
+      ],
+      "facing": "up",
+      "where": "au piano du Café des Artistes",
+      "doing": "Il pianote un air qu'il ne termine jamais."
+    },
+    "8": {
+      "map": "hall",
+      "cell": [
+        5,
+        6
+      ],
+      "facing": "left",
+      "where": "dans le hall de la Lanterne",
+      "doing": "Il regarde les vitrines comme un enfant."
+    },
+    "depart": {
+      "map": "rue",
+      "cell": [
+        47,
+        3
+      ],
+      "facing": "up",
+      "where": "sur le quai de la gare, valise à la main",
+      "doing": "Le train pour Paris est à quai."
+    }
+  },
+  "default_line": "Vous n'êtes pas venu me voir à temps : j'ai tranché seul. « %s ». On en reparle à Paris, d'accord ?",
+  "train": {
+    "lines": [
+      [
+        "lazare",
+        "Paris ! La « Gazette des Planches » a vu notre dernière répétition. Le Théâtre des Lumières nous offre une soirée."
+      ],
+      [
+        "helene",
+        "J'ai vérifié le contrat : cession à prix fixe, défraiement compris, transport en train. Pour une fois, les comptes sont simples."
+      ],
+      [
+        "lazare",
+        "Regardez par la fenêtre : la campagne file, et dans deux heures nous jouerons « %s » devant le Tout-Paris."
+      ],
+      [
+        "bastien",
+        "Le décor est dans le fourgon de queue. J'ai tout sanglé deux fois. Trois fois, en fait."
+      ],
+      [
+        "louison",
+        "Et les costumes voyagent avec moi. Personne ne touche aux costumes."
+      ],
+      [
+        "lazare",
+        "La voilà… La tour Eiffel. Mes amis, nous y sommes."
+      ]
+    ]
+  },
+  "paris": {
+    "arrival": [
+      "Bienvenue à Paris ! Nous jouons ce soir au Théâtre des Lumières, de l'autre côté de la place.",
+      "Prenez le temps de flâner : la troupe s'installe. Quand vous êtes prêt, entrez par la grande porte du théâtre."
+    ],
+    "theatre_label": "Théâtre des Lumières"
+  },
+  "receptions": [
+    {
+      "min": 80,
+      "id": "triomphe",
+      "title": "Un triomphe !",
+      "calls": 7,
+      "critic": "« %s : %s. On n'avait pas vu une telle troupe de province à Paris depuis longtemps. Courez-y ! » — La Gazette des Planches",
+      "text": "Sept rappels. La salle est debout. Lazare pleure dans la coulisse et Hélène, pour une fois, oublie de compter les entrées."
+    },
+    {
+      "min": 60,
+      "id": "succes",
+      "title": "Un beau succès",
+      "calls": 4,
+      "critic": "« %s : %s. Une soirée qui fait du bien, et une équipe à suivre. » — La Gazette des Planches",
+      "text": "Quatre rappels et des bravos sincères. Deux programmateurs demandent déjà les dates de tournée."
+    },
+    {
+      "min": 40,
+      "id": "mitige",
+      "title": "Un accueil partagé",
+      "calls": 2,
+      "critic": "« %s : de belles idées, mais le spectacle hésite entre plusieurs chemins. Une équipe prometteuse. » — La Gazette des Planches",
+      "text": "Deux rappels polis. Lazare hausse les épaules : « La prochaine fois, on choisira une direction et on s'y tiendra. »"
+    },
+    {
+      "min": 0,
+      "id": "difficile",
+      "title": "Une soirée difficile",
+      "calls": 1,
+      "critic": "« %s : on cherche encore le spectacle derrière les intentions. » — La Gazette des Planches",
+      "text": "Un seul rappel, quelques sièges vides. Mais la troupe a joué à Paris, et rentre avec mille idées pour la saison prochaine."
+    }
+  ]
+}

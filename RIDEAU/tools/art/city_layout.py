@@ -442,12 +442,17 @@ def main():
         "projectionniste": ("projectionniste", "Programmateur du cinéma"), "enfant_1": ("enfant_a", "Enfant"),
         "enfant_2": ("enfant_b", "Enfant"), "touriste": ("touriste", "Touriste"),
     }
+    # Le metteur en scène change de lieu chaque mois (data/story/creation.json) : pas de carte fixe.
+    people["lazare"] = {"sprite": "lazare", "name": "Victor Lazare, metteur en scène", "home": ""}
     for pid, (sprite, name) in extra.items():
         people[pid] = {"sprite": sprite, "name": name, "home": "rue"}
         if pid[-2:] in ("_1", "_2") and not pid.startswith("passant"):
             people[pid]["bark"] = pid[:-2]  # répliques communes (enfant, footballeur)
     for pid in ("passant_1", "passant_2", "passant_3", "passant_4"):
         people[pid]["home"] = "rue"
+    # Le quartier parisien de la fin de saison (paris_layout.py).
+    import paris_layout
+    print("paris :", paris_layout.write(world), "cases praticables")
     json.dump(world, open(path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     # Aperçu texte (contrôle visuel rapide)
     with open(os.path.join(HERE, "city_preview.txt"), "w", encoding="utf-8") as f:

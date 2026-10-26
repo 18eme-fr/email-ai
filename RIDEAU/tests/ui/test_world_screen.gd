@@ -284,7 +284,17 @@ func test_a_whole_season_goes_through_the_world() -> void:
 		await _wait(runner, func() -> bool: return not screen._busy and screen.map.id == "bureau", 100)
 	assert_bool(s.state.finished).is_true()
 	assert_int(seasons_seen.size()).is_equal(4)
-	assert_object(_find_button(screen, "Voir le bilan de la saison")).is_not_null()
+	# Le bilan lu, la troupe part pour Paris : Victor Lazare attend sur le quai de la gare.
+	var go := _find_button(screen, "Paris")
+	assert_object(go).is_not_null()
+	go.pressed.emit()
+	await _answer(runner, screen, 0)
+	await _wait(runner, func() -> bool: return not screen._busy)
+	assert_bool(bool(s.state.creation.get("season_closed", false))).is_true()
+	assert_str(screen.hud._objective.text).contains("gare")
+	screen.load_map("rue", Vector2i(47, 4), "up")
+	await runner.simulate_frames(5)
+	assert_bool(screen.npcs.has("lazare")).is_true()
 
 
 func test_case_study_opens_on_a_new_game() -> void:
@@ -535,3 +545,84 @@ func test_sound_and_atmosphere_follow_the_world() -> void:
 	screen._train_timer = 0.0
 	await runner.simulate_frames(30)
 	assert_bool(screen._train.has_meta("moving") or screen._train.visible != was).is_true()
+
+
+## Victor Lazare : il se présente, propose la décision du mois, et le guide du haut l'annonce.
+func test_meeting_the_director_and_choosing_a_creation_step() -> void:
+	var s := _new_session(8)
+	var runner := scene_runner(WORLD)
+	await runner.simulate_frames(10)
+	var screen := runner.scene() as WorldScreen
+	screen.load_map("rue", Vector2i(61, 33), "up")
+	await runner.simulate_frames(5)
+	assert_bool(screen.npcs.has("lazare")).is_true()
+	assert_str((screen.npcs["lazare"] as WorldActor).bubble).is_equal("scene")
+	var guide := WorldRules.guide(s, "rue")
+	assert_str(str(guide[1]["text"])).contains("Lazare")
+	screen.talk_to(screen.npcs["lazare"])
+	for i in 3:  # présentation
+		await _answer(runner, screen, 0)
+	await _answer(runner, screen, 2)  # « La mémoire des habitants »
+	await _answer(runner, screen, 0)  # sa réponse
+	await _wait(runner, func() -> bool: return not screen._busy)
+	assert_str(str(CreationSystem.choices(s.state).get("sujet", ""))).is_equal("memoire")
+	assert_str(str(WorldRules.guide(s, "rue")[1]["text"])).contains("1 / 8")
+
+
+## Paris : on descend du train devant la gare ; la troupe est là, le théâtre affiche le titre.
+func test_paris_quarter_after_the_train() -> void:
+	var s := _new_session(9)
+	s.state.finished = true
+	s.state.phase = GameState.PHASE_FINISHED
+	CreationSystem.fill_defaults(s.data, s.state)
+	s.state.creation["season_closed"] = true
+	s.state.creation["departed"] = true
+	var arrival: Dictionary = WorldData.get_default().raw["maps"]["paris"]["arrival"]
+	Game.world_entry = {"map": "paris", "cell": arrival["cell"], "facing": arrival["facing"]}
+	var runner := scene_runner(WORLD)
+	await runner.simulate_frames(10)
+	var screen := runner.scene() as WorldScreen
+	assert_str(screen.map.id).is_equal("paris")
+	await _answer(runner, screen, 0)
+	await _answer(runner, screen, 0)
+	assert_bool(screen.npcs.has("lazare_paris") and screen.npcs.has("critique")).is_true()
+	assert_str(screen.hud._objective.text).contains("Théâtre des Lumières")
+	assert_str(AudioDirector.current_music()).is_equal("paris")
+	var titles := screen._map_root.find_children("*", "Label", true, false)
+	assert_bool(titles.any(func(l: Label) -> bool: return l.text.contains(CreationSystem.show_title(s.data, s.state)))).is_true()
+	assert_bool(screen.map.spot("theatre_lumieres")["kind"] == "premiere").is_true()
+
+
+## Le voyage en train fait défiler les répliques et passe de la campagne à Paris.
+func test_train_trip_plays_its_lines() -> void:
+	_new_session(10)
+	var runner := scene_runner("res://scenes/story/train_trip.tscn")
+	await runner.simulate_frames(5)
+	var trip := runner.scene()
+	assert_int(trip.lines.size()).is_greater(3)
+	for i in trip.lines.size() - 1:
+		trip.next()
+	await runner.simulate_frames(5)
+	assert_bool(trip._in_paris).is_true()
+	assert_str(trip._name.text).is_not_empty()
+
+
+## La première : la scène correspond aux choix, puis la critique de la Gazette.
+func test_paris_premiere_shows_the_review() -> void:
+	var s := _new_session(11)
+	s.state.finished = true
+	for st: Dictionary in CreationSystem.steps(s.data):
+		for o: Dictionary in st["options"]:
+			if o["vision"] == "moderne":
+				CreationSystem.choose(s.data, s.state, st["id"], o["id"])
+	var runner := scene_runner("res://scenes/story/paris_premiere.tscn")
+	await runner.simulate_frames(5)
+	var premiere := runner.scene()
+	assert_dict(s.state.creation["paris"]).is_not_empty()
+	premiere.next()
+	assert_str(premiere._image.texture.resource_path).contains("scene_plateau_nu_contemporains")
+	premiere.show_gazette()
+	await runner.simulate_frames(3)
+	var labels := premiere.find_children("*", "Label", true, false)
+	assert_bool(labels.any(func(l: Label) -> bool: return l.text.contains("Gazette des Planches"))).is_true()
+	assert_bool(labels.any(func(l: Label) -> bool: return l.text.contains("Ondine, nuit blanche"))).is_true()

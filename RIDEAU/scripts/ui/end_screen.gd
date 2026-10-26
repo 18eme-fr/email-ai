@@ -96,6 +96,20 @@ func _ready() -> void:
 		chart2.title = "Entrées par période"
 		left.add_child(chart2)
 
+	# La création avec Victor Lazare et la première à Paris.
+	var paris: Dictionary = s.creation.get("paris", {})
+	right.add_child(UiKit.label("La création, à Paris", "SubHeaderLabel"))
+	if paris.is_empty():
+		right.add_child(UiKit.label("La troupe est invitée à jouer « %s » au Théâtre des Lumières. %d / %d décisions prises avec Victor Lazare." % [
+			CreationSystem.show_title(session.data, s), CreationSystem.choices(s).size(), CreationSystem.steps(session.data).size()], "", true))
+		var trip := UiKit.button("Prendre le train pour Paris", "", "play")
+		trip.pressed.connect(func() -> void: Game.start_paris_trip())
+		right.add_child(trip)
+	else:
+		right.add_child(UiKit.rich("[b]« %s »[/b] — %s (%d rappel%s, accueil %d / 100)\n[i]%s[/i]" % [
+			paris.get("show", ""), paris.get("title", ""), int(paris.get("calls", 1)), "s" if int(paris.get("calls", 1)) > 1 else "",
+			int(paris.get("score", 0)), paris.get("critic", "")]))
+	right.add_child(HSeparator.new())
 	right.add_child(UiKit.label("Décisions marquantes", "SubHeaderLabel"))
 	for d: Dictionary in _key_decisions(s):
 		right.add_child(UiKit.label("Période %d · %s" % [int(d["turn"]), d["text"]], "SmallLabel", true))

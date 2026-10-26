@@ -12,7 +12,7 @@ const ZOOM := 3.0
 const VIEW := Vector2(1280.0 / ZOOM, 720.0 / ZOOM)
 const MAPS_DIR := "res://assets/world/maps/"
 const META_PATH := "res://assets/world/meta.json"
-const WITH_PORTRAIT := ["helene", "bastien", "ines", "pommier", "louison"]
+const WITH_PORTRAIT := ["helene", "bastien", "ines", "pommier", "louison", "lazare"]
 const PHASE_TITLES := {
 	"situation": "Cahier de la période", "programmation": "Cahier de la période — programmation",
 	"gestion": "Feuille de route — actions", "evenement": "Imprévu", "bilan": "Bilan", "fin": "Bilan",
@@ -80,10 +80,13 @@ func _ready() -> void:
 	_build()
 	_prev_phase = session.state.phase
 	var start := world.start
+	if not Game.world_entry.is_empty():  # arrivée à Paris, au sortir du train
+		start = Game.world_entry
+		Game.world_entry = {}
+	AudioDirector.play_music("foyer")  # remplacée aussitôt par la musique du lieu (load_map)
 	load_map(str(start["map"]), WorldMap.to_cell(start["cell"]), str(start["facing"]))
 	Game.notice.connect(toast)
 	Game.collection_results.connect(_on_collection_results)
-	AudioDirector.play_music("foyer")  # remplacée par la musique du lieu au chargement de la carte
 	refresh_all()
 	var pending := Game.take_pending_notice()
 	if pending != "":
@@ -207,7 +210,7 @@ func load_map(map_id: String, cell: Vector2i, facing: String) -> void:
 	_fx = Node2D.new()
 	_fx.z_index = 22
 	_map_root.add_child(_fx)
-	_sky = sky_override if sky_override != "" else WorldRules.weather(world, session.state)
+	_sky = sky_override if sky_override != "" else ("clair" if map_id == "paris" else WorldRules.weather(world, session.state))
 	_water_cells = map.water_cells()
 	_apply_light()
 	_add_weather(season)
@@ -438,6 +441,9 @@ func _critter(frames: Array[Texture2D], area: Rect2, speed: float, z: int) -> vo
 
 
 func _add_posters(map_id: String) -> void:
+	if map_id == "paris":
+		_add_paris_title()
+		return
 	var slots: Array = _meta.get("poster_slots", {}).get(map_id, [])
 	var shows: Array = []
 	for entry: Dictionary in session.state.programmed:
@@ -455,6 +461,27 @@ func _add_posters(map_id: String) -> void:
 		_map_root.add_child(s)
 
 
+## Paris : le titre de la création, en lettres d'or sur la façade du Théâtre des Lumières.
+func _add_paris_title() -> void:
+	var sp := map.spot("theatre_lumieres")
+	if sp.is_empty():
+		return
+	var cells: Array = sp["cells"]
+	var door: Vector2i = cells[0]
+	var title := Label.new()
+	title.theme = load("res://assets/ui/rideau_theme.tres")
+	title.text = "Ce soir : « %s »" % CreationSystem.show_title(session.data, session.state)
+	title.add_theme_font_size_override("font_size", 7)
+	title.add_theme_color_override("font_color", Color("f0d48a"))
+	title.add_theme_color_override("font_outline_color", Color(0.25, 0.04, 0.08))
+	title.add_theme_constant_override("outline_size", 2)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.size = Vector2(220, 12)
+	title.position = Vector2(door.x * T + T - 110, door.y * T - 33)
+	title.z_index = -6
+	_map_root.add_child(title)
+
+
 func _spawn_people() -> void:
 	for n: Dictionary in map.npcs:
 		var pid := str(n["id"])
@@ -467,6 +494,7 @@ func _spawn_people() -> void:
 		a.wander_wait = _rng.randf_range(0.5, 3.0)
 		_actors.add_child(a)
 		npcs[pid] = a
+	_spawn_director()
 	if map.id == "hall":
 		var free := _free_cells(Rect2i(1, 4, 20, 8))
 		for i in mini(WorldRules.hall_crowd(session.state), free.size()):
@@ -479,6 +507,17 @@ func _spawn_people() -> void:
 			a.wander_wait = _rng.randf_range(1.0, 4.0)
 			_actors.add_child(a)
 			npcs[a.person_id] = a
+
+
+## Victor Lazare, le metteur en scène : chaque mois ailleurs (data/story/creation.json).
+func _spawn_director() -> void:
+	var loc := CreationSystem.location(session.data, session.state)
+	if loc.is_empty() or str(loc["map"]) != map.id or npcs.has(CreationSystem.DIRECTOR):
+		return
+	var a := WorldActor.new().setup(CreationSystem.DIRECTOR, "lazare", WorldMap.to_cell(loc["cell"]), str(loc.get("facing", "down")))
+	a.radius = 0
+	_actors.add_child(a)
+	npcs[CreationSystem.DIRECTOR] = a
 
 
 func _free_cells(rect: Rect2i) -> Array:
@@ -494,6 +533,8 @@ func _free_cells(rect: Rect2i) -> Array:
 ## Teinte selon le moment de la journée et la météo ; lampadaires allumés dès la fin de journée.
 func _apply_light() -> void:
 	var tod := "nuit" if _performing else WorldRules.time_of_day(session.state)
+	if map.id == "paris":
+		tod = "fin_de_journee"  # Paris à l'heure dorée, juste avant la première
 	var outdoor := map.outdoor
 	var c: Color = {
 		"matin": Color(1.0, 0.94, 0.86) if outdoor else Color(1.0, 0.97, 0.92),
@@ -774,10 +815,13 @@ func refresh_all() -> void:
 	var text := str(obj["text"])
 	if obj.get("kind", "") == "npc" and npcs.has(str(obj["id"])):
 		pass
-	elif str(obj["map"]) != map.id:
+	elif str(obj["map"]) != map.id and world.map(str(obj["map"])) != null:
 		text += "\n→ Direction : %s." % world.map(str(obj["map"])).name
 	hud.refresh(session, _place_name(), WorldRules.SEASON_LABELS.get(_season(), ""), text)
-	hud.set_missions(session)
+	var quests: Array = []
+	for q: Dictionary in Game.collection.active_quests():
+		quests.append({"title": q["title"], "step": Game.collection.quest_current_step(q["id"])})
+	hud.set_guide(WorldRules.guide(session, map.id, quests))
 	_refresh_markers(obj)
 
 
@@ -847,6 +891,9 @@ func _refresh_markers(obj: Dictionary) -> void:
 		for a: WorldActor in npcs.values():
 			if world.bark_key(a.person_id) == who and a.bubble == "":
 				a.set_bubble("question")
+	var director: WorldActor = npcs.get(CreationSystem.DIRECTOR)
+	if director != null and director.bubble == "" and (not CreationSystem.pending_step(session.data, s).is_empty() or s.finished):
+		director.set_bubble("scene")
 	if event_who != "" and npcs.has(event_who):
 		(npcs[event_who] as WorldActor).set_bubble("alert")
 	# Flèche dorée vers l'objectif (ou vers la porte qui y mène).
@@ -1017,6 +1064,10 @@ func _resume() -> void:
 	var s := session.state
 	if s.phase == GameState.PHASE_EVENT:
 		_start_event()
+	elif map.id == "paris":
+		await _arrive_in_paris()
+	elif s.finished and bool(s.creation.get("season_closed", false)):
+		pass  # bilan déjà lu : la troupe attend à la gare
 	elif s.phase in [GameState.PHASE_REPORT, GameState.PHASE_FINISHED]:
 		open_phase_window()
 	elif s.turn == 1 and s.phase == GameState.PHASE_SITUATION:
@@ -1029,6 +1080,17 @@ func _resume() -> void:
 		if not s.tutorial_seen.has("world") and bool(Settings.get_value("show_tutorial")):
 			await _intro()
 	_show_notices()
+
+
+## Descente du train : Lazare accueille le joueur à Paris.
+func _arrive_in_paris() -> void:
+	_busy = true
+	var who := CreationSystem.DIRECTOR
+	for line: String in session.data.creation.get("paris", {}).get("arrival", []):
+		await speech.say(_speaker_name(who), _portrait(who), line)
+	speech.close()
+	_busy = false
+	refresh_all()
 
 
 func _intro() -> void:
@@ -1187,6 +1249,9 @@ func _new_period() -> void:
 	_busy = true
 	await _fade_to(1.0)
 	var start := world.start
+	if not Game.world_entry.is_empty():  # arrivée à Paris, au sortir du train
+		start = Game.world_entry
+		Game.world_entry = {}
 	load_map(str(start["map"]), WorldMap.to_cell(start["cell"]), str(start["facing"]))
 	_banner.text = "%s\n%s" % [session.period_name(), WorldRules.SEASON_LABELS.get(_season(), "")]
 	_banner.visible = true
@@ -1485,6 +1550,9 @@ func _portrait(who: String) -> Texture2D:
 func talk_to(npc: WorldActor) -> void:
 	var who := npc.person_id
 	npc.face(WorldActor.opposite(player.facing))
+	if who == CreationSystem.DIRECTOR:
+		await _talk_director()
+		return
 	if who == WorldRules.event_character(session):
 		open_phase_window()
 		return
@@ -1515,6 +1583,74 @@ func talk_to(npc: WorldActor) -> void:
 		if action != "" and session.state.phase in [GameState.PHASE_SITUATION, GameState.PHASE_PROGRAMMING]:
 			await speech.say(_speaker_name(who), _portrait(who),
 				"Une fois la programmation signée, revenez me voir si vous voulez lancer : « %s »." % session.data.actions[action]["label"])
+	speech.close()
+	_busy = false
+	refresh_all()
+
+
+## Le metteur en scène : une décision de création par mois (mois manqués rattrapables),
+## puis, la saison finie, le départ pour Paris.
+func _talk_director() -> void:
+	_busy = true
+	var data := session.data
+	var s := session.state
+	var who := CreationSystem.DIRECTOR
+	var name := _speaker_name(who)
+	var pic := _portrait(who)
+	if not bool(s.creation.get("met", false)):
+		for line: String in data.creation.get("intro", []):
+			await speech.say(name, pic, line)
+		s.creation["met"] = true
+	var decided := 0
+	while true:
+		var st := CreationSystem.pending_step(data, s)
+		if st.is_empty():
+			break
+		var labels: Array = []
+		for o: Dictionary in st["options"]:
+			labels.append(str(o["label"]))
+		labels.append("J'y réfléchis, je reviens plus tard")
+		var lead := "Une décision nous attend encore. " if decided > 0 else ""
+		var pick := await speech.ask(name, pic, "%s%s — %s" % [lead, st["title"], st["question"]], labels)
+		if pick >= (st["options"] as Array).size():
+			await speech.say(name, pic, "Ne tardez pas trop : un spectacle, ça n'attend pas !")
+			break
+		var o: Dictionary = st["options"][pick]
+		CreationSystem.choose(data, s, str(st["id"]), str(o["id"]))
+		AudioDirector.play_sfx("quete")
+		await speech.say(name, UiKit.portrait(who, "happy"), str(o["reply"]))
+		toast("Création — %s : %s" % [st["title"], o["label"]])
+		decided += 1
+		Game.autosave()
+	if s.finished and s.creation.get("paris", {}).is_empty():
+		var go := await speech.ask(name, pic, "Le train pour Paris est à quai. « %s » nous attend au Théâtre des Lumières. On y va ?" % CreationSystem.show_title(data, s),
+			["En voiture !", "Encore un instant"])
+		speech.close()
+		_busy = false
+		if go == 0:
+			Game.start_paris_trip()
+		return
+	if decided == 0:
+		var line := WorldRules.bark(data, s, world, who, _rng.randf())
+		var steps := CreationSystem.steps(data)
+		var done := CreationSystem.choices(s).size()
+		if done < steps.size():
+			line += "\n(Prochaine décision le mois prochain : « %s ».)" % steps[done]["title"]
+		await speech.say(name, pic, line)
+	speech.close()
+	_busy = false
+	refresh_all()
+
+
+## Le bilan de fin de saison est lu : la troupe part pour Paris, Lazare attend à la gare.
+func go_to_departure() -> void:
+	session.state.creation["season_closed"] = true
+	window.close_window()
+	Game.autosave()
+	_reload_here()
+	_busy = true
+	await speech.say(_speaker_name("helene"), UiKit.portrait("helene", "happy"),
+		"Quelle saison ! Et ce n'est pas fini : Victor Lazare nous attend à la gare. Le Théâtre des Lumières nous invite à jouer notre création à Paris !")
 	speech.close()
 	_busy = false
 	refresh_all()
@@ -1638,6 +1774,18 @@ func use_spot(spot: Dictionary) -> void:
 				await speech.say(str(spot["label"]), null, "%s\n(À décider une fois la programmation signée : « %s ».)" % [session.data.actions[action]["summary"], session.data.actions[action]["label"]])
 		"upgrade":
 			await _offer_upgrade(spot)
+		"affiche_creation":
+			var c := session.data.creation
+			await speech.say(str(spot["label"]), null, "Votre affiche ! « %s » — ce soir au %s. Mise en scène : Victor Lazare. Avec la troupe du Théâtre de la Lanterne, Bréval-sur-Ondine." % [
+				CreationSystem.show_title(session.data, session.state), c.get("paris", {}).get("theatre_label", "Théâtre des Lumières")])
+		"premiere":
+			var go := await speech.ask(str(spot["label"]), null, "Ce soir : « %s ». La salle est pleine, la troupe est prête. Entrer en scène ?" % CreationSystem.show_title(session.data, session.state),
+				["Lever de rideau !", "Encore un tour dans le quartier"])
+			speech.close()
+			_busy = false
+			if go == 0:
+				Game.start_premiere()
+			return
 		"bus":
 			var dest := await _ask_bus(spot)
 			if not dest.is_empty():
@@ -1693,6 +1841,9 @@ func _ride_bus(stop: Dictionary) -> void:
 
 ## Plan de la ville (touche M), aussi accessible depuis l'intérieur du théâtre.
 func open_city_plan() -> void:
+	if map.id == "paris":
+		toast("Pas de plan de Paris : suivez les guirlandes jusqu'au Théâtre des Lumières !")
+		return
 	var city := world.map("rue")
 	if city == null:
 		return

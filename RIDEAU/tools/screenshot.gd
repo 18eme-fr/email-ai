@@ -132,6 +132,23 @@ func _do_action(action: String) -> void:
 		"evening":
 			scene._performing = true
 			scene._apply_light()
+		"met":
+			root.get_node("Game").session.state.creation["met"] = true
+		"parisstate":
+			# Fin de saison jouée, création tranchée, troupe partie pour Paris.
+			var st = root.get_node("Game").session.state
+			st.finished = true
+			st.phase = "fin"
+			load("res://scripts/progression/creation.gd").fill_defaults(root.get_node("Game").session.data, st)
+			st.creation["season_closed"] = true
+			st.creation["departed"] = true
+		"closed":
+			root.get_node("Game").session.state.finished = true
+			root.get_node("Game").session.state.phase = "fin"
+			root.get_node("Game").session.state.creation["season_closed"] = true
+			scene._reload_here()
+		"gazette":
+			scene.show_gazette()
 		"readable":
 			# Sans enregistrer : une capture ne doit pas modifier les réglages du joueur.
 			var settings := root.get_node("Settings")
@@ -158,6 +175,20 @@ func _do_action(action: String) -> void:
 					scene._title.modulate.a = 1.0
 				scene._image_old.modulate.a = 0.0
 				scene._image.modulate.a = 1.0
+			elif action.begins_with("story:"):
+				# Train ou première : N répliques ou tableaux plus loin, texte affiché en entier.
+				for i in int(action.substr(6)):
+					scene.next()
+				if scene._typing:
+					scene._typing.kill()
+				scene._text.visible_ratio = 1.0
+			elif action.begins_with("choose:"):
+				# choose:<étape>:<option> (création avec le metteur en scène)
+				var p := action.split(":")
+				var game = root.get_node("Game")
+				game.session.state.creation["choices"] = game.session.state.creation.get("choices", {})
+				game.session.state.creation["choices"][p[1]] = p[2]
+				scene._reload_here()
 			elif action.begins_with("perf:"):
 				scene.play_performance(float(action.substr(5)))
 			elif action.begins_with("tab:"):

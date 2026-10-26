@@ -1154,6 +1154,13 @@ PEOPLE = {
     "jardiniere": {"skin": P["skin2"], "hair": P["grey3"], "hair_style": "long", "top": P["green2"], "legs": P["wood1"], "accent": P["gold2"]},
     "libraire": {"skin": P["skin1"], "hair": P["wood0"], "hair_style": "short", "top": P["paper3"], "legs": P["wood1"], "accent": P["velvet3"], "glasses": True, "scarf": True},
     "projectionniste": {"skin": P["skin4"], "hair": P["grey2"], "hair_style": "beanie", "top": P["ink"], "legs": P["grey0"], "accent": P["velvet3"]},
+    # Le metteur en scène en résidence (data/story/creation.json)
+    "lazare": {"skin": P["skin2"], "hair": P["grey2"], "hair_style": "swoop", "top": P["ink"], "legs": P["ink"], "accent": P["velvet4"], "scarf": True, "glasses": True},
+    # Parisiens du quartier des Lumières (paris_layout.py)
+    "serveur": {"skin": P["skin1"], "hair": P["ink"], "hair_style": "short", "top": P["white"], "legs": P["ink"], "accent": P["ink"], "apron": True, "apron_color": P["ink"], "tie": True},
+    "bouquiniste": {"skin": P["skin0"], "hair": P["grey3"], "hair_style": "beanie", "top": P["green0"], "legs": P["wood1"], "accent": P["velvet3"], "scarf": True, "beard": True},
+    "peintre": {"skin": P["skin2"], "hair": P["velvet1"], "hair_style": "beanie", "top": P["blue"], "legs": P["wood2"], "accent": P["gold2"], "apron": True, "apron_color": P["paper2"]},
+    "critique": {"skin": P["skin0"], "hair": P["grey1"], "hair_style": "bob", "top": P["purple0"], "legs": P["ink"], "accent": P["gold3"], "glasses": True, "scarf": True},
     # Habitants des intérieurs (interiors_layout.py)
     "guichetiere": {"skin": P["skin2"], "hair": P["wood1"], "hair_style": "bob", "top": P["navy"], "legs": P["navy"], "accent": P["velvet3"], "scarf": True},
     "artiste": {"skin": P["skin3"], "hair": P["velvet3"], "hair_style": "swoop", "top": P["teal"], "legs": P["blue"], "accent": P["gold3"], "apron": True, "apron_color": P["grey2"]},
@@ -1429,8 +1436,15 @@ def fx_assets():
             elif symbol == "coin":
                 o.ellipse(6, 6, 3.5, 3.5, P["gold2"])
                 o.ellipse(6, 6, 2, 2, P["gold3"])
+            elif symbol == "scene":  # masque de théâtre : le metteur en scène attend une décision
+                o.ellipse(6, 6, 3.5, 4, P["gold3"])
+                o.set(4, 5, P["ink"])
+                o.set(8, 5, P["ink"])
+                o.hline(4, 8, 8, P["velvet3"])
+                o.set(3, 7, P["velvet3"])
+                o.set(9, 7, P["velvet3"])
         return outlined(12, 14, d)
-    for sym in ("!", "?", "ok", "dots", "build", "coin"):
+    for sym in ("!", "?", "ok", "dots", "build", "coin", "scene"):
         out["bubble_" + {"!": "alert", "?": "question"}.get(sym, sym)] = bubble(sym)
 
     arrow = Canvas(9, 7)
@@ -1545,6 +1559,10 @@ def generate(root, out_dir):
     # Intérieurs de tous les bâtiments de la ville (interiors.py)
     import interiors
     for art in interiors.generate(world, maps_dir):
+        meta["variants"][art] = []
+    # Le quartier parisien de la fin de saison (paris.py)
+    import paris
+    for art in paris.generate(world, maps_dir):
         meta["variants"][art] = []
     meta["poster_slots"]["hall"] = [[5 * T + 6, T - 8, 12, 20], [5 * T + 20, T - 8, 12, 20], [5 * T + 34, T - 8, 12, 20],
                                     [15 * T + 4, T - 8, 12, 20], [15 * T + 18, T - 8, 12, 20], [15 * T + 32, T - 8, 12, 20]]

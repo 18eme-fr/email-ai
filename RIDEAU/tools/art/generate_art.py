@@ -88,6 +88,8 @@ def main() -> None:
     collection_art.generate(os.path.join(a, "collection"))
     import prologue_art  # noqa: E402  (réutilise les images du monde et de la collection)
     prologue_art.generate(ROOT, os.path.join(a, "prologue"))
+    import story_art  # noqa: E402  (voyage en train et première à Paris)
+    story_art.generate(os.path.join(a, "story"))
     print("Images générées dans", a)
 
 

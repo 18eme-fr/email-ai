@@ -19,6 +19,7 @@ const MUSIC := {
 	"ville_fetes": "res://assets/audio/music/ville_fetes.wav",
 	"ville_nuit": "res://assets/audio/music/ville_nuit.wav",
 	"reserve": "res://assets/audio/music/reserve.wav",
+	"paris": "res://assets/audio/music/paris.wav",
 }
 const MUSIC_DB := -7.0
 const FADE := 1.4

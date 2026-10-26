@@ -39,7 +39,11 @@ func _ready() -> void:
 	scroll.add_child(_content)
 	var footer := UiKit.hbox([UiKit.spacer()])
 	var go: Button
-	if session.state.finished:
+	if session.state.finished and screen.has_method("go_to_departure") and session.state.creation.get("paris", {}).is_empty():
+		# Dans le monde : la troupe part jouer la création à Paris avant le bilan de saison.
+		go = UiKit.primary("Rejoindre la troupe : direction Paris !", "star")
+		go.pressed.connect(func() -> void: screen.go_to_departure())
+	elif session.state.finished:
 		go = UiKit.primary("Voir le bilan de la saison", "star")
 		go.pressed.connect(func() -> void: Game.go_to_end())
 	else:

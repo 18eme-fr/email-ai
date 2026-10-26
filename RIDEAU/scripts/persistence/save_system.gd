@@ -11,7 +11,7 @@ extends RefCounted
 ## endommagé, on tente la copie de secours, et on le signale toujours au joueur.
 
 const FORMAT_ID := "rideau-save"
-const CURRENT_VERSION := 3
+const CURRENT_VERSION := 4
 const DEFAULT_DIR := "user://saves"
 const DEFAULT_SLOT := "saison"
 
@@ -96,6 +96,10 @@ static func migrate(state_dict: Dictionary, from_version: int) -> Dictionary:
 		for key: String in ["dossiers", "achievements", "notions_seen", "notices"]:
 			if not d.has(key):
 				d[key] = []
+	if from_version < 4:
+		# Version 3 (0.16) : pas encore de création avec le metteur en scène.
+		if not d.has("creation"):
+			d["creation"] = {}
 	return d
 
 

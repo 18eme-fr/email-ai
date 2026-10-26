@@ -50,7 +50,65 @@ static func objective(session: GameSession) -> Dictionary:
 			return _with(desk, "Tout est prêt : lancez la soirée depuis votre bureau.")
 		GameState.PHASE_REPORT:
 			return _with(desk, "La soirée est finie. Lisez le bilan de la période à votre bureau.")
+	# Fin de saison : le bilan, puis le voyage à Paris avec la troupe.
+	var c := s.creation
+	if bool(c.get("departed", false)) and c.get("paris", {}).is_empty():
+		return {"text": "Paris ! Entrez au Théâtre des Lumières : la première, c'est ce soir.",
+				"map": "paris", "kind": "spot", "id": "theatre_lumieres"}
+	if bool(c.get("season_closed", false)) and c.get("paris", {}).is_empty():
+		var loc := CreationSystem.location(session.data, s)
+		return {"text": "Le train pour Paris vous attend ! Rejoignez Victor Lazare %s." % str(loc.get("where", "à la gare")),
+				"map": str(loc.get("map", "rue")), "kind": "npc", "id": CreationSystem.DIRECTOR}
 	return _with(desk, "La saison est terminée : le bilan vous attend à votre bureau.")
+
+
+## Le guide « Prochaines étapes » du haut de l'écran : l'étape en cours, le rendez-vous
+## avec le metteur en scène, les missions et les enquêtes. [{icon, text, tone}]
+## tone : "main" (étape à faire), "todo" (à faire quand on veut), "info" (pour mémoire).
+static func guide(session: GameSession, here: String = "", quests: Array = []) -> Array:
+	var s := session.state
+	var data := session.data
+	var world := WorldData.get_default()
+	var out: Array = []
+	var obj := objective(session)
+	var main := str(obj["text"])
+	if str(obj.get("map", "")) not in ["", here] and world.map(str(obj["map"])) != null:
+		main += "  → %s" % world.map(str(obj["map"])).name
+	out.append({"icon": "star", "text": main, "tone": "main"})
+	# Création avec Victor Lazare (sauf quand c'est déjà l'étape principale).
+	if not s.finished:
+		var pending := CreationSystem.pending_step(data, s)
+		var loc := CreationSystem.location(data, s)
+		if not pending.is_empty():
+			var late := CreationSystem.pending_count(data, s)
+			out.append({"icon": "mask", "text": "Création « %s »%s : retrouvez Victor Lazare %s." % [
+				pending["title"], " (+%d en retard)" % (late - 1) if late > 1 else "", loc.get("where", "en ville")], "tone": "todo"})
+		else:
+			out.append({"icon": "mask", "text": "Création : %d / %d décisions prises. Lazare vous attend le mois prochain." % [
+				CreationSystem.choices(s).size(), CreationSystem.steps(data).size()], "tone": "info"})
+	if s.finished:
+		return out  # saison finie : seul compte le voyage à Paris
+	# Missions en cours, puis propositions.
+	var active := MissionSystem.with_status(s, "active")
+	for id: String in active.slice(0, 2):
+		var def: Dictionary = data.missions[id]
+		var prog := MissionSystem.progress(data, s, id)
+		var left := int(s.missions[id]["deadline"]) - s.turn
+		var when := "dernière période" if left <= 0 else "%d périodes" % (left + 1)
+		out.append({"icon": "book", "text": "Mission « %s » : %s (%s)." % [def["title"], prog["text"], when], "tone": "todo"})
+	if active.size() > 2:
+		out.append({"icon": "book", "text": "+ %d autres missions (J : journal)." % (active.size() - 2), "tone": "info"})
+	var offered := MissionSystem.with_status(s, "offered")
+	if not offered.is_empty():
+		var names: Array = []
+		for id: String in offered:
+			var first := data.character_name(str(data.missions[id]["giver"])).split(" ")[0]
+			if not first in names:
+				names.append(first)
+		out.append({"icon": "question", "text": "Missions proposées par %s : cherchez les bulles « ? »." % ", ".join(names), "tone": "todo"})
+	for q: Dictionary in quests.slice(0, 1):
+		out.append({"icon": "album", "text": "Enquête « %s » : %s" % [q["title"], q.get("step", "")], "tone": "info"})
+	return out
 
 
 static func _with(target: Dictionary, text: String) -> Dictionary:
@@ -178,6 +236,8 @@ static func soundscape(map: WorldMap, cell: Vector2i, season_id: String, tod: St
 	var night := tod == "nuit"
 	var layers := {}
 	var music := "foyer"
+	if map.outdoor and not map.sound.is_empty():  # Paris : sa musique, sans la météo de Bréval
+		return {"music": str(map.sound.get("music", "ville_jour")), "layers": (map.sound.get("layers", {}) as Dictionary).duplicate()}
 	if map.outdoor:
 		music = "ville_nuit" if night else ("ville_fetes" if festive and season_id == "hiver" else "ville_jour")
 		var district := str(map.district_at(cell).get("id", ""))

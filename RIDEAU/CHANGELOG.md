@@ -2,6 +2,38 @@
 
 Format inspiré de « Keep a Changelog ». Versions du jeu (`application/config/version`).
 
+## [0.17.0] — 2026-10-26 — Une création, et Paris
+
+### Ajouté
+- **Victor Lazare, metteur en scène en résidence** : chaque mois, il est ailleurs (terrasse du
+  café, médiathèque, kiosque du parc, scène de la Fabrique, quais, maison de quartier, piano du
+  café, hall du théâtre) et vous demande de trancher une étape de la création d'un spectacle :
+  le sujet, la forme, la distribution, la scénographie, la musique, les costumes, les répétitions
+  et le titre (3 options chaque fois). Les mois manqués se rattrapent ; au départ, Lazare tranche
+  seul ce qui reste. Données : `data/story/creation.json` ; logique : `CreationSystem`.
+- **Voyage à Paris** : après le bilan de la dernière période, la troupe est invitée au Théâtre des
+  Lumières. Lazare attend sur le quai de la gare ; cinématique du train (la campagne défile, puis
+  Paris au soleil couchant, la troupe parle de la première).
+- **Un quartier parisien** à explorer : la place des Lumières (manège, fontaine Wallace, entrée de
+  métro Guimard, kiosque, colonnes Morris avec votre affiche, terrasse du Café de la Comédie),
+  la gare de Paris-Est, des immeubles haussmanniens, des ruelles, les quais de Seine avec les
+  bouquinistes et la tour Eiffel sur l'autre rive ; la troupe et des Parisiens à qui parler
+  (dont une critique) ; une valse musette à l'accordéon.
+- **La première** : la salle comble, le rideau qui se lève sur le décor et les costumes choisis
+  (9 mises en scène possibles), les rappels, puis la critique de la *Gazette des Planches*.
+  L'accueil dépend de la qualité des choix, de leur **cohérence** (garder une même vision paie)
+  et du rayonnement du théâtre ; chaque étape que Lazare a dû trancher seul coûte des points.
+  Résumé sur l'écran de fin et dans le rapport de saison.
+
+### Modifié
+- **Le bandeau du haut devient « Prochaines étapes »** : l'étape en cours, le rendez-vous avec le
+  metteur en scène (et où le trouver), les missions avec leur échéance, les missions proposées et
+  l'enquête en cours. Il remplace l'ancien encadré des missions.
+- Sauvegarde en version 4 (les anciennes parties sont migrées).
+
+### Corrigé
+- En ouvrant l'écran du monde, la musique du lieu était remplacée par celle du foyer.
+
 ## [0.16.2] — 2026-10-26 — Son plus propre
 
 ### Modifié

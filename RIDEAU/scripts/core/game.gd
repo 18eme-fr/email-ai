@@ -14,6 +14,8 @@ const MANAGEMENT := "res://scenes/management/management_screen.tscn"
 const WORLD := "res://scenes/world/world_screen.tscn"
 const END_SCREEN := "res://scenes/reports/end_screen.tscn"
 const PROLOGUE := "res://scenes/menus/prologue.tscn"
+const TRAIN := "res://scenes/story/train_trip.tscn"
+const PREMIERE := "res://scenes/story/paris_premiere.tscn"
 
 var session: GameSession = null
 ## Message à afficher par le prochain écran (ex. restauration depuis la copie de secours).
@@ -21,6 +23,8 @@ var pending_notice := ""
 ## Écran à ouvrir à la fin du prologue (la partie, ou le menu si on le revoit).
 var after_prologue := MAIN_MENU
 var saves := SaveSystem.new()
+## Carte où entrer à l'ouverture du monde ({map, cell, facing}) : l'arrivée à Paris.
+var world_entry: Dictionary = {}
 ## Collection permanente, commune à toutes les parties (user://collection.json).
 var collection := Collection.new()
 var data: GameData:
@@ -65,6 +69,9 @@ func _smoke_test() -> void:
 	StrategyBot.new("equilibre", 2024).play_season(s)
 	print("[autotest] saison : %s, trésorerie %s, %d entrées" % [s.state.ending.get("title", "?"), Format.money(s.state.cash), int(s.state.totals["attendance_total"])])
 	ok = ok and s.state.finished
+	var premiere := CreationSystem.play_premiere(d, s.state, s.rayonnement())
+	print("[autotest] création : « %s », %s (%d / 100)" % [premiere["show"], premiere["title"], int(premiere["score"])])
+	ok = ok and str(premiere["title"]) != "" and ResourceLoader.exists("res://assets/story/premiere/salle.png") and ResourceLoader.exists("res://assets/world/maps/paris_base.png")
 	var saves_test := SaveSystem.new("user://autotest")
 	var w := saves_test.save(s.state, "autotest")
 	var r := saves_test.load("autotest")
@@ -145,6 +152,31 @@ func go_to_menu() -> void:
 	if has_game() and not session.state.finished:
 		autosave()
 	get_tree().change_scene_to_file(MAIN_MENU)
+
+
+## Fin de saison : la troupe prend le train pour jouer la création à Paris.
+func start_paris_trip() -> void:
+	if not has_game():
+		return
+	CreationSystem.fill_defaults(data, session.state)
+	session.state.creation["departed"] = true
+	autosave()
+	get_tree().change_scene_to_file(TRAIN)
+
+
+## Descente du train : le quartier parisien, autour du Théâtre des Lumières.
+func arrive_in_paris() -> void:
+	var arrival: Dictionary = WorldData.get_default().raw.get("maps", {}).get("paris", {}).get("arrival", {})
+	world_entry = {"map": "paris", "cell": arrival.get("cell", [10, 20]), "facing": arrival.get("facing", "down")}
+	get_tree().change_scene_to_file(WORLD)
+
+
+## La première au Théâtre des Lumières, puis le bilan de saison.
+func start_premiere() -> void:
+	if has_game() and session.state.creation.get("paris", {}).is_empty():
+		CreationSystem.play_premiere(data, session.state, session.rayonnement())
+		autosave()
+	get_tree().change_scene_to_file(PREMIERE)
 
 
 func go_to_end() -> void:
