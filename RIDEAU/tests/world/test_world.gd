@@ -290,3 +290,23 @@ func test_interior_art_exists() -> void:
 		var art := (world.maps[id] as WorldMap).art
 		assert_bool(ResourceLoader.exists("res://assets/world/maps/%s_base.png" % art)).override_failure_message("Décor manquant : %s" % art).is_true()
 	assert_str(world.map("int_tour_c").art).is_equal("int_tour")
+
+
+## Chaque porte a un son qui lui ressemble, différent quand on entre et quand on sort.
+func test_door_sounds_fit_the_building() -> void:
+	for kind: String in AudioDirector.DOOR_KINDS:
+		for outside: bool in [true, false]:
+			var id := AudioDirector.door_sound_id(kind, outside)
+			assert_bool(ResourceLoader.exists("res://assets/audio/sfx/%s.wav" % id)).override_failure_message("Son manquant : %s" % id).is_true()
+	for id: String in world.maps:
+		for d: Dictionary in (world.maps[id] as WorldMap).doors:
+			if d.has("sound"):
+				assert_bool(str(d["sound"]) in AudioDirector.DOOR_KINDS).override_failure_message("%s : son de porte inconnu %s" % [id, d["sound"]]).is_true()
+	var city := world.map("rue")
+	assert_str(str(city.door_at(Vector2i(62, 29))["sound"])).is_equal("boutique")  # café : clochette
+	assert_str(str(city.door_at(Vector2i(51, 29))["sound"])).is_equal("lourde")    # théâtre
+	assert_str(str(city.door_at(Vector2i(48, 8))["sound"])).is_equal("vitree")     # gare
+	assert_str(str(world.map("int_tour_a").doors[0]["sound"])).is_equal("immeuble")
+	assert_str(AudioDirector.door_sound_id("boutique", false)).is_equal("porte_boutique_in")
+	assert_str(AudioDirector.door_sound_id("boutique", true)).is_equal("porte_boutique_out")
+	assert_str(AudioDirector.door_sound_id("inconnue", true)).is_equal("porte_bois_out")

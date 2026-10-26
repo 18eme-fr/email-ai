@@ -199,6 +199,12 @@ func test_entering_a_shop_and_talking_across_the_counter() -> void:
 	screen._try_step("up")
 	assert_bool(await _wait(runner, func() -> bool: return screen.map.id == "int_cafe" and not screen._busy)).is_true()
 	assert_bool(screen.npcs.has("patronne_cafe")).is_true()
+	# La clochette de la boutique a sonné (version « on entre »).
+	var played: Array = []
+	for p: AudioStreamPlayer in AudioDirector._players:
+		if p.stream != null:
+			played.append(p.stream.resource_path.get_file())
+	assert_array(played).contains(["porte_boutique_in.wav"])
 	# Devant le comptoir, la patronne est derrière : c'est elle qui répond.
 	screen.player.cell = Vector2i(9, 4)
 	screen.player.face("up")

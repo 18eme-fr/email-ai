@@ -1311,7 +1311,8 @@ func _step_player(target: Vector2i) -> void:
 
 func _go_through(door: Dictionary) -> void:
 	_busy = true
-	AudioDirector.play_sfx("porte", 0.08)
+	var target := world.map(str(door["to"]))
+	AudioDirector.door(str(door.get("sound", "bois")), target != null and target.outdoor)
 	await _fade_to(1.0)
 	load_map(str(door["to"]), door["to_cell"], str(door["facing"]))
 	if WorldRules.event_character(session) != "":

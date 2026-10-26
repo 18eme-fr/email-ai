@@ -2,6 +2,20 @@
 
 Format inspiré de « Keep a Changelog ». Versions du jeu (`application/config/version`).
 
+## [0.16.1] — 2026-10-26 — Des portes qu'on reconnaît à l'oreille
+
+### Modifié
+- **Le son des portes dépend du bâtiment**, et il est différent quand on entre (la porte se
+  referme derrière soi avec l'écho de la pièce) et quand on sort (son sec, en plein air) :
+  - porte en bois ordinaire (clenche, grincement des gonds, battant) : hôtel, école, collège,
+    maison de quartier, salles du théâtre ;
+  - lourde porte (grincement grave, choc profond, grand écho) : théâtre, mairie, conservatoire, halle ;
+  - **clochette de boutique** : café, imprimerie, boulangerie, librairie, fleuriste, disquaire, galerie ;
+  - porte vitrée automatique (moteur, souffle) : gare, cinéma, médiathèque, Ondine Énergie ;
+  - porte métallique coulissante : la Fabrique ;
+  - hall d'immeuble (bourdonnement de l'interphone, gâche, groom) : les tours des Coteaux.
+- L'ancien son unique (« porte »), un bourdonnement peu reconnaissable, est supprimé.
+
 ## [0.16.0] — 2026-10-26 — On entre partout : intérieurs, ruelles et façades refaites
 
 ### Ajouté
