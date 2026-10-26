@@ -17,6 +17,9 @@ static func open(parent: Node) -> Modal:
 	if not OS.has_feature("web"):
 		_check(c, "Plein écran", "fullscreen", "")
 	_check(c, "Afficher les conseils de prise en main", "show_tutorial", "Hélène et Inès expliquent chaque étape lors de la première période.")
+	c.add_child(HSeparator.new())
+	c.add_child(UiKit.label("Façon de jouer", "SubHeaderLabel"))
+	_check(c, "Vue tableau de bord (sans se déplacer)", "dashboard_view", "Joue toute la saison depuis un écran de gestion, sans explorer le théâtre. Prend effet à la prochaine partie lancée ou reprise.")
 	return m
 
 

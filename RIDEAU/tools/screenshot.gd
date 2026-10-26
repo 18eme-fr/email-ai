@@ -36,9 +36,11 @@ func _run() -> void:
 	var args := OS.get_cmdline_user_args()
 	if args.size() > 3:
 		action = args[3]
-	_do_action(action)
-	for i in 40:
-		await process_frame
+	# Plusieurs actions possibles, séparées par « ; » (monde explorable).
+	for one in action.split(";"):
+		_do_action(one)
+		for i in 40:
+			await process_frame
 	var img := root.get_texture().get_image()
 	img.save_png(out_path)
 	print("Capture enregistrée : ", out_path, " ", img.get_size())
@@ -63,13 +65,36 @@ func _do_action(action: String) -> void:
 			load("res://scripts/ui/settings_panel.gd").open(overlay)
 		"pause":
 			scene.open_pause()
+		"menu":
+			scene.open_menu()
+		"window":
+			scene.open_phase_window()
+		"talk":
+			scene.interact()
+		"status":
+			load("res://scripts/ui/theatre_status.gd").open(scene.overlay, root.get_node("Game").session)
+		"evening":
+			scene._performing = true
+			scene._apply_light()
 		"readable":
 			# Sans enregistrer : une capture ne doit pas modifier les réglages du joueur.
 			var settings := root.get_node("Settings")
 			settings.values["readable_font"] = true
 			settings.apply("readable_font")
 		_:
-			if action.begins_with("tab:"):
+			if action.begins_with("map:"):
+				# map:<carte>:<x>:<y>:<direction>
+				var p := action.split(":")
+				scene.load_map(p[1], Vector2i(int(p[2]), int(p[3])), p[4] if p.size() > 4 else "down")
+			elif action.begins_with("upgrade:"):
+				root.get_node("Game").session.buy_upgrade(action.substr(8))
+				scene._reload_here()
+			elif action.begins_with("turn:"):
+				root.get_node("Game").session.state.turn = int(action.substr(5))
+				scene._reload_here()
+			elif action.begins_with("perf:"):
+				scene.play_performance(float(action.substr(5)))
+			elif action.begins_with("tab:"):
 				for b in scene.find_children("*", "Button", true, false):
 					if (b as Button).text == action.substr(4):
 						(b as Button).pressed.emit()

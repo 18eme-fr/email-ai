@@ -9,6 +9,7 @@ signal notice(message: String, kind: String)
 
 const MAIN_MENU := "res://scenes/menus/main_menu.tscn"
 const MANAGEMENT := "res://scenes/management/management_screen.tscn"
+const WORLD := "res://scenes/world/world_screen.tscn"
 const END_SCREEN := "res://scenes/reports/end_screen.tscn"
 
 var session: GameSession = null
@@ -66,7 +67,7 @@ func new_game(difficulty: String, game_seed: int = -1) -> void:
 	session = GameSession.new(data)
 	session.new_game(game_seed, difficulty)
 	autosave()
-	get_tree().change_scene_to_file(MANAGEMENT)
+	get_tree().change_scene_to_file(play_scene())
 
 
 ## Charge la sauvegarde. Retourne le message à afficher ("" si tout va bien).
@@ -76,8 +77,13 @@ func continue_game() -> String:
 		return str(result["message"])
 	session = GameSession.new(data)
 	session.load_state(result["state"])
-	get_tree().change_scene_to_file(END_SCREEN if session.state.finished else MANAGEMENT)
+	get_tree().change_scene_to_file(END_SCREEN if session.state.finished else play_scene())
 	return str(result["message"])
+
+
+## Écran de jeu : le monde à explorer, ou le tableau de bord (paramètre).
+func play_scene() -> String:
+	return MANAGEMENT if bool(Settings.get_value("dashboard_view")) else WORLD
 
 
 func autosave() -> void:

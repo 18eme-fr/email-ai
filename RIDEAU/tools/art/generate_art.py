@@ -81,6 +81,9 @@ def main() -> None:
     theatre.export(dirs["theatre"], 2)
     menu_background(os.path.join(dirs["ui"], "menu_background.png"))
     app_icon(os.path.join(dirs["ui"], "icon.png"))
+    # Monde explorable (importé en dernier : il complète la petite police de theatre.py).
+    import world  # noqa: E402
+    world.generate(ROOT, os.path.join(a, "world"))
     print("Images générées dans", a)
 
 

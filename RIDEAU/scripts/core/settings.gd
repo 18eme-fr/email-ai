@@ -14,6 +14,7 @@ const DEFAULTS := {
 	"fullscreen": false,
 	"text_speed": 1.0,
 	"show_tutorial": true,
+	"dashboard_view": false,
 }
 
 var values: Dictionary = DEFAULTS.duplicate()

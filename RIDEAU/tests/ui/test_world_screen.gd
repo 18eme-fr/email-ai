@@ -1,0 +1,225 @@
+extends GdUnitTestSuite
+## Monde explorable : une période complète jouée à pied (bureau, actions auprès
+## des personnes, porte, événement, soirée, bilan), rénovation, clic pour aller.
+
+const WORLD := "res://scenes/world/world_screen.tscn"
+
+
+func before_test() -> void:
+	Game.saves = SaveSystem.new("user://test_world_saves")
+	Game.saves.delete()
+	Settings.values["show_tutorial"] = false
+	Settings.values["reduce_motion"] = true
+
+
+func after_test() -> void:
+	Game.saves.delete()
+	Game.saves = SaveSystem.new()
+	Game.session = null
+
+
+func _new_session(game_seed: int) -> GameSession:
+	Game.session = GameSession.new()
+	Game.session.new_game(game_seed, "standard")
+	return Game.session
+
+
+func _buttons(root: Node) -> Array[Button]:
+	var out: Array[Button] = []
+	for n in root.find_children("*", "Button", true, false):
+		out.append(n as Button)
+	return out
+
+
+func _find_button(root: Node, text_part: String) -> Button:
+	for b in _buttons(root):
+		if b.is_visible_in_tree() and not b.disabled and b.text.contains(text_part):
+			return b
+	return null
+
+
+## Attend qu'une condition soit vraie (au plus `tries` × 5 images).
+func _wait(runner: GdUnitSceneRunner, cond: Callable, tries: int = 80) -> bool:
+	for i in tries:
+		if cond.call():
+			return true
+		await runner.simulate_frames(5)
+	return cond.call()
+
+
+## Répond à la boîte de dialogue du monde (index de la réponse, ou « Suite »).
+func _answer(runner: GdUnitSceneRunner, screen: WorldScreen, index: int) -> void:
+	await _wait(runner, func() -> bool: return screen.speech.visible)
+	await runner.simulate_frames(5)
+	if screen.speech._asking:
+		screen.speech._pick(index)
+	else:
+		screen.speech._advance()
+	await runner.simulate_frames(5)
+
+
+func test_a_full_period_on_foot() -> void:
+	var s := _new_session(31)
+	var runner := scene_runner(WORLD)
+	await runner.simulate_frames(10)
+	var screen := runner.scene() as WorldScreen
+	assert_str(screen.map.id).is_equal("bureau")
+	# 1. Monter d'une case vers le bureau et l'utiliser : le cahier s'ouvre.
+	screen._try_step("up")
+	await _wait(runner, func() -> bool: return not screen.player.moving)
+	screen.interact()
+	await runner.simulate_frames(5)
+	assert_bool(screen.window.is_open()).is_true()
+	_find_button(screen, "Préparer la programmation").pressed.emit()
+	await runner.simulate_frames(5)
+	assert_str(s.state.phase).is_equal(GameState.PHASE_PROGRAMMING)
+	# 2. Programmer un spectacle : la fenêtre se ferme, place aux actions.
+	var panel := screen.find_children("*", "ProgrammingPanel", true, false)[0] as ProgrammingPanel
+	for id: String in s.state.offers:
+		if Programming.unavailable_reason(s.data, s.state, id) == "":
+			panel._show_detail(id)
+			await runner.simulate_frames(2)
+			_find_button(screen, "Programmer ce spectacle").pressed.emit()
+			break
+	await runner.simulate_frames(2)
+	_find_button(screen, "Valider la programmation").pressed.emit()
+	await runner.simulate_frames(10)
+	assert_str(s.state.phase).is_equal(GameState.PHASE_MANAGEMENT)
+	assert_bool(screen.window.is_open()).is_false()
+	# 3. Parler à Hélène : elle propose de former l'équipe.
+	await _wait(runner, func() -> bool: return not screen._busy)
+	screen.talk_to(screen.npcs["helene"])
+	await _answer(runner, screen, 0)
+	await _answer(runner, screen, 0)
+	assert_array(s.state.actions).contains(["formation"])
+	await _wait(runner, func() -> bool: return not screen._busy)
+	# 4. Descendre au hall par la porte du bureau.
+	screen._walk_then([Vector2i(6, 9)], Callable())
+	assert_bool(await _wait(runner, func() -> bool: return screen.map.id == "hall" and not screen._busy)).is_true()
+	assert_bool(screen.npcs.has("ines")).is_true()
+	# 5. Signer la feuille de route : l'événement arrive, quelqu'un vient vous voir.
+	screen.open_phase_window()
+	await runner.simulate_frames(5)
+	_find_button(screen, "Valider les actions").pressed.emit()
+	await runner.simulate_frames(5)
+	assert_str(s.state.phase).is_equal(GameState.PHASE_EVENT)
+	assert_bool(await _wait(runner, func() -> bool: return screen.window.is_open())).is_true()
+	if s.state.current_event != "":
+		var choice_button: Button = null
+		for i in 60:
+			await runner.simulate_frames(5)
+			var box := screen.find_children("*", "DialogueBox", true, false)
+			if box.is_empty():
+				break
+			var more := _find_button(box[0], "Suite")
+			if more:
+				more.pressed.emit()
+			var ev := screen.find_children("*", "EventPanel", true, false)[0] as EventPanel
+			for b in _buttons(ev._choices):
+				if not b.disabled:
+					choice_button = b
+			if choice_button:
+				break
+		assert_object(choice_button).is_not_null()
+		choice_button.pressed.emit()
+		await _wait(runner, func() -> bool:
+			var box2 := screen.find_children("*", "DialogueBox", true, false)
+			if not box2.is_empty():
+				var close := _find_button(box2[0], "Fermer")
+				var more := _find_button(box2[0], "Suite")
+				if close:
+					close.pressed.emit()
+				elif more:
+					more.pressed.emit()
+			return _find_button(screen, "Lancer la période") != null)
+	# 6. Soirée de représentation dans la salle, puis bilan.
+	_find_button(screen, "Lancer la période").pressed.emit()
+	assert_bool(await _wait(runner, func() -> bool: return s.state.phase == GameState.PHASE_REPORT and screen.window.is_open(), 200)).is_true()
+	assert_str(screen.map.id).is_equal("salle")
+	assert_object(_find_button(screen, "Période suivante")).is_not_null()
+	# 7. Période suivante : retour au bureau, nouvelle saison éventuelle.
+	_find_button(screen, "Période suivante").pressed.emit()
+	assert_bool(await _wait(runner, func() -> bool: return screen.map.id == "bureau" and not screen._busy, 100)).is_true()
+	assert_int(s.state.turn).is_equal(2)
+	assert_bool(screen.window.is_open()).is_false()
+	assert_bool(Game.saves.has_save()).is_true()
+
+
+func test_buying_an_upgrade_on_the_spot() -> void:
+	var s := _new_session(8)
+	var runner := scene_runner(WORLD)
+	await runner.simulate_frames(10)
+	var screen := runner.scene() as WorldScreen
+	screen.load_map("hall", Vector2i(17, 4), "up")
+	await runner.simulate_frames(5)
+	var cash_due := Ledger.outstanding_total(s.state, Ledger.EXPENSE)
+	screen.use_spot(screen.map.spot("bar"))
+	await _answer(runner, screen, 0)
+	await _wait(runner, func() -> bool: return s.state.upgrades.has("foyer_bar"))
+	await _answer(runner, screen, 0)
+	assert_array(s.state.upgrades).contains(["foyer_bar"])
+	assert_int(Ledger.outstanding_total(s.state, Ledger.EXPENSE)).is_equal(cash_due + int(s.data.upgrades["foyer_bar"]["cost"]))
+	await _wait(runner, func() -> bool: return not screen._busy)
+	# Une seconde visite ne rachète pas les travaux.
+	screen.use_spot(screen.map.spot("bar"))
+	await _answer(runner, screen, 0)
+	assert_int(s.state.upgrades.size()).is_equal(1)
+
+
+func test_click_to_walk_and_doors_lead_somewhere() -> void:
+	_new_session(3)
+	var runner := scene_runner(WORLD)
+	await runner.simulate_frames(10)
+	var screen := runner.scene() as WorldScreen
+	screen._click(Vector2(3 * 16 + 8, 6 * 16 + 8))
+	assert_array(screen._path).is_not_empty()
+	assert_bool(await _wait(runner, func() -> bool: return screen.player.cell == Vector2i(3, 6))).is_true()
+	# Objectif hors de la carte : une flèche indique la porte à prendre.
+	screen.load_map("rue", Vector2i(19, 9), "down")
+	await runner.simulate_frames(5)
+	assert_str(str(screen._door_towards("bureau").get("to", ""))).is_equal("hall")
+
+
+func test_objective_and_hud_are_shown() -> void:
+	_new_session(4)
+	var runner := scene_runner(WORLD)
+	await runner.simulate_frames(10)
+	var screen := runner.scene() as WorldScreen
+	assert_str(screen.hud._objective.text).contains("bureau")
+	assert_str(screen.hud._period.text).contains("Période 1")
+	assert_str(screen.hud._period.text).contains("Automne")
+
+
+func test_a_whole_season_goes_through_the_world() -> void:
+	var s := _new_session(2024)
+	var runner := scene_runner(WORLD)
+	await runner.simulate_frames(10)
+	var screen := runner.scene() as WorldScreen
+	var bot := StrategyBot.new("batisseur", 2024)
+	var seasons_seen := {}
+	for turn in s.data.turns():
+		seasons_seen[WorldRules.season(screen.world, s.state.turn)] = true
+		bot._build(s)
+		s.open_programming()
+		screen.advance()
+		s.confirm_programming(bot.choose_programming(s))
+		screen.advance()
+		await _wait(runner, func() -> bool: return not screen._busy)
+		s.confirm_actions(bot.choose_actions(s))
+		screen.advance()
+		await _wait(runner, func() -> bool: return screen.window.is_open() and not screen._busy)
+		if s.state.current_event != "":
+			s.choose_event(bot.choose_event(s))
+		var report := s.resolve_turn()
+		assert_bool(report.has("error")).is_false()
+		await screen.play_performance(0.7)
+		screen.advance()
+		assert_bool(screen.window.is_open()).is_true()
+		if s.state.finished:
+			break
+		s.next_turn()
+		screen.advance()
+		await _wait(runner, func() -> bool: return not screen._busy and screen.map.id == "bureau", 100)
+	assert_bool(s.state.finished).is_true()
+	assert_int(seasons_seen.size()).is_equal(4)
+	assert_object(_find_button(screen, "Voir le bilan de la saison")).is_not_null()
