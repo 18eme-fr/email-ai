@@ -80,8 +80,8 @@ Aucune stratégie triviale ne gagne. « La première saison » est volontairemen
 
 | Plateforme | Produit | Vérification réelle |
 |---|---|---|
-| Linux x86_64 | `RIDEAU.x86_64` (93 Mo) | **Autotest** (`-- --smoke-test`) : données, dialogue, **monde (5 cartes, 51 répliques, images, scène)**, saison complète, sauvegarde → SUCCÈS (v0.10.0) |
-| Web (WebGL 2, sans threads) | `index.html` + `.wasm` + `.pck` | Chargé dans Chromium (v0.10.0) : menu, nouvelle saison, accueil d'Hélène dans le monde, touches — **0 erreur console** ; publié en lien privé (moteur découpé en 3 morceaux de moins de 15 Mo, réassemblés au chargement) |
+| Linux x86_64 | `RIDEAU.x86_64` (93 Mo) | **Autotest** (`-- --smoke-test`) : données, dialogue, **monde (5 cartes, 51 répliques, images, scène)**, saison complète avec missions et dossiers, sauvegarde → SUCCÈS (v0.11.0) |
+| Web (WebGL 2, sans threads) | `index.html` + `.wasm` + `.pck` | Chargé dans Chromium (v0.11.0) : menu, choix du scénario, étude de cas, monde, transmission du rapport de saison à la page — **0 erreur console** ; publié en lien privé (moteur découpé en 3 morceaux de moins de 15 Mo, réassemblés au chargement) |
 | Windows x86_64 | `RIDEAU.exe` (86 Mo) | Export sans erreur. **Non lancé** : pas de Windows dans l'environnement |
 | macOS | préréglage fourni | **Non produit** : nécessite un Mac (modèles et signature Apple) |
 
