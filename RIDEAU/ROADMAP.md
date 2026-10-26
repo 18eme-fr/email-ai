@@ -19,6 +19,11 @@
 - [x] Rénovations du théâtre (investissement / amortissement)
 - [x] Soirées de représentation dans la salle ; interface façon jeu de rôle
 
+## Réalisé (v0.11.0)
+
+- [x] Scénarios-études de cas, missions, dossiers de compétences, compétences, trophées
+- [x] Journal de bord, rapport de saison téléchargeable, guide de l'enseignant·e
+
 ## Prochaines étapes proposées
 
 1. **Tests de jeu humains** : faire jouer 5 à 10 personnes (dont des non-initiés) et noter où elles

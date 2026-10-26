@@ -43,6 +43,7 @@ de masse et les tests l'utilisent de la même façon.
 | 7. Difficulté / équilibrage | `data/balancing/balance.json` |
 | 8. Contenus pédagogiques | `data/pedagogy/glossary.json`, `endings.json`, `scripts/ui/glossary_panel.gd`, `briefing.gd` |
 | 9. Monde explorable | `data/world/world.json` (cartes), `barks.json` (répliques), `scripts/world/`, `assets/world/`, `tools/art/world.py` |
+| 11. Progression | `data/scenarios/`, `data/missions/`, `data/progression/`, `scripts/progression/` (`MissionSystem`, `Dossiers`, `SkillSystem`, `AchievementSystem`, `SeasonReport`), `scripts/ui/journal_panel.gd`, `dossier_panel.gd`, `case_study.gd` |
 | 10. Rénovations | `data/upgrades/upgrades.json`, `GameSession.buy_upgrade()`, écritures `non_cash` du `Ledger` |
 
 ## Autoloads
@@ -89,7 +90,7 @@ l'ordre des clics : même graine + mêmes décisions = même saison (testé).
 ## Sauvegarde
 
 JSON dans `user://saves/saison.json` : enveloppe `{format, version, game_version, saved_at,
-checksum, state}`. Version actuelle du format : 2 (ajout des rénovations ; migration depuis la version 1). Écriture dans un fichier temporaire, relecture de vérification, puis
+checksum, state}`. Version actuelle du format : 3 (v2 : rénovations ; v3 : scénario, missions, compétences, dossiers, trophées, notions consultées ; migrations depuis toutes les versions précédentes). Écriture dans un fichier temporaire, relecture de vérification, puis
 remplacement ; l'ancienne sauvegarde est conservée en `.bak`. Au chargement : somme de contrôle
 SHA-256, migrations de version, validation des champs ; en cas d'échec, restauration depuis la
 copie de secours **avec un message au joueur**. Sauvegarde automatique à chaque étape.

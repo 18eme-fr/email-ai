@@ -2,6 +2,28 @@
 
 Format inspiré de « Keep a Changelog ». Versions du jeu (`application/config/version`).
 
+## [0.11.0] — 2026-10-26 — Une vraie saison de jeu, pensée pour la formation
+
+### Ajouté
+- **4 scénarios-études de cas** au choix (première saison, redressement, territoire, création),
+  avec situation de départ, engagements propres, fiche d'étude de cas et questions de débriefing.
+- **16 missions** confiées par les personnages (bulles « ? », journal de bord) : objectifs,
+  échéances, récompenses, pénalités, débriefing « à retenir » par la personne concernée.
+- **5 dossiers de compétences** générés à partir de la partie et corrigés avec le calcul :
+  budget prévisionnel, seuil de rentabilité, cession ou coréalisation, résultat ou trésorerie,
+  mécénat. Mode entraînement.
+- **5 compétences** à 3 niveaux, avec avantages débloqués ; **12 trophées**.
+- **Journal de bord** (touche J) : missions, compétences, trophées, étude de cas.
+- **Rapport de saison téléchargeable** (Markdown) pour l'enseignant·e ; onglet « Missions » du
+  bilan ; écran de fin enrichi.
+- `docs/GUIDE_ENSEIGNANT.md` ; rapports d'équilibrage par scénario ; source S16 (contreparties
+  du mécénat).
+
+### Modifié
+- Sauvegarde en version 3, migration automatique des parties 0.9 et 0.10.
+- Simulation : choix du scénario (`--scenario`), missions réussies par stratégie ; les joueurs
+  automatiques acceptent les missions et rendent les dossiers.
+
 ## [0.10.0] — 2026-10-26 — Le théâtre à explorer
 
 ### Ajouté

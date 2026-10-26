@@ -30,6 +30,12 @@ Contexte pour les prochaines sessions (humaines ou Claude Code).
   `session`, `advance()`, `refresh_all()`, `toast()`, `theatre`).
 - **Rénovations** : prix en écriture neutre, amortissement en écritures `non_cash` (résultat
   seulement). Ne jamais faire bouger la trésorerie avec une écriture `non_cash`.
+- **Progression** (`scripts/progression/`) : missions, dossiers, compétences et trophées sont
+  pilotés par les données (`data/scenarios`, `data/missions`, `data/progression`). Les
+  récompenses passent par `Rules.apply` ; l'expérience par `SkillSystem.add_xp` ; les messages au
+  joueur par `state.notices` (lus avec `GameSession.take_notices()`). Un dossier doit rester
+  généré à partir de la partie et corrigé avec une explication par question
+  (`tests/progression` vérifie que la réponse parfaite vaut 100 %).
 - Interface : construire avec `UiKit` (thème `assets/ui/rideau_theme.tres`, variations
   `WoodPanel`, `PaperPanel`, `InsetPanel`, `GoldButton`, `SecondaryButton`, `FlatButton`,
   `HeaderLabel`, `SmallLabel`…). Les textes à la ligne utilisent `UiKit.label(..., wrap=true)`.

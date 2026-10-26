@@ -70,6 +70,35 @@ après modification, relancer `python3 tools/art/generate_art.py`. Les tests
 ci-dessous, plus `phase`, `has_upgrade`, `missing_upgrade`), `priority` facultative. La réplique
 la plus spécifique (nombre de conditions + priorité) est choisie.
 
+## `data/scenarios/scenarios.json` — scénarios (études de cas)
+
+`order`, puis pour chaque scénario : `title`, `level`, `summary`, `context`, `question`,
+`learning` (notions), `start` (`cash`, `stats` qui remplacent `balance.start`), `ledger`
+(écritures de départ : `label`, `category`, `amount`, `direction`, `delay` depuis la période 1,
+`neutral`), `objectives` (format de `balance.objectives`, une métrique peut être un indicateur),
+`renewal_rule` facultatif, `missions` (ids proposés, dans l'ordre), `debrief` (questions).
+
+## `data/missions/missions.json` — missions
+
+`max_active`, puis : `id`, `title`, `giver` (personnage), `offer` (`min_turn`, `max_turn`, `when`
+au format des conditions), `pitch`, `goal` (`kind` : `metric` avec `metric_min`/`metric_max`,
+`delta` avec `metric` et `min`, `played` avec `show`, `dossier` avec `dossier` et `min_score` ;
+`text` lisible), `duration` ou `deadline_turn`, `at_deadline`, `reward` et `penalty` (`effects`
+au format des effets, `xp` par compétence), `success_text`, `failure_text`, `takeaway`, `notion`.
+Les métriques sont celles de `SeasonEvaluator.metric` (indicateurs, `cash`, `attendance_total`,
+`eac_count`, `art_count`, `solidaire_count`…).
+
+## `data/progression/skills.json` et `achievements.json`
+
+Compétences : `levels` (seuils d'expérience), `order`, et pour chacune `label`, `icon`,
+`description`, `perks` par niveau (`per_turn`, `offers`, `action_discount`, `incident_mult`,
+`overdraft_bonus`). Trophées : `id`, `title`, `text`, `icon`, `when` (`metric_min`, `fill_min`,
+`missions_done_min`, `dossier_perfect`, `upgrades_min`, `skill_level_min`, `all_skills_min`,
+`never_overdraft`, `renewed`).
+
+Les dossiers sont générés par code (`scripts/progression/dossiers.gd`) : chaque générateur lit la
+partie (charges fixes, spectacles, taux de TVA et de droits) et un hasard reproductible.
+
 ## `data/events/events.json` — événements
 
 | Champ | Rôle |

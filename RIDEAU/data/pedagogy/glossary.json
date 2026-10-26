@@ -212,10 +212,11 @@
       "title": "Mécénat",
       "short": "Un soutien apporté par une entreprise ou un particulier à une activité d'intérêt général, sans contrepartie équivalente.",
       "game": "Une entreprise peut vous soutenir ; plus le logo est visible, plus le soutien est généreux… et moins il est discret.",
-      "reality": "En France, les entreprises peuvent bénéficier d'une réduction d'impôt de 60 % des sommes versées, dans certaines limites (article 238 bis du Code général des impôts). Le parrainage avec contreparties importantes relève d'un autre régime.",
+      "reality": "En France, les entreprises peuvent bénéficier d'une réduction d'impôt de 60 % des sommes versées, dans certaines limites (article 238 bis du Code général des impôts). Le parrainage avec contreparties importantes relève d'un autre régime. Les contreparties accordées au mécène sont valorisées et doivent rester dans une « disproportion marquée » avec le don (repère admis : 25 % au plus).",
       "simplified": true,
       "sources": [
-        "S13"
+        "S13",
+        "S16"
       ]
     },
     "production_diffusion": {

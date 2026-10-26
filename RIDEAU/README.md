@@ -10,7 +10,10 @@ des saisons. Le jeu fait découvrir, par l'expérience,
 les grandes logiques de l'administration culturelle (budget prévisionnel, billetterie, jauge,
 contrats de cession et de coréalisation, médiation, subventions, mécénat…).
 
-État : **version 0.10.0 jouable de bout en bout** (voir `QA_REPORT.md` et `ROADMAP.md`).
+État : **version 0.11.0 jouable de bout en bout** (voir `QA_REPORT.md` et `ROADMAP.md`).
+Depuis la version 0.11 : **scénarios-études de cas, missions, dossiers de compétences,
+progression, trophées et rapport de saison** pour l'utilisation en formation — voir
+**`docs/GUIDE_ENSEIGNANT.md`**.
 
 ## Lancer le jeu sur macOS (le plus simple)
 
@@ -30,7 +33,7 @@ En ligne de commande :
 ```
 
 Des versions prêtes à jouer pour **Linux, Windows et le Web** ont été produites (archives
-`RIDEAU-0.10.0-*.zip` transmises avec la livraison ; le dossier `exports/` n'est pas versionné).
+`RIDEAU-0.11.0-*.zip` transmises avec la livraison ; le dossier `exports/` n'est pas versionné).
 La version Web se lance en servant le dossier décompressé, par exemple :
 `python3 -m http.server` puis <http://localhost:8000> (l'ouvrir directement en `file://` ne marche pas).
 Vérifier une version exportée : `./RIDEAU.x86_64 --headless -- --smoke-test`.
@@ -44,6 +47,7 @@ Dans le monde explorable (écran par défaut) :
 | Marcher | clic sur la destination | flèches ou Z Q S D (W A S D en QWERTY) |
 | Parler, utiliser un objet | clic dessus | Entrée, Espace ou E, face à lui |
 | Menu, carnet, budget, bilans | boutons en haut à droite | Échap, F1 |
+| Journal de bord (missions, compétences, trophées) | bouton livre | J |
 
 La flèche dorée indique toujours la prochaine étape. Le paramètre « vue tableau de bord » permet de
 jouer sans se déplacer, avec l'écran de gestion :

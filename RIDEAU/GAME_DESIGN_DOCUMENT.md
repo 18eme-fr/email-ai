@@ -78,6 +78,33 @@ Chaque rénovation a un effet immédiat, un effet à chaque période et parfois 
 simulation montre qu'une stratégie qui rénove tout gagne un peu en indicateurs mais garde moins
 de trésorerie (convention renouvelée 90 % du temps contre 99 % sans rénovation).
 
+## 3 ter. Une saison de jeu : scénarios, missions, dossiers, progression (depuis la version 0.11)
+
+Le jeu vise un public de formation (master en management de la culture) : il doit rester un vrai
+jeu (buts, défis, imprévus, progression) tout en faisant travailler des compétences
+professionnelles. Cinq briques s'enchaînent :
+
+1. **Scénario (étude de cas)** choisi au lancement : situation de départ, problématique,
+   engagements propres de la convention, missions disponibles, questions de débriefing.
+   Quatre scénarios : première saison (découverte), redressement, territoire (intermédiaires),
+   création (expert).
+2. **Missions** confiées par les personnages (bulle « ? ») : objectif chiffré, échéance,
+   récompense (indicateurs, argent, expérience), pénalité en cas d'échec, « à retenir ». Trois
+   missions au plus en même temps. Seize missions, dont des missions « dossier ».
+3. **Dossiers** : défis courts générés à partir de la partie et corrigés avec explications
+   (budget prévisionnel, seuil de rentabilité, cession ou coréalisation, résultat ou trésorerie,
+   mécénat). Réussir un dossier fait progresser une compétence ; entraînement libre possible.
+4. **Compétences** de la direction (cinq, trois niveaux) : chaque niveau débloque un avantage
+   (découvert autorisé, propositions supplémentaires, actions moins chères, incidents plus rares,
+   indicateurs qui progressent seuls).
+5. **Trophées** (douze) et **rapport de saison** téléchargeable, pensé pour être remis à
+   l'enseignant·e (voir `docs/GUIDE_ENSEIGNANT.md`).
+
+Boucle : chaque période apporte des propositions de missions ; on les accepte en parlant aux
+personnes ; les décisions de gestion (programmation, actions, événement) font avancer les
+objectifs ; en fin de période les missions réussissent ou échouent ; au début de la suivante, la
+personne concernée commente le résultat et rappelle ce qu'il faut retenir.
+
 ## 4. Indicateurs
 
 Visibles en permanence : **Trésorerie**, **Publics** (fidélité, total des entrées), **Rayonnement**.

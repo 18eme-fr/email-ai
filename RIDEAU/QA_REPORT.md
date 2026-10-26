@@ -1,13 +1,13 @@
-# Rapport d'assurance qualité — RIDEAU ! v0.10.0
+# Rapport d'assurance qualité — RIDEAU ! v0.11.0
 
-Date : 26 octobre 2026 (v0.10.0 : monde explorable et rénovations ; v0.9.0 le 25 octobre). Environnement : conteneur Linux, **Godot 4.7.2-stable compilé depuis les
+Date : 26 octobre 2026 (v0.11.0 : scénarios, missions, dossiers, compétences ; v0.10.0 : monde explorable ; v0.9.0 le 25 octobre). Environnement : conteneur Linux, **Godot 4.7.2-stable compilé depuis les
 sources**, rendu réel OpenGL (Mesa llvmpipe) sous Xvfb, Chromium (Playwright) pour la version Web.
 **Tout ce qui est indiqué « réussi » a été réellement exécuté.**
 
 ## 1. Tests automatisés (GdUnit4 6.2.2)
 
 Commande : `GODOT_BIN=… xvfb-run -a ./addons/gdUnit4/runtest.sh -a res://tests -c`
-Résultat de la dernière exécution : **112 cas, 0 échec, 0 erreur, 0 orphelin.**
+Résultat de la dernière exécution : **136 cas, 0 échec, 0 erreur, 0 orphelin.**
 
 | Suite | Cas | Ce qui est vérifié |
 |---|---|---|
@@ -21,27 +21,45 @@ Résultat de la dernière exécution : **112 cas, 0 échec, 0 erreur, 0 orphelin
 | `data/test_data_integrity.gd` | 9 | Chargement des JSON, champs et bornes des spectacles, actions, correspondance événements ↔ dialogues, compilation des `.dialogue` par Dialogue Manager, réponses disponibles pour chaque événement, notions et sources, portraits, fins |
 | `economy/test_upgrades.gd` | 7 | Rénovations : le prix touche la trésorerie et **jamais le résultat**, l'amortissement touche le résultat et **jamais la trésorerie** ; achat unique et seulement avant l'événement ; refus si le découvert serait dépassé ; effets et recettes à chaque période ; achat tardif amorti sur les seules périodes restantes |
 | `world/test_world.gd` | 11 | Cartes rectangulaires et légende, portes praticables avec retour, **tout objet, personnage et porte accessible à pied**, chemins qui contournent les personnages, chaque action et rénovation a un lieu, saisons, répliques pour tous, réplique la plus spécifique choisie, objectif qui suit les étapes, actions décidées une à une (capacité, étape) |
-| `ui/test_world_screen.gd` | 5 | **Une période complète jouée à pied** (bureau, Hélène, porte, événement qui vient au joueur, soirée dans la salle, bilan, retour au bureau) ; **une saison entière à travers le monde** (4 saisons, fin de saison) ; rénovation achetée sur place et pas deux fois ; clic pour marcher ; objectif et période affichés |
+| `ui/test_world_screen.gd` | 9 | **Une période complète jouée à pied** (bureau, Hélène, porte, événement qui vient au joueur, soirée dans la salle, bilan, retour au bureau) ; **une saison entière à travers le monde** (4 saisons, fin de saison) ; rénovation achetée sur place et pas deux fois ; clic pour marcher ; objectif et période affichés ; **étude de cas au lancement** ; **mission acceptée en parlant puis dossier réussi** ; fenêtre de dossier qui refuse une copie incomplète et affiche la correction ; journal (onglets, acceptation) et rapport de saison |
+| `progression/test_progression.gd` | 20 | Cohérence des scénarios, missions, compétences et trophées ; **chaque dossier bien formé, réponse parfaite = 100 %, réponse fausse < 100 %** (6 tirages par dossier) ; seuil de rentabilité recalculé avec le moteur économique ; chiffres différents à chaque tentative mais reproductibles ; entraînement sans expérience ; missions proposées selon le scénario, réussite par dossier, par métrique, à l'échéance, par progression depuis l'acceptation, pénalité en cas d'échec, limite de 3 missions, refus ; spectacle demandé ajouté aux propositions ; niveaux et avantages (propositions, coûts, découvert) jusque dans le grand livre ; départ et objectifs propres à chaque scénario ; **une saison complète par scénario** ; trophées uniques ; sauvegarde et migration |
 | `ui/test_ui.gd` | 13 | Formatage des nombres, boutons du menu, Paramètres et Crédits, « Continuer » activé après sauvegarde, **une période complète jouée à travers l'interface**, montant affiché, fenêtres ouvertes/fermées au clavier (Échap), Entrée inactive sous une fenêtre modale, chaque étape se construit, **tous les écrans tiennent en 1280×720 (police pixel et police lisible)**, tailles de texte ≥ 13 px, écran de fin |
 
 ## 2. Simulation d'équilibrage (`tools/simulate.gd`)
 
-200 saisons par stratégie et par difficulté (rapports complets dans `docs/`, relancés pour la v0.10).
+200 saisons par stratégie, par difficulté et par scénario (rapports complets dans `docs/BALANCE_REPORT*.md`).
+Les joueurs automatiques acceptent les missions et répondent juste à 75 % des questions des
+dossiers (40 % pour le joueur au hasard).
+
+Scénario « La première saison » selon la difficulté :
 
 | Stratégie | Découverte | **Standard** | Exigeant |
 |---|---|---|---|
-| Équilibrée | 100 % | **99 %** | 71 % |
-| Bâtisseuse (équilibrée + toutes les rénovations) | 100 % | **90 %** | 54 % |
-| Artistique | 100 % | **71 %** | 21 % |
-| Publics | 100 % | **74 %** | 15 % |
+| Équilibrée | 100 % | **100 %** | 91 % |
+| Bâtisseuse (équilibrée + rénovations) | 100 % | **99 %** | 79 % |
+| Artistique | 100 % | **95 %** | 51 % |
+| Publics | 100 % | **91 %** | 36 % |
 | Prudente (rentabilité seule) | 0 % | **0 %** | 0 % |
-| Aléatoire | 42 % | **33 %** | 15 % |
+| Aléatoire | 43 % | **35 %** | 17 % |
 | Passive | 0 % | **0 %** | 0 % |
 
-(pourcentage de conventions renouvelées). Aucune stratégie triviale ne gagne ; plusieurs styles
-différents gagnent avec des fins différentes ; la difficulté Exigeant est un vrai défi. Les
-rénovations sont un arbitrage, pas un passage obligé : elles améliorent un peu les indicateurs mais
-pèsent sur la trésorerie (5 % de faillites en Exigeant pour qui rénove tout).
+Scénarios en difficulté Standard :
+
+| Stratégie | Sauver la Lanterne | Territoire | Création |
+|---|---|---|---|
+| Équilibrée | 62 % | 100 % | 70 % |
+| Bâtisseuse | 62 % | 99 % | 48 % |
+| Artistique | 34 % | 60 % | **75 %** |
+| Publics | 23 % | **95 %** | 39 % |
+| Prudente | 5 % | 0 % | 0 % |
+| Aléatoire | 6 % | 2 % | 2 % |
+| Passive | 0 % | 0 % | 0 % |
+
+(pourcentage de conventions renouvelées ; 5,5 à 6,9 missions réussies en moyenne pour les
+stratégies actives). Chaque scénario favorise une approche différente : publics pour
+« territoire », création pour « création », gestion prudente et équilibrée pour le redressement.
+Aucune stratégie triviale ne gagne. « La première saison » est volontairement accessible
+(niveau Découverte) ; les missions la rendent plus facile qu'en v0.10.
 
 ## 3. Vérifications manuelles et visuelles
 
@@ -81,6 +99,8 @@ inutile en rendu Compatibilité).
 - À très petite taille, le « î » de la police pixel ressemble à un « i » (option « police très
   lisible » disponible).
 - Le serveur MCP Godot recommandé n'a pas été installé (voir `PLUGINS_AUDIT.md`).
+- Missions et dossiers : jamais testés avec de vrais étudiant·e·s ; la difficulté des dossiers
+  et la durée des missions sont à ajuster après un premier usage en cours.
 - Monde explorable : les déplacements ont été testés par programme et sur captures, pas encore
   « à la manette » par un humain ; la sensation de déplacement (vitesse, réactivité) est à valider
   en jouant. Pas de manette prise en charge pour l'instant (clavier et souris uniquement).
