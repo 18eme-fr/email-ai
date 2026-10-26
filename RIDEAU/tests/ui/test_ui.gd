@@ -70,7 +70,7 @@ func test_main_menu_opens_settings_and_credits() -> void:
 	await runner.simulate_frames(3)
 	var overlay := runner.find_child("Overlay")
 	assert_int(overlay.get_child_count()).is_equal(1)
-	assert_int(overlay.find_children("*", "HSlider", true, false).size()).is_equal(3)
+	assert_int(overlay.find_children("*", "HSlider", true, false).size()).is_equal(4)
 	(overlay.get_child(0) as Modal).close_modal()
 	await runner.simulate_frames(3)
 	(runner.find_child("Credits") as Button).pressed.emit()

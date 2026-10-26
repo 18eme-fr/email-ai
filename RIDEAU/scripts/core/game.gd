@@ -13,10 +13,13 @@ const MAIN_MENU := "res://scenes/menus/main_menu.tscn"
 const MANAGEMENT := "res://scenes/management/management_screen.tscn"
 const WORLD := "res://scenes/world/world_screen.tscn"
 const END_SCREEN := "res://scenes/reports/end_screen.tscn"
+const PROLOGUE := "res://scenes/menus/prologue.tscn"
 
 var session: GameSession = null
 ## Message à afficher par le prochain écran (ex. restauration depuis la copie de secours).
 var pending_notice := ""
+## Écran à ouvrir à la fin du prologue (la partie, ou le menu si on le revoit).
+var after_prologue := MAIN_MENU
 var saves := SaveSystem.new()
 ## Collection permanente, commune à toutes les parties (user://collection.json).
 var collection := Collection.new()
@@ -83,7 +86,18 @@ func new_game(difficulty: String, game_seed: int = -1, scenario: String = GameDa
 	session = GameSession.new(data)
 	session.new_game(game_seed, difficulty, scenario)
 	autosave()
+	if not bool(Settings.get_value("prologue_seen")):
+		# Toute première partie : le prologue raconte l'histoire de la Lanterne.
+		after_prologue = play_scene()
+		get_tree().change_scene_to_file(PROLOGUE)
+		return
 	get_tree().change_scene_to_file(play_scene())
+
+
+## Revoir le prologue depuis le menu principal.
+func show_prologue() -> void:
+	after_prologue = MAIN_MENU
+	get_tree().change_scene_to_file(PROLOGUE)
 
 
 ## Charge la sauvegarde. Retourne le message à afficher ("" si tout va bien).

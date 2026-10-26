@@ -673,8 +673,7 @@ def render(world, season, festive=False):
     # 2. Décors fixes (train, bateaux)
     for d in m.get("decor", []):
         if d["kind"] == "train":
-            x, y, w, h = d["rect"]
-            draw_train(base, x * T, y * T, w, h)
+            pass  # le train est un sprite animé (rue_train.png) : il entre en gare et repart
         elif d["kind"] == "boat":
             x, y = d["cell"]
             draw_boat(base, x * T - 6, y * T, x + y)
@@ -888,6 +887,12 @@ def generate(root, maps_dir, people_dir=None):
     import os
     world = W0.load_world(root)
     lights = []
+    for d in world["maps"]["rue"].get("decor", []):
+        if d["kind"] == "train":
+            _, _, w, h = d["rect"]
+            tc = Canvas(w * T, h * T)
+            draw_train(tc, 0, 0, w, h)
+            tc.save(os.path.join(maps_dir, "rue_train.png"))
     for season in SEASONS:
         base, top, lights = render(world, season)
         base.save(os.path.join(maps_dir, "rue_%s_base.png" % season))

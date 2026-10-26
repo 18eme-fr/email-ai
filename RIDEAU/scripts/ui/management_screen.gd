@@ -55,6 +55,7 @@ func _ready() -> void:
 		b.text = ""
 	Game.notice.connect(toast)
 	AudioDirector.play_music("foyer")
+	AudioDirector.clear_ambience()
 	refresh_all()
 	show_phase()
 	var pending := Game.take_pending_notice()

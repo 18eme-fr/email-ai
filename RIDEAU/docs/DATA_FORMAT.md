@@ -100,6 +100,17 @@ précis révélés, objets exposés et la tenue. Dans `world.json`, une porte pe
 (`requires_clue`, `locked`), une personne peut n'arriver que plus tard (`requires`, format
 `Rules.check`) et un spot de type `exhibit` ouvre l'exposition.
 
+## `data/story/prologue.json` — prologue
+
+`scenes` : `image` (illustration de `assets/prologue/`, dessinée par `tools/art/prologue_art.py`),
+`text` (140 caractères au plus), `music` (piste d'`AudioDirector`, `""` pour le silence), `ambience`
+(couche → volume 0..1, fichiers de `assets/audio/ambience/`), `sfx`, `pan` (déplacement lent de la
+caméra), `title` (affiche le titre du jeu).
+
+Sons : `python3 tools/generate_audio.py` (interface et musiques) et `tools/audio_world.py` (musiques de
+la ville, ambiances en boucle sans couture, pas, sons de lieux). Le choix des ambiances est fait par
+`WorldRules.soundscape()`, la météo par `WorldRules.weather()` (canal `SeededRng.CHANNEL_WEATHER`).
+
 ## `data/world/barks.json` — répliques
 
 `who` (personne, `passant`, ou identifiant d'objet), `text`, `when` (conditions au format

@@ -53,6 +53,14 @@ var _water: Sprite2D               ## reflets animés de la rivière (deux image
 var _water_frames: Array[Texture2D] = []
 var _water_time := 0.0
 var _weather: CPUParticles2D
+var _water_cells: Array = []       ## cases d'eau de la carte (volume du bruit de la rivière)
+var _sky: String = "clair"         ## météo de la période : clair, pluie, neige
+var sky_override := ""             ## force une météo (captures d'écran, essais)
+var _sky_timer := 0.0              ## prochain passage d'oiseaux
+var _train: Sprite2D
+var _train_timer := 0.0
+var _life_timer := 0.0             ## petits sons de vie (canards, pigeons)
+var _surface := ""
 var _district := ""                ## quartier de la ville où se trouve le joueur
 var _pickups: Dictionary = {}      ## case -> {id, nodes} : objets de collection posés sur cette carte
 var _collection_queue: Array = []  ## résultats de collection en attente d'affichage
@@ -75,7 +83,7 @@ func _ready() -> void:
 	load_map(str(start["map"]), WorldMap.to_cell(start["cell"]), str(start["facing"]))
 	Game.notice.connect(toast)
 	Game.collection_results.connect(_on_collection_results)
-	AudioDirector.play_music("foyer")
+	AudioDirector.play_music("foyer")  # remplacée par la musique du lieu au chargement de la carte
 	refresh_all()
 	var pending := Game.take_pending_notice()
 	if pending != "":
@@ -198,14 +206,19 @@ func load_map(map_id: String, cell: Vector2i, facing: String) -> void:
 	_fx = Node2D.new()
 	_fx.z_index = 22
 	_map_root.add_child(_fx)
+	_sky = sky_override if sky_override != "" else WorldRules.weather(world, session.state)
+	_water_cells = map.water_cells()
 	_apply_light()
 	_add_weather(season)
+	_add_sky_life(season)
+	_add_sound_sources()
 	_setup_camera()
 	_path.clear()
 	_district = ""
 	_update_district(false)
 	refresh_all()
 	_update_pickup_prompts()
+	_refresh_soundscape()
 	Game.collection_event(Game.collection.on_enter_map(session, map_id))
 
 
@@ -309,6 +322,7 @@ func _try_pickup() -> bool:
 		var results := Game.collection.on_pickup(session, map.id, c)
 		if results.is_empty():
 			return false
+		AudioDirector.play_sfx("ramasser")
 		_pickups.erase(c)
 		for n: Node in p["nodes"]:
 			n.queue_free()
@@ -353,13 +367,15 @@ func _on_collection_results(results: Array) -> void:
 			"object":
 				var o: Dictionary = r["object"]
 				var big: bool = o["rarity"] in ["rare", "legendaire", "mythique"]
-				AudioDirector.play_sfx("applause" if o["rarity"] in ["legendaire", "mythique"] else ("coins" if big else "confirm"))
+				AudioDirector.play_sfx("decouverte_legendaire" if o["rarity"] in ["legendaire", "mythique"] else ("decouverte_rare" if big else "decouverte"))
 				await hud.show_discovery(o, CollectionPanel.icon(o), Game.collection.rarity_info(o["rarity"]), Game.collection.count(), Game.collection.total())
 				if o.get("trigger", {}).get("type", "") == "state" and str(r.get("text", "")) != "":
 					toast(str(r["text"]))
 			"clue":
+				AudioDirector.play_sfx("indice")
 				toast("Nouvel indice noté : %s (Collection > Enquêtes)." % r["clue"]["title"])
 			"quest_step":
+				AudioDirector.play_sfx("quete")
 				var q := Game.collection.quest(str(r["quest"]))
 				if r.get("done", false):
 					toast("Enquête « %s » terminée !" % q["title"])
@@ -474,21 +490,33 @@ func _free_cells(rect: Rect2i) -> Array:
 	return out
 
 
+## Teinte selon le moment de la journée et la météo ; lampadaires allumés dès la fin de journée.
 func _apply_light() -> void:
-	var evening := WorldRules.is_evening(session.state) or _performing
-	_lights.visible = evening
-	if not evening:
-		_modulate.color = Color.WHITE
-	elif map.outdoor:
-		_modulate.color = Color(0.42, 0.42, 0.68)
-	else:
-		_modulate.color = Color(0.62, 0.58, 0.76)
+	var tod := "nuit" if _performing else WorldRules.time_of_day(session.state)
+	var outdoor := map.outdoor
+	var c: Color = {
+		"matin": Color(1.0, 0.94, 0.86) if outdoor else Color(1.0, 0.97, 0.92),
+		"jour": Color.WHITE,
+		"fin_de_journee": Color(1.0, 0.8, 0.66) if outdoor else Color(1.0, 0.92, 0.84),
+		"nuit": Color(0.42, 0.42, 0.68) if outdoor else Color(0.62, 0.58, 0.76),
+	}[tod]
+	if outdoor and _sky == "pluie":
+		c *= Color(0.8, 0.82, 0.9)
+	_modulate.color = c
+	_lights.visible = tod in ["nuit", "fin_de_journee"]
+	_lights.modulate.a = 1.0 if tod == "nuit" else 0.45
+	if _lights.visible and outdoor and not Settings.reduce_motion():
+		var tw := _lights.create_tween().set_loops()  # léger vacillement des lampadaires
+		tw.tween_property(_lights, "modulate:a", _lights.modulate.a * 0.88, 0.9).set_trans(Tween.TRANS_SINE)
+		tw.tween_property(_lights, "modulate:a", _lights.modulate.a, 1.3).set_trans(Tween.TRANS_SINE)
 
 
 func _add_weather(season: String) -> void:
 	_weather = null
 	if not map.outdoor or Settings.reduce_motion():
 		return
+	if season == "hiver" and _sky != "neige":
+		return  # un ciel d'hiver dégagé : pas de flocons
 	var tex_name: String = {"automne": "leaf", "hiver": "snow", "printemps": "petal", "ete": "mote"}[season]
 	var p := CPUParticles2D.new()
 	p.texture = _texture("res://assets/world/fx/%s.png" % tex_name)
@@ -511,9 +539,199 @@ func _add_weather(season: String) -> void:
 		p.gravity = Vector2(2, -2)
 		p.emission_rect_extents.y = VIEW.y * 0.5
 		p.color = Color(1, 1, 1, 0.6)
+	if _sky == "pluie":
+		p.texture = _texture("res://assets/world/fx/rain.png")
+		p.amount = 160
+		p.lifetime = 1.6
+		p.preprocess = 2.0
+		p.direction = Vector2(0.12, 1)
+		p.spread = 3.0
+		p.gravity = Vector2(0, 0)
+		p.initial_velocity_min = 260.0
+		p.initial_velocity_max = 320.0
+		p.angular_velocity_min = 0.0
+		p.angular_velocity_max = 0.0
+		p.color = Color(1, 1, 1, 0.75)
 	_fx.add_child(p)
 	_weather = p
 	_follow_weather()
+
+
+## Nuages qui passent, lucioles les nuits d'été au parc, poussière dans la réserve, train en gare.
+func _add_sky_life(season: String) -> void:
+	_train = null
+	_sky_timer = _rng.randf_range(4.0, 10.0)
+	var tod := WorldRules.time_of_day(session.state)
+	var calm := Settings.reduce_motion()
+	if map.outdoor and tod != "nuit" and not calm:
+		var cloud_tex := _texture("res://assets/world/fx/cloud.png")
+		for i in (6 if _sky == "pluie" else 4):
+			var cl := _sprite(cloud_tex, 19)
+			cl.scale = Vector2(3, 3)
+			cl.modulate.a = 0.22 if _sky == "pluie" else 0.12
+			var y := _rng.randf_range(0, map.size.y * T)
+			var x0 := _rng.randf_range(-400, map.size.x * T)
+			cl.position = Vector2(x0, y)
+			_map_root.add_child(cl)
+			var tw := cl.create_tween().set_loops()
+			var speed := _rng.randf_range(6.0, 11.0)
+			tw.tween_property(cl, "position:x", map.size.x * T + 50.0, (map.size.x * T + 50.0 - x0) / speed)
+			tw.tween_callback(func() -> void: cl.position.x = -420.0)
+	if map.outdoor and tod == "nuit" and season in ["ete", "printemps"] and _sky != "pluie" and not calm:
+		for dist: Dictionary in map.districts:
+			if dist["id"] == "parc":
+				var r: Rect2i = dist["rect"]
+				var f := CPUParticles2D.new()
+				f.texture = _texture("res://assets/world/fx/firefly.png")
+				f.amount = 26
+				f.lifetime = 5.0
+				f.preprocess = 5.0
+				f.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
+				f.position = Vector2(r.get_center() * T)
+				f.emission_rect_extents = Vector2(r.size * T) / 2.0
+				f.gravity = Vector2.ZERO
+				f.initial_velocity_min = 2.0
+				f.initial_velocity_max = 8.0
+				f.spread = 180.0
+				f.color_ramp = Gradient.new()
+				f.color_ramp.set_color(0, Color(1, 1, 1, 0))
+				f.color_ramp.add_point(0.5, Color(1, 1, 1, 1))
+				f.color_ramp.set_color(f.color_ramp.get_point_count() - 1, Color(1, 1, 1, 0))
+				_fx.add_child(f)
+	if map.id in ["reserve", "salle", "coulisses"] and not calm:
+		var d := CPUParticles2D.new()
+		d.texture = _texture("res://assets/world/fx/dust.png")
+		d.amount = 30 if map.id == "reserve" else 14
+		d.lifetime = 8.0
+		d.preprocess = 8.0
+		d.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
+		d.position = Vector2(map.size * T) / 2.0
+		d.emission_rect_extents = Vector2(map.size * T) / 2.0
+		d.gravity = Vector2(0, 1.5)
+		d.initial_velocity_min = 1.0
+		d.initial_velocity_max = 4.0
+		d.spread = 180.0
+		d.color = Color(1, 1, 1, 0.35)
+		_fx.add_child(d)
+	for dec: Dictionary in map.decor:
+		if dec.get("kind", "") == "train":
+			var r: Array = dec["rect"]
+			_train = _sprite(_texture(MAPS_DIR + "rue_train.png"), -6)
+			_train.set_meta("station", Vector2(float(r[0]) * T, float(r[1]) * T))
+			# Au chargement, le train est à quai une fois sur deux.
+			_train.visible = _rng.randf() < 0.5
+			_train.position = _train.get_meta("station")
+			_map_root.add_child(_train)
+			_train_timer = _rng.randf_range(6.0, 14.0) if _train.visible else _rng.randf_range(15.0, 35.0)
+
+
+## Sources sonores localisées : fontaine, café, marché, fanfare du kiosque.
+func _add_sound_sources() -> void:
+	if not map.outdoor:
+		return
+	var tod := WorldRules.time_of_day(session.state)
+	var season := _season()
+	var sources: Array = [["fontaine", "fontaine", -2.0], ["cafe", "cafe", 0.0]]
+	if tod != "nuit":
+		sources.append(["marche", "marche", 0.0])
+		if season != "hiver" and _sky != "pluie":
+			sources.append(["kiosque", "fanfare", -6.0])
+	for spec: Array in sources:
+		var sp := map.spot(str(spec[0]))
+		if sp.is_empty():
+			continue
+		var cells: Array = sp["cells"]
+		var e := AudioDirector.make_emitter(str(spec[1]), float(spec[2]))
+		e.position = Vector2((cells[0] as Vector2i) * T) + Vector2(T / 2.0, T / 2.0)
+		_map_root.add_child(e)
+
+
+## Choisit la musique et les ambiances du lieu où se trouve le joueur.
+func _refresh_soundscape() -> void:
+	if map == null or player == null:
+		return
+	var dist := 99
+	for c: Vector2i in _water_cells:
+		dist = mini(dist, absi(c.x - player.cell.x) + absi(c.y - player.cell.y))
+	var crowd := WorldRules.hall_crowd(session.state) if map.id == "hall" else 0
+	var sc := WorldRules.soundscape(map, player.cell, _season(), WorldRules.time_of_day(session.state), _sky,
+		WorldRules.is_festive(world, session.state.turn), dist, crowd)
+	if _performing:
+		return
+	AudioDirector.play_music(str(sc["music"]))
+	AudioDirector.set_ambience(sc["layers"])
+	_surface = WorldRules.footstep_surface(map, player.cell, _season(), _sky)
+
+
+## Passages d'oiseaux, train qui entre en gare puis repart, canards et pigeons.
+func _tick_life(delta: float) -> void:
+	if not map.outdoor:
+		return
+	var tod := WorldRules.time_of_day(session.state)
+	_sky_timer -= delta
+	if _sky_timer <= 0.0:
+		_sky_timer = _rng.randf_range(12.0, 25.0)
+		if tod != "nuit" and _sky != "pluie" and not Settings.reduce_motion():
+			_spawn_birds()
+	_life_timer -= delta
+	if _life_timer <= 0.0:
+		_life_timer = _rng.randf_range(5.0, 11.0)
+		for d: Dictionary in map.decor:
+			if d.get("kind", "") == "ducks" and _season() != "hiver" and tod != "nuit":
+				var r: Array = d["rect"]
+				AudioDirector.play_at("canard", _map_root, Vector2(float(r[0]) + float(r[2]) / 2.0, float(r[1]) + float(r[3]) / 2.0) * T, -4.0, 260.0)
+		var place := map.spot("fontaine")
+		if not place.is_empty() and tod != "nuit" and _rng.randf() < 0.5:
+			AudioDirector.play_at("pigeon", _map_root, Vector2((place["cells"][0] as Vector2i) * T) + Vector2(_rng.randf_range(-60, 60), 30), -6.0, 200.0)
+	if _train == null:
+		return
+	_train_timer -= delta
+	if _train_timer > 0.0 or _train.has_meta("moving"):
+		return
+	var station: Vector2 = _train.get_meta("station")
+	_train.set_meta("moving", true)
+	var tw := _train.create_tween()
+	var quick := Settings.reduce_motion()
+	if _train.visible:
+		# Départ : coup de sifflet, puis le train file vers l'est.
+		AudioDirector.play_at("sifflet", _map_root, station + Vector2(200, 16), 0.0, 420.0)
+		AudioDirector.play_at("train", _map_root, station + Vector2(200, 16), 0.0, 520.0)
+		tw.tween_interval(1.2)
+		tw.tween_property(_train, "position:x", map.size.x * T + 40.0, 0.1 if quick else 6.0).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUAD)
+		tw.tween_callback(func() -> void:
+			_train.visible = false
+			_train_timer = _rng.randf_range(25.0, 50.0))
+	else:
+		# Arrivée depuis l'ouest, freinage jusqu'au quai.
+		_train.position = Vector2(-float(_train.texture.get_width()) - 40.0, station.y)
+		_train.visible = true
+		AudioDirector.play_at("train", _map_root, station + Vector2(200, 16), 0.0, 520.0)
+		tw.tween_property(_train, "position:x", station.x, 0.1 if quick else 6.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
+		tw.tween_callback(func() -> void: _train_timer = _rng.randf_range(10.0, 18.0))
+	tw.tween_callback(func() -> void: _train.remove_meta("moving"))
+
+
+func _spawn_birds() -> void:
+	var frames: Array[Texture2D] = [_texture("res://assets/world/fx/bird_0.png"), _texture("res://assets/world/fx/bird_1.png")]
+	if frames[0] == null:
+		return
+	var from_left := _rng.randf() < 0.5
+	var y0 := player.position.y - _rng.randf_range(40, 110)
+	var x0 := player.position.x + (-VIEW.x if from_left else VIEW.x)
+	var x1 := player.position.x + (VIEW.x if from_left else -VIEW.x)
+	for i in _rng.randi_range(3, 5):
+		var b := _sprite(frames[0], 25)
+		b.position = Vector2(x0 - (i * 10 if from_left else -i * 10), y0 + abs(i - 2) * 6)
+		b.flip_h = not from_left
+		_map_root.add_child(b)
+		var flap := b.create_tween().set_loops(40)
+		flap.tween_callback(func() -> void: b.texture = frames[1])
+		flap.tween_interval(0.18)
+		flap.tween_callback(func() -> void: b.texture = frames[0])
+		flap.tween_interval(0.18)
+		var tw := b.create_tween()
+		tw.tween_property(b, "position", Vector2(x1, y0 - 30), 7.0)
+		tw.tween_callback(b.queue_free)
 
 
 func _follow_weather() -> void:
@@ -908,12 +1126,15 @@ func play_performance(ratio: float) -> void:
 		if child is WorldActor and child.person_id == "bastien":
 			child.queue_free()
 	_seat_audience(perf, ratio)
+	AudioDirector.play_music("")
+	AudioDirector.set_ambience({"salle": 0.5, "foule": clampf(ratio, 0.1, 1.0) * 0.5})
 	var performers: Array[WorldActor] = []
 	for i in 3:
 		var a := WorldActor.new().setup("artiste_%d" % i, ["louison", "spectateur_c", "passant_b"][i], Vector2i(7 + i * 3, 4), "down")
 		_actors.add_child(a)
 		performers.append(a)
 	await _fade_to(0.0)
+	AudioDirector.set_ambience({"salle": 0.4}, 0.8)  # le public se tait au lever de rideau
 	AudioDirector.play_sfx("curtain")
 	var quick := Settings.reduce_motion()
 	await get_tree().create_timer(0.6 if quick else 1.2).timeout
@@ -929,6 +1150,7 @@ func play_performance(ratio: float) -> void:
 	_performing = false
 	_busy = false
 	hud.visible = true
+	_refresh_soundscape()
 	performance_finished.emit()
 
 
@@ -961,6 +1183,7 @@ func _new_period() -> void:
 	load_map(str(start["map"]), WorldMap.to_cell(start["cell"]), str(start["facing"]))
 	_banner.text = "%s\n%s" % [session.period_name(), WorldRules.SEASON_LABELS.get(_season(), "")]
 	_banner.visible = true
+	AudioDirector.play_sfx("cloche", 0.0, -4.0)
 	await get_tree().create_timer(0.4 if Settings.reduce_motion() else 1.4).timeout
 	_banner.visible = false
 	await _fade_to(0.0)
@@ -1024,6 +1247,7 @@ func _process(delta: float) -> void:
 			_water_time = 0.0
 			_water.texture = _water_frames[1] if _water.texture == _water_frames[0] else _water_frames[0]
 	_wander(delta)
+	_tick_life(delta)
 	if _blocked() or player.moving:
 		return
 	var dir := _held_direction()
@@ -1059,6 +1283,7 @@ func _door_locked(c: Vector2i) -> bool:
 		return false
 	_path.clear()
 	_on_arrival = Callable()
+	AudioDirector.play_sfx("verrou")
 	toast(str(door.get("locked", "C'est fermé à clé.")))
 	return true
 
@@ -1068,6 +1293,8 @@ func _step_player(target: Vector2i) -> void:
 	await player.step_finished
 	_update_district()
 	_update_pickup_prompts()
+	_refresh_soundscape()
+	AudioDirector.footstep(_surface)
 	var door := map.door_at(player.cell)
 	if not door.is_empty():
 		_path.clear()
@@ -1077,7 +1304,7 @@ func _step_player(target: Vector2i) -> void:
 
 func _go_through(door: Dictionary) -> void:
 	_busy = true
-	AudioDirector.play_sfx("page", 0.1)
+	AudioDirector.play_sfx("porte", 0.08)
 	await _fade_to(1.0)
 	load_map(str(door["to"]), door["to_cell"], str(door["facing"]))
 	if WorldRules.event_character(session) != "":
@@ -1417,7 +1644,7 @@ func _ride_bus(stop: Dictionary) -> void:
 	_busy = true
 	_path.clear()
 	_on_arrival = Callable()
-	AudioDirector.play_sfx("page", 0.1)
+	AudioDirector.play_sfx("bus")
 	await _fade_to(1.0)
 	var arrive := WorldMap.to_cell(stop.get("arrive", (stop["cells"] as Array)[0]))
 	for a: WorldActor in npcs.values():

@@ -19,6 +19,11 @@ func _ready() -> void:
 	col.pressed.connect(func() -> void: CollectionPanel.open(_overlay, Game.collection, null))
 	buttons.add_child(col)
 	buttons.move_child(col, _continue.get_index() + 1)
+	var prologue := UiKit.button("Prologue : l'histoire de la Lanterne", "SecondaryButton")
+	prologue.name = "Prologue"
+	prologue.pressed.connect(Game.show_prologue)
+	buttons.add_child(prologue)
+	buttons.move_child(prologue, col.get_index() + 1)
 	var quit := buttons.get_node("Quit") as Button
 	quit.pressed.connect(func() -> void: get_tree().quit())
 	quit.visible = not OS.has_feature("web")
@@ -29,6 +34,7 @@ func _ready() -> void:
 	_continue.tooltip_text = "" if not _continue.disabled else "Aucune partie enregistrée."
 	buttons.get_node("NewGame").grab_focus()
 	AudioDirector.play_music("theme")
+	AudioDirector.clear_ambience()
 	if not Settings.reduce_motion():
 		var title := $Center/Column/Title
 		title.pivot_offset = title.size / 2

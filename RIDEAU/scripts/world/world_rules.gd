@@ -140,3 +140,94 @@ static func action_pitch(session: GameSession, action_id: String) -> String:
 	var a: Dictionary = session.data.actions[action_id]
 	var pay := "payée dans la période" if int(a.get("payment_delay", 0)) == 0 else "facture à 30 jours"
 	return "%s — %s\nCoût : %s (%s)." % [a["label"], a["summary"], Format.money(Programming.action_cost(session.data, session.state, action_id)), pay]
+
+
+# --- Ambiance : moment de la journée, météo, sons (sans effet sur la gestion) ----------------
+
+## Moment de la journée selon l'étape : matin (cahier), journée (actions),
+## fin de journée (imprévu, soirée qui approche), nuit (après le spectacle).
+static func time_of_day(state: GameState) -> String:
+	match state.phase:
+		GameState.PHASE_SITUATION, GameState.PHASE_PROGRAMMING:
+			return "matin"
+		GameState.PHASE_MANAGEMENT:
+			return "jour"
+		GameState.PHASE_EVENT:
+			return "fin_de_journee"
+	return "nuit"
+
+
+## Temps qu'il fait pendant une période (reproductible : même graine, même ciel).
+static func weather(world: WorldData, state: GameState) -> String:
+	var rng := SeededRng.make(state.game_seed, state.turn, SeededRng.CHANNEL_WEATHER)
+	var r := rng.randf()
+	match season(world, state.turn):
+		"hiver":
+			return "neige" if r < 0.7 else "clair"
+		"automne":
+			return "pluie" if r < 0.4 else "clair"
+		"printemps":
+			return "pluie" if r < 0.3 else "clair"
+	return "pluie" if r < 0.1 else "clair"
+
+
+## Musique et couches d'ambiance d'un lieu. `water_dist` : distance (en cases) à
+## l'eau la plus proche ; `crowd` : nombre de spectateurs dans le hall.
+static func soundscape(map: WorldMap, cell: Vector2i, season_id: String, tod: String, sky: String,
+		festive: bool, water_dist: int = 99, crowd: int = 0) -> Dictionary:
+	var night := tod == "nuit"
+	var layers := {}
+	var music := "foyer"
+	if map.outdoor:
+		music = "ville_nuit" if night else ("ville_fetes" if festive and season_id == "hiver" else "ville_jour")
+		var district := str(map.district_at(cell).get("id", ""))
+		var green := district in ["parc", "parc_sud"]
+		layers["ville"] = (0.3 if green else (0.5 if district == "coteaux" else 0.7)) * (0.5 if night else 1.0)
+		if not night and season_id != "hiver" and sky != "pluie":
+			layers["oiseaux"] = 0.9 if green else (0.55 if district == "quais" else 0.3)
+		layers["vent"] = {"hiver": 0.55, "automne": 0.45}.get(season_id, 0.15)
+		if season_id == "ete" and not night:
+			layers["cigales"] = 0.6 if green or district == "coteaux" else 0.2
+		if night and season_id in ["ete", "printemps"]:
+			layers["grillons"] = 0.8 if green else 0.35
+		if sky == "pluie":
+			layers["pluie"] = 0.9
+		if water_dist < 9:
+			layers["riviere"] = 0.9 * (1.0 - water_dist / 9.0)
+	else:
+		match map.id:
+			"hall":
+				layers["foule"] = clampf(0.12 + crowd * 0.12, 0.0, 0.8)
+			"salle":
+				layers["salle"] = 0.6
+			"coulisses":
+				layers["coulisses"] = 0.45
+			"bureau":
+				layers["bureau"] = 0.8
+			"reserve":
+				layers["reserve"] = 0.85
+				music = "reserve"
+		if sky == "pluie":
+			layers["pluie"] = 0.25  # la pluie qu'on entend à travers les murs
+	return {"music": music, "layers": layers}
+
+
+## Surface sous les pieds : pierre, herbe, bois, tapis, beton ou neige.
+static func footstep_surface(map: WorldMap, cell: Vector2i, season_id: String, sky: String) -> String:
+	var g := map.ground_at(cell)
+	match map.id:
+		"hall":
+			return "tapis" if g == "," else "pierre"
+		"salle":
+			return "bois" if g in ["p", "r"] else "tapis"
+		"coulisses", "reserve":
+			return "beton"
+		"bureau":
+			return "bois"
+	if g == "P":
+		return "bois"
+	if g in ["g", ":"]:
+		return "neige" if season_id == "hiver" and sky == "neige" else "herbe"
+	if g == "+" and season_id == "hiver" and sky == "neige":
+		return "neige"
+	return "pierre"

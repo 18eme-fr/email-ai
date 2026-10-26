@@ -103,6 +103,12 @@ secondaire : elle récompense l'exploration et la curiosité sans jamais toucher
 
 Registre complet : `docs/COLLECTION.md`.
 
+**Prologue et ambiance (depuis la version 0.15)** : la première partie s'ouvre sur l'histoire de
+la Lanterne (neuf tableaux), qui pose l'enjeu de la saison et sème le mystère de la lanterne
+disparue que la collection permet d'élucider. Dans le monde, le son et la lumière suivent l'étape
+du tour (matin, journée, fin de journée, nuit), la saison et une météo tirée par période ; chaque
+lieu a son ambiance. Rien de tout cela ne change la gestion.
+
 ### Rénovations (investissements)
 
 Cinq travaux, une fois chacun, à décider sur place avant l'événement de la période : projecteurs

@@ -2,6 +2,31 @@
 
 Format inspiré de « Keep a Changelog ». Versions du jeu (`application/config/version`).
 
+## [0.15.0] — 2026-10-26 — Ambiance sonore, ville vivante et prologue
+
+### Ajouté
+- **Prologue** au lancement de la toute première partie : l'histoire de la Lanterne en neuf
+  tableaux illustrés (1902, la création de 1924 et la lanterne disparue, l'âge d'or, le déclin,
+  la direction qu'on vous confie, l'équipe), avec musique et sons ; passable à tout moment (Échap),
+  à revoir depuis le menu principal. Textes dans `data/story/prologue.json`.
+- **Nouvelles musiques** : Bréval le jour (swing musette), la nuit (piano feutré), version des
+  fêtes (grelots, glockenspiel), la réserve (boîte à musique), fanfare du kiosque. Fondus enchaînés.
+- **16 ambiances en boucle** : ville, oiseaux, vent, pluie, cigales, grillons, rivière, fontaine,
+  café, marché, foule du hall, salle, coulisses, bureau (horloge), réserve (craquements), fanfare.
+  Elles se mélangent selon le lieu, le quartier, la saison, l'heure et la météo, et le bruit de la
+  rivière monte quand on s'en approche. Sons localisés : fontaine, café, marché, fanfare, canards,
+  pigeons, train.
+- **Bruits de pas** selon le sol (pavés, herbe, bois, tapis, béton, neige) ; sons de portes, de
+  verrou, de bus, de cloche (début de période), de découverte selon la rareté, d'indice et
+  d'enquête ; petite « voix » pendant les dialogues.
+- **Moment de la journée** : matin doré, journée, fin de journée orangée (les lampadaires
+  s'allument), nuit. **Météo** reproductible par période : pluie (automne, printemps, parfois
+  l'été), neige ou ciel clair l'hiver.
+- **Ville vivante** : ombres de nuages, vols d'oiseaux, lucioles les nuits d'été au parc,
+  poussière dans la réserve et les coulisses, lampadaires qui vacillent, **train qui entre en
+  gare et repart** (sifflet, roulement).
+- Réglage de volume **« Ambiance »** dans les paramètres.
+
 ## [0.14.0] — 2026-10-26 — La collection de la Lanterne
 
 ### Ajouté

@@ -12,6 +12,7 @@ const CHANNEL_SHOWS := 4
 const CHANNEL_QUALITY := 5
 const CHANNEL_INCIDENT := 6
 const CHANNEL_DOSSIER := 7
+const CHANNEL_WEATHER := 8      ## météo du monde explorable (sans effet sur la gestion)
 
 
 static func make(game_seed: int, turn: int, channel: int, salt: int = 0) -> RandomNumberGenerator:

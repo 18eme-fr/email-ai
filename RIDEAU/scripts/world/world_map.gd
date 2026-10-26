@@ -19,6 +19,7 @@ var npcs: Array = []         ## [{id, cell: Vector2i, radius}]
 var performance: Dictionary = {}
 var districts: Array = []    ## [{id, name, rect: Rect2i}] (quartiers de la ville)
 var decor: Array = []        ## décors animés : [{kind, rect?, cell?}]
+var ground: PackedStringArray = []  ## sol sous chaque case (ville), pour les bruits de pas
 
 var _astar: AStarGrid2D
 
@@ -54,6 +55,8 @@ static func from_data(world: Dictionary, map_id: String) -> WorldMap:
 		var r: Array = d["rect"]
 		m.districts.append({"id": str(d["id"]), "name": str(d["name"]), "rect": Rect2i(int(r[0]), int(r[1]), int(r[2]), int(r[3]))})
 	m.decor = raw.get("decor", [])
+	for line: String in raw.get("ground", []):
+		m.ground.append(line)
 	return m
 
 
@@ -96,6 +99,25 @@ func spot(spot_id: String) -> Dictionary:
 		if sp["id"] == spot_id:
 			return sp
 	return {}
+
+
+## Sol sous une case (le caractère de la grille si la carte n'a pas de sol séparé).
+func ground_at(cell: Vector2i) -> String:
+	if not in_bounds(cell):
+		return " "
+	if ground.size() == size.y:
+		return ground[cell.y][cell.x]
+	return char_at(cell)
+
+
+## Cases d'eau de la carte (rivière, étang).
+func water_cells() -> Array:
+	var out: Array = []
+	for y in ground.size():
+		for x in ground[y].length():
+			if ground[y][x] == "~":
+				out.append(Vector2i(x, y))
+	return out
 
 
 ## Quartier de la ville où se trouve une case ({} hors quartier).

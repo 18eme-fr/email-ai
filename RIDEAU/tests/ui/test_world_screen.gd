@@ -472,3 +472,37 @@ func test_exhibited_objects_appear_in_the_hall() -> void:
 	screen.interact()
 	await runner.simulate_frames(3)
 	assert_int(screen.overlay.get_child_count()).override_failure_message("Les vitrines ouvrent l'exposition").is_equal(1)
+
+
+func test_sound_and_atmosphere_follow_the_world() -> void:
+	var s := _new_session(12)
+	var runner := scene_runner(WORLD)
+	await runner.simulate_frames(10)
+	var screen := runner.scene() as WorldScreen
+	screen.load_map("rue", Vector2i(52, 33), "up")
+	await runner.simulate_frames(10)
+	assert_array(["ville_jour", "ville_fetes"]).contains([AudioDirector.current_music()])
+	assert_bool(AudioDirector.ambience_levels().has("ville")).is_true()
+	assert_object(screen._train).is_not_null()
+	var emitters := screen._map_root.find_children("*", "AudioStreamPlayer2D", true, false)
+	assert_int(emitters.size()).is_greater_equal(2)
+	# Le soir, la lumière baisse et la musique de nuit prend le relais.
+	s.state.phase = GameState.PHASE_REPORT
+	screen.load_map("rue", Vector2i(52, 33), "up")
+	await runner.simulate_frames(10)
+	assert_str(AudioDirector.current_music()).is_equal("ville_nuit")
+	assert_bool(screen._lights.visible).is_true()
+	assert_float(screen._modulate.color.b).is_greater(screen._modulate.color.r)
+	# À l'intérieur : plus de bruit de ville, l'ambiance du lieu.
+	screen.load_map("reserve", Vector2i(7, 3), "down")
+	await runner.simulate_frames(90)
+	assert_str(AudioDirector.current_music()).is_equal("reserve")
+	assert_bool(AudioDirector.ambience_levels().has("reserve")).is_true()
+	assert_bool(await _wait(runner, func() -> bool: return not AudioDirector.ambience_levels().has("ville"), 300)).override_failure_message("La ville doit s'éteindre en fondu").is_true()
+	# Le train finit par partir puis revenir (minuteries accélérées).
+	screen.load_map("rue", Vector2i(48, 10), "up")
+	await runner.simulate_frames(5)
+	var was: bool = screen._train.visible
+	screen._train_timer = 0.0
+	await runner.simulate_frames(30)
+	assert_bool(screen._train.has_meta("moving") or screen._train.visible != was).is_true()

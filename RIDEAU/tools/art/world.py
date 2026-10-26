@@ -1445,6 +1445,40 @@ def fx_assets():
                 sp.set(5 + d, 5 - d, P["light"])
         out["sparkle_%d" % f] = sp
 
+    # Météo et vie du ciel : pluie, ombre de nuage, oiseaux (2 images), luciole, poussière
+    rain = Canvas(2, 9)
+    for y in range(9):
+        rain.set(1 if y > 4 else 0, y, (200, 220, 245), 120 + y * 12)
+    out["rain"] = rain
+    cloud = Canvas(128, 64)
+    for (cx, cy, rx, ry) in [(40, 34, 34, 20), (72, 28, 38, 22), (98, 36, 26, 17), (60, 42, 44, 16)]:
+        for y in range(64):
+            for x in range(128):
+                d = ((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2
+                if d < 1:
+                    a = int(255 * (1 - d) ** 0.6)
+                    r0, g0, b0, a0 = cloud.get(x, y)
+                    if a > a0:
+                        cloud.px[x, y] = (20, 18, 40, a)
+    out["cloud"] = cloud
+    for f in range(2):
+        bird = Canvas(9, 5)
+        if f == 0:
+            bird.set(0, 1, P["ink"]); bird.set(1, 2, P["ink"]); bird.set(2, 3, P["ink"]); bird.set(3, 2, P["ink"])
+            bird.set(4, 3, P["ink"]); bird.set(5, 2, P["ink"]); bird.set(6, 3, P["ink"]); bird.set(7, 2, P["ink"]); bird.set(8, 1, P["ink"])
+        else:
+            bird.set(0, 3, P["ink"]); bird.set(1, 2, P["ink"]); bird.set(2, 2, P["ink"]); bird.set(3, 2, P["ink"])
+            bird.set(4, 3, P["ink"]); bird.set(5, 2, P["ink"]); bird.set(6, 2, P["ink"]); bird.set(7, 2, P["ink"]); bird.set(8, 3, P["ink"])
+        out["bird_%d" % f] = bird
+    fly = Canvas(5, 5)
+    fly.set(2, 2, (240, 255, 170))
+    for (x, y) in [(1, 2), (3, 2), (2, 1), (2, 3)]:
+        fly.set(x, y, (200, 240, 120), 120)
+    out["firefly"] = fly
+    dust = Canvas(2, 2)
+    dust.rect(0, 0, 2, 2, P["light"], 160)
+    out["dust"] = dust
+
     shadow = Canvas(14, 5)
     shadow.ellipse(7, 2.5, 6, 2, P["ink"], 110)
     out["shadow"] = shadow

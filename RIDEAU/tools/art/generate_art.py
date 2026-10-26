@@ -86,6 +86,8 @@ def main() -> None:
     world.generate(ROOT, os.path.join(a, "world"))
     import collection_art  # noqa: E402
     collection_art.generate(os.path.join(a, "collection"))
+    import prologue_art  # noqa: E402  (réutilise les images du monde et de la collection)
+    prologue_art.generate(ROOT, os.path.join(a, "prologue"))
     print("Images générées dans", a)
 
 

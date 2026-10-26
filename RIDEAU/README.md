@@ -10,7 +10,9 @@ des saisons. Le jeu fait découvrir, par l'expérience,
 les grandes logiques de l'administration culturelle (budget prévisionnel, billetterie, jauge,
 contrats de cession et de coréalisation, médiation, subventions, mécénat…).
 
-État : **version 0.14.0 jouable de bout en bout** (voir `QA_REPORT.md` et `ROADMAP.md`).
+État : **version 0.15.0 jouable de bout en bout** (voir `QA_REPORT.md` et `ROADMAP.md`).
+Depuis la version 0.15 : **un prologue** qui raconte l'histoire de la Lanterne, une **ambiance
+sonore** complète (musiques, ambiances, bruits de pas) et une ville vivante (heure, météo, train).
 Depuis la version 0.14 : **la collection de la Lanterne**, 50 objets d'histoire du spectacle à
 découvrir de partie en partie (exploration, enquêtes, secrets, rénovations), une réserve secrète
 et des vitrines d'exposition dans le hall — registre complet dans `docs/COLLECTION.md`.
@@ -38,7 +40,7 @@ En ligne de commande :
 ```
 
 Des versions prêtes à jouer pour **Linux, Windows et le Web** ont été produites (archives
-`RIDEAU-0.14.0-*.zip` transmises avec la livraison ; le dossier `exports/` n'est pas versionné).
+`RIDEAU-0.15.0-*.zip` transmises avec la livraison ; le dossier `exports/` n'est pas versionné).
 La version Web se lance en servant le dossier décompressé, par exemple :
 `python3 -m http.server` puis <http://localhost:8000> (l'ouvrir directement en `file://` ne marche pas).
 Vérifier une version exportée : `./RIDEAU.x86_64 --headless -- --smoke-test`.

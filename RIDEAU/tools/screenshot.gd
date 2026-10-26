@@ -88,6 +88,18 @@ func _do_action(action: String) -> void:
 			scene.open_city_plan()
 		"collection":
 			scene.open_collection()
+		"rain":
+			scene.sky_override = "pluie"
+			scene._reload_here()
+		"phase_gestion":
+			root.get_node("Game").session.state.phase = "gestion"
+			scene._reload_here()
+		"phase_event":
+			root.get_node("Game").session.state.phase = "evenement"
+			scene._reload_here()
+		"phase_night":
+			root.get_node("Game").session.state.phase = "bilan"
+			scene._reload_here()
 		"coldemo":
 			# Collection partiellement remplie, pour la capture (profil de capture séparé).
 			var col = load("res://scripts/progression/collection.gd").new("user://capture_collection.json", "")
@@ -136,6 +148,16 @@ func _do_action(action: String) -> void:
 			elif action.begins_with("turn:"):
 				root.get_node("Game").session.state.turn = int(action.substr(5))
 				scene._reload_here()
+			elif action.begins_with("prologue:"):
+				for i in int(action.substr(9)):
+					scene.next()
+				if scene._typing:
+					scene._typing.kill()
+				scene._text.visible_ratio = 1.0
+				if bool(scene.scenes[scene.index].get("title", false)):
+					scene._title.modulate.a = 1.0
+				scene._image_old.modulate.a = 0.0
+				scene._image.modulate.a = 1.0
 			elif action.begins_with("perf:"):
 				scene.play_performance(float(action.substr(5)))
 			elif action.begins_with("tab:"):

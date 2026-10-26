@@ -21,6 +21,7 @@ func _ready() -> void:
 		s.ending = SeasonEvaluator.evaluate(session.data, s)
 	var e := s.ending
 	AudioDirector.play_music("theme")
+	AudioDirector.clear_ambience()
 	AudioDirector.play_sfx("applause" if e.get("renewed", false) else "curtain")
 
 	var head := UiKit.hbox([], 16)

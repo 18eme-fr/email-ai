@@ -187,6 +187,12 @@ def main():
     sfx(sfx_dir)
     waltz(mus_dir)
     foyer(mus_dir)
+    import sys
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import audio_world  # noqa: E402
+    amb_dir = os.path.join(ROOT, "assets", "audio", "ambience")
+    os.makedirs(amb_dir, exist_ok=True)
+    audio_world.generate(write, mus_dir, amb_dir, sfx_dir)
     print("Audio généré dans assets/audio/")
 
 

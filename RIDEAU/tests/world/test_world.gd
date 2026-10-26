@@ -185,3 +185,59 @@ func test_every_person_has_a_sprite() -> void:
 	for pid: String in world.people:
 		var sprite := str(world.people[pid].get("sprite", pid))
 		assert_bool(ResourceLoader.exists("res://assets/world/people/%s.png" % sprite)).override_failure_message("Sprite manquant : %s" % sprite).is_true()
+
+
+func test_time_of_day_and_weather() -> void:
+	var s := GameSession.new()
+	s.new_game(31, "standard")
+	assert_str(WorldRules.time_of_day(s.state)).is_equal("matin")
+	s.state.phase = GameState.PHASE_MANAGEMENT
+	assert_str(WorldRules.time_of_day(s.state)).is_equal("jour")
+	s.state.phase = GameState.PHASE_EVENT
+	assert_str(WorldRules.time_of_day(s.state)).is_equal("fin_de_journee")
+	s.state.phase = GameState.PHASE_REPORT
+	assert_str(WorldRules.time_of_day(s.state)).is_equal("nuit")
+	# Même graine, même période : même ciel. La neige n'existe qu'en hiver.
+	var seen := {}
+	for g in 40:
+		var st := GameSession.new()
+		st.new_game(g, "standard")
+		for t in range(1, data.turns() + 1):
+			st.state.turn = t
+			var w := WorldRules.weather(world, st.state)
+			assert_str(w).is_equal(WorldRules.weather(world, st.state))
+			seen[w] = true
+			if w == "neige":
+				assert_str(WorldRules.season(world, t)).is_equal("hiver")
+	assert_bool(seen.has("pluie") and seen.has("neige") and seen.has("clair")).is_true()
+
+
+func test_soundscape_follows_place_time_and_weather() -> void:
+	var city := world.map("rue")
+	var park := Vector2i(10, 30)
+	var day := WorldRules.soundscape(city, park, "printemps", "jour", "clair", false, 99)
+	assert_str(str(day["music"])).is_equal("ville_jour")
+	assert_bool((day["layers"] as Dictionary).has("oiseaux")).is_true()
+	assert_bool((day["layers"] as Dictionary).has("pluie")).is_false()
+	var night := WorldRules.soundscape(city, park, "ete", "nuit", "pluie", false, 2)
+	assert_str(str(night["music"])).is_equal("ville_nuit")
+	var layers: Dictionary = night["layers"]
+	assert_bool(layers.has("grillons") and layers.has("pluie") and layers.has("riviere")).is_true()
+	assert_bool(layers.has("oiseaux")).is_false()
+	assert_float(float(layers["riviere"])).is_greater(float(WorldRules.soundscape(city, park, "ete", "nuit", "pluie", false, 6)["layers"]["riviere"]))
+	assert_str(str(WorldRules.soundscape(city, park, "hiver", "jour", "neige", true)["music"])).is_equal("ville_fetes")
+	assert_str(str(WorldRules.soundscape(world.map("reserve"), Vector2i(7, 3), "ete", "jour", "clair", false)["music"])).is_equal("reserve")
+	var hall: Dictionary = WorldRules.soundscape(world.map("hall"), Vector2i(10, 8), "ete", "jour", "clair", false, 99, 5)["layers"]
+	assert_float(float(hall["foule"])).is_greater(float(WorldRules.soundscape(world.map("hall"), Vector2i(10, 8), "ete", "jour", "clair", false, 99, 0)["layers"]["foule"]))
+
+
+func test_footstep_surfaces() -> void:
+	var city := world.map("rue")
+	assert_str(WorldRules.footstep_surface(city, Vector2i(52, 33), "ete", "clair")).is_equal("pierre")
+	assert_str(WorldRules.footstep_surface(city, Vector2i(11, 30), "ete", "clair")).is_equal("herbe")
+	assert_str(WorldRules.footstep_surface(city, Vector2i(11, 30), "hiver", "neige")).is_equal("neige")
+	assert_str(WorldRules.footstep_surface(world.map("hall"), Vector2i(10, 8), "ete", "clair")).is_equal("tapis")
+	assert_str(WorldRules.footstep_surface(world.map("salle"), Vector2i(10, 5), "ete", "clair")).is_equal("bois")
+	assert_str(WorldRules.footstep_surface(world.map("reserve"), Vector2i(7, 3), "ete", "clair")).is_equal("beton")
+	for id: String in ["pierre", "herbe", "bois", "tapis", "beton", "neige"]:
+		assert_bool(ResourceLoader.exists("res://assets/audio/sfx/pas_%s.wav" % id)).is_true()

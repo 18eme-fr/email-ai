@@ -4,12 +4,13 @@ extends RefCounted
 
 
 static func open(parent: Node) -> Modal:
-	var m := Modal.open(parent, "Paramètres", 640, 520)
+	var m := Modal.open(parent, "Paramètres", 640, 560)
 	var c := m.content
 	c.add_child(UiKit.label("Son", "SubHeaderLabel"))
 	_slider(c, "Volume général", "master_volume")
 	_slider(c, "Musique", "music_volume")
 	_slider(c, "Effets sonores", "sfx_volume")
+	_slider(c, "Ambiance (ville, nature, salle)", "ambience_volume")
 	c.add_child(HSeparator.new())
 	c.add_child(UiKit.label("Affichage et confort", "SubHeaderLabel"))
 	_check(c, "Réduire les animations", "reduce_motion", "Désactive les fondus, le rideau animé et l'effet machine à écrire.")

@@ -9,12 +9,14 @@ const DEFAULTS := {
 	"master_volume": 0.8,
 	"music_volume": 0.6,
 	"sfx_volume": 0.8,
+	"ambience_volume": 0.7,
 	"reduce_motion": false,
 	"readable_font": false,
 	"fullscreen": false,
 	"text_speed": 1.0,
 	"show_tutorial": true,
 	"dashboard_view": false,
+	"prologue_seen": false,
 }
 
 var values: Dictionary = DEFAULTS.duplicate()
@@ -61,6 +63,7 @@ func apply(key: String = "") -> void:
 		_set_bus("Master", float(values["master_volume"]))
 		_set_bus("Music", float(values["music_volume"]))
 		_set_bus("SFX", float(values["sfx_volume"]))
+		_set_bus("Ambience", float(values.get("ambience_volume", DEFAULTS["ambience_volume"])))
 	if key == "" or key == "readable_font":
 		_apply_font(bool(values["readable_font"]))
 	if (key == "" or key == "fullscreen") and DisplayServer.get_name() != "headless":

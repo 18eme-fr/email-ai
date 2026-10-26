@@ -110,6 +110,20 @@ func _typing() -> bool:
 	return _tween != null and _tween.is_running()
 
 
+## Petite « voix » pendant que le texte s'écrit (une syllabe toutes les trois lettres).
+var _voiced := 0
+
+
+func _process(_delta: float) -> void:
+	if not visible or _text == null or not _typing():
+		_voiced = 0
+		return
+	var shown := int(_text.visible_ratio * _text.text.length())
+	if shown - _voiced >= 3:
+		_voiced = shown
+		AudioDirector.play_sfx("voix", 0.15, -10.0)
+
+
 func _finish_typing() -> void:
 	if _tween:
 		_tween.kill()
