@@ -348,7 +348,7 @@ func choose_event(choice_id: String) -> Dictionary:
 	var decision := "%s : %s" % [event["title"], choice["label"]]
 	if not state.event_outcome.is_empty():
 		decision += " (%s)" % ("réussi" if state.event_outcome["success"] else "raté")
-	state.key_decisions.append({"turn": state.turn, "text": decision})
+	state.key_decisions.append({"turn": state.turn, "text": decision, "event": state.current_event, "choice": choice_id})
 	return summary
 
 

@@ -78,12 +78,30 @@ ville sert de « terrain » au cours. Un bus relie les quartiers ; le plan (touc
 retrouver. Explorer reste facultatif : aucune décision de gestion n'y est cachée hors des lieux
 déjà connus (place, théâtre).
 
-**L'Album de Bréval (depuis la version 0.13)** : une collection de 95 cartes qui se garde d'une
-partie à l'autre, pour donner envie de revenir. On l'enrichit en parlant aux habitants, en
-examinant les lieux, en programmant des spectacles (il faut plusieurs saisons pour toutes les
-affiches) et en trouvant 12 trésors cachés. Chaque carte tient en une phrase : la notion est là
-pour qui veut la lire, sans interrompre le jeu. Les paliers débloquent des tenues pour le
-directeur, purement décoratives : l'album n'influe jamais sur la gestion ni sur l'évaluation.
+**La collection de la Lanterne (depuis la version 0.14)** : 50 objets d'histoire du spectacle,
+en cinq familles de dix (archives, costumes et accessoires, décors et scénographie, trésors
+techniques, légendes du spectacle vivant), gardés d'une partie à l'autre. C'est une mécanique
+secondaire : elle récompense l'exploration et la curiosité sans jamais toucher à la gestion.
+
+- **Raretés** : 20 communs (trouvés tôt en se promenant), 15 peu communs, 10 rares (secrets,
+  enquêtes, grands moments de la saison), 4 légendaires et 1 mythique, la Lanterne d'Ondine.
+- **Modes d'obtention** : exploration (objets posés au sol, lieux à examiner, dont une réserve
+  fermée à clé sous les coulisses), missions (7 missions de gestion existantes, chacune avec une
+  alternative, et 5 enquêtes sans échéance), rencontres, énigmes et secrets (indices à recouper),
+  rénovations du théâtre, événements et décisions.
+- **Mystère** : les cachettes ne livrent rien sans l'indice qui y mène (une description d'objet,
+  une confidence, une inscription). La quête mythique part d'une affiche de 1924, passe par trois
+  témoignages et une photographie, et se termine en ouvrant la trappe du plateau… un soir de spectacle.
+- **Indices progressifs** dans la fenêtre de collection ; Fernand, l'ancien régisseur, donne une
+  indication précise par période.
+- **Exposition** : six places dans les vitrines du hall ; l'esquisse du rideau d'origine demande
+  d'exposer au moins trois objets.
+- **Récompenses décoratives** : tenues (5 objets, 20 objets, chaque famille complète), guirlande
+  de lanternes dans le hall (10), distinctions (25 et 50).
+- Rien ne se perd : la collection est permanente, les enquêtes n'ont pas d'échéance, et les objets
+  liés à une mission ou à un événement ont une seconde voie (dossier d'entraînement, indicateur).
+
+Registre complet : `docs/COLLECTION.md`.
 
 ### Rénovations (investissements)
 

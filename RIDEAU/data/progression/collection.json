@@ -1,0 +1,1643 @@
+{
+ "_doc": "Collection permanente de la Lanterne (50 objets). Voir docs/COLLECTION.md (registre généré par tools/collection_registry.py) et docs/DATA_FORMAT.md.",
+ "families": [
+  {
+   "id": "archives",
+   "label": "Archives",
+   "title": "Les archives du théâtre"
+  },
+  {
+   "id": "costumes",
+   "label": "Costumes",
+   "title": "Costumes et accessoires"
+  },
+  {
+   "id": "decors",
+   "label": "Décors",
+   "title": "Décors et scénographie"
+  },
+  {
+   "id": "technique",
+   "label": "Technique",
+   "title": "Les trésors techniques"
+  },
+  {
+   "id": "legendes",
+   "label": "Légendes",
+   "title": "Les légendes du spectacle vivant"
+  }
+ ],
+ "rarities": [
+  {
+   "id": "commun",
+   "label": "Commun",
+   "color": "b9b0c8"
+  },
+  {
+   "id": "peu_commun",
+   "label": "Peu commun",
+   "color": "8fd19e"
+  },
+  {
+   "id": "rare",
+   "label": "Rare",
+   "color": "8fc3f0"
+  },
+  {
+   "id": "legendaire",
+   "label": "Légendaire",
+   "color": "f0d48a"
+  },
+  {
+   "id": "mythique",
+   "label": "Mythique",
+   "color": "e88ad8"
+  }
+ ],
+ "methods": {
+  "exploration": {
+   "label": "Exploration",
+   "hint": "À trouver en explorant."
+  },
+  "mission": {
+   "label": "Mission",
+   "hint": "Récompense d'une mission ou d'une enquête."
+  },
+  "pnj": {
+   "label": "Rencontre",
+   "hint": "Quelqu'un pourrait vous l'offrir."
+  },
+  "secret": {
+   "label": "Énigme ou secret",
+   "hint": "Un secret bien gardé…"
+  },
+  "progression": {
+   "label": "Développement du théâtre",
+   "hint": "Lié aux travaux du théâtre."
+  },
+  "evenement": {
+   "label": "Événement",
+   "hint": "Un moment marquant de la saison."
+  }
+ },
+ "exhibit_slots": 6,
+ "objects": [
+  {
+   "id": "programme_1987",
+   "family": "archives",
+   "rarity": "commun",
+   "name": "Programme de la saison 1987",
+   "description": "Couverture jaunie, agrafes rouillées. En dernière page : « Merci à M. Pic, notre souffleur, pour sa dernière saison. »",
+   "icon": "programme",
+   "method": "exploration",
+   "trigger": {
+    "type": "pickup",
+    "map": "bureau",
+    "cell": [
+     3,
+     7
+    ]
+   },
+   "hint2": "Dans le théâtre, côté administration.",
+   "hint3": "Par terre, près de la bibliothèque du bureau de la direction.",
+   "exhibit": "vitrine"
+  },
+  {
+   "id": "coupure_presse",
+   "family": "archives",
+   "rarity": "commun",
+   "name": "Coupure de presse jaunie",
+   "description": "« La Lanterne rallume ses feux » : un article de 1952 sur la réouverture du théâtre après la guerre.",
+   "icon": "newspaper",
+   "method": "pnj",
+   "trigger": {
+    "type": "talk",
+    "person": "chef_gare"
+   },
+   "hint2": "Quelqu'un qui voit passer tous les voyageurs.",
+   "hint3": "Parlez au chef de gare, sur le quai.",
+   "exhibit": "vitrine",
+   "say": "J'ai gardé ça punaisé dans mon bureau pendant vingt ans. Ça vous revient de droit !"
+  },
+  {
+   "id": "billet_avignon",
+   "family": "archives",
+   "rarity": "commun",
+   "name": "Billet d'Avignon, 1947",
+   "description": "En 1947, Jean Vilar crée à Avignon une « Semaine d'art ». Ce billet en vient : le début d'un festival.",
+   "icon": "ticket",
+   "method": "exploration",
+   "trigger": {
+    "type": "pickup",
+    "map": "rue",
+    "cell": [
+     8,
+     20
+    ]
+   },
+   "hint2": "Dans la ville, au bord de l'eau.",
+   "hint3": "Sur les quais de l'Ondine, tout à l'ouest.",
+   "exhibit": "vitrine"
+  },
+  {
+   "id": "livre_or",
+   "family": "archives",
+   "rarity": "commun",
+   "name": "Livre d'or de la Lanterne",
+   "description": "Cent ans de mots de spectateurs. Le premier date de 1902 : « Enfin un théâtre chez nous ! »",
+   "icon": "book",
+   "method": "exploration",
+   "trigger": {
+    "type": "examine",
+    "spot": "guichet"
+   },
+   "hint2": "Dans le hall du théâtre.",
+   "hint3": "Rangé sous le comptoir de la billetterie.",
+   "exhibit": "vitrine",
+   "say": "Sous le comptoir de la billetterie, un gros livre relié de cuir : le livre d'or du théâtre !"
+  },
+  {
+   "id": "plaque_1902",
+   "family": "archives",
+   "rarity": "peu_commun",
+   "name": "Plaque inaugurale de 1902",
+   "description": "Retrouvée derrière l'ancien guichet pendant les travaux : « Ce théâtre est la maison de tous. »",
+   "icon": "plaque",
+   "method": "progression",
+   "trigger": {
+    "type": "state",
+    "when": {
+     "upgrade": "accessibilite"
+    }
+   },
+   "hint2": "Elle se cache dans un mur du hall.",
+   "hint3": "Réalisez les travaux d'accessibilité du hall.",
+   "exhibit": "vitrine",
+   "say": "Pendant les travaux d'accessibilité, les ouvriers ont dégagé une plaque de cuivre derrière l'ancien guichet."
+  },
+  {
+   "id": "programme_tnp",
+   "family": "archives",
+   "rarity": "peu_commun",
+   "name": "Programme du TNP, 1951",
+   "description": "Jean Vilar dirige le Théâtre national populaire de 1951 à 1963 : le théâtre comme service public.",
+   "icon": "programme_blue",
+   "method": "pnj",
+   "trigger": {
+    "type": "talk",
+    "person": "bibliothecaire"
+   },
+   "hint2": "Quelqu'un qui reçoit beaucoup de dons de livres.",
+   "hint3": "Parlez à la bibliothécaire de la médiathèque, à partir de la 2ᵉ période.",
+   "exhibit": "vitrine",
+   "requires": {
+    "min_turn": 2
+   },
+   "say": "On nous a légué une caisse de vieux papiers de théâtre. Ce programme du TNP serait mieux chez vous."
+  },
+  {
+   "id": "contrat_1962",
+   "family": "archives",
+   "rarity": "peu_commun",
+   "name": "Contrat de tournée de 1962",
+   "description": "Signé à la plume : cachet, transport, repas des artistes… Les contrats de cession n'ont pas tant changé.",
+   "icon": "contract",
+   "method": "mission",
+   "trigger": {
+    "type": "state",
+    "when": {
+     "any": [
+      {
+       "mission_done": "contrat_negociation"
+      },
+      {
+       "dossier_min": {
+        "dossier": "contrat",
+        "score": 0.8
+       }
+      }
+     ]
+    }
+   },
+   "hint2": "Une mission sur les contrats de spectacle.",
+   "hint3": "Réussissez la mission « Cession ou coréalisation ? » de Louison (ou le dossier « Cession ou coréalisation ? » à 80 % dans le journal).",
+   "exhibit": "vitrine",
+   "say": "Louison vous tend une chemise poussiéreuse : un contrat de tournée de 1962, retrouvé en rangeant.",
+   "alternative": "Le dossier « Cession ou coréalisation ? » réussi à 80 % (même en entraînement) le donne aussi."
+  },
+  {
+   "id": "registre_1959",
+   "family": "archives",
+   "rarity": "commun",
+   "name": "Registre comptable de 1959",
+   "description": "Recettes à l'encre bleue, dépenses à l'encre rouge. Le budget de la Lanterne, tenu à la main.",
+   "icon": "ledger",
+   "method": "mission",
+   "trigger": {
+    "type": "state",
+    "when": {
+     "any": [
+      {
+       "mission_done": "budget_saison"
+      },
+      {
+       "dossier_min": {
+        "dossier": "budget",
+        "score": 0.8
+       }
+      }
+     ]
+    }
+   },
+   "hint2": "Une mission sur le budget.",
+   "hint3": "Réussissez « Le budget prévisionnel » d'Hélène (ou le dossier « Budget » à 80 %).",
+   "exhibit": "vitrine",
+   "say": "Hélène : « Pour fêter votre premier budget, voici celui de 1959. On a fait des progrès… ou pas. »",
+   "alternative": "Le dossier « Budget prévisionnel » réussi à 80 % le donne aussi."
+  },
+  {
+   "id": "affiche_1924",
+   "family": "archives",
+   "rarity": "rare",
+   "name": "Affiche de la création de 1924",
+   "description": "« 12 mars 1924 — La troupe Vasseur présente LA LANTERNE D'ONDINE ». Le soir où la lanterne de scène a disparu.",
+   "icon": "poster_old",
+   "method": "mission",
+   "trigger": {
+    "type": "quest",
+    "quest": "archives_oubliees"
+   },
+   "hint2": "Un ancien du théâtre a une histoire à raconter.",
+   "hint3": "Parlez à Fernand, l'ancien régisseur, près du Café des Artistes.",
+   "exhibit": "vitrine",
+   "gives_clue": "troupe_vasseur"
+  },
+  {
+   "id": "photo_vasseur",
+   "family": "archives",
+   "rarity": "rare",
+   "name": "Photographie de la troupe Vasseur",
+   "description": "Douze comédiens posent sur le plateau en 1924. Au centre, bien visible : la trappe de scène.",
+   "icon": "photo",
+   "method": "secret",
+   "trigger": {
+    "type": "search",
+    "map": "reserve",
+    "cell": [
+     12,
+     7
+    ]
+   },
+   "hint2": "Une malle bien cachée…",
+   "hint3": "Dans la réserve, la malle à double fond. Louison en sait plus.",
+   "exhibit": "vitrine",
+   "requires": {
+    "clues": [
+     "malle_vasseur"
+    ]
+   },
+   "say": "Le fond de la malle se soulève : une photographie de troupe, intacte."
+  },
+  {
+   "id": "masque_arlequin",
+   "family": "costumes",
+   "rarity": "commun",
+   "name": "Masque d'Arlequin",
+   "description": "Commedia dell'arte, Italie, XVIᵉ siècle : des personnages types, et beaucoup d'improvisation.",
+   "icon": "mask",
+   "method": "exploration",
+   "trigger": {
+    "type": "pickup",
+    "map": "rue",
+    "cell": [
+     108,
+     64
+    ]
+   },
+   "hint2": "Dans la ville, loin du centre.",
+   "hint3": "Au bout du quartier des Coteaux, côté est.",
+   "exhibit": "vitrine"
+  },
+  {
+   "id": "gants_habilleuse",
+   "family": "costumes",
+   "rarity": "commun",
+   "name": "Gants de l'habilleuse",
+   "description": "Brodés « L. » au poignet. Dans un gant, un billet : « Il manque les escarpins de Mlle Lys. »",
+   "icon": "gloves",
+   "method": "exploration",
+   "trigger": {
+    "type": "examine",
+    "spot": "costumes"
+   },
+   "hint2": "Dans les coulisses.",
+   "hint3": "Fouillez le portant de costumes des coulisses.",
+   "exhibit": "vitrine",
+   "say": "Au fond du portant, une paire de gants d'habilleuse… avec un petit mot glissé dedans."
+  },
+  {
+   "id": "eventail_diva",
+   "family": "costumes",
+   "rarity": "commun",
+   "name": "Éventail de la diva",
+   "description": "Plumes d'autruche et nacre. Il aurait servi à une diva de l'opérette, pour cacher son trac.",
+   "icon": "fan",
+   "method": "exploration",
+   "trigger": {
+    "type": "pickup",
+    "map": "coulisses",
+    "cell": [
+     6,
+     4
+    ]
+   },
+   "hint2": "Dans les coulisses.",
+   "hint3": "Par terre, près des loges.",
+   "exhibit": "vitrine"
+  },
+  {
+   "id": "nez_clown",
+   "family": "costumes",
+   "rarity": "commun",
+   "name": "Nez rouge de clown",
+   "description": "« C'est pour toi, comme ça tu feras rire les gens. » Le plus petit masque du monde.",
+   "icon": "nose",
+   "method": "pnj",
+   "trigger": {
+    "type": "talk",
+    "person": "enfant"
+   },
+   "hint2": "Le public de demain a un cadeau pour vous.",
+   "hint3": "Parlez aux enfants, au parc ou aux Coteaux.",
+   "exhibit": "vitrine",
+   "say": "Tiens ! C'est mon nez de clown. Comme ça, tu feras rire les gens dans ton théâtre !"
+  },
+  {
+   "id": "chapeau_mes",
+   "family": "costumes",
+   "rarity": "peu_commun",
+   "name": "Chapeau de metteur en scène",
+   "description": "Un feutre cabossé, porté pendant trente ans de répétitions. Il sent le café froid et la poussière de plateau.",
+   "icon": "hat",
+   "method": "pnj",
+   "trigger": {
+    "type": "talk",
+    "person": "louison"
+   },
+   "hint2": "Un artiste du théâtre veut fêter votre première soirée.",
+   "hint3": "Parlez à Louison dans les coulisses, après votre première représentation.",
+   "exhibit": "vitrine",
+   "requires": {
+    "played_min": 1
+   },
+   "say": "Ta première soirée est passée : tu es des nôtres. Prends ce chapeau, c'était celui de mon maître."
+  },
+  {
+   "id": "costume_eleves",
+   "family": "costumes",
+   "rarity": "peu_commun",
+   "name": "Costume cousu par les élèves",
+   "description": "Patchwork de tissus récupérés par une classe de 4ᵉ pour leur premier atelier théâtre.",
+   "icon": "costume",
+   "method": "mission",
+   "trigger": {
+    "type": "state",
+    "when": {
+     "any": [
+      {
+       "mission_done": "parcours_eac"
+      },
+      {
+       "metric_min": {
+        "eac_count": 6
+       }
+      }
+     ]
+    }
+   },
+   "hint2": "Une mission d'éducation artistique.",
+   "hint3": "Réussissez « Le parcours d'éducation artistique » d'Inès (ou menez 6 actions d'éducation artistique).",
+   "exhibit": "vitrine",
+   "say": "Inès : « Les élèves vous offrent le costume qu'ils ont cousu pendant l'atelier ! »",
+   "alternative": "Six actions d'éducation artistique dans la saison le donnent aussi."
+  },
+  {
+   "id": "couronne_doublure",
+   "family": "costumes",
+   "rarity": "peu_commun",
+   "name": "Couronne de la doublure",
+   "description": "Carton doré et verroterie. Portée par une comédienne qui a appris le rôle en une nuit.",
+   "icon": "crown",
+   "method": "evenement",
+   "trigger": {
+    "type": "state",
+    "when": {
+     "any": [
+      {
+       "event_choice": {
+        "event": "annulation_maladie",
+        "choices": [
+         "doublure",
+         "lecture"
+        ]
+       }
+      },
+      {
+       "metric_min": {
+        "shows_count": 8
+       }
+      }
+     ]
+    }
+   },
+   "hint2": "Un soir où le spectacle a failli ne pas avoir lieu.",
+   "hint3": "Quand un comédien tombe malade, sauvez la soirée (doublure ou lecture) — ou jouez 8 représentations dans la saison.",
+   "exhibit": "vitrine",
+   "say": "La comédienne qui a sauvé la soirée vous laisse sa couronne en souvenir.",
+   "alternative": "Huit représentations dans la saison la donnent aussi."
+  },
+  {
+   "id": "escarpins_lys",
+   "family": "costumes",
+   "rarity": "rare",
+   "name": "Escarpins de Mlle Lys",
+   "description": "Satin rose usé jusqu'à la trame. Mlle Lys, danseuse de la Lanterne, les cachait pour qu'on ne les lui vole pas.",
+   "icon": "shoes",
+   "method": "secret",
+   "trigger": {
+    "type": "search",
+    "map": "coulisses",
+    "cell": [
+     4,
+     2
+    ]
+   },
+   "hint2": "Quelqu'un les a cachés il y a longtemps.",
+   "hint3": "La coiffeuse du milieu, dans les coulisses. Rémi, à l'accueil, connaît l'histoire.",
+   "exhibit": "vitrine",
+   "requires": {
+    "clues": [
+     "escarpins"
+    ]
+   },
+   "say": "Le tiroir coincé cède : les escarpins de Mlle Lys, enveloppés dans du papier de soie."
+  },
+  {
+   "id": "cape_cid",
+   "family": "costumes",
+   "rarity": "rare",
+   "name": "Cape de velours du Cid",
+   "description": "Velours grenat, doublure dorée. Portée pour « Le Cid » en 1931, oubliée dans un placard des loges.",
+   "icon": "cape",
+   "method": "progression",
+   "trigger": {
+    "type": "state",
+    "when": {
+     "upgrade": "loges"
+    }
+   },
+   "hint2": "Elle dort dans un vieux placard.",
+   "hint3": "Rénovez les loges et l'atelier des coulisses.",
+   "exhibit": "vitrine",
+   "say": "En vidant les vieux placards des loges, Bastien a trouvé une cape de velours, presque neuve."
+  },
+  {
+   "id": "masque_bauta",
+   "family": "costumes",
+   "rarity": "legendaire",
+   "name": "Masque vénitien de la Bauta",
+   "description": "Un masque de carnaval vénitien du XVIIIᵉ siècle, cédé par un collectionneur qui ne le confiait qu'aux connaisseurs.",
+   "icon": "mask_venice",
+   "method": "mission",
+   "trigger": {
+    "type": "quest",
+    "quest": "collectionneur"
+   },
+   "hint2": "Un mystérieux amateur d'objets rares.",
+   "hint3": "Le collectionneur loge à l'Hôtel du Commerce à partir de la 3ᵉ période.",
+   "exhibit": "vitrine"
+  },
+  {
+   "id": "maquette_carton",
+   "family": "decors",
+   "rarity": "commun",
+   "name": "Maquette de décor en carton",
+   "description": "Un salon bourgeois au 1/25ᵉ : chaque meuble est découpé à la main. Avant de construire, on maquette.",
+   "icon": "maquette",
+   "method": "exploration",
+   "trigger": {
+    "type": "examine",
+    "spot": "etabli"
+   },
+   "hint2": "Dans l'atelier.",
+   "hint3": "Sur l'établi des coulisses.",
+   "exhibit": "vitrine",
+   "say": "Sur l'établi, sous une bâche : une maquette de décor au 1/25ᵉ."
+  },
+  {
+   "id": "pinceau_decorateur",
+   "family": "decors",
+   "rarity": "commun",
+   "name": "Pinceau de peintre-décorateur",
+   "description": "Un pinceau de 12 cm, raide de peinture. Les décors se peignaient au sol, à grands gestes.",
+   "icon": "brush",
+   "method": "exploration",
+   "trigger": {
+    "type": "pickup",
+    "map": "rue",
+    "cell": [
+     71,
+     9
+    ]
+   },
+   "hint2": "Près d'un lieu de fabrication.",
+   "hint3": "Devant La Fabrique, la friche culturelle, au nord.",
+   "exhibit": "vitrine"
+  },
+  {
+   "id": "fleur_tissu",
+   "family": "decors",
+   "rarity": "commun",
+   "name": "Fleur en tissu de décor",
+   "description": "Une rose en tissu amidonné : elle ne fanera jamais, même sous les projecteurs.",
+   "icon": "flower",
+   "method": "exploration",
+   "trigger": {
+    "type": "examine",
+    "spot": "fleuriste"
+   },
+   "hint2": "Chez un commerçant du quartier des Arts.",
+   "hint3": "Chez le fleuriste.",
+   "exhibit": "vitrine",
+   "say": "Le fleuriste : « Je fabriquais des fleurs pour les décors, autrefois. Gardez celle-là ! »"
+  },
+  {
+   "id": "miniature_lanterne",
+   "family": "decors",
+   "rarity": "commun",
+   "name": "Miniature de la Lanterne",
+   "description": "Une petite Lanterne en résine, achetée à l'office de tourisme. Le théâtre devient un souvenir de voyage.",
+   "icon": "miniature",
+   "method": "pnj",
+   "trigger": {
+    "type": "talk",
+    "person": "touriste"
+   },
+   "hint2": "Quelqu'un qui découvre la ville.",
+   "hint3": "Parlez à la touriste, sur la place.",
+   "exhibit": "vitrine",
+   "say": "Je l'ai achetée à l'office de tourisme… mais elle sera mieux chez vous !"
+  },
+  {
+   "id": "toile_etoilee",
+   "family": "decors",
+   "rarity": "peu_commun",
+   "name": "Toile peinte du ciel étoilé",
+   "description": "Une toile de fond de 6 mètres, roulée depuis des décennies. Le ciel de Bréval, en 1950.",
+   "icon": "canvas",
+   "method": "exploration",
+   "trigger": {
+    "type": "pickup",
+    "map": "reserve",
+    "cell": [
+     3,
+     7
+    ]
+   },
+   "hint2": "Dans un endroit fermé à clé.",
+   "hint3": "Dans la réserve, sous les coulisses.",
+   "exhibit": "vitrine"
+  },
+  {
+   "id": "miniature_orange",
+   "family": "decors",
+   "rarity": "peu_commun",
+   "name": "Maquette du théâtre antique d'Orange",
+   "description": "Un mur de scène romain miniature. Le cadeau d'un mécène qui aime les théâtres qui durent.",
+   "icon": "miniature_orange",
+   "method": "mission",
+   "trigger": {
+    "type": "state",
+    "when": {
+     "any": [
+      {
+       "mission_done": "mecenat"
+      },
+      {
+       "dossier_min": {
+        "dossier": "mecenat",
+        "score": 0.8
+       }
+      }
+     ]
+    }
+   },
+   "hint2": "Une mission de partenariat.",
+   "hint3": "Réussissez « Convaincre un mécène » (ou le dossier « Mécénat » à 80 %).",
+   "exhibit": "vitrine",
+   "say": "Mme Roux, d'Ondine Énergie, vous fait livrer une maquette du théâtre antique d'Orange en remerciement.",
+   "alternative": "Le dossier « Une proposition de mécénat » réussi à 80 % la donne aussi."
+  },
+  {
+   "id": "panneau_complet",
+   "family": "decors",
+   "rarity": "peu_commun",
+   "name": "Panneau « COMPLET » peint à la main",
+   "description": "Lettres dorées sur fond rouge : on l'accrochait au guichet les grands soirs.",
+   "icon": "sign_complet",
+   "method": "mission",
+   "trigger": {
+    "type": "state",
+    "when": {
+     "any": [
+      {
+       "mission_done": "frequentation_mi_saison"
+      },
+      {
+       "metric_min": {
+        "attendance_total": 1500
+       }
+      }
+     ]
+    }
+   },
+   "hint2": "Une mission sur la fréquentation.",
+   "hint3": "Réussissez « Les chiffres de mi-saison » (ou atteignez 1 500 spectateurs).",
+   "exhibit": "vitrine",
+   "say": "Rémi ressort de la cave le vieux panneau « COMPLET » : « On en aura besoin ! »",
+   "alternative": "1 500 spectateurs dans la saison le donnent aussi."
+  },
+  {
+   "id": "trompe_loeil",
+   "family": "decors",
+   "rarity": "rare",
+   "name": "Trompe-l'œil de la forêt",
+   "description": "Une forêt profonde peinte sur toile en 1950 : de loin, on jurerait entendre le vent.",
+   "icon": "forest",
+   "method": "secret",
+   "trigger": {
+    "type": "search",
+    "map": "rue",
+    "cell": [
+     64,
+     8
+    ]
+   },
+   "hint2": "Derrière une porte que plus personne n'ouvre.",
+   "hint3": "À la Fabrique, la porte murée à gauche de l'entrée. Le programmateur du cinéma en a entendu parler.",
+   "exhibit": "vitrine",
+   "requires": {
+    "clues": [
+     "porte_muree"
+    ]
+   },
+   "say": "Derrière les planches de la porte murée, une grande toile roulée : un trompe-l'œil de forêt."
+  },
+  {
+   "id": "lettres_enseigne",
+   "family": "decors",
+   "rarity": "rare",
+   "name": "Lettres de l'ancienne enseigne",
+   "description": "Le « L » et le « A » de la première enseigne lumineuse, en tôle émaillée. Le reste s'est perdu.",
+   "icon": "letters",
+   "method": "progression",
+   "trigger": {
+    "type": "state",
+    "when": {
+     "upgrade": "enseigne"
+    }
+   },
+   "hint2": "En haut de la façade.",
+   "hint3": "Installez la nouvelle enseigne lumineuse.",
+   "exhibit": "vitrine",
+   "say": "En déposant l'ancienne enseigne, les ouvriers vous mettent de côté deux lettres émaillées."
+  },
+  {
+   "id": "esquisse_rideau",
+   "family": "decors",
+   "rarity": "legendaire",
+   "name": "Esquisse du rideau d'Ondine",
+   "description": "Le dessin original du rideau de 1902, peint par des habitantes du quartier : vagues, étoiles et une lanterne.",
+   "icon": "sketch",
+   "method": "mission",
+   "trigger": {
+    "type": "quest",
+    "quest": "rideau_origine"
+   },
+   "hint2": "Un motif ancien se cache dans un quartier.",
+   "hint3": "Parlez à Karim, à la maison de quartier des Coteaux, à partir de la 3ᵉ période.",
+   "exhibit": "vitrine"
+  },
+  {
+   "id": "gelatine_ambre",
+   "family": "technique",
+   "rarity": "commun",
+   "name": "Gélatine de couleur ambre",
+   "description": "Un filtre de couleur pour projecteur : avec lui, toute scène devient un soir d'été.",
+   "icon": "gel",
+   "method": "exploration",
+   "trigger": {
+    "type": "pickup",
+    "map": "salle",
+    "cell": [
+     4,
+     8
+    ]
+   },
+   "hint2": "Dans la salle de spectacle.",
+   "hint3": "Au pied de la scène, côté gauche.",
+   "exhibit": "vitrine"
+  },
+  {
+   "id": "cle_molette",
+   "family": "technique",
+   "rarity": "commun",
+   "name": "Clé à molette du régisseur",
+   "description": "La clé de Bastien, gravée « B.K. ». Elle a serré chaque projecteur du théâtre.",
+   "icon": "wrench",
+   "method": "pnj",
+   "trigger": {
+    "type": "talk",
+    "person": "bastien"
+   },
+   "hint2": "Quelqu'un qui règle tout dans la salle.",
+   "hint3": "Parlez à Bastien, le régisseur, dans la salle.",
+   "exhibit": "vitrine",
+   "say": "Tiens, ma vieille clé. J'en ai une neuve : garde-la, elle porte chance."
+  },
+  {
+   "id": "caisse_1930",
+   "family": "technique",
+   "rarity": "commun",
+   "name": "Caisse enregistreuse de 1930",
+   "description": "Clavier en laiton, sonnette à chaque vente. Elle a encaissé quarante ans de billets.",
+   "icon": "register",
+   "method": "mission",
+   "trigger": {
+    "type": "state",
+    "when": {
+     "any": [
+      {
+       "mission_done": "seuil_rentabilite"
+      },
+      {
+       "dossier_min": {
+        "dossier": "seuil",
+        "score": 0.8
+       }
+      }
+     ]
+    }
+   },
+   "hint2": "Une mission sur la rentabilité.",
+   "hint3": "Réussissez « Le seuil de rentabilité » d'Hélène (ou le dossier « Seuil » à 80 %).",
+   "exhibit": "vitrine",
+   "say": "Hélène : « Un seuil de rentabilité bien calculé mérite bien la vieille caisse de la billetterie. »",
+   "alternative": "Le dossier « Seuil de rentabilité » réussi à 80 % la donne aussi."
+  },
+  {
+   "id": "talkie",
+   "family": "technique",
+   "rarity": "commun",
+   "name": "Talkie-walkie de plateau",
+   "description": "« Régie à plateau, top lumière ! » Grésillant mais fidèle.",
+   "icon": "talkie",
+   "method": "exploration",
+   "trigger": {
+    "type": "pickup",
+    "map": "hall",
+    "cell": [
+     2,
+     11
+    ]
+   },
+   "hint2": "Dans le hall.",
+   "hint3": "Oublié dans un coin du hall, près de l'entrée.",
+   "exhibit": "vitrine"
+  },
+  {
+   "id": "micro_ruban",
+   "family": "technique",
+   "rarity": "peu_commun",
+   "name": "Micro à ruban des années 50",
+   "description": "Chromé, lourd, élégant. Il a capté les voix de la fanfare pendant des décennies.",
+   "icon": "microphone",
+   "method": "pnj",
+   "trigger": {
+    "type": "talk",
+    "person": "musicien"
+   },
+   "hint2": "Un musicien a du vieux matériel.",
+   "hint3": "Parlez au musicien de la fanfare, au kiosque du parc, à partir de la 4ᵉ période.",
+   "exhibit": "vitrine",
+   "requires": {
+    "min_turn": 4
+   },
+   "say": "On a acheté une sono neuve pour le kiosque. Ce vieux micro, je vous le confie."
+  },
+  {
+   "id": "projecteur_par",
+   "family": "technique",
+   "rarity": "peu_commun",
+   "name": "Projecteur PAR de 1980",
+   "description": "Un des anciens projecteurs halogènes, démonté pour laisser place aux LED. Il chauffe, mais quelle lumière !",
+   "icon": "par",
+   "method": "progression",
+   "trigger": {
+    "type": "state",
+    "when": {
+     "upgrade": "projecteurs_led"
+    }
+   },
+   "hint2": "Il attend d'être remplacé.",
+   "hint3": "Installez les projecteurs LED dans la salle.",
+   "exhibit": "vitrine",
+   "say": "Bastien met de côté le plus beau des anciens projecteurs : « Pour la collection ! »"
+  },
+  {
+   "id": "registre_securite",
+   "family": "technique",
+   "rarity": "peu_commun",
+   "name": "Registre de sécurité de 1964",
+   "description": "Chaque visite des pompiers y est notée. La sécurité du public, première règle d'un théâtre.",
+   "icon": "registry",
+   "method": "mission",
+   "trigger": {
+    "type": "state",
+    "when": {
+     "any": [
+      {
+       "mission_done": "commission_securite"
+      },
+      {
+       "rules": {
+        "stat_min": {
+         "equipements": 70
+        }
+       }
+      }
+     ]
+    }
+   },
+   "hint2": "Une mission sur la sécurité.",
+   "hint3": "Réussissez « La commission de sécurité » de Bastien (ou amenez l'équipement à 70).",
+   "exhibit": "vitrine",
+   "say": "Bastien : « La commission est passée. Voici le registre de 1964, on l'a retrouvé en préparant la visite. »",
+   "alternative": "Un équipement à 70 ou plus le donne aussi."
+  },
+  {
+   "id": "moufle",
+   "family": "technique",
+   "rarity": "peu_commun",
+   "name": "Moufle de machinerie",
+   "description": "Une poulie à trois réas pour lever les décors. Avant les moteurs, tout se faisait à la force des bras.",
+   "icon": "pulley",
+   "method": "exploration",
+   "trigger": {
+    "type": "pickup",
+    "map": "reserve",
+    "cell": [
+     10,
+     4
+    ]
+   },
+   "hint2": "Dans un endroit fermé à clé.",
+   "hint3": "Dans la réserve, entre les étagères.",
+   "exhibit": "vitrine"
+  },
+  {
+   "id": "projecteur_1950",
+   "family": "technique",
+   "rarity": "rare",
+   "name": "Projecteur restauré de 1950",
+   "description": "Remis en état avec une lentille de Fresnel et une lampe d'époque. Il éclaire comme au premier jour.",
+   "icon": "projector",
+   "method": "mission",
+   "trigger": {
+    "type": "quest",
+    "quest": "restauration"
+   },
+   "hint2": "Un vieil appareil abîmé attend un peu de soin.",
+   "hint3": "Dans la réserve, examinez le vieux projecteur, puis parlez à Bastien.",
+   "exhibit": "vitrine"
+  },
+  {
+   "id": "console_1975",
+   "family": "technique",
+   "rarity": "rare",
+   "name": "Console d'éclairage de 1975",
+   "description": "Vingt-quatre potentiomètres en bakélite. Les éclairagistes y jouaient comme d'un orgue.",
+   "icon": "console",
+   "method": "evenement",
+   "trigger": {
+    "type": "state",
+    "when": {
+     "any": [
+      {
+       "event_choice": {
+        "event": "panne_console",
+        "choices": [
+         "reparer",
+         "louer",
+         "bricoler"
+        ]
+       }
+      },
+      {
+       "rules": {
+        "stat_min": {
+         "equipements": 75
+        }
+       }
+      }
+     ]
+    }
+   },
+   "hint2": "Le jour où la technique a lâché.",
+   "hint3": "Quand la console tombe en panne, décidez quoi faire — ou amenez l'équipement à 75.",
+   "exhibit": "vitrine",
+   "say": "Après la panne, Bastien remplace la vieille console. L'ancienne rejoint votre collection.",
+   "alternative": "Un équipement à 75 ou plus la donne aussi."
+  },
+  {
+   "id": "piece_dedicacee",
+   "family": "legendes",
+   "rarity": "commun",
+   "name": "Pièce dédicacée",
+   "description": "« À la Lanterne, qui m'a donné ma première chance. » Signé : une autrice devenue célèbre.",
+   "icon": "book_signed",
+   "method": "pnj",
+   "trigger": {
+    "type": "talk",
+    "person": "libraire"
+   },
+   "hint2": "Une commerçante du quartier des Arts.",
+   "hint3": "Parlez à la libraire de La Plume.",
+   "exhibit": "vitrine",
+   "say": "Cette autrice a joué chez vous à ses débuts. Elle a dédicacé ce livre pour le théâtre."
+  },
+  {
+   "id": "bouquet_seche",
+   "family": "legendes",
+   "rarity": "commun",
+   "name": "Bouquet séché de la première",
+   "description": "Des roses séchées, attachées par un ruban : « Soir de première, 1987 ».",
+   "icon": "bouquet",
+   "method": "exploration",
+   "trigger": {
+    "type": "examine",
+    "spot": "loges"
+   },
+   "hint2": "Dans les coulisses.",
+   "hint3": "Dans les loges, sur une coiffeuse.",
+   "exhibit": "vitrine",
+   "say": "Coincé derrière un miroir des loges : un bouquet séché, avec un ruban daté."
+  },
+  {
+   "id": "verre_entracte",
+   "family": "legendes",
+   "rarity": "commun",
+   "name": "Verre gravé de l'entracte",
+   "description": "Un verre de cristal gravé d'une lanterne. On trinquait au foyer depuis 1902.",
+   "icon": "glass",
+   "method": "progression",
+   "trigger": {
+    "type": "state",
+    "when": {
+     "upgrade": "foyer_bar"
+    }
+   },
+   "hint2": "Au bar, en rénovant.",
+   "hint3": "Rénovez le bar du foyer.",
+   "exhibit": "vitrine",
+   "say": "Au fond du vieux bar du foyer, un verre gravé a survécu à toutes les époques."
+  },
+  {
+   "id": "rose_rappel",
+   "family": "legendes",
+   "rarity": "peu_commun",
+   "name": "Rose lancée au rappel",
+   "description": "Lancée depuis le balcon un soir de salle comble. Le public était debout.",
+   "icon": "rose",
+   "method": "evenement",
+   "trigger": {
+    "type": "state",
+    "when": {
+     "achievement": "salle_comble"
+    }
+   },
+   "hint2": "Un soir où la salle est pleine à craquer.",
+   "hint3": "Remplissez la salle à au moins 95 %.",
+   "exhibit": "vitrine",
+   "say": "Salle comble ! Au rappel, une rose tombe sur le plateau. Louison la ramasse pour vous."
+  },
+  {
+   "id": "une_courrier",
+   "family": "legendes",
+   "rarity": "peu_commun",
+   "name": "Une du Courrier de l'Ondine",
+   "description": "« LA LANTERNE FAIT SALLE COMBLE » — la une encadrée par la rédaction.",
+   "icon": "frontpage",
+   "method": "evenement",
+   "trigger": {
+    "type": "state",
+    "when": {
+     "any": [
+      {
+       "event_choice": {
+        "event": "journaliste",
+        "choices": [
+         "interview",
+         "creation"
+        ]
+       }
+      },
+      {
+       "rules": {
+        "stat_min": {
+         "reputation": 70
+        }
+       }
+      }
+     ]
+    }
+   },
+   "hint2": "La presse s'intéresse à vous.",
+   "hint3": "Accordez un entretien au journaliste — ou portez la réputation à 70.",
+   "exhibit": "vitrine",
+   "say": "Le Courrier de l'Ondine vous envoie la une encadrée.",
+   "alternative": "Une réputation de 70 la donne aussi."
+  },
+  {
+   "id": "medaille_ville",
+   "family": "legendes",
+   "rarity": "rare",
+   "name": "Médaille de la Ville",
+   "description": "Remise par le maire à la direction quand la convention est renouvelée. Rare et méritée.",
+   "icon": "medal",
+   "method": "evenement",
+   "trigger": {
+    "type": "state",
+    "when": {
+     "achievement": "convention"
+    }
+   },
+   "hint2": "Le terme d'une saison réussie.",
+   "hint3": "Faites renouveler la convention en fin de saison.",
+   "exhibit": "vitrine",
+   "say": "Le maire vous remet la médaille de la Ville : la convention est renouvelée !"
+  },
+  {
+   "id": "carnet_souffleur",
+   "family": "legendes",
+   "rarity": "rare",
+   "name": "Carnet du souffleur",
+   "description": "Le carnet de M. Pic, dernier souffleur (1987). En marge : « Le brigadier ? Derrière la porte du plateau, côté coulisses. »",
+   "icon": "notebook",
+   "method": "secret",
+   "trigger": {
+    "type": "search",
+    "map": "salle",
+    "cell": [
+     9,
+     7
+    ]
+   },
+   "hint2": "Un métier disparu a laissé une trace.",
+   "hint3": "Le trou du souffleur, au milieu de l'avant-scène. Hélène s'en souvient.",
+   "exhibit": "vitrine",
+   "requires": {
+    "clues": [
+     "souffleur"
+    ]
+   },
+   "say": "Sous une planche de l'avant-scène, le trou du souffleur… et son carnet.",
+   "gives_clue": "brigadier"
+  },
+  {
+   "id": "lettre_breval",
+   "family": "legendes",
+   "rarity": "legendaire",
+   "name": "Lettre d'Anselme Brévalois",
+   "description": "La dernière lettre du poète, écrite pour l'ouverture de la Lanterne : « Que ce théâtre soit la place publique des âmes. »",
+   "icon": "letter",
+   "method": "secret",
+   "trigger": {
+    "type": "examine",
+    "spot": "statue_parc"
+   },
+   "hint2": "Une énigme en trois lieux, gravée dans la pierre.",
+   "hint3": "Lisez le socle de la statue du poète, puis suivez l'eau.",
+   "exhibit": "vitrine",
+   "requires": {
+    "clues": [
+     "lettre_2"
+    ]
+   },
+   "say": "Au pied de la statue d'Ondine, une petite boîte de fer : la lettre du poète."
+  },
+  {
+   "id": "brigadier",
+   "family": "legendes",
+   "rarity": "legendaire",
+   "name": "Le brigadier de la première",
+   "description": "Le bâton qui a frappé les trois coups du 12 mars 1924. Son bois est poli par cent ans de mains.",
+   "icon": "staff",
+   "method": "secret",
+   "trigger": {
+    "type": "search",
+    "map": "coulisses",
+    "cell": [
+     17,
+     4
+    ]
+   },
+   "hint2": "Il a frappé les trois coups de la toute première.",
+   "hint3": "Le carnet du souffleur le dit : derrière la porte du plateau, dans les coulisses.",
+   "exhibit": "vitrine",
+   "requires": {
+    "clues": [
+     "brigadier"
+    ]
+   },
+   "say": "Derrière la porte du plateau, accroché à un clou : le brigadier de la première !"
+  },
+  {
+   "id": "lanterne_ondine",
+   "family": "legendes",
+   "rarity": "mythique",
+   "name": "La Lanterne d'Ondine",
+   "description": "La lanterne de scène de 1924, qui a donné son nom au théâtre. On la croyait perdue : elle attendait sous la scène.",
+   "icon": "lantern",
+   "method": "mission",
+   "trigger": {
+    "type": "quest",
+    "quest": "representation_perdue"
+   },
+   "hint2": "Une représentation dont on parle encore à voix basse.",
+   "hint3": "Une histoire de 1924 : elle commence avec une affiche, et se termine un soir de spectacle.",
+   "exhibit": "vitrine"
+  }
+ ],
+ "quests": [
+  {
+   "id": "archives_oubliees",
+   "title": "Les archives oubliées",
+   "giver": "fernand",
+   "reward": "affiche_1924",
+   "steps": [
+    {
+     "text": "Écouter Fernand, l'ancien régisseur.",
+     "trigger": {
+      "type": "talk",
+      "person": "fernand"
+     },
+     "say": "Je suis Fernand, régisseur ici pendant quarante ans. Sous les coulisses, il y a une réserve que personne n'a ouverte depuis 1987. Tenez, la clé : allez voir l'armoire des archives.",
+     "gives_clue": "cle_reserve"
+    },
+    {
+     "text": "Entrer dans la réserve, au fond des coulisses.",
+     "trigger": {
+      "type": "visit",
+      "map": "reserve"
+     },
+     "say": "La réserve sent la poussière et le vieux bois. Au fond, l'armoire des archives."
+    },
+    {
+     "text": "Fouiller l'armoire des archives.",
+     "trigger": {
+      "type": "examine",
+      "spot": "armoire_archives"
+     },
+     "say": "Sous une pile de programmes, une grande affiche roulée, presque intacte. Fernand voudra la voir."
+    },
+    {
+     "text": "Montrer la trouvaille à Fernand.",
+     "trigger": {
+      "type": "talk",
+      "person": "fernand"
+     },
+     "say": "La création de 1924 ! Le soir où la lanterne a disparu… mon père en parlait tout le temps. Gardez-la précieusement."
+    }
+   ]
+  },
+  {
+   "id": "restauration",
+   "title": "La restauration",
+   "giver": "bastien",
+   "reward": "projecteur_1950",
+   "steps": [
+    {
+     "text": "Examiner le vieux projecteur de la réserve.",
+     "trigger": {
+      "type": "examine",
+      "spot": "projecteur_casse"
+     },
+     "say": "Un projecteur de 1950, cabossé : lentille fendue, lampe grillée. Bastien saurait peut-être le réparer."
+    },
+    {
+     "text": "En parler à Bastien.",
+     "trigger": {
+      "type": "talk",
+      "person": "bastien"
+     },
+     "say": "Une merveille ! Il me faut une lentille de Fresnel et une lampe à incandescence. Le disquaire chine du vieux matériel, et la Fabrique garde des pièces."
+    },
+    {
+     "text": "Trouver une lentille de Fresnel (disquaire).",
+     "trigger": {
+      "type": "examine",
+      "spot": "disquaire"
+     },
+     "say": "Le disquaire fouille un carton : « Une lentille de Fresnel ? Prenez-la, elle vous attendait. »"
+    },
+    {
+     "text": "Trouver une lampe d'époque (La Fabrique).",
+     "trigger": {
+      "type": "examine",
+      "spot": "fabrique"
+     },
+     "say": "Au fond de l'atelier, le gardien de la Fabrique vous tend une vieille lampe à incandescence."
+    },
+    {
+     "text": "Rapporter les pièces à Bastien.",
+     "trigger": {
+      "type": "talk",
+      "person": "bastien"
+     },
+     "say": "Lentille, lampe, un peu de patience… Et voilà ! Il éclaire comme au premier jour."
+    }
+   ]
+  },
+  {
+   "id": "collectionneur",
+   "title": "Le collectionneur mystérieux",
+   "giver": "collectionneur",
+   "reward": "masque_bauta",
+   "steps": [
+    {
+     "text": "Rencontrer le collectionneur (8 objets dans votre collection).",
+     "trigger": {
+      "type": "talk",
+      "person": "collectionneur"
+     },
+     "requires": {
+      "owned_min": 8
+     },
+     "tease": "Je ne parle qu'aux connaisseurs. Revenez quand votre collection comptera au moins huit pièces.",
+     "say": "Un masque vénitien du XVIIIᵉ siècle dort dans ma malle. Je le céderai à qui me prouvera son goût… et son sérieux."
+    },
+    {
+     "text": "Lui montrer le masque d'Arlequin et l'éventail de la diva.",
+     "trigger": {
+      "type": "talk",
+      "person": "collectionneur"
+     },
+     "requires": {
+      "owned": [
+       "masque_arlequin",
+       "eventail_diva"
+      ]
+     },
+     "tease": "Montrez-moi d'abord un masque d'Arlequin et l'éventail d'une diva. Ils traînent bien quelque part.",
+     "say": "Arlequin et l'éventail de la diva… Vous avez l'œil."
+    },
+    {
+     "text": "Revenir quand le théâtre aura une belle réputation (60).",
+     "trigger": {
+      "type": "talk",
+      "person": "collectionneur"
+     },
+     "requires": {
+      "rules": {
+       "stat_min": {
+        "reputation": 60
+       }
+      }
+     },
+     "tease": "Votre théâtre doit encore faire parler de lui. Revenez quand sa réputation aura grandi.",
+     "say": "Tout Bréval parle de vos spectacles. Le masque est à vous : il sera bien gardé."
+    }
+   ]
+  },
+  {
+   "id": "rideau_origine",
+   "title": "Le rideau d'origine",
+   "giver": "animateur",
+   "reward": "esquisse_rideau",
+   "requires": {
+    "min_turn": 3
+   },
+   "steps": [
+    {
+     "text": "Écouter Karim, à la maison de quartier.",
+     "trigger": {
+      "type": "talk",
+      "person": "animateur"
+     },
+     "requires": {
+      "min_turn": 3
+     },
+     "say": "La fresque des Coteaux reprend un motif très ancien : le rideau d'origine de la Lanterne, peint en 1902 par des habitantes du quartier. Allez la regarder de près !"
+    },
+    {
+     "text": "Examiner la fresque des Coteaux.",
+     "trigger": {
+      "type": "examine",
+      "spot": "fresque"
+     },
+     "say": "Dans un coin de la fresque : des vagues, des étoiles, et « d'après le rideau de 1902 ». Le galeriste du quartier des Arts en saurait plus."
+    },
+    {
+     "text": "Convaincre le galeriste (3 objets exposés dans le hall).",
+     "trigger": {
+      "type": "examine",
+      "spot": "galerie"
+     },
+     "requires": {
+      "exhibit_min": 3
+     },
+     "tease": "Le galeriste : « J'ai l'esquisse… mais je ne la confie qu'à un théâtre qui montre son patrimoine. Exposez au moins trois objets dans les vitrines du hall. »",
+     "say": "Le galeriste : « Votre exposition m'a convaincu. Voici l'esquisse : rendez-la au quartier. »"
+    },
+    {
+     "text": "Rapporter l'esquisse à Karim.",
+     "trigger": {
+      "type": "talk",
+      "person": "animateur"
+     },
+     "say": "L'esquisse du rideau d'Ondine ! Les anciennes du quartier vont pleurer de joie. Gardez-la au théâtre, c'est sa place."
+    }
+   ]
+  },
+  {
+   "id": "representation_perdue",
+   "title": "La représentation perdue",
+   "giver": "louison",
+   "reward": "lanterne_ondine",
+   "requires": {
+    "owned": [
+     "affiche_1924"
+    ]
+   },
+   "steps": [
+    {
+     "text": "Montrer l'affiche de 1924 à Louison.",
+     "trigger": {
+      "type": "talk",
+      "person": "louison"
+     },
+     "requires": {
+      "owned": [
+       "affiche_1924"
+      ]
+     },
+     "say": "La troupe Vasseur… mon arrière-grand-mère ! Chez nous, on raconte que la lanterne de scène a disparu le soir de cette première. Et elle cachait ses photos dans une malle à double fond, dans la réserve.",
+     "gives_clue": "malle_vasseur"
+    },
+    {
+     "text": "Interroger le pêcheur, au bord de l'Ondine.",
+     "trigger": {
+      "type": "talk",
+      "person": "pecheur"
+     },
+     "say": "Mon grand-père était ouvreur, ce soir-là. Au rideau final, la lanterne s'est éteinte d'un coup… et on ne l'a jamais revue."
+    },
+    {
+     "text": "Chercher le journal de l'époque (médiathèque).",
+     "trigger": {
+      "type": "talk",
+      "person": "bibliothecaire"
+     },
+     "say": "Le Courrier du 13 mars 1924 : « Pendant les saluts, la lanterne a été descendue par la trappe, sous la scène. » Personne ne l'a cherchée là ?",
+     "gives_clue": "trappe"
+    },
+    {
+     "text": "Retrouver la photographie de la troupe, puis revoir Louison.",
+     "trigger": {
+      "type": "talk",
+      "person": "louison"
+     },
+     "requires": {
+      "owned": [
+       "photo_vasseur"
+      ]
+     },
+     "tease": "Il nous faudrait la photo de la troupe… La malle à double fond, dans la réserve !",
+     "say": "Regarde la photo : la trappe est au centre du plateau. Elle ne s'ouvre que les soirs de spectacle, quand la machinerie est en place."
+    },
+    {
+     "text": "Ouvrir la trappe du plateau, un soir de spectacle.",
+     "trigger": {
+      "type": "search",
+      "map": "salle",
+      "cell": [
+       10,
+       5
+      ]
+     },
+     "requires": {
+      "evening": true
+     },
+     "tease": "La trappe est verrouillée. La machinerie n'est en place que les soirs de représentation.",
+     "say": "La trappe s'ouvre dans un grincement. Sous la scène, dans la poussière, une lanterne de cuivre… Elle s'allume encore."
+    }
+   ]
+  }
+ ],
+ "clues": {
+  "cle_reserve": {
+   "title": "La clé de la réserve",
+   "text": "Fernand vous a confié la clé de la réserve, au fond des coulisses (porte du bas)."
+  },
+  "troupe_vasseur": {
+   "title": "La troupe Vasseur",
+   "text": "L'affiche de 1924 nomme la troupe Vasseur. Louison porte le même nom…"
+  },
+  "malle_vasseur": {
+   "title": "La malle à double fond",
+   "text": "Louison : la troupe Vasseur cachait ses photos dans une malle à double fond, dans la réserve."
+  },
+  "trappe": {
+   "title": "La trappe",
+   "text": "En 1924, la lanterne a été descendue par la trappe, sous la scène, pendant les saluts."
+  },
+  "escarpins": {
+   "title": "Les escarpins de Mlle Lys",
+   "text": "Rémi : Mlle Lys cachait ses escarpins dans la coiffeuse du milieu, dans les coulisses."
+  },
+  "porte_muree": {
+   "title": "La porte murée",
+   "text": "Le programmateur du Rex : un trompe-l'œil dort derrière la porte murée de la Fabrique, à gauche de l'entrée."
+  },
+  "souffleur": {
+   "title": "Le trou du souffleur",
+   "text": "Hélène : le trou du souffleur, au milieu de l'avant-scène, a été recouvert en 1987… avec tout dedans."
+  },
+  "brigadier": {
+   "title": "Le brigadier",
+   "text": "Carnet du souffleur : le brigadier est accroché derrière la porte du plateau, côté coulisses."
+  },
+  "lettre_1": {
+   "title": "L'énigme du poète (1)",
+   "text": "Socle de la statue du poète : « Ma dernière lettre dort où chante l'eau de la place. »"
+  },
+  "lettre_2": {
+   "title": "L'énigme du poète (2)",
+   "text": "Margelle de la fontaine : « …puis va saluer Ondine, au cœur du parc. »"
+  }
+ },
+ "clue_sources": [
+  {
+   "clue": "escarpins",
+   "trigger": {
+    "type": "talk",
+    "person": "accueil"
+   },
+   "requires": {
+    "owned": [
+     "gants_habilleuse"
+    ]
+   },
+   "say": "Les escarpins de Mlle Lys ? Ma grand-mère était ouvreuse : elle disait que Mlle Lys les cachait dans la coiffeuse du milieu, dans les coulisses."
+  },
+  {
+   "clue": "porte_muree",
+   "trigger": {
+    "type": "talk",
+    "person": "projectionniste"
+   },
+   "requires": {
+    "min_turn": 2
+   },
+   "say": "Mon père peignait des décors pour la Fabrique. Il disait qu'un trompe-l'œil dort derrière la porte murée, à gauche de l'entrée."
+  },
+  {
+   "clue": "souffleur",
+   "trigger": {
+    "type": "talk",
+    "person": "helene"
+   },
+   "requires": {
+    "owned": [
+     "programme_1987"
+    ]
+   },
+   "say": "M. Pic, le souffleur ? Il soufflait le texte depuis un trou au milieu de l'avant-scène. On l'a recouvert en 1987… avec ses affaires dedans, je crois."
+  },
+  {
+   "clue": "lettre_1",
+   "trigger": {
+    "type": "examine",
+    "spot": "statue_place"
+   },
+   "say": "Gravé sur le socle, presque effacé : « Ma dernière lettre dort où chante l'eau de la place. »"
+  },
+  {
+   "clue": "lettre_2",
+   "trigger": {
+    "type": "examine",
+    "spot": "fontaine"
+   },
+   "requires": {
+    "clues": [
+     "lettre_1"
+    ]
+   },
+   "say": "Vous faites le tour de la fontaine. Sous la margelle, une inscription : « …puis va saluer Ondine, au cœur du parc. »"
+  }
+ ],
+ "rewards": [
+  {
+   "id": "echarpe",
+   "kind": "outfit",
+   "label": "Écharpe rouge",
+   "sprite": "directeur_echarpe",
+   "when": {
+    "total": 5
+   }
+  },
+  {
+   "id": "guirlande",
+   "kind": "decor",
+   "label": "Guirlande de lanternes dans le hall",
+   "when": {
+    "total": 10
+   }
+  },
+  {
+   "id": "festival",
+   "kind": "outfit",
+   "label": "Tenue de festival",
+   "sprite": "directeur_festival",
+   "when": {
+    "total": 20
+   }
+  },
+  {
+   "id": "collectionneur",
+   "kind": "title",
+   "label": "Collectionneur·se de la Lanterne",
+   "when": {
+    "total": 25
+   }
+  },
+  {
+   "id": "archiviste",
+   "kind": "outfit",
+   "label": "Gilet d'archiviste",
+   "sprite": "directeur_archiviste",
+   "when": {
+    "family": "archives"
+   }
+  },
+  {
+   "id": "gala",
+   "kind": "outfit",
+   "label": "Costume de gala",
+   "sprite": "directeur_gala",
+   "when": {
+    "family": "costumes"
+   }
+  },
+  {
+   "id": "beret",
+   "kind": "outfit",
+   "label": "Béret d'artiste",
+   "sprite": "directeur_beret",
+   "when": {
+    "family": "decors"
+   }
+  },
+  {
+   "id": "regie",
+   "kind": "outfit",
+   "label": "Tenue de régie",
+   "sprite": "directeur_regie",
+   "when": {
+    "family": "technique"
+   }
+  },
+  {
+   "id": "lanterne",
+   "kind": "outfit",
+   "label": "Habit de la Lanterne",
+   "sprite": "directeur_lanterne",
+   "when": {
+    "family": "legendes"
+   }
+  },
+  {
+   "id": "gardien",
+   "kind": "title",
+   "label": "Gardien·ne de la Lanterne",
+   "when": {
+    "total": 50
+   }
+  }
+ ],
+ "migrate_album": {
+  "t_ticket_avignon": "billet_avignon",
+  "t_masque": "masque_arlequin"
+ }
+}

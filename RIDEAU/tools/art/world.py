@@ -146,6 +146,7 @@ WALLS = {
     "salle": {"paper": P["night2"], "pattern": P["night"], "wainscot": P["velvet0"], "trim": P["gold1"]},
     "coulisses": {"paper": P["grey1"], "pattern": P["grey0"], "wainscot": P["grey0"], "trim": P["grey2"], "brick": True},
     "bureau": {"paper": P["green0"], "pattern": P["green1"], "wainscot": P["wood1"], "trim": P["wood3"]},
+    "reserve": {"paper": P["wood1"], "pattern": P["wood0"], "wainscot": P["wood0"], "trim": P["wood2"], "brick": True},
 }
 
 
@@ -273,6 +274,32 @@ def draw_desk(c, x0, y0, w, items=()):
                 o.rect(ix, 4, 3, 3, P["cream"])
                 o.set(ix + 3, 5, P["cream"])
     c.paste(outlined(w, 16, d), x0, y0)
+
+
+def draw_showcase(base, top, x0, y0, n):
+    """Vitrine d'exposition de la collection : socle de bois, verre, plateau (objets posés par le jeu)."""
+    w = n * T
+
+    def d(o):
+        o.rect(0, 9, w, 7, P["wood2"])
+        o.hline(0, w - 1, 9, P["wood3"])
+        o.rect(1, 0, w - 2, 9, (200, 220, 235))
+        o.hline(1, w - 2, 7, P["paper2"])
+        for xx in range(T, w, T):
+            o.vline(xx, 0, 8, P["gold2"])
+        o.set(3, 1, P["white"])
+        o.set(4, 2, P["white"])
+    base.paste(outlined(w, 16, d), x0, y0)
+
+
+def draw_old_projector(base, x0, y0):
+    def d(o):
+        o.rect(3, 3, 20, 9, P["navy"])
+        o.ellipse(25, 7, 4, 4, P["grey2"])
+        o.line(23, 4, 28, 10, P["ink"])
+        o.rect(10, 12, 3, 4, P["grey1"])
+        o.rect(5, 0, 10, 3, P["grey1"])
+    base.paste(outlined(32, 16, d), x0, y0)
 
 
 def draw_bookshelf(base, x0, y0, w):
@@ -410,7 +437,7 @@ def interior(world, map_id):
                     pass
                 else:
                     floor_salle(base, x0, y0, x, y)
-            elif map_id == "coulisses":
+            elif map_id in ("coulisses", "reserve"):
                 floor_concrete(base, x0, y0, x, y)
             elif map_id == "bureau":
                 floor_parquet(base, x0, y0, x, y)
@@ -435,6 +462,10 @@ def interior(world, map_id):
                 double_door(base, x0, y0, P["wood2"] if map_id != "salle" else P["velvet2"])
                 base.rect(x0 + 2, y0 - 6, 28, 6, P["gold2"])
                 base.frame(x0 + 2, y0 - 6, 28, 6, P["gold0"])
+            elif ch(x + 1, y) != "D" and ch(x - 1, y) != "D":
+                base.rect(x0 + 2, y0 - 4, 12, 20, P["wood1"])
+                base.rect(x0 + 3, y0 - 3, 10, 19, P["wood2"])
+                base.set(x0 + 11, y0 + 6, P["gold3"])
         elif y == H - 1:
             base.rect(x0, y0, T, T, P["wood1"])
             base.rect(x0, y0, T, 4, P["light"])
@@ -462,8 +493,8 @@ def interior(world, map_id):
             base.dither_rect(15 * T + 4 + i * 15, 3 * T + 1, 10, 5, P["paper3"], 0.3)
         for (x, y) in [(1, 2), (20, 2), (1, 12), (20, 12)]:
             draw_plant(base, top, x * T, y * T)
-        draw_bench(base, 3 * T, 9 * T, 32, velvet=True)
-        draw_bench(base, 17 * T, 9 * T, 32, velvet=True)
+        for vx in (3, 17):
+            draw_showcase(base, top, vx * T, 9 * T, 3)
         draw_sign(base, 7 * T, 12 * T)
         # Cadres d'affiches au mur (remplis dans le jeu)
         for fx in (5 * T + 6, 15 * T + 4):
@@ -519,6 +550,20 @@ def interior(world, map_id):
         # Ampoules des loges
         for i in range(5):
             top.set(2 * T + 6 + i * 16, 2 * T - 1, P["light"])
+    elif map_id == "reserve":
+        draw_bookshelf(base, 1 * T, 2 * T, 4 * T)
+        draw_cabinet(base, 8 * T, 2 * T, 2 * T)
+        draw_workbench(base, 12 * T, 2 * T, 2 * T)
+        for (x, y) in [(3, 4), (3, 5), (11, 7), (12, 7)]:
+            draw_crate(base, x * T, y * T)
+        draw_rack(base, top, 1 * T, 8 * T, 2 * T)
+        draw_old_projector(base, 7 * T, 6 * T)
+        # Toiles roulées et poussière
+        base.rect(12 * T + 2, 4 * T + 6, 2 * T - 4, 5, P["paper2"])
+        base.rect(12 * T + 2, 5 * T + 2, 2 * T - 4, 5, P["paper3"])
+        r = rng(77)
+        for _ in range(120):
+            base.set(T + r.randrange(14 * T), 3 * T + r.randrange(6 * T), P["grey1"], 60)
     elif map_id == "bureau":
         draw_desk(base, 5 * T, 4 * T, 3 * T, [("book", 14), ("lamp", 36), ("paper", 3), ("mug", 28)])
         draw_desk(base, 9 * T, 6 * T, 2 * T, [("computer", 4), ("paper", 20)])
@@ -1006,6 +1051,16 @@ def upgrade_overlays(world):
     for i in range(5):
         c.rect(2 * T + 4 + i * 16, 2 * T - 4, 8, 2, P["light"])
     out[("coulisses", "loges")] = c
+    # Récompense de collection : guirlande de lanternes dans le hall (10 objets)
+    c = Canvas(hall_w, hall_h)
+    for x in range(T, 21 * T, 4):
+        sag = int(4 * math.sin((x - T) / (20 * T) * math.pi * 4) ** 2)
+        c.set(x, 2 * T + 2 + sag, P["grey0"])
+        c.set(x + 1, 2 * T + 2 + sag, P["grey0"])
+        if (x // 4) % 6 == 0:
+            c.rect(x - 1, 2 * T + 3 + sag, 4, 5, P["gold2"])
+            c.rect(x, 2 * T + 4 + sag, 2, 3, P["light"])
+    out[("hall", "reward_guirlande")] = c
     # Enseigne lumineuse sur la façade
     rw, rh = 40 * T, 18 * T
     c = Canvas(rw, rh)
@@ -1071,6 +1126,14 @@ PEOPLE = {
                        "accent": P["velvet3"], "tie": True},
     "directeur_lanterne": {"skin": P["skin1"], "hair": P["wood1"], "hair_style": "short", "top": P["gold2"], "legs": P["velvet1"],
                            "accent": P["velvet3"], "scarf": True, "glasses": True},
+    "directeur_archiviste": {"skin": P["skin1"], "hair": P["wood1"], "hair_style": "short", "top": P["wood3"], "legs": P["navy"],
+                             "accent": P["green1"], "glasses": True, "scarf": True},
+    "directeur_regie": {"skin": P["skin1"], "hair": P["wood1"], "hair_style": "beanie", "top": P["ink"], "legs": P["grey0"],
+                        "accent": P["gold2"]},
+    "fernand": {"skin": P["skin1"], "hair": P["white"], "hair_style": "bald", "top": P["grey1"], "legs": P["navy"],
+                "accent": P["velvet3"], "glasses": True, "cane": True},
+    "collectionneur": {"skin": P["skin0"], "hair": P["ink"], "hair_style": "swoop", "top": P["purple0"], "legs": P["ink"],
+                       "accent": P["gold3"], "scarf": True},
     "spectateur_a": {"skin": P["skin2"], "hair": P["velvet1"], "hair_style": "long", "top": P["gold1"], "legs": P["night"], "accent": P["cream"]},
     "spectateur_b": {"skin": P["skin4"], "hair": P["ink"], "hair_style": "short", "top": P["blue"], "legs": P["night"], "accent": P["cream"]},
     "spectateur_c": {"skin": P["skin0"], "hair": P["wood2"], "hair_style": "bob", "top": P["green0"], "legs": P["grey1"], "accent": P["gold3"]},
@@ -1283,93 +1346,6 @@ def seated_audience():
 
 # --- Effets et interface ---------------------------------------------------------------
 
-def treasure_icons():
-    """Petites icônes 16×16 des trésors cachés (album)."""
-    def ic(draw):
-        c = Canvas(16, 16)
-        draw(c)
-        c.outline(P["ink"])
-        return c
-
-    def ticket(c):
-        c.rect(1, 4, 14, 8, P["gold2"])
-        c.vline(5, 4, 11, P["gold0"])
-        c.rect(7, 6, 6, 1, P["velvet3"])
-        c.rect(7, 8, 4, 1, P["velvet3"])
-
-    def programme(c):
-        c.rect(3, 1, 10, 14, P["paper"])
-        c.rect(5, 3, 6, 4, P["velvet3"])
-        for y in (9, 11, 13):
-            c.hline(5, 10, y, P["paper3"])
-
-    def scroll(c):
-        c.rect(3, 3, 10, 10, P["cream"])
-        c.rect(2, 2, 12, 2, P["paper3"])
-        c.rect(2, 12, 12, 2, P["paper3"])
-        for y in (6, 8, 10):
-            c.hline(5, 11, y, P["grey1"])
-
-    def notebook(c):
-        c.rect(3, 2, 10, 12, P["green1"])
-        c.vline(4, 2, 13, P["green0"])
-        c.rect(6, 5, 5, 3, P["cream"])
-
-    def note(c):
-        c.ellipse(5, 12, 2.5, 2, P["purple2"])
-        c.vline(7, 3, 12, P["purple2"])
-        c.rect(7, 3, 5, 2, P["purple2"])
-        c.vline(11, 3, 8, P["purple2"])
-
-    def mask(c):
-        # Demi-masque d'Arlequin : losanges rouges et verts, yeux découpés, ruban doré
-        c.ellipse(8, 7, 6.5, 4.5, P["velvet3"])
-        for (x, y) in [(4, 5), (8, 4), (12, 5), (6, 9), (10, 9)]:
-            c.set(x, y, P["green1"])
-            c.set(x + 1, y, P["green1"])
-        c.ellipse(5, 7, 1.8, 1.2, P["ink"])
-        c.ellipse(11, 7, 1.8, 1.2, P["ink"])
-        c.set(8, 10, P["ink"])
-        c.hline(0, 1, 6, P["gold2"])
-        c.hline(14, 15, 6, P["gold2"])
-
-    def quill(c):
-        c.line(3, 14, 12, 2, P["grey1"])
-        for i in range(7):
-            c.hline(6 + i // 2, 11, 3 + i, P["white"])
-
-    def staff(c):
-        c.rect(7, 1, 3, 14, P["wood2"])
-        c.rect(6, 1, 5, 2, P["gold2"])
-        c.rect(6, 13, 5, 2, P["velvet3"])
-
-    def key(c):
-        c.ellipse(5, 6, 3.5, 3.5, P["gold2"])
-        c.ellipse(5, 6, 1.5, 1.5, P["ink"])
-        c.hline(8, 14, 6, P["gold2"])
-        c.vline(12, 6, 9, P["gold2"])
-        c.vline(14, 6, 8, P["gold2"])
-
-    def statue(c):
-        c.rect(4, 12, 8, 3, P["grey2"])
-        c.ellipse(8, 4, 2.5, 2.5, P["teal"])
-        c.rect(6, 6, 4, 6, P["teal"])
-
-    def card(c):
-        c.rect(1, 3, 14, 10, P["cream"])
-        c.rect(2, 4, 4, 5, P["sky"])
-        for y in (5, 7, 9, 11):
-            c.hline(7, 13, y, P["grey1"])
-
-    def rope(c):
-        for i in range(12):
-            c.rect(3 + (i % 2) * 2 + i // 2, 2 + i, 3, 1, P["wood3"] if i % 2 else P["wood4"])
-        c.ellipse(11, 12, 3, 2, P["wood3"])
-    return {n: ic(f) for n, f in [("ticket", ticket), ("programme", programme), ("scroll", scroll), ("notebook", notebook),
-                                  ("note", note), ("mask", mask), ("quill", quill), ("staff", staff), ("key", key),
-                                  ("statue", statue), ("card", card), ("rope", rope)]}
-
-
 def fx_assets():
     out = {}
     leaf = Canvas(5, 4)
@@ -1468,8 +1444,6 @@ def fx_assets():
                 sp.set(5 + d, 5 + d, P["light"])
                 sp.set(5 + d, 5 - d, P["light"])
         out["sparkle_%d" % f] = sp
-    for name, canvas in treasure_icons().items():
-        out["tresor_" + name] = canvas
 
     shadow = Canvas(14, 5)
     shadow.ellipse(7, 2.5, 6, 2, P["ink"], 110)
@@ -1489,7 +1463,7 @@ def generate(root, out_dir):
     import city
     meta["variants"]["rue"] = SEASONS
     meta["poster_slots"]["rue"] = city.generate(root, maps_dir)
-    for map_id in ("hall", "salle", "coulisses", "bureau"):
+    for map_id in ("hall", "salle", "coulisses", "bureau", "reserve"):
         base, top = interior(world, map_id)
         if map_id == "bureau":
             for season in SEASONS:

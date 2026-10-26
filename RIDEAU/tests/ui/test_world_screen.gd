@@ -10,13 +10,13 @@ func before_test() -> void:
 	Game.saves.delete()
 	Settings.values["show_tutorial"] = false
 	Settings.values["reduce_motion"] = true
-	Game.album = Album.new("user://test_world_album.json")
-	Game.album.reset()
+	Game.collection = Collection.new("user://test_world_collection.json", "")
+	Game.collection.reset()
 
 
 func after_test() -> void:
-	Game.album.reset()
-	Game.album = Album.new()
+	Game.collection.reset()
+	Game.collection = Collection.new()
 	Game.saves.delete()
 	Game.saves = SaveSystem.new()
 	Game.session = null
@@ -355,50 +355,120 @@ func test_journal_tabs_and_season_report() -> void:
 	assert_str(report).contains("Questions pour le débriefing")
 
 
-func test_album_cards_from_talking_examining_and_treasures() -> void:
-	var s := _new_session(6)
+
+
+func _finish_speech(runner: GdUnitSceneRunner, screen: WorldScreen) -> void:
+	for i in 12:
+		await runner.simulate_frames(4)
+		if not screen.speech.visible and not screen._busy:
+			return
+		if screen.speech.visible:
+			await _answer(runner, screen, 0)
+
+
+func test_collection_talk_pickup_and_discovery() -> void:
+	_new_session(6)
 	var runner := scene_runner(WORLD)
 	await runner.simulate_frames(10)
 	var screen := runner.scene() as WorldScreen
-	# Parler à quelqu'un : sa carte rejoint l'album et une vignette s'affiche.
+	# Une rencontre : la touriste offre sa miniature, une vignette apparaît.
 	screen.load_map("rue", Vector2i(51, 31), "down")
 	await runner.simulate_frames(5)
-	screen.talk_to(screen.npcs["principale"])
-	await runner.simulate_frames(3)
-	assert_bool(Game.album.has("p_principale")).is_true()
+	screen.talk_to(screen.npcs["touriste"])
+	await _finish_speech(runner, screen)
+	assert_bool(Game.collection.has("miniature_lanterne")).is_true()
 	assert_bool(screen.hud._card_pop.visible).is_true()
-	while screen.speech.visible:
-		await _answer(runner, screen, 0)
-	await _wait(runner, func() -> bool: return not screen._busy)
-	# Examiner un lieu.
-	screen.use_spot(screen.map.spot("cinema"))
-	await runner.simulate_frames(3)
-	assert_bool(Game.album.has("l_cinema")).is_true()
-	while screen.speech.visible:
-		await _answer(runner, screen, 0)
-	await _wait(runner, func() -> bool: return not screen._busy)
-	# Marcher sur l'étincelle d'un trésor le ramasse, et elle disparaît.
-	var t: Dictionary = Game.album.hidden_treasures("rue")[0]
-	var cell: Vector2i = t["cell"]
-	assert_bool(screen._treasures.has(cell)).is_true()
-	var start := cell + Vector2i(0, 1) if screen.map.is_walkable(cell + Vector2i(0, 1)) else cell + Vector2i(0, -1)
-	screen.load_map("rue", start, "up")
+	# Un objet posé au sol dans le hall : on le ramasse face à lui, une seule fois.
+	screen.load_map("hall", Vector2i(2, 10), "down")
 	await runner.simulate_frames(5)
-	screen._walk_then([cell], Callable())
-	assert_bool(await _wait(runner, func() -> bool: return Game.album.has(str(t["id"])))).is_true()
-	assert_bool(screen._treasures.has(cell)).is_false()
-	# Les spectacles joués rejoignent les affiches à la sauvegarde.
-	s.state.played_shows.append(str(data_show(s)))
-	Game.autosave()
-	assert_bool(Game.album.has("a_" + data_show(s))).is_true()
-	# L'album s'ouvre, avec ses onglets, puis se referme.
-	screen.open_album()
+	assert_bool(screen._pickups.has(Vector2i(2, 11))).is_true()
+	screen.interact()
+	await runner.simulate_frames(5)
+	assert_bool(Game.collection.has("talkie")).is_true()
+	assert_bool(screen._pickups.has(Vector2i(2, 11))).is_false()
+	assert_int(Game.collection.count()).is_equal(2)
+	screen.load_map("hall", Vector2i(2, 10), "down")
+	await runner.simulate_frames(5)
+	assert_bool(screen._pickups.has(Vector2i(2, 11))).override_failure_message("Un objet ramassé ne réapparaît pas").is_false()
+	# La collection s'ouvre et se referme.
+	screen.open_collection()
 	await runner.simulate_frames(3)
 	assert_int(screen.overlay.get_child_count()).is_equal(1)
 	(screen.overlay.get_child(0) as Modal).close_modal()
 	await runner.simulate_frames(3)
-	assert_array(Game.album.unseen).is_empty()
+	assert_array(Game.collection.unseen).is_empty()
 
 
-func data_show(s: GameSession) -> String:
-	return str(s.data.shows.keys()[0])
+func test_archives_quest_through_the_locked_storeroom() -> void:
+	_new_session(7)
+	var runner := scene_runner(WORLD)
+	await runner.simulate_frames(10)
+	var screen := runner.scene() as WorldScreen
+	# Sans la clé, la porte de la réserve reste fermée.
+	screen.load_map("coulisses", Vector2i(9, 10), "down")
+	await runner.simulate_frames(5)
+	screen._try_step("down")
+	await runner.simulate_frames(20)
+	assert_str(screen.map.id).is_equal("coulisses")
+	assert_str(screen.hud._toast_text.text).contains("fermée à clé")
+	# Fernand confie la clé : l'enquête commence (bulle « ? » au-dessus de lui).
+	screen.load_map("rue", Vector2i(63, 32), "up")
+	await runner.simulate_frames(5)
+	assert_str(screen.npcs["fernand"].bubble).is_equal("question")
+	screen.talk_to(screen.npcs["fernand"])
+	await _finish_speech(runner, screen)
+	assert_bool(Game.collection.known_clues.has("cle_reserve")).is_true()
+	# La porte s'ouvre désormais.
+	screen.load_map("coulisses", Vector2i(9, 10), "down")
+	await runner.simulate_frames(5)
+	screen._try_step("down")
+	assert_bool(await _wait(runner, func() -> bool: return screen.map.id == "reserve" and not screen._busy)).is_true()
+	assert_int(int(Game.collection.quest_steps["archives_oubliees"])).is_equal(2)
+	# L'armoire des archives, puis retour chez Fernand.
+	screen.use_spot(screen.map.spot("armoire_archives"))
+	await _finish_speech(runner, screen)
+	screen.load_map("rue", Vector2i(63, 32), "up")
+	await runner.simulate_frames(5)
+	screen.talk_to(screen.npcs["fernand"])
+	await _finish_speech(runner, screen)
+	assert_bool(await _wait(runner, func() -> bool: return not screen._showing_collection, 300)).is_true()
+	assert_bool(Game.collection.has("affiche_1924")).is_true()
+	assert_str(Game.collection.quest_status("archives_oubliees")).is_equal("done")
+
+
+func test_the_lost_lantern_only_on_a_show_night() -> void:
+	var s := _new_session(8)
+	var runner := scene_runner(WORLD)
+	await runner.simulate_frames(10)
+	var screen := runner.scene() as WorldScreen
+	Game.collection.quest_steps["representation_perdue"] = 4
+	screen.load_map("salle", Vector2i(10, 5), "up")
+	await runner.simulate_frames(5)
+	screen.interact()
+	await _finish_speech(runner, screen)
+	assert_bool(Game.collection.has("lanterne_ondine")).is_false()
+	s.state.phase = GameState.PHASE_REPORT
+	screen.interact()
+	await _finish_speech(runner, screen)
+	assert_bool(await _wait(runner, func() -> bool: return Game.collection.has("lanterne_ondine"), 100)).is_true()
+	assert_bool(await _wait(runner, func() -> bool: return not screen._showing_collection, 400)).is_true()
+
+
+func test_exhibited_objects_appear_in_the_hall() -> void:
+	_new_session(9)
+	var runner := scene_runner(WORLD)
+	await runner.simulate_frames(10)
+	var screen := runner.scene() as WorldScreen
+	for id: String in ["talkie", "masque_arlequin"]:
+		Game.collection.owned[id] = Game.collection.owned.size() + 1
+		Game.collection.set_exhibited(id, true)
+	screen.load_map("hall", Vector2i(4, 10), "up")
+	await runner.simulate_frames(5)
+	var shown := 0
+	for n in screen._map_root.get_children():
+		if n is Sprite2D and (n as Sprite2D).texture == CollectionPanel.icon(Game.collection.object("talkie")):
+			shown += 1
+	assert_int(shown).is_equal(1)
+	screen.interact()
+	await runner.simulate_frames(3)
+	assert_int(screen.overlay.get_child_count()).override_failure_message("Les vitrines ouvrent l'exposition").is_equal(1)

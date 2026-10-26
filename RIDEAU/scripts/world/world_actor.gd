@@ -17,6 +17,7 @@ var facing := "down"
 var moving := false
 var step_time := 0.18
 var home := Vector2i.ZERO
+var bubble := ""            ## bulle affichée ("" si aucune)
 var radius := 0
 var wander_wait := 0.0
 
@@ -106,6 +107,7 @@ func step_to(c: Vector2i) -> void:
 
 
 func set_bubble(kind: String) -> void:
+	bubble = kind
 	if kind == "":
 		_bubble.visible = false
 		return

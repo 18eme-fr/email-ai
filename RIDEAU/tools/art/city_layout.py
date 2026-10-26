@@ -311,6 +311,7 @@ def build():
         ("maraichere", 39, 38, 1), ("musicien", 18, 30, 1), ("bibliothecaire", 38, 54, 2), ("pecheur", 96, 13, 0),
         ("footballeur_1", 66, 62, 3), ("footballeur_2", 72, 64, 3), ("jardiniere", 40, 74, 2), ("libraire", 87, 41, 1),
         ("projectionniste", 90, 30, 1), ("enfant_1", 6, 47, 2), ("enfant_2", 54, 75, 2), ("touriste", 54, 37, 3),
+        ("fernand", 63, 31, 1), ("collectionneur", 92, 9, 1),
     ]:
         c.npc(nid, x, y, rad)
     # Aucun mobilier (arbre, lampadaire, poubelle) au débouché d'un passage piéton.

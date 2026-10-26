@@ -86,19 +86,31 @@ func _do_action(action: String) -> void:
 			scene.open_journal()
 		"plan":
 			scene.open_city_plan()
-		"album":
-			scene.open_album()
-		"albumdemo":
-			# Album partiellement rempli, pour la capture (profil de capture séparé).
-			var album = load("res://scripts/progression/album.gd").new("user://capture_album.json")
-			album.reset()
-			for c in album.cards.slice(0, 40):
-				album.collect(c["id"])
-			album.set_outfit("festival")
-			root.get_node("Game").album = album
+		"collection":
+			scene.open_collection()
+		"coldemo":
+			# Collection partiellement remplie, pour la capture (profil de capture séparé).
+			var col = load("res://scripts/progression/collection.gd").new("user://capture_collection.json", "")
+			col.reset()
+			for o in col.objects.slice(0, 23):
+				col.owned[o["id"]] = col.owned.size() + 1
+			col.known_clues["cle_reserve"] = true
+			col.known_clues["troupe_vasseur"] = true
+			col.quest_steps["archives_oubliees"] = 4
+			col.quest_steps["restauration"] = 2
+			for id in ["programme_1987", "billet_avignon", "masque_arlequin", "eventail_diva"]:
+				col.exhibit.append(id)
+			col.outfit = "festival"
+			col.save_profile()
+			root.get_node("Game").collection = col
 			scene._reload_here()
-		"cardpop":
-			root.get_node("Game").collect_card("t_masque")
+		"discover":
+			var game = root.get_node("Game")
+			game.collection.owned.erase("affiche_1924")
+			game.collection_event([{"kind": "object", "id": "affiche_1924", "object": game.collection.object("affiche_1924"), "text": ""}])
+		"discoverc":
+			var game = root.get_node("Game")
+			game.collection_event([{"kind": "object", "id": "gelatine_ambre", "object": game.collection.object("gelatine_ambre"), "text": ""}])
 		"case":
 			load("res://scripts/ui/case_study.gd").open(scene.overlay, root.get_node("Game").session)
 		"dossier":

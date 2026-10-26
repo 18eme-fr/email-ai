@@ -71,14 +71,34 @@ Les grilles servent à la fois aux collisions (jeu) et au dessin (`tools/art/wor
 après modification, relancer `python3 tools/art/generate_art.py`. Les tests
 `tests/world/test_world.gd` vérifient que tout reste accessible à pied.
 
-## `data/progression/album.json` — album de collection
+## `data/progression/collection.json` — collection permanente (50 objets)
 
-`categories` (`id`, `label`, `hint` = indice pour les cartes manquantes), `outfits` (tenues :
-`id`, `label`, `sprite`, `cards_min` ou `tresors_min`), `cards` : `id` (préfixe `p_` personne,
-`l_` lieu, `a_` affiche, `t_` trésor), `category`, `title`, `text` (140 caractères au plus),
-`rarity` (commune, rare, legendaire) ; selon la catégorie `sprite`, `map` + `cell` + `keys`
-(clés de spots qui donnent la carte), `show`, ou `icon` + `map` + `cell` (case du trésor caché).
-La collection du joueur est enregistrée à part, dans `user://album.json` (classe `Album`).
+Registre lisible : `docs/COLLECTION.md`, régénéré et vérifié (quotas) par
+`python3 tools/collection_registry.py`. Classe : `Collection` (`scripts/progression/collection.gd`).
+
+- `families`, `rarities` (`id`, `label`, `color`), `methods` (libellé et premier indice de chaque mode),
+  `exhibit_slots` (places dans les vitrines du hall), `rewards` (`id`, `kind` ∈ outfit, decor, title,
+  `label`, `sprite` pour une tenue, `when` : `{"total": n}` ou `{"family": id}`).
+- `objects` : `id`, `family`, `rarity`, `name`, `description`, `icon` (`assets/collection/<icon>.png`,
+  dessinée par `tools/art/collection_art.py`), `method`, `trigger`, `requires` (facultatif), `say`
+  (réplique au moment du don), `gives_clue`, `hint2`, `hint3`, `alternative`, `exhibit`.
+- `trigger.type` : `pickup` (`map`, `cell` : objet posé, visible seulement si `requires` est rempli),
+  `examine` (`spot` : clé du spot), `talk` (`person` : clé de répliques), `search` (`map`, `cell` :
+  cachette, devant le joueur ou sous ses pieds), `visit` (`map`, pour les enquêtes), `state` (`when` :
+  conditions vérifiées après chaque étape de la partie), `quest` (récompense d'une enquête).
+- Conditions (`requires`, `when`) : `min_turn`, `rules` (format `Rules.check`), `metric_min`,
+  `mission_done`, `upgrade`, `achievement`, `event_choice` (`event`, `choices`), `dossier_min`
+  (`dossier`, `score`, entraînement compris), `played_min`, `evening`, `owned`, `owned_min`, `clues`,
+  `exhibit_min`, `any` (liste d'alternatives).
+- `quests` : `id`, `title`, `giver`, `reward`, `requires`, `steps` (`text`, `trigger`, `requires`,
+  `tease` = ce que dit la personne s'il manque quelque chose, `say`, `gives_clue`).
+- `clues` (`title`, `text`) et `clue_sources` (`clue`, `trigger`, `requires`, `say`).
+- `migrate_album` : correspondance des anciens trésors de l'album 0.13.
+
+Le profil du joueur (`user://collection.json`) garde les objets, indices, étapes d'enquêtes, indices
+précis révélés, objets exposés et la tenue. Dans `world.json`, une porte peut demander un indice
+(`requires_clue`, `locked`), une personne peut n'arriver que plus tard (`requires`, format
+`Rules.check`) et un spot de type `exhibit` ouvre l'exposition.
 
 ## `data/world/barks.json` — répliques
 

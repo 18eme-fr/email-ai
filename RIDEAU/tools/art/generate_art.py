@@ -84,6 +84,8 @@ def main() -> None:
     # Monde explorable (importé en dernier : il complète la petite police de theatre.py).
     import world  # noqa: E402
     world.generate(ROOT, os.path.join(a, "world"))
+    import collection_art  # noqa: E402
+    collection_art.generate(os.path.join(a, "collection"))
     print("Images générées dans", a)
 
 

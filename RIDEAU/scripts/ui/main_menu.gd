@@ -13,12 +13,12 @@ func _ready() -> void:
 	_continue.pressed.connect(_on_continue)
 	buttons.get_node("Settings").pressed.connect(func() -> void: SettingsPanel.open(_overlay))
 	buttons.get_node("Credits").pressed.connect(_on_credits)
-	# Album de collection : il se remplit de partie en partie.
-	var album := UiKit.button("Album de Bréval — %d / %d" % [Game.album.count(), Game.album.total()], "SecondaryButton")
-	album.name = "Album"
-	album.pressed.connect(func() -> void: AlbumPanel.open(_overlay, Game.album))
-	buttons.add_child(album)
-	buttons.move_child(album, _continue.get_index() + 1)
+	# Collection permanente : elle se remplit de partie en partie.
+	var col := UiKit.button("Collection — %d / %d" % [Game.collection.count(), Game.collection.total()], "SecondaryButton")
+	col.name = "Collection"
+	col.pressed.connect(func() -> void: CollectionPanel.open(_overlay, Game.collection, null))
+	buttons.add_child(col)
+	buttons.move_child(col, _continue.get_index() + 1)
 	var quit := buttons.get_node("Quit") as Button
 	quit.pressed.connect(func() -> void: get_tree().quit())
 	quit.visible = not OS.has_feature("web")

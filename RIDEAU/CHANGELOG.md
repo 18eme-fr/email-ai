@@ -2,6 +2,37 @@
 
 Format inspiré de « Keep a Changelog ». Versions du jeu (`application/config/version`).
 
+## [0.14.0] — 2026-10-26 — La collection de la Lanterne
+
+### Ajouté
+- **Collection permanente de 50 objets** en 5 familles de 10 (archives, costumes et accessoires,
+  décors et scénographie, trésors techniques, légendes du spectacle vivant), 5 raretés (20 communs,
+  15 peu communs, 10 rares, 4 légendaires, 1 mythique) et 6 modes d'obtention (14 exploration,
+  12 missions, 8 rencontres, 6 énigmes et secrets, 5 développement du théâtre, 5 événements).
+  Catalogue central `data/progression/collection.json`, registre `docs/COLLECTION.md` généré et
+  vérifié par `tools/collection_registry.py`, 50 illustrations originales.
+- **5 enquêtes** sans échéance : « Les archives oubliées », « La restauration », « Le collectionneur
+  mystérieux », « Le rideau d'origine », « La représentation perdue » (objet mythique).
+- **Une réserve secrète** sous les coulisses, fermée à clé jusqu'à l'enquête de Fernand.
+- **Deux personnages** : Fernand, ancien régisseur (enquête, un indice précis par période) et le
+  collectionneur (à partir de la 3ᵉ période).
+- **Secrets** : cachettes qui ne livrent rien sans l'indice qui y mène ; énigme du poète en trois
+  lieux ; trappe du plateau qui ne s'ouvre qu'un soir de spectacle.
+- **Indices progressifs** (3 niveaux), **carnet d'indices**, enquêtes dans le panneau des missions,
+  bulle « ? » au-dessus des personnes qui ont du nouveau, bulle « ! » près d'un objet à ramasser.
+- **Découvertes** : vignette pour les objets communs, présentation au centre pour les rares,
+  légendaires et le mythique.
+- **Exposition** : 6 places dans les vitrines du hall (à la place des banquettes).
+- **Récompenses décoratives** : tenues (5 et 20 objets, chaque famille complète), guirlande de
+  lanternes dans le hall (10), distinctions (25 et 50).
+- Les décisions d'événement sont désormais notées avec leur identifiant (anciennes sauvegardes
+  compatibles : les objets liés ont une seconde voie d'obtention).
+
+### Modifié
+- L'album de cartes de la 0.13 est remplacé par la collection (limite de 50 objets demandée) ; les
+  deux anciens trésors qui existent encore (masque d'Arlequin, billet d'Avignon) sont repris
+  automatiquement.
+
 ## [0.13.0] — 2026-10-26 — L'Album de Bréval : collectionner, revenir
 
 ### Ajouté

@@ -127,6 +127,10 @@
     {"who": "touriste", "text": "Quelle jolie ville ! Il y a quelque chose à voir ce soir ? Je ne suis là que pour deux jours.", "when": {}},
     {"who": "touriste", "text": "J'ai trouvé votre théâtre sur l'office de tourisme. Le rayonnement, ça passe aussi par là !", "when": {"stat_min": {"rayonnement": 55}}},
     {"who": "passant", "text": "Les Coteaux, le centre-ville… On dirait deux villes différentes. Le théâtre pourrait faire le lien.", "when": {}},
-    {"who": "passant", "text": "Le bus pour les Coteaux passe toutes les vingt minutes. Pratique pour venir au spectacle.", "when": {}}
+    {"who": "passant", "text": "Le bus pour les Coteaux passe toutes les vingt minutes. Pratique pour venir au spectacle.", "when": {}},
+    {"who": "armoire_archives", "text": "Une armoire bourrée de programmes, de factures et de lettres. Des décennies de théâtre en papier.", "when": {}},
+    {"who": "projecteur_casse", "text": "Un vieux projecteur cabossé. Avec un peu de soin, il pourrait renaître.", "when": {}},
+    {"who": "fernand", "text": "Quarante ans de régie, ça laisse des souvenirs dans chaque recoin du théâtre.", "when": {}},
+    {"who": "collectionneur", "text": "Je ne collectionne que ce qui a une histoire. Le reste n'est que de la brocante.", "when": {}}
   ]
 }

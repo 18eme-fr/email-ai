@@ -205,6 +205,14 @@
   "N": {
    "name": "kiosque",
    "walk": false
+  },
+  "U": {
+   "name": "vitrine",
+   "walk": false
+  },
+  "q": {
+   "name": "vieux projecteur",
+   "walk": false
   }
  },
  "start": {
@@ -1265,6 +1273,22 @@
       37
      ],
      "radius": 3
+    },
+    {
+     "id": "fernand",
+     "cell": [
+      63,
+      31
+     ],
+     "radius": 1
+    },
+    {
+     "id": "collectionneur",
+     "cell": [
+      92,
+      9
+     ],
+     "radius": 1
     }
    ],
    "ground": [
@@ -2012,7 +2036,7 @@
     "#........,,,,........S",
     "#........,,,,........S",
     "#........,,,,........#",
-    "#..BB....,,,,....BB..#",
+    "#..UUU...,,,,....UUU.#",
     "#........,,,,........#",
     "#........,,,,........#",
     "#o.....n.,,,,.......o#",
@@ -2191,6 +2215,37 @@
      ],
      "label": "Affiches de la période",
      "kind": "posters"
+    },
+    {
+     "id": "vitrines",
+     "cells": [
+      [
+       3,
+       9
+      ],
+      [
+       4,
+       9
+      ],
+      [
+       5,
+       9
+      ],
+      [
+       17,
+       9
+      ],
+      [
+       18,
+       9
+      ],
+      [
+       19,
+       9
+      ]
+     ],
+     "label": "Vitrines de la collection",
+     "kind": "exhibit"
     }
    ],
    "npcs": [
@@ -2376,7 +2431,7 @@
     "#.RR..........xx.#",
     "#..............x.#",
     "#o...............#",
-    "##################"
+    "#########D########"
    ],
    "doors": [
     {
@@ -2390,6 +2445,20 @@
       4
      ],
      "facing": "right"
+    },
+    {
+     "cell": [
+      9,
+      11
+     ],
+     "to": "reserve",
+     "to_cell": [
+      7,
+      2
+     ],
+     "facing": "down",
+     "requires_clue": "cle_reserve",
+     "locked": "La porte de la réserve est fermée à clé. Fernand, l'ancien régisseur, en garde la clé : on le croise près du Café des Artistes."
     }
    ],
    "spots": [
@@ -2580,6 +2649,77 @@
      "radius": 1
     }
    ]
+  },
+  "reserve": {
+   "name": "Réserve des coulisses",
+   "outdoor": false,
+   "grid": [
+    "################",
+    "#######D########",
+    "#bbbb...kk..ww.#",
+    "#..............#",
+    "#..x...........#",
+    "#..x...........#",
+    "#......qq......#",
+    "#..........xx..#",
+    "#RR............#",
+    "################"
+   ],
+   "doors": [
+    {
+     "cell": [
+      7,
+      1
+     ],
+     "to": "coulisses",
+     "to_cell": [
+      9,
+      10
+     ],
+     "facing": "up"
+    }
+   ],
+   "spots": [
+    {
+     "id": "armoire_archives",
+     "cells": [
+      [
+       1,
+       2
+      ],
+      [
+       2,
+       2
+      ],
+      [
+       3,
+       2
+      ],
+      [
+       4,
+       2
+      ]
+     ],
+     "label": "Armoire des archives",
+     "kind": "flavor"
+    },
+    {
+     "id": "projecteur_casse",
+     "cells": [
+      [
+       7,
+       6
+      ],
+      [
+       8,
+       6
+      ]
+     ],
+     "label": "Vieux projecteur",
+     "kind": "flavor"
+    }
+   ],
+   "npcs": []
   }
  },
  "people": {
@@ -2756,6 +2896,19 @@
    "sprite": "touriste",
    "name": "Touriste",
    "home": "rue"
+  },
+  "fernand": {
+   "sprite": "fernand",
+   "name": "Fernand, ancien régisseur",
+   "home": "rue"
+  },
+  "collectionneur": {
+   "sprite": "collectionneur",
+   "name": "Le collectionneur",
+   "home": "rue",
+   "requires": {
+    "min_turn": 3
+   }
   }
  },
  "seasons": {

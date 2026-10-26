@@ -12,7 +12,7 @@ func before() -> void:
 
 
 func test_maps_are_rectangular_and_use_the_legend() -> void:
-	assert_int(world.maps.size()).is_equal(5)
+	assert_int(world.maps.size()).is_equal(6)
 	for id: String in world.maps:
 		var m: WorldMap = world.maps[id]
 		for y in m.size.y:

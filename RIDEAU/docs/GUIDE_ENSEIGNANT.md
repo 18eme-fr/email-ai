@@ -46,10 +46,11 @@ que la rentabilité ») ne réussit.
   réponse est corrigée avec son calcul. Mode **entraînement** sans enjeu dans le journal de bord.
 - **Compétences** (gestion financière, programmation, publics, partenariats, technique) : elles
   progressent avec les missions et les dossiers et débloquent des avantages.
-- **Album de Bréval** : 95 cartes d'une phrase (habitants, lieux culturels, spectacles, trésors
-  d'histoire du théâtre et des politiques culturelles) qui se collectionnent d'une partie à
-  l'autre. Il peut servir de point de départ à un exercice (« choisissez trois cartes et
-  développez »), mais il n'entre pas dans l'évaluation du jeu.
+- **Collection de la Lanterne** : 50 objets d'histoire du spectacle (Vilar et Avignon, le TNP,
+  Malraux, la décentralisation, la commedia dell'arte, les métiers disparus comme le souffleur…)
+  gardés d'une partie à l'autre. Elle peut servir de point de départ à un exercice (« choisissez
+  trois objets et développez »), mais elle n'entre pas dans l'évaluation du jeu et ne change
+  jamais la gestion. La collection est enregistrée dans le navigateur ou l'ordinateur utilisé.
 - **Trophées** : douze objectifs facultatifs (salle comble, sans faute, jamais dans le rouge…).
 - **Bilans expliqués** à chaque période : résultat ≠ trésorerie, « pourquoi ces résultats ? ».
 

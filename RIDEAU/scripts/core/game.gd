@@ -6,8 +6,8 @@ extends Node
 signal state_changed
 signal phase_changed(phase: String)
 signal notice(message: String, kind: String)
-## Nouvelle carte d'album (et tenue éventuellement débloquée, {} sinon).
-signal card_collected(card: Dictionary, outfit: Dictionary)
+## Résultats de la collection à montrer (objets, indices, étapes d'enquête, récompenses).
+signal collection_results(results: Array)
 
 const MAIN_MENU := "res://scenes/menus/main_menu.tscn"
 const MANAGEMENT := "res://scenes/management/management_screen.tscn"
@@ -18,8 +18,8 @@ var session: GameSession = null
 ## Message à afficher par le prochain écran (ex. restauration depuis la copie de secours).
 var pending_notice := ""
 var saves := SaveSystem.new()
-## Album de collection, commun à toutes les parties (user://album.json).
-var album := Album.new()
+## Collection permanente, commune à toutes les parties (user://collection.json).
+var collection := Collection.new()
 var data: GameData:
 	get:
 		return GameData.get_default()
@@ -43,15 +43,17 @@ func _smoke_test() -> void:
 	print("[autotest] dialogue : ", line.text if line else "INTROUVABLE")
 	ok = ok and line != null
 	var world_data := WorldData.get_default()
-	var world_ok := world_data.maps.size() == 5 and load("res://assets/world/maps/rue_hiver_base.png") != null \
+	var world_ok := world_data.maps.size() == 6 and load("res://assets/world/maps/rue_hiver_base.png") != null \
 			and load("res://assets/world/people/directeur.png") != null and load(WORLD) != null
 	print("[autotest] monde : %d cartes, %d répliques, images et scène %s" % [world_data.maps.size(), world_data.barks.size(), "OK" if world_ok else "MANQUANTES"])
 	ok = ok and world_ok
-	var album_test := Album.new("user://autotest_album.json")
-	var album_ok := album_test.total() >= 90 and not album_test.collect("t_masque").is_empty() and load("res://assets/world/fx/tresor_mask.png") != null
-	album_test.reset()
-	print("[autotest] album : %d cartes, %s" % [album_test.total(), "OK" if album_ok else "ÉCHEC"])
-	ok = ok and album_ok
+	var col := Collection.new("user://autotest_collection.json", "")
+	col.reset()
+	var col_ok := col.total() == 50 and not col.on_talk(null, "touriste").is_empty() and col.has("miniature_lanterne") \
+			and load("res://assets/collection/miniature.png") != null
+	col.reset()
+	print("[autotest] collection : %d objets, %s" % [col.total(), "OK" if col_ok else "ÉCHEC"])
+	ok = ok and col_ok
 	var s := GameSession.new(d)
 	s.new_game(2024, "standard")
 	StrategyBot.new("equilibre", 2024).play_season(s)
@@ -103,27 +105,23 @@ func play_scene() -> String:
 func autosave() -> void:
 	if not has_game():
 		return
-	sync_album()
+	sync_collection()
 	var result := saves.save(session.state)
 	if result["status"] != SaveSystem.Status.OK:
 		notice.emit(str(result["message"]), "error")
 
 
-## Ajoute une carte à l'album et prévient l'écran si elle est nouvelle.
-func collect_card(id: String) -> bool:
-	var c := album.collect(id)
-	if c.is_empty():
-		return false
-	card_collected.emit(c, album.outfit_just_unlocked())
-	return true
+## Transmet à l'écran ce que la collection vient de produire.
+func collection_event(results: Array) -> Array:
+	if not results.is_empty():
+		collection_results.emit(results)
+	return results
 
 
-## Les spectacles programmés rejoignent la collection d'affiches.
-func sync_album() -> void:
-	if not has_game():
-		return
-	for show_id: String in session.state.played_shows:
-		collect_card(album.card_for("affiches", show_id))
+## Vérifie la partie (missions, rénovations, événements, trophées) après chaque étape.
+func sync_collection() -> void:
+	if has_game():
+		collection_event(collection.check_state(session))
 
 
 func go_to_menu() -> void:

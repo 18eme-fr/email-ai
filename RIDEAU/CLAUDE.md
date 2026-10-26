@@ -38,6 +38,11 @@ Contexte pour les prochaines sessions (humaines ou Claude Code).
   joueur par `state.notices` (lus avec `GameSession.take_notices()`). Un dossier doit rester
   généré à partir de la partie et corrigé avec une explication par question
   (`tests/progression` vérifie que la réponse parfaite vaut 100 %).
+- **Collection** (`scripts/progression/collection.gd`, `data/progression/collection.json`) : profil
+  permanent `user://collection.json`, hors sauvegarde de partie. Toute acquisition passe par
+  `Collection.on_*` ou `check_state` (jamais par l'interface) et ne donne aucun avantage de gestion.
+  Après modification du catalogue : `python3 tools/collection_registry.py` (quotas + registre
+  `docs/COLLECTION.md`) et les tests `tests/progression/test_collection.gd`.
 - Interface : construire avec `UiKit` (thème `assets/ui/rideau_theme.tres`, variations
   `WoodPanel`, `PaperPanel`, `InsetPanel`, `GoldButton`, `SecondaryButton`, `FlatButton`,
   `HeaderLabel`, `SmallLabel`…). Les textes à la ligne utilisent `UiKit.label(..., wrap=true)`.

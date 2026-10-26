@@ -54,7 +54,9 @@ var _water_frames: Array[Texture2D] = []
 var _water_time := 0.0
 var _weather: CPUParticles2D
 var _district := ""                ## quartier de la ville où se trouve le joueur
-var _treasures: Dictionary = {}    ## case -> {id, sprite} : trésors de l'album cachés sur cette carte
+var _pickups: Dictionary = {}      ## case -> {id, nodes} : objets de collection posés sur cette carte
+var _collection_queue: Array = []  ## résultats de collection en attente d'affichage
+var _showing_collection := false
 
 
 func _ready() -> void:
@@ -72,7 +74,7 @@ func _ready() -> void:
 	var start := world.start
 	load_map(str(start["map"]), WorldMap.to_cell(start["cell"]), str(start["facing"]))
 	Game.notice.connect(toast)
-	Game.card_collected.connect(_on_card_collected)
+	Game.collection_results.connect(_on_collection_results)
 	AudioDirector.play_music("foyer")
 	refresh_all()
 	var pending := Game.take_pending_notice()
@@ -105,7 +107,7 @@ func _build() -> void:
 	hud.reports_pressed.connect(func() -> void: ReportsHistory.open(overlay, session))
 	hud.journal_pressed.connect(open_journal)
 	hud.plan_pressed.connect(open_city_plan)
-	hud.album_pressed.connect(open_album)
+	hud.album_pressed.connect(open_collection)
 	root.add_child(hud)
 	speech = SpeechBox.new()
 	speech.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
@@ -179,12 +181,12 @@ func load_map(map_id: String, cell: Vector2i, facing: String) -> void:
 	_actors = Node2D.new()
 	_actors.y_sort_enabled = true
 	_map_root.add_child(_actors)
-	player = WorldActor.new().setup("joueur", Game.album.outfit_sprite(), cell, facing)
+	player = WorldActor.new().setup("joueur", Game.collection.outfit_sprite(), cell, facing)
 	player.step_time = 0.16
 	_actors.add_child(player)
 	_spawn_people()
 	_add_fauna(season)
-	_add_treasures()
+	_add_collection_items()
 	var top_path := MAPS_DIR + ("%s_%s_top.png" % [map_id, "hiver_fetes" if festive and season == "hiver" else season] if season in variants and map_id == "rue" else "%s_top.png" % map_id)
 	_top = _sprite(_texture(top_path), 20)
 	_map_root.add_child(_top)
@@ -203,6 +205,8 @@ func load_map(map_id: String, cell: Vector2i, facing: String) -> void:
 	_district = ""
 	_update_district(false)
 	refresh_all()
+	_update_pickup_prompts()
+	Game.collection_event(Game.collection.on_enter_map(session, map_id))
 
 
 func _add_water(map_id: String, season: String) -> void:
@@ -248,44 +252,154 @@ func _add_fauna(season: String) -> void:
 		_critter(pigeon, area, 2.5, -6)
 
 
-## Étincelles des trésors de l'album pas encore trouvés.
-func _add_treasures() -> void:
-	_treasures.clear()
-	var frames: Array[Texture2D] = [_texture("res://assets/world/fx/sparkle_0.png"), _texture("res://assets/world/fx/sparkle_1.png")]
-	if frames[0] == null:
-		return
-	for t: Dictionary in Game.album.hidden_treasures(map.id):
-		var c: Vector2i = t["cell"]
-		var s := _sprite(frames[0], -6)
-		s.position = Vector2(c.x * T + 2.5, c.y * T + 2.5)
+## Objets de la collection visibles sur cette carte (posés au sol) et vitrines du hall.
+func _add_collection_items() -> void:
+	_pickups.clear()
+	var col := Game.collection
+	var spark: Array[Texture2D] = [_texture("res://assets/world/fx/sparkle_0.png"), _texture("res://assets/world/fx/sparkle_1.png")]
+	for p: Dictionary in col.visible_pickups(session, map.id):
+		var c: Vector2i = p["cell"]
+		var item := _sprite(CollectionPanel.icon(col.object(p["id"])), -6)
+		item.position = Vector2(c.x * T, c.y * T - 1)
+		_map_root.add_child(item)
+		var s := _sprite(spark[0], -5)
+		s.position = Vector2(c.x * T + 8, c.y * T - 6)
 		_map_root.add_child(s)
-		_treasures[c] = {"id": t["id"], "sprite": s}
-		if not Settings.reduce_motion():
+		var prompt := _sprite(_texture("res://assets/world/fx/bubble_alert.png"), 23)
+		prompt.position = Vector2(c.x * T + 2, c.y * T - 20)
+		prompt.visible = false
+		_map_root.add_child(prompt)
+		_pickups[c] = {"id": p["id"], "nodes": [item, s, prompt]}
+		if not Settings.reduce_motion() and spark[0] != null:
 			var tw := s.create_tween().set_loops()
 			tw.tween_interval(_rng.randf_range(0.2, 0.9))
-			tw.tween_callback(func() -> void: s.texture = frames[1])
+			tw.tween_callback(func() -> void: s.texture = spark[1])
 			tw.tween_interval(0.35)
-			tw.tween_callback(func() -> void: s.texture = frames[0])
+			tw.tween_callback(func() -> void: s.texture = spark[0])
+			var bob := item.create_tween().set_loops()
+			bob.tween_property(item, "position:y", item.position.y - 2, 0.6).set_trans(Tween.TRANS_SINE)
+			bob.tween_property(item, "position:y", item.position.y, 0.6).set_trans(Tween.TRANS_SINE)
+	if map.id == "hall":
+		if col.has_reward("guirlande"):
+			var g := _texture(MAPS_DIR + "hall_upgrade_reward_guirlande.png")
+			if g:
+				_map_root.add_child(_sprite(g, -8))
+		var cases := map.spot("vitrines")
+		var cells: Array = cases.get("cells", [])
+		for i in mini(col.exhibit.size(), cells.size()):
+			var c: Vector2i = cells[i]
+			var shown := _sprite(CollectionPanel.icon(col.object(str(col.exhibit[i]))), -6)
+			shown.position = Vector2(c.x * T, c.y * T - 6)
+			_map_root.add_child(shown)
 
 
-func _pick_treasure() -> void:
-	if not _treasures.has(player.cell):
+## Bulle « ! » au-dessus d'un objet quand le joueur est tout près (Entrée / E pour le prendre).
+func _update_pickup_prompts() -> void:
+	for c: Vector2i in _pickups:
+		var near: bool = player != null and absi(player.cell.x - c.x) + absi(player.cell.y - c.y) <= 1
+		(_pickups[c]["nodes"][2] as Sprite2D).visible = near
+
+
+## Ramasse l'objet posé devant le joueur ou sous ses pieds. Retourne vrai si un objet a été pris.
+func _try_pickup() -> bool:
+	for c: Vector2i in [player.cell + DIRS[player.facing], player.cell]:
+		if not _pickups.has(c):
+			continue
+		var p: Dictionary = _pickups[c]
+		var results := Game.collection.on_pickup(session, map.id, c)
+		if results.is_empty():
+			return false
+		_pickups.erase(c)
+		for n: Node in p["nodes"]:
+			n.queue_free()
+		Game.collection_event(results)
+		return true
+	return false
+
+
+## Fouille ce qui se trouve devant le joueur (ou sous ses pieds : une trappe…).
+func _try_search() -> void:
+	for c: Vector2i in [player.cell + DIRS[player.facing], player.cell]:
+		var results := Game.collection.on_search(session, map.id, c)
+		if not results.is_empty():
+			_busy = true
+			await _say_collection("", null, results)
+			speech.close()
+			_busy = false
+			refresh_all()
+			return
+
+
+## Dit les répliques produites par la collection, puis montre les trouvailles.
+func _say_collection(speaker: String, portrait: Texture2D, results: Array) -> void:
+	for r: Dictionary in results:
+		var line := str(r.get("text", ""))
+		if line != "":
+			await speech.say(speaker, portrait, line)
+	speech.close()
+	Game.collection_event(results)
+	while _showing_collection:
+		await get_tree().process_frame
+
+
+func _on_collection_results(results: Array) -> void:
+	_collection_queue.append_array(results)
+	if _showing_collection:
 		return
-	var t: Dictionary = _treasures[player.cell]
-	_treasures.erase(player.cell)
-	(t["sprite"] as Node).queue_free()
-	Game.collect_card(str(t["id"]))
+	_showing_collection = true
+	while not _collection_queue.is_empty():
+		var r: Dictionary = _collection_queue.pop_front()
+		match str(r["kind"]):
+			"object":
+				var o: Dictionary = r["object"]
+				var big: bool = o["rarity"] in ["rare", "legendaire", "mythique"]
+				AudioDirector.play_sfx("applause" if o["rarity"] in ["legendaire", "mythique"] else ("coins" if big else "confirm"))
+				await hud.show_discovery(o, CollectionPanel.icon(o), Game.collection.rarity_info(o["rarity"]), Game.collection.count(), Game.collection.total())
+				if o.get("trigger", {}).get("type", "") == "state" and str(r.get("text", "")) != "":
+					toast(str(r["text"]))
+			"clue":
+				toast("Nouvel indice noté : %s (Collection > Enquêtes)." % r["clue"]["title"])
+			"quest_step":
+				var q := Game.collection.quest(str(r["quest"]))
+				if r.get("done", false):
+					toast("Enquête « %s » terminée !" % q["title"])
+				else:
+					toast("Enquête « %s » : %s" % [q["title"], Game.collection.quest_current_step(q["id"])])
+			"reward":
+				var rw: Dictionary = r["reward"]
+				AudioDirector.play_sfx("coins")
+				var what: String = {"outfit": "Nouvelle tenue", "decor": "Nouveau décor", "title": "Distinction"}.get(str(rw["kind"]), "Récompense")
+				toast("%s : %s ! (Collection > Récompenses)" % [what, rw["label"]])
+				if rw["kind"] == "decor" and map.id == "hall":
+					_reload_here.call_deferred()
+	_showing_collection = false
+	hud.set_album_badge(Game.collection.unseen.size())
+	refresh_all()
 
 
-func _on_card_collected(c: Dictionary, outfit: Dictionary) -> void:
-	AudioDirector.play_sfx("coins" if c.get("rarity", "") == "legendaire" else "confirm")
-	hud.show_card(c, AlbumPanel.texture_for(c), outfit)
-	hud.set_album_badge(Game.album.unseen.size())
-
-
-func open_album() -> void:
-	AlbumPanel.open(overlay, Game.album, func() -> void: _reload_here())
+func open_collection(tab: String = "") -> void:
+	CollectionPanel.open(overlay, Game.collection, session, tab, func() -> void: _reload_here())
 	hud.set_album_badge(0)
+
+
+## Fernand, l'ancien régisseur, donne un indice précis par période.
+func _fernand_advice(name: String) -> void:
+	var col := Game.collection
+	if not col.can_advise(session):
+		await speech.say(name, null, "Revenez à la prochaine période : un vieux régisseur a besoin de temps pour se souvenir.")
+		return
+	var labels: Array = []
+	for f: Dictionary in col.families:
+		labels.append("%s (%d/%d)" % [f["label"], col.count(f["id"]), col.total(f["id"])])
+	labels.append("Non merci")
+	var pick := await speech.ask(name, null, "Je connais ce théâtre par cœur. Un conseil pour votre collection ? Dites-moi laquelle vous intéresse.", labels)
+	if pick >= col.families.size():
+		return
+	var o := col.advise(session, str(col.families[pick]["id"]))
+	if o.is_empty():
+		await speech.say(name, null, "Cette collection, je n'ai plus rien à vous apprendre dessus. Bravo !")
+		return
+	await speech.say(name, null, "Un objet %s… %s" % [str(col.rarity_info(o["rarity"])["label"]).to_lower(), o["hint3"]])
 
 
 func _critter(frames: Array[Texture2D], area: Rect2, speed: float, z: int) -> void:
@@ -328,6 +442,8 @@ func _spawn_people() -> void:
 	for n: Dictionary in map.npcs:
 		var pid := str(n["id"])
 		var person: Dictionary = world.people.get(pid, {})
+		if not Rules.check(person.get("requires", {}), session.data, session.state):
+			continue  # cette personne n'arrive en ville que plus tard dans la saison
 		var a := WorldActor.new().setup(pid, str(person.get("sprite", pid)), n["cell"], "down")
 		a.radius = int(n["radius"])
 		a.step_time = 0.28
@@ -501,6 +617,11 @@ func _refresh_markers(obj: Dictionary) -> void:
 		var giver := str(session.data.missions[id]["giver"])
 		if npcs.has(giver):
 			(npcs[giver] as WorldActor).set_bubble("question")
+	# Enquêtes de collection : « ? » au-dessus des personnes qui ont du nouveau.
+	for who: String in Game.collection.people_with_quest_news(session):
+		for a: WorldActor in npcs.values():
+			if world.bark_key(a.person_id) == who and a.bubble == "":
+				a.set_bubble("question")
 	if event_who != "" and npcs.has(event_who):
 		(npcs[event_who] as WorldActor).set_bubble("alert")
 	# Flèche dorée vers l'objectif (ou vers la porte qui y mène).
@@ -912,7 +1033,7 @@ func _process(delta: float) -> void:
 		_try_step(dir)
 	elif not _path.is_empty():
 		var next: Vector2i = _path.pop_front()
-		if _occupied(next) or not (map.is_walkable(next)):
+		if _occupied(next) or not (map.is_walkable(next)) or _door_locked(next):
 			_path.clear()
 			return
 		_step_player(next)
@@ -925,15 +1046,28 @@ func _process(delta: float) -> void:
 func _try_step(dir: String) -> void:
 	var target: Vector2i = player.cell + DIRS[dir]
 	player.face(dir)
+	if _door_locked(target):
+		return
 	if map.is_walkable(target) and not _occupied(target):
 		_step_player(target)
+
+
+## Une porte qui demande une clé (indice de collection) : prévient le joueur.
+func _door_locked(c: Vector2i) -> bool:
+	var door := map.door_at(c)
+	if door.is_empty() or not door.has("requires_clue") or Game.collection.known_clues.has(str(door["requires_clue"])):
+		return false
+	_path.clear()
+	_on_arrival = Callable()
+	toast(str(door.get("locked", "C'est fermé à clé.")))
+	return true
 
 
 func _step_player(target: Vector2i) -> void:
 	player.step_to(target)
 	await player.step_finished
 	_update_district()
-	_pick_treasure()
+	_update_pickup_prompts()
 	var door := map.door_at(player.cell)
 	if not door.is_empty():
 		_path.clear()
@@ -992,7 +1126,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		open_journal()
 	elif event.is_action_pressed("rideau_album"):
 		get_viewport().set_input_as_handled()
-		open_album()
+		open_collection()
 	elif event.is_action_pressed("rideau_map"):
 		get_viewport().set_input_as_handled()
 		open_city_plan()
@@ -1028,6 +1162,11 @@ func _click(world_pos: Vector2) -> void:
 					player.face_toward(sc)
 					break
 			interact())
+	elif _pickups.has(c):
+		_walk_then([c] + _adjacent_cells(c), func() -> void:
+			if player.cell != c:
+				player.face_toward(c)
+			_try_pickup())
 	elif map.is_walkable(c):
 		_walk_then([c], Callable())
 
@@ -1069,6 +1208,9 @@ func interact() -> void:
 	var spot := map.spot_at(front)
 	if not spot.is_empty():
 		use_spot(spot)
+		return
+	if not _try_pickup():
+		_try_search()
 
 
 # --- Personnes et objets ---------------------------------------------------------------
@@ -1087,7 +1229,6 @@ func _portrait(who: String) -> Texture2D:
 func talk_to(npc: WorldActor) -> void:
 	var who := npc.person_id
 	npc.face(WorldActor.opposite(player.facing))
-	Game.collect_card(Game.album.card_for("rencontres", world.bark_key(who)))
 	if who == WorldRules.event_character(session):
 		open_phase_window()
 		return
@@ -1096,6 +1237,18 @@ func talk_to(npc: WorldActor) -> void:
 		await _talk_mission(who, mission)
 		return
 	_busy = true
+	var found := Game.collection.on_talk(session, world.bark_key(who))
+	if not found.is_empty():
+		await _say_collection(_speaker_name(who), _portrait(who), found)
+		_busy = false
+		refresh_all()
+		return
+	if who == "fernand":
+		await _fernand_advice(_speaker_name(who))
+		speech.close()
+		_busy = false
+		refresh_all()
+		return
 	var person: Dictionary = world.people.get(who, {})
 	var action := str(person.get("action", ""))
 	if action != "" and session.state.phase == GameState.PHASE_MANAGEMENT:
@@ -1189,8 +1342,10 @@ func _offer_action(speaker: String, portrait: Texture2D, action: String) -> void
 
 func use_spot(spot: Dictionary) -> void:
 	var kind := str(spot.get("kind", ""))
-	Game.collect_card(Game.album.card_for("lieux", WorldData.spot_bark_key(spot)))
 	match kind:
+		"exhibit":
+			open_collection("exposition")
+			return
 		"desk":
 			AudioDirector.play_sfx("page")
 			open_phase_window()
@@ -1205,6 +1360,13 @@ func use_spot(spot: Dictionary) -> void:
 			ReportsHistory.open(overlay, session)
 			return
 	_busy = true
+	var found := Game.collection.on_examine(session, WorldData.spot_bark_key(spot))
+	if not found.is_empty():
+		await _say_collection(str(spot["label"]), null, found)
+		if not kind in ["action", "upgrade", "bus"]:
+			_busy = false
+			refresh_all()
+			return
 	match kind:
 		"posters":
 			var titles: Array = []
@@ -1330,7 +1492,7 @@ func open_menu() -> void:
 			m.close_modal()
 			open_phase_window()],
 		["Journal de bord", "SecondaryButton", "star", func() -> void: open_journal()],
-		["Album de Bréval", "SecondaryButton", "album", func() -> void: open_album()],
+		["Collection", "SecondaryButton", "album", func() -> void: open_collection()],
 		["Carnet du directeur", "SecondaryButton", "question", func() -> void: GlossaryPanel.open(overlay)],
 		["Budget et trésorerie", "SecondaryButton", "cash", func() -> void: BudgetPanel.open(overlay, session)],
 		["Bilans des périodes", "SecondaryButton", "chart", func() -> void: ReportsHistory.open(overlay, session)],

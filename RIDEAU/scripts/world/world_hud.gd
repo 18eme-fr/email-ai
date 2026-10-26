@@ -27,6 +27,7 @@ var _card_pop: PanelContainer
 var _card_pic: TextureRect
 var _card_title: Label
 var _card_kind: Label
+var _card_desc: Label
 var _card_tween: Tween
 var _album_badge: Label
 var _place_tween: Tween
@@ -73,7 +74,7 @@ func _init() -> void:
 	_missions_list = UiKit.vbox([], 0)
 	_missions_panel.add_child(_missions_list)
 	buttons.position.x -= 138
-	for spec: Array in [["album", "Album de Bréval : vos cartes et tenues (C)", album_pressed], ["map", "Plan de la ville (M)", plan_pressed], ["book", "Journal de bord : missions, compétences, trophées (J)", journal_pressed], ["question", "Carnet du directeur (F1)", glossary_pressed], ["cash", "Budget et trésorerie", budget_pressed],
+	for spec: Array in [["album", "Collection de la Lanterne : objets, enquêtes, exposition (C)", album_pressed], ["map", "Plan de la ville (M)", plan_pressed], ["book", "Journal de bord : missions, compétences, trophées (J)", journal_pressed], ["question", "Carnet du directeur (F1)", glossary_pressed], ["cash", "Budget et trésorerie", budget_pressed],
 			["chart", "Bilans des périodes", reports_pressed], ["gear", "Menu (Échap)", menu_pressed]]:
 		var b := Button.new()
 		b.tooltip_text = spec[1]
@@ -148,6 +149,9 @@ func _init() -> void:
 	_card_title = UiKit.label("", "SubHeaderLabel", true)
 	_card_title.custom_minimum_size = Vector2(220, 0)
 	ccol.add_child(_card_title)
+	_card_desc = UiKit.label("", "SmallLabel", true)
+	_card_desc.custom_minimum_size = Vector2(220, 0)
+	ccol.add_child(_card_desc)
 	# Message éphémère.
 	_toast = UiKit.panel("InsetPanel")
 	_toast.visible = false
@@ -183,7 +187,13 @@ func set_missions(session: GameSession) -> void:
 	var s := session.state
 	var active := MissionSystem.with_status(s, "active")
 	var offered := MissionSystem.with_status(s, "offered")
-	_missions_panel.visible = not (active.is_empty() and offered.is_empty())
+	var quests := Game.collection.active_quests()
+	_missions_panel.visible = not (active.is_empty() and offered.is_empty() and quests.is_empty())
+	for q: Dictionary in quests.slice(0, 2):
+		var ql := UiKit.label("◆ Enquête « %s » : %s" % [q["title"], Game.collection.quest_current_step(q["id"])], "", true)
+		ql.add_theme_font_size_override("font_size", 15)
+		ql.add_theme_color_override("font_color", Color("e8c8f0"))
+		_missions_list.add_child(ql)
 	if active.is_empty() and offered.is_empty():
 		return
 	_missions_list.add_child(UiKit.label("Missions (J : journal)", "SmallLabel"))
@@ -248,28 +258,95 @@ func announce_place(name: String) -> void:
 	_place_tween.tween_callback(func() -> void: _place_banner.visible = false)
 
 
-## Annonce une nouvelle carte d'album (et la tenue qu'elle débloque, le cas échéant).
-func show_card(card: Dictionary, picture: Texture2D, outfit: Dictionary = {}) -> void:
-	var kind: String = {"legendaire": "★ Trésor trouvé !", "rare": "Nouvelle carte rare !"}.get(str(card.get("rarity", "")), "Nouvelle carte !")
-	_card_kind.text = kind if outfit.is_empty() else "%s  + tenue « %s »" % [kind, outfit["label"]]
-	_card_title.text = str(card.get("title", ""))
-	_card_pic.texture = picture
-	_card_pop.visible = true
-	_card_pop.reset_size()
-	if _card_tween:
-		_card_tween.kill()
-	var shown := Vector2(1280 - 12 - 330, 132)
-	if Settings.reduce_motion():
-		_card_pop.position = shown
+## Découverte d'un objet de collection. Commun et peu commun : vignette qui glisse
+## sur le côté ; rare et au-delà : présentation au centre, plus solennelle (et plus
+## longue pour l'objet mythique). On peut passer avec Entrée ou un clic.
+func show_discovery(o: Dictionary, picture: Texture2D, rarity: Dictionary, owned: int, total: int) -> void:
+	var col := Color(str(rarity.get("color", "ffffff")))
+	if not o["rarity"] in ["rare", "legendaire", "mythique"]:
+		_card_kind.text = "%s · objet de collection %d / %d" % [rarity["label"], owned, total]
+		_card_kind.add_theme_color_override("font_color", col)
+		_card_title.text = str(o["name"])
+		_card_desc.text = str(o["description"])
+		_card_pic.texture = picture
+		_card_pop.visible = true
+		_card_pop.reset_size()
+		if _card_tween:
+			_card_tween.kill()
+		var shown := Vector2(1280 - 12 - _card_pop.size.x, 132)
 		_card_tween = create_tween()
-		_card_tween.tween_interval(3.0)
-	else:
-		_card_pop.position = Vector2(1290, 132)
-		_card_tween = create_tween()
-		_card_tween.tween_property(_card_pop, "position", shown, 0.3).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-		_card_tween.tween_interval(2.8)
+		if Settings.reduce_motion():
+			_card_pop.position = shown
+		else:
+			_card_pop.position = Vector2(1290, 132)
+			_card_tween.tween_property(_card_pop, "position", shown, 0.3).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		_card_tween.tween_interval(4.0)
 		_card_tween.tween_property(_card_pop, "position", Vector2(1290, 132), 0.3)
-	_card_tween.tween_callback(func() -> void: _card_pop.visible = false)
+		_card_tween.tween_callback(func() -> void: _card_pop.visible = false)
+		return
+	var veil := ColorRect.new()
+	veil.color = Color(0.05, 0.03, 0.08, 0.0)
+	veil.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	veil.mouse_filter = Control.MOUSE_FILTER_STOP
+	add_child(veil)
+	var center := Vector2(640, 300)
+	var rays := Node2D.new()
+	rays.position = center
+	veil.add_child(rays)
+	for i in 12:
+		var ray := Polygon2D.new()
+		ray.polygon = PackedVector2Array([Vector2(0, 0), Vector2(-18, -320), Vector2(18, -320)])
+		ray.color = Color(col.r, col.g, col.b, 0.18)
+		ray.rotation = TAU * i / 12.0
+		rays.add_child(ray)
+	var pic := TextureRect.new()
+	pic.texture = picture
+	pic.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	pic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	pic.size = Vector2(128, 128)
+	pic.pivot_offset = Vector2(64, 64)
+	pic.position = center - Vector2(64, 64)
+	veil.add_child(pic)
+	var box := UiKit.vbox([], 4)
+	box.position = Vector2(290, 400)
+	box.custom_minimum_size = Vector2(700, 0)
+	veil.add_child(box)
+	var kind := UiKit.label("%s — objet %d / %d" % [str(rarity["label"]).to_upper(), owned, total], "SubHeaderLabel")
+	kind.add_theme_color_override("font_color", col)
+	kind.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	box.add_child(kind)
+	var title := UiKit.label(str(o["name"]), "TitleLabel", true)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	box.add_child(title)
+	var desc := UiKit.label(str(o["description"]), "", true)
+	desc.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	desc.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.8))
+	box.add_child(desc)
+	var hint := UiKit.label("Entrée ou clic : continuer", "SmallLabel")
+	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	box.add_child(hint)
+	var hold := 4.5 if o["rarity"] == "mythique" else 2.8
+	var skip := [false]
+	veil.gui_input.connect(func(e: InputEvent) -> void:
+		if e is InputEventMouseButton and e.pressed:
+			skip[0] = true)
+	var tw := create_tween()
+	if Settings.reduce_motion():
+		veil.color.a = 0.8
+	else:
+		pic.scale = Vector2(0.2, 0.2)
+		tw.tween_property(veil, "color:a", 0.8, 0.25)
+		tw.parallel().tween_property(pic, "scale", Vector2(1, 1), 0.45).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		var spin := rays.create_tween().set_loops()
+		spin.tween_property(rays, "rotation", TAU, 12.0).from(0.0)
+	var t := 0.0
+	while t < hold and not skip[0]:
+		await get_tree().process_frame
+		t += get_process_delta_time()
+		if t > 0.4 and Input.is_action_just_pressed("ui_accept"):
+			skip[0] = true
+	tw.kill()
+	veil.queue_free()
 
 
 func set_album_badge(n: int) -> void:
