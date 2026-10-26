@@ -1134,14 +1134,14 @@ func play_performance(ratio: float) -> void:
 			child.queue_free()
 	_seat_audience(perf, ratio)
 	AudioDirector.play_music("")
-	AudioDirector.set_ambience({"salle": 0.5, "foule": clampf(ratio, 0.1, 1.0) * 0.5})
+	AudioDirector.set_ambience({"foule": clampf(ratio, 0.1, 1.0) * 0.5})
 	var performers: Array[WorldActor] = []
 	for i in 3:
 		var a := WorldActor.new().setup("artiste_%d" % i, ["louison", "spectateur_c", "passant_b"][i], Vector2i(7 + i * 3, 4), "down")
 		_actors.add_child(a)
 		performers.append(a)
 	await _fade_to(0.0)
-	AudioDirector.set_ambience({"salle": 0.4}, 0.8)  # le public se tait au lever de rideau
+	AudioDirector.set_ambience({}, 0.8)  # le public se tait au lever de rideau
 	AudioDirector.play_sfx("curtain")
 	var quick := Settings.reduce_motion()
 	await get_tree().create_timer(0.6 if quick else 1.2).timeout
@@ -1311,8 +1311,7 @@ func _step_player(target: Vector2i) -> void:
 
 func _go_through(door: Dictionary) -> void:
 	_busy = true
-	var target := world.map(str(door["to"]))
-	AudioDirector.door(str(door.get("sound", "bois")), target != null and target.outdoor)
+	AudioDirector.play_sfx("porte", 0.08)
 	await _fade_to(1.0)
 	load_map(str(door["to"]), door["to_cell"], str(door["facing"]))
 	if WorldRules.event_character(session) != "":

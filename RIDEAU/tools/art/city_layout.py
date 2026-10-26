@@ -398,8 +398,8 @@ def main():
     rue["npcs"] = c.npcs
     rue["decor"] = c.decor
     rue["districts"] = c.districts
-    rue["doors"] = [{"cell": [51, 29], "to": "hall", "to_cell": [10, 12], "facing": "up", "sound": "lourde"},
-                    {"cell": [52, 29], "to": "hall", "to_cell": [11, 12], "facing": "up", "sound": "lourde"}]
+    rue["doors"] = [{"cell": [51, 29], "to": "hall", "to_cell": [10, 12], "facing": "up"},
+                    {"cell": [52, 29], "to": "hall", "to_cell": [11, 12], "facing": "up"}]
     # Tous les autres bâtiments s'ouvrent sur un intérieur (interiors_layout.py).
     for mid in [k for k in world["maps"] if k.startswith("int_")]:
         del world["maps"][mid]
@@ -412,15 +412,13 @@ def main():
             continue
         mid = "int_" + b["id"]
         outside = [tuple(d) for d in b["doors"]]
-        sound = IL.door_sound(b["id"], b["style"])
-        imap = IL.to_map(mid, spec, outside, sound)
+        imap = IL.to_map(mid, spec, outside)
         world["maps"][mid] = imap
         for d, idoor in zip(outside, imap["doors"]):
             x, y = d
             row = rue["grid"][y]
             rue["grid"][y] = row[:x] + "D" + row[x + 1:]
-            rue["doors"].append({"cell": [x, y], "to": mid, "to_cell": [idoor["cell"][0], idoor["cell"][1] - 1], "facing": "up",
-                                 "sound": sound})
+            rue["doors"].append({"cell": [x, y], "to": mid, "to_cell": [idoor["cell"][0], idoor["cell"][1] - 1], "facing": "up"})
         inside_ids.add(b["id"])
         for n in imap["npcs"]:
             sprite, name = IL.PEOPLE[n["id"]]
@@ -430,7 +428,6 @@ def main():
     for d in world["maps"]["hall"]["doors"]:
         if d["to"] == "rue":
             d["to_cell"] = [51, 30] if d["cell"][0] == 10 else [52, 30]
-            d["sound"] = "lourde"
     people = world["people"]
     extra = {
         "passant_5": ("passant_a", "Promeneuse"), "passant_6": ("passant_b", "Passant"), "passant_7": ("passant_c", "Passante"),

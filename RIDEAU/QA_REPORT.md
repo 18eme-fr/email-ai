@@ -1,6 +1,6 @@
-# Rapport d'assurance qualité — RIDEAU ! v0.16.1
+# Rapport d'assurance qualité — RIDEAU ! v0.16.2
 
-Date : 26 octobre 2026 (v0.16.1 : sons de portes ; v0.16.0 : intérieurs, ruelles, façades ; v0.15.0 : son, ambiance, prologue ; v0.14.0 : collection de 50 objets ; v0.13.0 : album de collection ; v0.12.0 : grande ville ; v0.11.0 : scénarios, missions, dossiers, compétences ; v0.10.0 : monde explorable ; v0.9.0 le 25 octobre). Environnement : conteneur Linux, **Godot 4.7.2-stable compilé depuis les
+Date : 26 octobre 2026 (v0.16.2 : son de porte d'origine, plus de grésillement ; v0.16.0 : intérieurs, ruelles, façades ; v0.15.0 : son, ambiance, prologue ; v0.14.0 : collection de 50 objets ; v0.13.0 : album de collection ; v0.12.0 : grande ville ; v0.11.0 : scénarios, missions, dossiers, compétences ; v0.10.0 : monde explorable ; v0.9.0 le 25 octobre). Environnement : conteneur Linux, **Godot 4.7.2-stable compilé depuis les
 sources**, rendu réel OpenGL (Mesa llvmpipe) sous Xvfb, Chromium (Playwright) pour la version Web.
 **Tout ce qui est indiqué « réussi » a été réellement exécuté.**
 
@@ -68,12 +68,12 @@ Aucune stratégie triviale ne gagne. « La première saison » est volontairemen
 - Captures réelles de chaque écran (`docs/screenshots/`), relues une à une, dont le monde
   explorable : bureau, hall, place en automne et en hiver (fêtes, enseigne), coulisses, dialogue
   avec réponses, fenêtre d'étape, soirée dans la salle, menu.
-- v0.16.1 : les 12 sons de portes vérifiés par mesure et sur spectrogrammes (structure attendue :
-  clenche, grincement, choc, clochette, souffle…). Défauts trouvés et corrigés : clics en fin de
-  choc (son coupé net), sifflement de la porte métallique qui partait dans tous les sens, attaque
-  trop sèche du joint de la porte vitrée ; le retrait de l'ancien son modifiait sans le vouloir
-  d'autres bruitages (bus, cloche…) — corrigé, ils sont identiques à avant. Test : la clochette
-  sonne bien en entrant au café. **Les sons n'ont pas pu être écoutés** (pas de carte son ici).
+- v0.16.2 : grésillement de fond signalé par le porteur de projet. Cause : des nappes de bruit
+  filtré jouées en continu sous la musique (ville, vent, salle, coulisses, et un souffle dans les
+  oiseaux, le bureau et la réserve). Supprimées ; mesure après correction : entre deux sons, les
+  ambiances oiseaux, bureau et réserve sont au silence numérique (plancher -180 dB). Test ajouté :
+  aucun lieu, à aucune saison, heure ou météo, ne demande une nappe de bruit. Le son de porte
+  d'origine est rétabli (fichier identique à la v0.16.0). **Non écouté** (pas de carte son ici).
 - v0.16 : planches de rendu des 20 décors d'intérieur et des façades relues une à une, captures
   en jeu (café, gare de nuit, cinéma, mairie, hall de tour, ruelle de jour et de nuit). Défauts
   trouvés et corrigés : mur du fond trop bas (cadres qui débordaient sur le plafond), tapis
@@ -102,8 +102,8 @@ Aucune stratégie triviale ne gagne. « La première saison » est volontairemen
 
 | Plateforme | Produit | Vérification réelle |
 |---|---|---|
-| Linux x86_64 | `RIDEAU.x86_64` (93 Mo) | **Autotest** (`-- --smoke-test`) : données, dialogue, **monde (33 cartes, 240 répliques, décors de chaque intérieur, scène)**, collection (50 objets), saison complète avec missions et dossiers, sauvegarde → SUCCÈS (v0.16.1) |
-| Web (WebGL 2, sans threads) | `index.html` + `.wasm` + `.pck` | Chargé dans Chromium (v0.16.1) : menu, choix du scénario, monde ; (v0.11.0) transmission du rapport de saison à la page — **0 erreur console** ; publié en lien privé (moteur découpé en 3 morceaux de moins de 15 Mo, réassemblés au chargement) |
+| Linux x86_64 | `RIDEAU.x86_64` (93 Mo) | **Autotest** (`-- --smoke-test`) : données, dialogue, **monde (33 cartes, 240 répliques, décors de chaque intérieur, scène)**, collection (50 objets), saison complète avec missions et dossiers, sauvegarde → SUCCÈS (v0.16.2) |
+| Web (WebGL 2, sans threads) | `index.html` + `.wasm` + `.pck` | Chargé dans Chromium (v0.16.2) : menu, choix du scénario, monde ; (v0.11.0) transmission du rapport de saison à la page — **0 erreur console** ; publié en lien privé (moteur découpé en 3 morceaux de moins de 15 Mo, réassemblés au chargement) |
 | Windows x86_64 | `RIDEAU.exe` (86 Mo) | Export sans erreur. **Non lancé** : pas de Windows dans l'environnement |
 | macOS | préréglage fourni | **Non produit** : nécessite un Mac (modèles et signature Apple) |
 

@@ -199,12 +199,6 @@ func test_entering_a_shop_and_talking_across_the_counter() -> void:
 	screen._try_step("up")
 	assert_bool(await _wait(runner, func() -> bool: return screen.map.id == "int_cafe" and not screen._busy)).is_true()
 	assert_bool(screen.npcs.has("patronne_cafe")).is_true()
-	# La clochette de la boutique a sonné (version « on entre »).
-	var played: Array = []
-	for p: AudioStreamPlayer in AudioDirector._players:
-		if p.stream != null:
-			played.append(p.stream.resource_path.get_file())
-	assert_array(played).contains(["porte_boutique_in.wav"])
 	# Devant le comptoir, la patronne est derrière : c'est elle qui répond.
 	screen.player.cell = Vector2i(9, 4)
 	screen.player.face("up")
@@ -515,7 +509,9 @@ func test_sound_and_atmosphere_follow_the_world() -> void:
 	screen.load_map("rue", Vector2i(52, 33), "up")
 	await runner.simulate_frames(10)
 	assert_array(["ville_jour", "ville_fetes"]).contains([AudioDirector.current_music()])
-	assert_bool(AudioDirector.ambience_levels().has("ville")).is_true()
+	# Aucune nappe de bruit continue sous la musique (l'ancien « grésillement »).
+	for id: String in ["ville", "vent", "salle", "coulisses"]:
+		assert_bool(AudioDirector.ambience_levels().has(id)).override_failure_message("Nappe de bruit : %s" % id).is_false()
 	assert_object(screen._train).is_not_null()
 	var emitters := screen._map_root.find_children("*", "AudioStreamPlayer2D", true, false)
 	assert_int(emitters.size()).is_greater_equal(2)
@@ -531,7 +527,7 @@ func test_sound_and_atmosphere_follow_the_world() -> void:
 	await runner.simulate_frames(90)
 	assert_str(AudioDirector.current_music()).is_equal("reserve")
 	assert_bool(AudioDirector.ambience_levels().has("reserve")).is_true()
-	assert_bool(await _wait(runner, func() -> bool: return not AudioDirector.ambience_levels().has("ville"), 300)).override_failure_message("La ville doit s'éteindre en fondu").is_true()
+	assert_bool(await _wait(runner, func() -> bool: return not AudioDirector.ambience_levels().has("oiseaux"), 300)).override_failure_message("Les sons de la ville doivent s'éteindre en fondu").is_true()
 	# Le train finit par partir puis revenir (minuteries accélérées).
 	screen.load_map("rue", Vector2i(48, 10), "up")
 	await runner.simulate_frames(5)

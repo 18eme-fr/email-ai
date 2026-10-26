@@ -348,8 +348,7 @@
       10,
       12
      ],
-     "facing": "up",
-     "sound": "lourde"
+     "facing": "up"
     },
     {
      "cell": [
@@ -361,8 +360,7 @@
       11,
       12
      ],
-     "facing": "up",
-     "sound": "lourde"
+     "facing": "up"
     },
     {
      "cell": [
@@ -374,8 +372,7 @@
       9,
       8
      ],
-     "facing": "up",
-     "sound": "vitree"
+     "facing": "up"
     },
     {
      "cell": [
@@ -387,8 +384,7 @@
       10,
       8
      ],
-     "facing": "up",
-     "sound": "vitree"
+     "facing": "up"
     },
     {
      "cell": [
@@ -400,8 +396,7 @@
       9,
       9
      ],
-     "facing": "up",
-     "sound": "metal"
+     "facing": "up"
     },
     {
      "cell": [
@@ -413,8 +408,7 @@
       10,
       9
      ],
-     "facing": "up",
-     "sound": "metal"
+     "facing": "up"
     },
     {
      "cell": [
@@ -426,8 +420,7 @@
       7,
       8
      ],
-     "facing": "up",
-     "sound": "bois"
+     "facing": "up"
     },
     {
      "cell": [
@@ -439,8 +432,7 @@
       8,
       8
      ],
-     "facing": "up",
-     "sound": "lourde"
+     "facing": "up"
     },
     {
      "cell": [
@@ -452,8 +444,7 @@
       9,
       8
      ],
-     "facing": "up",
-     "sound": "lourde"
+     "facing": "up"
     },
     {
      "cell": [
@@ -465,8 +456,7 @@
       6,
       8
      ],
-     "facing": "up",
-     "sound": "boutique"
+     "facing": "up"
     },
     {
      "cell": [
@@ -478,8 +468,7 @@
       5,
       8
      ],
-     "facing": "up",
-     "sound": "boutique"
+     "facing": "up"
     },
     {
      "cell": [
@@ -491,8 +480,7 @@
       5,
       7
      ],
-     "facing": "up",
-     "sound": "boutique"
+     "facing": "up"
     },
     {
      "cell": [
@@ -504,8 +492,7 @@
       8,
       9
      ],
-     "facing": "up",
-     "sound": "vitree"
+     "facing": "up"
     },
     {
      "cell": [
@@ -517,8 +504,7 @@
       9,
       9
      ],
-     "facing": "up",
-     "sound": "vitree"
+     "facing": "up"
     },
     {
      "cell": [
@@ -530,8 +516,7 @@
       8,
       8
      ],
-     "facing": "up",
-     "sound": "lourde"
+     "facing": "up"
     },
     {
      "cell": [
@@ -543,8 +528,7 @@
       9,
       8
      ],
-     "facing": "up",
-     "sound": "lourde"
+     "facing": "up"
     },
     {
      "cell": [
@@ -556,8 +540,7 @@
       5,
       7
      ],
-     "facing": "up",
-     "sound": "boutique"
+     "facing": "up"
     },
     {
      "cell": [
@@ -569,8 +552,7 @@
       4,
       7
      ],
-     "facing": "up",
-     "sound": "boutique"
+     "facing": "up"
     },
     {
      "cell": [
@@ -582,8 +564,7 @@
       5,
       7
      ],
-     "facing": "up",
-     "sound": "boutique"
+     "facing": "up"
     },
     {
      "cell": [
@@ -595,8 +576,7 @@
       6,
       7
      ],
-     "facing": "up",
-     "sound": "boutique"
+     "facing": "up"
     },
     {
      "cell": [
@@ -608,8 +588,7 @@
       9,
       9
      ],
-     "facing": "up",
-     "sound": "vitree"
+     "facing": "up"
     },
     {
      "cell": [
@@ -621,8 +600,7 @@
       10,
       9
      ],
-     "facing": "up",
-     "sound": "vitree"
+     "facing": "up"
     },
     {
      "cell": [
@@ -634,8 +612,7 @@
       10,
       8
      ],
-     "facing": "up",
-     "sound": "lourde"
+     "facing": "up"
     },
     {
      "cell": [
@@ -647,8 +624,7 @@
       11,
       8
      ],
-     "facing": "up",
-     "sound": "lourde"
+     "facing": "up"
     },
     {
      "cell": [
@@ -660,8 +636,7 @@
       8,
       8
      ],
-     "facing": "up",
-     "sound": "bois"
+     "facing": "up"
     },
     {
      "cell": [
@@ -673,8 +648,7 @@
       9,
       8
      ],
-     "facing": "up",
-     "sound": "bois"
+     "facing": "up"
     },
     {
      "cell": [
@@ -686,8 +660,7 @@
       8,
       8
      ],
-     "facing": "up",
-     "sound": "vitree"
+     "facing": "up"
     },
     {
      "cell": [
@@ -699,8 +672,7 @@
       9,
       8
      ],
-     "facing": "up",
-     "sound": "vitree"
+     "facing": "up"
     },
     {
      "cell": [
@@ -712,8 +684,7 @@
       5,
       7
      ],
-     "facing": "up",
-     "sound": "immeuble"
+     "facing": "up"
     },
     {
      "cell": [
@@ -725,8 +696,7 @@
       5,
       7
      ],
-     "facing": "up",
-     "sound": "immeuble"
+     "facing": "up"
     },
     {
      "cell": [
@@ -738,8 +708,7 @@
       5,
       7
      ],
-     "facing": "up",
-     "sound": "immeuble"
+     "facing": "up"
     },
     {
      "cell": [
@@ -751,8 +720,7 @@
       5,
       7
      ],
-     "facing": "up",
-     "sound": "immeuble"
+     "facing": "up"
     },
     {
      "cell": [
@@ -764,8 +732,7 @@
       5,
       7
      ],
-     "facing": "up",
-     "sound": "immeuble"
+     "facing": "up"
     },
     {
      "cell": [
@@ -777,8 +744,7 @@
       5,
       7
      ],
-     "facing": "up",
-     "sound": "immeuble"
+     "facing": "up"
     },
     {
      "cell": [
@@ -790,8 +756,7 @@
       5,
       7
      ],
-     "facing": "up",
-     "sound": "immeuble"
+     "facing": "up"
     },
     {
      "cell": [
@@ -803,8 +768,7 @@
       5,
       7
      ],
-     "facing": "up",
-     "sound": "immeuble"
+     "facing": "up"
     },
     {
      "cell": [
@@ -816,8 +780,7 @@
       9,
       8
      ],
-     "facing": "up",
-     "sound": "bois"
+     "facing": "up"
     },
     {
      "cell": [
@@ -829,8 +792,7 @@
       10,
       8
      ],
-     "facing": "up",
-     "sound": "bois"
+     "facing": "up"
     },
     {
      "cell": [
@@ -842,8 +804,7 @@
       8,
       8
      ],
-     "facing": "up",
-     "sound": "bois"
+     "facing": "up"
     },
     {
      "cell": [
@@ -855,8 +816,7 @@
       9,
       8
      ],
-     "facing": "up",
-     "sound": "bois"
+     "facing": "up"
     }
    ],
    "spots": [
@@ -2237,8 +2197,7 @@
       51,
       30
      ],
-     "facing": "down",
-     "sound": "lourde"
+     "facing": "down"
     },
     {
      "cell": [
@@ -2250,8 +2209,7 @@
       52,
       30
      ],
-     "facing": "down",
-     "sound": "lourde"
+     "facing": "down"
     },
     {
      "cell": [
@@ -2933,8 +2891,7 @@
       48,
       9
      ],
-     "facing": "down",
-     "sound": "vitree"
+     "facing": "down"
     },
     {
      "cell": [
@@ -2946,8 +2903,7 @@
       49,
       9
      ],
-     "facing": "down",
-     "sound": "vitree"
+     "facing": "down"
     }
    ],
    "spots": [
@@ -3094,8 +3050,7 @@
       67,
       9
      ],
-     "facing": "down",
-     "sound": "metal"
+     "facing": "down"
     },
     {
      "cell": [
@@ -3107,8 +3062,7 @@
       68,
       9
      ],
-     "facing": "down",
-     "sound": "metal"
+     "facing": "down"
     }
    ],
    "spots": [
@@ -3222,9 +3176,7 @@
    },
    "sound": {
     "music": "ville_jour",
-    "layers": {
-     "coulisses": 0.4
-    },
+    "layers": {},
     "steps": "beton"
    }
   },
@@ -3254,8 +3206,7 @@
       90,
       9
      ],
-     "facing": "down",
-     "sound": "bois"
+     "facing": "down"
     }
    ],
    "spots": [
@@ -3385,8 +3336,7 @@
       36,
       30
      ],
-     "facing": "down",
-     "sound": "lourde"
+     "facing": "down"
     },
     {
      "cell": [
@@ -3398,8 +3348,7 @@
       37,
       30
      ],
-     "facing": "down",
-     "sound": "lourde"
+     "facing": "down"
     }
    ],
    "spots": [
@@ -3533,8 +3482,7 @@
       62,
       30
      ],
-     "facing": "down",
-     "sound": "boutique"
+     "facing": "down"
     }
    ],
    "spots": [
@@ -3656,8 +3604,7 @@
       69,
       30
      ],
-     "facing": "down",
-     "sound": "boutique"
+     "facing": "down"
     }
    ],
    "spots": [
@@ -3759,9 +3706,7 @@
    },
    "sound": {
     "music": "ville_jour",
-    "layers": {
-     "coulisses": 0.5
-    },
+    "layers": {},
     "steps": "bois"
    }
   },
@@ -3790,8 +3735,7 @@
       75,
       30
      ],
-     "facing": "down",
-     "sound": "boutique"
+     "facing": "down"
     }
    ],
    "spots": [
@@ -3898,8 +3842,7 @@
       88,
       30
      ],
-     "facing": "down",
-     "sound": "vitree"
+     "facing": "down"
     },
     {
      "cell": [
@@ -3911,8 +3854,7 @@
       89,
       30
      ],
-     "facing": "down",
-     "sound": "vitree"
+     "facing": "down"
     }
    ],
    "spots": [
@@ -4001,9 +3943,7 @@
    },
    "sound": {
     "music": "foyer",
-    "layers": {
-     "salle": 0.5
-    },
+    "layers": {},
     "steps": "tapis"
    }
   },
@@ -4033,8 +3973,7 @@
       101,
       30
      ],
-     "facing": "down",
-     "sound": "lourde"
+     "facing": "down"
     },
     {
      "cell": [
@@ -4046,8 +3985,7 @@
       102,
       30
      ],
-     "facing": "down",
-     "sound": "lourde"
+     "facing": "down"
     }
    ],
    "spots": [
@@ -4138,9 +4076,7 @@
    },
    "sound": {
     "music": "foyer",
-    "layers": {
-     "salle": 0.3
-    },
+    "layers": {},
     "steps": "bois"
    }
   },
@@ -4169,8 +4105,7 @@
       86,
       41
      ],
-     "facing": "down",
-     "sound": "boutique"
+     "facing": "down"
     }
    ],
    "spots": [
@@ -4300,8 +4235,7 @@
       93,
       41
      ],
-     "facing": "down",
-     "sound": "boutique"
+     "facing": "down"
     }
    ],
    "spots": [
@@ -4406,8 +4340,7 @@
       99,
       41
      ],
-     "facing": "down",
-     "sound": "boutique"
+     "facing": "down"
     }
    ],
    "spots": [
@@ -4541,8 +4474,7 @@
       105,
       41
      ],
-     "facing": "down",
-     "sound": "boutique"
+     "facing": "down"
     }
    ],
    "spots": [
@@ -4681,8 +4613,7 @@
       36,
       54
      ],
-     "facing": "down",
-     "sound": "vitree"
+     "facing": "down"
     },
     {
      "cell": [
@@ -4694,8 +4625,7 @@
       37,
       54
      ],
-     "facing": "down",
-     "sound": "vitree"
+     "facing": "down"
     }
    ],
    "spots": [
@@ -4828,8 +4758,7 @@
       51,
       54
      ],
-     "facing": "down",
-     "sound": "lourde"
+     "facing": "down"
     },
     {
      "cell": [
@@ -4841,8 +4770,7 @@
       52,
       54
      ],
-     "facing": "down",
-     "sound": "lourde"
+     "facing": "down"
     }
    ],
    "spots": [
@@ -4996,8 +4924,7 @@
       66,
       54
      ],
-     "facing": "down",
-     "sound": "bois"
+     "facing": "down"
     },
     {
      "cell": [
@@ -5009,8 +4936,7 @@
       67,
       54
      ],
-     "facing": "down",
-     "sound": "bois"
+     "facing": "down"
     }
    ],
    "spots": [
@@ -5122,8 +5048,7 @@
       92,
       54
      ],
-     "facing": "down",
-     "sound": "vitree"
+     "facing": "down"
     },
     {
      "cell": [
@@ -5135,8 +5060,7 @@
       93,
       54
      ],
-     "facing": "down",
-     "sound": "vitree"
+     "facing": "down"
     }
    ],
    "spots": [
@@ -5251,8 +5175,7 @@
       6,
       68
      ],
-     "facing": "down",
-     "sound": "immeuble"
+     "facing": "down"
     }
    ],
    "spots": [
@@ -5345,9 +5268,7 @@
    },
    "sound": {
     "music": "ville_jour",
-    "layers": {
-     "ville": 0.2
-    },
+    "layers": {},
     "steps": "pierre"
    },
    "art": "int_tour"
@@ -5377,8 +5298,7 @@
       17,
       68
      ],
-     "facing": "down",
-     "sound": "immeuble"
+     "facing": "down"
     }
    ],
    "spots": [
@@ -5462,9 +5382,7 @@
    },
    "sound": {
     "music": "ville_jour",
-    "layers": {
-     "ville": 0.2
-    },
+    "layers": {},
     "steps": "pierre"
    },
    "art": "int_tour"
@@ -5494,8 +5412,7 @@
       6,
       78
      ],
-     "facing": "down",
-     "sound": "immeuble"
+     "facing": "down"
     }
    ],
    "spots": [
@@ -5579,9 +5496,7 @@
    },
    "sound": {
     "music": "ville_jour",
-    "layers": {
-     "ville": 0.2
-    },
+    "layers": {},
     "steps": "pierre"
    },
    "art": "int_tour"
@@ -5611,8 +5526,7 @@
       17,
       78
      ],
-     "facing": "down",
-     "sound": "immeuble"
+     "facing": "down"
     }
    ],
    "spots": [
@@ -5705,9 +5619,7 @@
    },
    "sound": {
     "music": "ville_jour",
-    "layers": {
-     "ville": 0.2
-    },
+    "layers": {},
     "steps": "pierre"
    },
    "art": "int_tour"
@@ -5737,8 +5649,7 @@
       89,
       68
      ],
-     "facing": "down",
-     "sound": "immeuble"
+     "facing": "down"
     }
    ],
    "spots": [
@@ -5822,9 +5733,7 @@
    },
    "sound": {
     "music": "ville_jour",
-    "layers": {
-     "ville": 0.2
-    },
+    "layers": {},
     "steps": "pierre"
    },
    "art": "int_tour"
@@ -5854,8 +5763,7 @@
       101,
       68
      ],
-     "facing": "down",
-     "sound": "immeuble"
+     "facing": "down"
     }
    ],
    "spots": [
@@ -5948,9 +5856,7 @@
    },
    "sound": {
     "music": "ville_jour",
-    "layers": {
-     "ville": 0.2
-    },
+    "layers": {},
     "steps": "pierre"
    },
    "art": "int_tour"
@@ -5980,8 +5886,7 @@
       89,
       78
      ],
-     "facing": "down",
-     "sound": "immeuble"
+     "facing": "down"
     }
    ],
    "spots": [
@@ -6065,9 +5970,7 @@
    },
    "sound": {
     "music": "ville_jour",
-    "layers": {
-     "ville": 0.2
-    },
+    "layers": {},
     "steps": "pierre"
    },
    "art": "int_tour"
@@ -6097,8 +6000,7 @@
       101,
       78
      ],
-     "facing": "down",
-     "sound": "immeuble"
+     "facing": "down"
     }
    ],
    "spots": [
@@ -6182,9 +6084,7 @@
    },
    "sound": {
     "music": "ville_jour",
-    "layers": {
-     "ville": 0.2
-    },
+    "layers": {},
     "steps": "pierre"
    },
    "art": "int_tour"
@@ -6215,8 +6115,7 @@
       39,
       68
      ],
-     "facing": "down",
-     "sound": "bois"
+     "facing": "down"
     },
     {
      "cell": [
@@ -6228,8 +6127,7 @@
       40,
       68
      ],
-     "facing": "down",
-     "sound": "bois"
+     "facing": "down"
     }
    ],
    "spots": [
@@ -6378,8 +6276,7 @@
       54,
       68
      ],
-     "facing": "down",
-     "sound": "bois"
+     "facing": "down"
     },
     {
      "cell": [
@@ -6391,8 +6288,7 @@
       55,
       68
      ],
-     "facing": "down",
-     "sound": "bois"
+     "facing": "down"
     }
    ],
    "spots": [

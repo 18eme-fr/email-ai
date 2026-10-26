@@ -182,26 +182,21 @@ static func soundscape(map: WorldMap, cell: Vector2i, season_id: String, tod: St
 		music = "ville_nuit" if night else ("ville_fetes" if festive and season_id == "hiver" else "ville_jour")
 		var district := str(map.district_at(cell).get("id", ""))
 		var green := district in ["parc", "parc_sud"]
-		layers["ville"] = (0.3 if green else (0.5 if district == "coteaux" else 0.7)) * (0.5 if night else 1.0)
 		if not night and season_id != "hiver" and sky != "pluie":
 			layers["oiseaux"] = 0.9 if green else (0.55 if district == "quais" else 0.3)
-		layers["vent"] = {"hiver": 0.55, "automne": 0.45}.get(season_id, 0.15)
 		if season_id == "ete" and not night:
-			layers["cigales"] = 0.6 if green or district == "coteaux" else 0.2
+			layers["cigales"] = 0.3 if green or district == "coteaux" else 0.1
 		if night and season_id in ["ete", "printemps"]:
 			layers["grillons"] = 0.8 if green else 0.35
 		if sky == "pluie":
-			layers["pluie"] = 0.9
+			layers["pluie"] = 0.6
 		if water_dist < 9:
-			layers["riviere"] = 0.9 * (1.0 - water_dist / 9.0)
+			layers["riviere"] = 0.6 * (1.0 - water_dist / 9.0)
 	else:
 		match map.id:
 			"hall":
-				layers["foule"] = clampf(0.12 + crowd * 0.12, 0.0, 0.8)
-			"salle":
-				layers["salle"] = 0.6
-			"coulisses":
-				layers["coulisses"] = 0.45
+				if crowd > 0:  # hall vide : silence, pas de brouhaha
+					layers["foule"] = clampf(0.1 + crowd * 0.1, 0.0, 0.7)
 			"bureau":
 				layers["bureau"] = 0.8
 			"reserve":
@@ -215,8 +210,6 @@ static func soundscape(map: WorldMap, cell: Vector2i, season_id: String, tod: St
 				var own: Dictionary = map.sound.get("layers", {})
 				for id: String in own:
 					layers[id] = float(own[id])
-		if sky == "pluie":
-			layers["pluie"] = 0.25  # la pluie qu'on entend à travers les murs
 	return {"music": music, "layers": layers}
 
 

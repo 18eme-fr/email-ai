@@ -228,7 +228,9 @@ func test_soundscape_follows_place_time_and_weather() -> void:
 	assert_str(str(WorldRules.soundscape(city, park, "hiver", "jour", "neige", true)["music"])).is_equal("ville_fetes")
 	assert_str(str(WorldRules.soundscape(world.map("reserve"), Vector2i(7, 3), "ete", "jour", "clair", false)["music"])).is_equal("reserve")
 	var hall: Dictionary = WorldRules.soundscape(world.map("hall"), Vector2i(10, 8), "ete", "jour", "clair", false, 99, 5)["layers"]
-	assert_float(float(hall["foule"])).is_greater(float(WorldRules.soundscape(world.map("hall"), Vector2i(10, 8), "ete", "jour", "clair", false, 99, 0)["layers"]["foule"]))
+	assert_float(float(hall["foule"])).is_greater(0.0)
+	# Hall vide : pas de brouhaha.
+	assert_bool((WorldRules.soundscape(world.map("hall"), Vector2i(10, 8), "ete", "jour", "clair", false, 99, 0)["layers"] as Dictionary).has("foule")).is_false()
 
 
 func test_footstep_surfaces() -> void:
@@ -292,21 +294,19 @@ func test_interior_art_exists() -> void:
 	assert_str(world.map("int_tour_c").art).is_equal("int_tour")
 
 
-## Chaque porte a un son qui lui ressemble, différent quand on entre et quand on sort.
-func test_door_sounds_fit_the_building() -> void:
-	for kind: String in AudioDirector.DOOR_KINDS:
-		for outside: bool in [true, false]:
-			var id := AudioDirector.door_sound_id(kind, outside)
-			assert_bool(ResourceLoader.exists("res://assets/audio/sfx/%s.wav" % id)).override_failure_message("Son manquant : %s" % id).is_true()
+## Pas de nappe de bruit continue sous la musique : partout, chaque couche d'ambiance
+## demandée existe, et aucune n'est un simple souffle (ville, vent, salle, coulisses).
+func test_no_background_hiss_anywhere() -> void:
 	for id: String in world.maps:
-		for d: Dictionary in (world.maps[id] as WorldMap).doors:
-			if d.has("sound"):
-				assert_bool(str(d["sound"]) in AudioDirector.DOOR_KINDS).override_failure_message("%s : son de porte inconnu %s" % [id, d["sound"]]).is_true()
-	var city := world.map("rue")
-	assert_str(str(city.door_at(Vector2i(62, 29))["sound"])).is_equal("boutique")  # café : clochette
-	assert_str(str(city.door_at(Vector2i(51, 29))["sound"])).is_equal("lourde")    # théâtre
-	assert_str(str(city.door_at(Vector2i(48, 8))["sound"])).is_equal("vitree")     # gare
-	assert_str(str(world.map("int_tour_a").doors[0]["sound"])).is_equal("immeuble")
-	assert_str(AudioDirector.door_sound_id("boutique", false)).is_equal("porte_boutique_in")
-	assert_str(AudioDirector.door_sound_id("boutique", true)).is_equal("porte_boutique_out")
-	assert_str(AudioDirector.door_sound_id("inconnue", true)).is_equal("porte_bois_out")
+		var m: WorldMap = world.maps[id]
+		for season: String in ["automne", "hiver", "printemps", "ete"]:
+			for tod: String in ["matin", "jour", "nuit"]:
+				for sky: String in ["clair", "pluie"]:
+					var layers: Dictionary = WorldRules.soundscape(m, Vector2i(5, 5), season, tod, sky, false, 4, 3)["layers"]
+					for layer: String in layers:
+						assert_bool(layer in ["ville", "vent", "salle", "coulisses"]).override_failure_message("%s : nappe de bruit %s" % [id, layer]).is_false()
+						assert_bool(ResourceLoader.exists("res://assets/audio/ambience/%s.wav" % layer)).override_failure_message("%s : ambiance manquante %s" % [id, layer]).is_true()
+	var prologue: Variant = GameData.read_json("res://data/story/prologue.json")
+	for sc: Dictionary in (prologue as Dictionary)["scenes"]:
+		for layer: String in sc.get("ambience", {}):
+			assert_bool(ResourceLoader.exists("res://assets/audio/ambience/%s.wav" % layer)).override_failure_message("prologue : ambiance manquante %s" % layer).is_true()

@@ -1,13 +1,13 @@
 {
  "_doc": "Prologue montré au lancement de la toute première partie (puis à revoir depuis le menu principal). Une scène = une illustration de assets/prologue/ (tools/art/prologue_art.py), un texte court, et l'ambiance sonore : music (piste d'AudioDirector, \"\" = silence), ambience (couches et volumes), sfx (son ponctuel), pan (déplacement lent de la caméra, en pixels de l'illustration).",
  "scenes": [
-  {"image": "01_ville", "text": "Bréval-sur-Ondine. Une petite ville au bord de l'eau… et, sur la place, un théâtre.", "music": "ville_nuit", "ambience": {"ville": 0.35, "grillons": 0.4}, "pan": [10, -4]},
+  {"image": "01_ville", "text": "Bréval-sur-Ondine. Une petite ville au bord de l'eau… et, sur la place, un théâtre.", "music": "ville_nuit", "ambience": {"grillons": 0.4}, "pan": [10, -4]},
   {"image": "02_1902", "text": "1902. Les habitants bâtissent ensemble le Théâtre de la Lanterne. Les femmes du quartier en peignent le rideau.", "music": "ville_nuit", "ambience": {"marche": 0.35}, "pan": [-10, 0]},
-  {"image": "03_1924", "text": "12 mars 1924. La troupe Vasseur crée sa pièce. Une lanterne de cuivre éclaire la scène.", "music": "ville_nuit", "ambience": {"salle": 0.4}, "pan": [0, -6]},
-  {"image": "04_noir", "text": "Au rideau final, la lanterne s'éteint… et disparaît. Personne ne l'a jamais retrouvée.", "music": "", "ambience": {"salle": 0.3}, "sfx": "curtain", "pan": [0, 0]},
+  {"image": "03_1924", "text": "12 mars 1924. La troupe Vasseur crée sa pièce. Une lanterne de cuivre éclaire la scène.", "music": "ville_nuit", "ambience": {"foule": 0.3}, "pan": [0, -6]},
+  {"image": "04_noir", "text": "Au rideau final, la lanterne s'éteint… et disparaît. Personne ne l'a jamais retrouvée.", "music": "", "ambience": {}, "sfx": "curtain", "pan": [0, 0]},
   {"image": "05_age_or", "text": "Pendant des décennies, la Lanterne fait rire, pleurer et rêver toute la ville.", "music": "theme", "ambience": {}, "sfx": "applause", "pan": [12, 0]},
-  {"image": "06_declin", "text": "Puis la salle se vide. Les caisses aussi. Les fauteuils prennent la poussière.", "music": "", "ambience": {"vent": 0.5, "reserve": 0.4}, "pan": [-8, 0]},
-  {"image": "07_aujourdhui", "text": "Aujourd'hui, la Ville vous confie le théâtre. Votre mission : remplir la salle, accueillir tous les publics, tenir le budget.", "music": "ville_jour", "ambience": {"ville": 0.4, "oiseaux": 0.4}, "sfx": "cloche", "pan": [8, -4]},
+  {"image": "06_declin", "text": "Puis la salle se vide. Les caisses aussi. Les fauteuils prennent la poussière.", "music": "", "ambience": {"reserve": 0.4}, "pan": [-8, 0]},
+  {"image": "07_aujourdhui", "text": "Aujourd'hui, la Ville vous confie le théâtre. Votre mission : remplir la salle, accueillir tous les publics, tenir le budget.", "music": "ville_jour", "ambience": {"oiseaux": 0.4}, "sfx": "cloche", "pan": [8, -4]},
   {"image": "08_equipe", "text": "Hélène, Bastien, Inès et Louison vous attendent. Une saison entière pour faire vos preuves.", "music": "theme", "ambience": {}, "pan": [0, 0]},
   {"image": "09_titre", "text": "Rallumez la Lanterne. À vous de diriger le spectacle !", "music": "theme", "ambience": {}, "pan": [0, -4], "title": true}
  ]

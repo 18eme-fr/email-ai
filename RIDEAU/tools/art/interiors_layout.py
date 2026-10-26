@@ -82,7 +82,7 @@ BASE_INTERIORS = {
         "wall": [("board", 8, 4), ("clock", 4), ("window", 13, 3), ("poster", 2)],
     },
     "fabrique": {
-        "name": "La Fabrique", "floor": "concrete", "walls": "fabrique", "music": "ville_jour", "ambience": {"coulisses": 0.4},
+        "name": "La Fabrique", "floor": "concrete", "walls": "fabrique", "music": "ville_jour", "ambience": {},
         "grid": [
             "####################",
             "####################",
@@ -162,7 +162,7 @@ BASE_INTERIORS = {
         "wall": [("bottles", 7, 5), ("frame", 3), ("frame", 5), ("mirror", 11)],
     },
     "imprimerie": {
-        "name": "Imprimerie Lebrun", "floor": "planks", "walls": "imprimerie", "music": "ville_jour", "ambience": {"coulisses": 0.5},
+        "name": "Imprimerie Lebrun", "floor": "planks", "walls": "imprimerie", "music": "ville_jour", "ambience": {},
         "grid": [
             "############",
             "############",
@@ -200,7 +200,7 @@ BASE_INTERIORS = {
         "wall": [("slate", 9, 2)],
     },
     "cinema": {
-        "name": "Cinéma Le Rex", "floor": "carpet_red", "walls": "cinema", "music": "foyer", "ambience": {"salle": 0.5},
+        "name": "Cinéma Le Rex", "floor": "carpet_red", "walls": "cinema", "music": "foyer", "ambience": {},
         "grid": [
             "##################",
             "##################",
@@ -221,7 +221,7 @@ BASE_INTERIORS = {
         "wall": [("screen", 2, 14)],
     },
     "conservatoire": {
-        "name": "Conservatoire", "floor": "parquet", "walls": "conservatoire", "music": "foyer", "ambience": {"salle": 0.3},
+        "name": "Conservatoire", "floor": "parquet", "walls": "conservatoire", "music": "foyer", "ambience": {},
         "grid": [
             "##################",
             "##################",
@@ -433,7 +433,7 @@ BASE_INTERIORS = {
         "wall": [("posters", 4, 3), ("garland", 1, 16)],
     },
     "tour": {
-        "name": "Résidence des Coteaux — hall", "floor": "tiles_grey", "walls": "tour", "music": "ville_jour", "ambience": {"ville": 0.2},
+        "name": "Résidence des Coteaux — hall", "floor": "tiles_grey", "walls": "tour", "music": "ville_jour", "ambience": {},
         "grid": [
             "############",
             "############",
@@ -463,23 +463,6 @@ STEPS = {"marble": "pierre", "marble_dark": "pierre", "checker": "pierre", "chec
          "parquet": "bois", "planks": "bois", "carpet_red": "tapis", "concrete": "beton", "concrete_light": "beton", "lino": "beton"}
 
 
-# Son de la porte de chaque bâtiment (assets/audio/sfx/porte_<sorte>_in|out.wav) :
-# bois (porte ordinaire), lourde (grand portail), boutique (clochette), vitree (automatique),
-# metal (porte coulissante d'atelier), immeuble (interphone et groom).
-DOOR_SOUND = {
-    "theatre": "lourde", "mairie": "lourde", "conservatoire": "lourde", "halle": "lourde",
-    "cafe": "boutique", "imprimerie": "boutique", "boulangerie": "boutique", "librairie": "boutique",
-    "fleuriste": "boutique", "disquaire": "boutique", "galerie": "boutique",
-    "gare": "vitree", "cinema": "vitree", "mediatheque": "vitree", "ondine": "vitree",
-    "fabrique": "metal", "tour": "immeuble",
-    "hotel": "bois", "ecole": "bois", "college": "bois", "maison_quartier": "bois",
-}
-
-
-def door_sound(building_id, style):
-    return DOOR_SOUND.get("tour" if style == "tour" else building_id, "bois")
-
-
 def interior_for(building_id, style):
     """Plan d'intérieur d'un bâtiment de la ville ({} : aucun)."""
     key = "tour" if style == "tour" else building_id
@@ -493,7 +476,7 @@ def interior_for(building_id, style):
     return spec
 
 
-def to_map(map_id, spec, outside_doors, sound="bois"):
+def to_map(map_id, spec, outside_doors):
     """Carte world.json d'un intérieur. `outside_doors` : cases-portes dans la rue."""
     g = spec["grid"]
     w = len(g[0])
@@ -504,7 +487,7 @@ def to_map(map_id, spec, outside_doors, sound="bois"):
     assert len(inside) == len(outside_doors), (map_id, inside, outside_doors)
     doors = []
     for x, (ox, oy) in zip(inside, outside_doors):
-        doors.append({"cell": [x, bottom], "to": "rue", "to_cell": [ox, oy + 1], "facing": "down", "sound": sound})
+        doors.append({"cell": [x, bottom], "to": "rue", "to_cell": [ox, oy + 1], "facing": "down"})
     spots = []
     for sp in spec["spots"]:
         sid, cells, label = sp[0], sp[1], sp[2]

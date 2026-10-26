@@ -2,13 +2,13 @@
 
 importer="wav"
 type="AudioStreamWAV"
-uid="uid://7njpxnp751ib"
-path="res://.godot/imported/ville.wav-81c5bf9646b25ad83115e45d578792a7.sample"
+uid="uid://4v2xgyu3scx7"
+path="res://.godot/imported/porte.wav-ec03bd091502bb5a13fd9d329aab11c9.sample"
 
 [deps]
 
-source_file="res://assets/audio/ambience/ville.wav"
-dest_files=["res://.godot/imported/ville.wav-81c5bf9646b25ad83115e45d578792a7.sample"]
+source_file="res://assets/audio/sfx/porte.wav"
+dest_files=["res://.godot/imported/porte.wav-ec03bd091502bb5a13fd9d329aab11c9.sample"]
 
 [params]
 

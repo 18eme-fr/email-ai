@@ -2,19 +2,18 @@
 
 Format inspiré de « Keep a Changelog ». Versions du jeu (`application/config/version`).
 
-## [0.16.1] — 2026-10-26 — Des portes qu'on reconnaît à l'oreille
+## [0.16.2] — 2026-10-26 — Son plus propre
 
 ### Modifié
-- **Le son des portes dépend du bâtiment**, et il est différent quand on entre (la porte se
-  referme derrière soi avec l'écho de la pièce) et quand on sort (son sec, en plein air) :
-  - porte en bois ordinaire (clenche, grincement des gonds, battant) : hôtel, école, collège,
-    maison de quartier, salles du théâtre ;
-  - lourde porte (grincement grave, choc profond, grand écho) : théâtre, mairie, conservatoire, halle ;
-  - **clochette de boutique** : café, imprimerie, boulangerie, librairie, fleuriste, disquaire, galerie ;
-  - porte vitrée automatique (moteur, souffle) : gare, cinéma, médiathèque, Ondine Énergie ;
-  - porte métallique coulissante : la Fabrique ;
-  - hall d'immeuble (bourdonnement de l'interphone, gâche, groom) : les tours des Coteaux.
-- L'ancien son unique (« porte »), un bourdonnement peu reconnaissable, est supprimé.
+- **Portes** : retour au son de porte d'origine pour tous les bâtiments (les six sons par sorte
+  de bâtiment de la 0.16.1 sont retirés).
+- **Plus de grésillement de fond** : les nappes de bruit continu qui tournaient sous la musique
+  sont supprimées — rumeur de la ville, vent, « air » de la salle, bourdonnement des coulisses —
+  ainsi que le souffle de fond des oiseaux, du bureau et de la réserve. Restent des sons qui ont
+  une forme : chants d'oiseaux, horloge, craquements, voix du café et du marché, eau près de la
+  rivière et de la fontaine, grillons et cigales (plus discrètes) selon la saison.
+- Pluie plus douce (gouttes sourdes, sans sifflement aigu) ; elle ne s'entend plus à l'intérieur.
+- Hall vide : silence (le brouhaha n'apparaît qu'avec des spectateurs). Rivière un peu moins forte.
 
 ## [0.16.0] — 2026-10-26 — On entre partout : intérieurs, ruelles et façades refaites
 

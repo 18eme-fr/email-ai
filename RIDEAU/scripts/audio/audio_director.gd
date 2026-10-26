@@ -9,12 +9,9 @@ extends Node
 const SFX_DIR := "res://assets/audio/sfx/"
 const AMB_DIR := "res://assets/audio/ambience/"
 const SFX := ["click", "hover", "confirm", "cancel", "coins", "applause", "curtain", "page", "error", "blip",
-	"verrou", "ramasser", "decouverte", "decouverte_rare", "decouverte_legendaire", "quete", "indice",
+	"porte", "verrou", "ramasser", "decouverte", "decouverte_rare", "decouverte_legendaire", "quete", "indice",
 	"bus", "cloche", "sifflet", "train", "canard", "pigeon", "voix",
-	"pas_pierre", "pas_herbe", "pas_bois", "pas_tapis", "pas_beton", "pas_neige",
-	"porte_bois_in", "porte_bois_out", "porte_lourde_in", "porte_lourde_out", "porte_boutique_in", "porte_boutique_out",
-	"porte_vitree_in", "porte_vitree_out", "porte_metal_in", "porte_metal_out", "porte_immeuble_in", "porte_immeuble_out"]
-const DOOR_KINDS := ["bois", "lourde", "boutique", "vitree", "metal", "immeuble"]
+	"pas_pierre", "pas_herbe", "pas_bois", "pas_tapis", "pas_beton", "pas_neige"]
 const MUSIC := {
 	"theme": "res://assets/audio/music/lanterne_theme.wav",
 	"foyer": "res://assets/audio/music/foyer_loop.wav",
@@ -85,16 +82,6 @@ func play_sfx(id: String, pitch_jitter: float = 0.0, volume_db: float = 0.0) -> 
 ## Bruit de pas du joueur (surface : pierre, herbe, bois, tapis, beton, neige).
 func footstep(surface: String) -> void:
 	play_sfx("pas_" + surface, 0.12, -9.0)
-
-
-## Son d'une porte selon sa sorte (bois, lourde, boutique, vitree, metal, immeuble) et le sens :
-## en entrant, la porte se referme derrière soi avec l'écho de la pièce ; en sortant, le son est sec.
-static func door_sound_id(kind: String, going_outside: bool) -> String:
-	return "porte_%s_%s" % [kind if kind in DOOR_KINDS else "bois", "out" if going_outside else "in"]
-
-
-func door(kind: String, going_outside: bool) -> void:
-	play_sfx(door_sound_id(kind, going_outside), 0.04)
 
 
 # --- Musique ----------------------------------------------------------------------------
