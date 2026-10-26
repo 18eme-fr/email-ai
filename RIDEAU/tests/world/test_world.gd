@@ -12,7 +12,7 @@ func before() -> void:
 
 
 func test_maps_are_rectangular_and_use_the_legend() -> void:
-	assert_int(world.maps.size()).is_equal(6)
+	assert_int(world.maps.size()).is_equal(33)  # ville, 5 salles du théâtre, 27 intérieurs
 	for id: String in world.maps:
 		var m: WorldMap = world.maps[id]
 		for y in m.size.y:
@@ -241,3 +241,52 @@ func test_footstep_surfaces() -> void:
 	assert_str(WorldRules.footstep_surface(world.map("reserve"), Vector2i(7, 3), "ete", "clair")).is_equal("beton")
 	for id: String in ["pierre", "herbe", "bois", "tapis", "beton", "neige"]:
 		assert_bool(ResourceLoader.exists("res://assets/audio/sfx/pas_%s.wav" % id)).is_true()
+
+
+## On peut entrer dans tous les bâtiments de la ville : chaque porte mène quelque part.
+func test_every_city_building_opens_on_an_interior() -> void:
+	var city := world.map("rue")
+	var raw: Array = world.raw["maps"]["rue"]["buildings"]
+	assert_int(raw.size()).is_greater(20)
+	for b: Dictionary in raw:
+		for c: Array in b["doors"]:
+			var door := city.door_at(WorldMap.to_cell(c))
+			assert_bool(door.is_empty()).override_failure_message("%s : porte %s fermée" % [b["id"], c]).is_false()
+			if b["id"] != "theatre":
+				assert_str(str(door["to"])).is_equal("int_" + str(b["id"]))
+
+
+## Tous les objets à examiner et toutes les personnes ont quelque chose à dire.
+func test_every_spot_and_person_has_lines() -> void:
+	var keys := {}
+	for b: Dictionary in world.barks:
+		keys[str(b["who"])] = true
+	for id: String in world.maps:
+		var m: WorldMap = world.maps[id]
+		for sp: Dictionary in m.spots:
+			if str(sp.get("kind", "flavor")) == "flavor":
+				assert_bool(keys.has(WorldData.spot_bark_key(sp))).override_failure_message("%s : %s muet" % [id, sp["id"]]).is_true()
+		for n: Dictionary in m.npcs:
+			assert_bool(keys.has(world.bark_key(str(n["id"])))).override_failure_message("%s : %s muet" % [id, n["id"]]).is_true()
+
+
+## Un intérieur de la ville prend sa musique, son ambiance et ses bruits de pas dans les données.
+func test_interior_sound_comes_from_data() -> void:
+	var cafe := world.map("int_cafe")
+	var sc := WorldRules.soundscape(cafe, Vector2i(3, 4), "ete", "jour", "clair", false)
+	assert_str(str(sc["music"])).is_equal("foyer")
+	assert_bool((sc["layers"] as Dictionary).has("cafe")).is_true()
+	assert_str(WorldRules.footstep_surface(cafe, Vector2i(3, 4), "ete", "clair")).is_equal("pierre")
+	var halle := world.map("int_halle")
+	assert_str(str(WorldRules.soundscape(halle, Vector2i(3, 3), "ete", "nuit", "clair", false)["music"])).is_equal("ville_nuit")
+	assert_str(WorldRules.footstep_surface(world.map("int_librairie"), Vector2i(3, 3), "ete", "clair")).is_equal("bois")
+
+
+## Les halls des huit tours partagent un même décor ; leurs images existent.
+func test_interior_art_exists() -> void:
+	for id: String in world.maps:
+		if not id.begins_with("int_"):
+			continue
+		var art := (world.maps[id] as WorldMap).art
+		assert_bool(ResourceLoader.exists("res://assets/world/maps/%s_base.png" % art)).override_failure_message("Décor manquant : %s" % art).is_true()
+	assert_str(world.map("int_tour_c").art).is_equal("int_tour")

@@ -46,8 +46,11 @@ func _smoke_test() -> void:
 	print("[autotest] dialogue : ", line.text if line else "INTROUVABLE")
 	ok = ok and line != null
 	var world_data := WorldData.get_default()
-	var world_ok := world_data.maps.size() == 6 and load("res://assets/world/maps/rue_hiver_base.png") != null \
+	var world_ok := world_data.maps.size() > 6 and load("res://assets/world/maps/rue_hiver_base.png") != null \
 			and load("res://assets/world/people/directeur.png") != null and load(WORLD) != null
+	for id: String in world_data.maps:  # chaque intérieur a son décor
+		if id.begins_with("int_"):
+			world_ok = world_ok and load("res://assets/world/maps/%s_base.png" % world_data.map(id).art) != null
 	print("[autotest] monde : %d cartes, %d répliques, images et scène %s" % [world_data.maps.size(), world_data.barks.size(), "OK" if world_ok else "MANQUANTES"])
 	ok = ok and world_ok
 	var col := Collection.new("user://autotest_collection.json", "")

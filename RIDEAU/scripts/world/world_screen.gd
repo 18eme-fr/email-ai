@@ -173,16 +173,17 @@ func load_map(map_id: String, cell: Vector2i, facing: String) -> void:
 	_spot_markers.clear()
 	var season := _season()
 	var festive := WorldRules.is_festive(world, session.state.turn)
-	var variants: Array = _meta.get("variants", {}).get(map_id, [])
-	var base_path := MAPS_DIR + ("%s_%s_base.png" % [map_id, season] if season in variants else "%s_base.png" % map_id)
+	var art := map.art  # les halls des tours partagent un même décor
+	var variants: Array = _meta.get("variants", {}).get(art, [])
+	var base_path := MAPS_DIR + ("%s_%s_base.png" % [art, season] if season in variants else "%s_base.png" % art)
 	_map_root.add_child(_sprite(_texture(base_path), -10))
 	_add_water(map_id, season)
 	for u: String in session.state.upgrades:
-		var tex := _texture(MAPS_DIR + "%s_upgrade_%s.png" % [map_id, u])
+		var tex := _texture(MAPS_DIR + "%s_upgrade_%s.png" % [art, u])
 		if tex:
 			_map_root.add_child(_sprite(tex, -9))
 	if festive:
-		var fest := _texture(MAPS_DIR + "%s_festive.png" % map_id)
+		var fest := _texture(MAPS_DIR + "%s_festive.png" % art)
 		if fest:
 			_map_root.add_child(_sprite(fest, -8))
 	_add_posters(map_id)
@@ -195,10 +196,10 @@ func load_map(map_id: String, cell: Vector2i, facing: String) -> void:
 	_spawn_people()
 	_add_fauna(season)
 	_add_collection_items()
-	var top_path := MAPS_DIR + ("%s_%s_top.png" % [map_id, "hiver_fetes" if festive and season == "hiver" else season] if season in variants and map_id == "rue" else "%s_top.png" % map_id)
+	var top_path := MAPS_DIR + ("%s_%s_top.png" % [art, "hiver_fetes" if festive and season == "hiver" else season] if season in variants and art == "rue" else "%s_top.png" % art)
 	_top = _sprite(_texture(top_path), 20)
 	_map_root.add_child(_top)
-	_lights = _sprite(_texture(MAPS_DIR + "%s_lights.png" % map_id), 21)
+	_lights = _sprite(_texture(MAPS_DIR + "%s_lights.png" % art), 21)
 	var add := CanvasItemMaterial.new()
 	add.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
 	_lights.material = add
@@ -814,6 +815,12 @@ func _refresh_markers(obj: Dictionary) -> void:
 		var room := s.actions.size() < session.action_capacity()
 		for src: Dictionary in WorldRules.action_sources(world):
 			if src["map"] != map.id:
+				for d: Dictionary in map.doors:  # l'action est dans un bâtiment : on le signale sur sa porte
+					if d["to"] == src["map"] and str(src["map"]).begins_with("int_"):
+						var planned_in: bool = src["action"] in s.actions
+						if planned_in or room:
+							_cell_marker(d["cell"], "ok" if planned_in else "alert")
+						break
 				continue
 			var planned: bool = src["action"] in s.actions
 			if not planned and not room:
@@ -1376,9 +1383,19 @@ func _click(world_pos: Vector2) -> void:
 	if npc == null:
 		npc = _npc_at(c + Vector2i(0, 1)) if world_pos.y - c.y * T > 4 else null
 	if npc != null:
-		_walk_then(_adjacent_cells(npc.cell), func() -> void:
+		var near := _adjacent_cells(npc.cell)
+		var across := false
+		for d: Vector2i in DIRS.values():  # de l'autre côté du comptoir
+			var front: Vector2i = npc.cell + d
+			if map.char_at(front) == "c" and map.is_walkable(front + d) and map.door_at(front + d).is_empty():
+				near.append(front + d)
+				across = true
+		_walk_then(near, func() -> void:
 			player.face_toward(npc.cell)
-			interact())
+			if across and (npc.cell - player.cell).length() > 1.0:
+				talk_to(npc)
+			else:
+				interact())
 	elif not spot.is_empty():
 		var cells: Array = []
 		for sc: Vector2i in spot["cells"]:
@@ -1433,11 +1450,23 @@ func interact() -> void:
 		talk_to(npc)
 		return
 	var spot := map.spot_at(front)
+	# Devant un comptoir : on parle à la personne qui tient la boutique, derrière.
+	var keeper := _keeper_behind(front)
+	if keeper != null and str(spot.get("kind", "flavor")) == "flavor":
+		talk_to(keeper)
+		return
 	if not spot.is_empty():
 		use_spot(spot)
 		return
 	if not _try_pickup():
 		_try_search()
+
+
+## Personne qui se tient derrière la case de comptoir `counter` (vue depuis le joueur).
+func _keeper_behind(counter: Vector2i) -> WorldActor:
+	if map.char_at(counter) != "c":
+		return null
+	return _npc_at(counter + (counter - player.cell))
 
 
 # --- Personnes et objets ---------------------------------------------------------------

@@ -2,6 +2,39 @@
 
 Format inspiré de « Keep a Changelog ». Versions du jeu (`application/config/version`).
 
+## [0.16.0] — 2026-10-26 — On entre partout : intérieurs, ruelles et façades refaites
+
+### Ajouté
+- **Tous les bâtiments de la ville s'ouvrent** : 27 intérieurs (gare, Fabrique, hôtel, mairie,
+  café, imprimerie, boulangerie, cinéma, conservatoire, librairie, fleuriste, disquaire, galerie,
+  médiathèque, halle, école, Ondine Énergie, collège, maison de quartier et les huit halls des
+  tours des Coteaux), chacun avec son décor, son mobilier, sa musique, son ambiance et ses bruits
+  de pas. Plans dans `tools/art/interiors_layout.py`, dessin dans `tools/art/interiors.py`.
+- **28 nouveaux habitants** à l'intérieur (guichetière, patronne du café, imprimeur, boulangère,
+  caissière du Rex, professeur de piano, galeriste, instituteur, gardienne des tours, CPE,
+  bénévole…) et **54 sortes d'objets à examiner**, avec 109 nouvelles répliques : on y parle de tournées,
+  de sorties scolaires, d'abonnements, de résidences, de publics éloignés.
+- **On parle par-dessus le comptoir** : face à un comptoir, c'est la personne derrière qui répond
+  (au clavier comme à la souris).
+- **Ruelles** : 16 passages pavés entre les bâtiments (avec fils de lanternes allumés la nuit) et
+  une cour des artisans derrière la place ; on peut désormais passer entre les immeubles.
+- Les actions de gestion situées dans un bâtiment (l'imprimerie) se signalent sur sa porte.
+
+### Modifié
+- **Façades redessinées** : fenêtres avec linteau, appui, reflet et volets ; enseignes toujours
+  au-dessus, jamais sur une fenêtre ; vitrines bornées aux murs ; portes encadrées de pierre avec
+  marche ; corniches, pilastres, soubassement ; ombre portée au pied des façades ; appliques
+  douces la nuit. La mairie, le conservatoire, l'école et les tours ont été repris.
+- Rien (arbre, lampadaire, poubelle) devant une porte ni au débouché d'une ruelle.
+- Les descriptions « devant le bâtiment » sont passées à l'intérieur (mêmes identifiants : la
+  collection et les enquêtes fonctionnent comme avant).
+
+### Corrigé
+- Fenêtres en double sur la mairie ; enseignes posées sur des fenêtres (hôtel, halle, Ondine,
+  conservatoire) ; colonnes et notes du conservatoire sur les fenêtres ; vitrines débordant des
+  murs ; arbres devant les portes ; taches sur les tours ; devise de l'école sur les fenêtres ;
+  fenêtres du rez-de-chaussée de la Fabrique sur ses panneaux ; halos blancs trop forts la nuit.
+
 ## [0.15.0] — 2026-10-26 — Ambiance sonore, ville vivante et prologue
 
 ### Ajouté

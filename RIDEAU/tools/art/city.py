@@ -35,12 +35,18 @@ SEASONS = W0.SEASONS
 ROOF_BANDS = ((4, 8), (22, 29), (35, 40), (46, 53))
 
 
-def sign(c, cx, y, label, bg, fg, frame=P["gold1"]):
+def sign_rect(cx, y, label):
     w = text_width(label) + 6
-    x = cx - w // 2
-    c.rect(x, y, w, 11, bg)
-    c.frame(x, y, w, 11, frame)
+    return (cx - w // 2, y, w, 11)
+
+
+def sign(c, cx, y, label, bg, fg, frame=P["gold1"]):
+    x, y, w, h = sign_rect(cx, y, label)
+    c.rect(x + 1, y + 1, w, h, P["ink"], 110)                                  # ombre portée
+    c.rect(x, y, w, h, bg)
+    c.frame(x, y, w, h, frame)
     text(c, x + 3, y + 2, label, fg)
+    return (x, y, w, h)
 
 
 def roof(c, x0, y0, w, h, col, season, style="tiles"):
@@ -72,19 +78,52 @@ def roof(c, x0, y0, w, h, col, season, style="tiles"):
             c.set(x0 + r.randrange(w), y0 + h // 2 + r.randrange(max(1, h // 2)), P["white"])
 
 
-def windows(c, x0, y0, w, rows, cols, ww, wh, frame_col, glass, gap_y=4, out=None, balcony=None):
+def draw_window(c, wx, wy, ww, wh, frame_col, glass, wall, shutters=None, balcony=None):
+    """Fenêtre en 3/4 : linteau, cadre, vitre à croisillons, reflet, appui, volets, balcon."""
+    c.hline(wx - 1, wx + ww, wy - 2, shade(wall, 0.72))                      # linteau
+    c.rect(wx - 1, wy - 1, ww + 2, wh + 2, frame_col)
+    c.rect(wx, wy, ww, wh, glass)
+    c.rect(wx, wy, ww, max(1, wh // 3), shade(glass, 1.18))                # ciel reflété
+    if ww >= 8:
+        c.vline(wx + ww // 2, wy, wy + wh - 1, frame_col)
+    if wh >= 10:
+        c.hline(wx, wx + ww - 1, wy + wh // 2, frame_col)
+    c.set(wx + 1, wy + 1, P["white"])
+    c.rect(wx - 2, wy + wh + 1, ww + 4, 2, shade(wall, 1.12))               # appui
+    c.hline(wx - 2, wx + ww + 1, wy + wh + 3, shade(wall, 0.7))
+    if shutters:
+        c.rect(wx - 4, wy - 1, 3, wh + 2, shutters)
+        c.rect(wx + ww + 1, wy - 1, 3, wh + 2, shutters)
+        for yy in range(wy + 1, wy + wh, 3):
+            c.hline(wx - 4, wx - 2, yy, shade(shutters, 0.75))
+            c.hline(wx + ww + 1, wx + ww + 3, yy, shade(shutters, 0.75))
+    if balcony:
+        c.rect(wx - 3, wy + wh + 1, ww + 6, 1, balcony)
+        c.rect(wx - 3, wy + wh - 3, ww + 6, 1, balcony)
+        for xx in range(wx - 3, wx + ww + 3, 2):
+            c.vline(xx, wy + wh - 3, wy + wh + 1, balcony)
+
+
+def _overlaps(a, b, margin=2):
+    ax, ay, aw, ah = a
+    bx, by, bw, bh = b
+    return ax < bx + bw + margin and bx < ax + aw + margin and ay < by + bh + margin and by < ay + ah + margin
+
+
+def windows(c, x0, y0, w, rows, cols, ww, wh, frame_col, glass, gap_y=4, out=None, balcony=None, wall=None,
+            avoid=(), shutters=None):
+    """Grille de fenêtres ; celles qui toucheraient une zone réservée (`avoid`) ne sont pas dessinées."""
     if cols <= 0:
         return
+    wall = wall or P["grey3"]
     span = w // cols
     for r_ in range(rows):
         for k in range(cols):
             wx = x0 + k * span + (span - ww) // 2
             wy = y0 + r_ * (wh + gap_y)
-            c.rect(wx - 1, wy - 1, ww + 2, wh + 2, frame_col)
-            c.rect(wx, wy, ww, wh, glass)
-            c.hline(wx, wx + ww - 1, wy, shade(glass, 1.3))
-            if balcony:
-                c.rect(wx - 2, wy + wh + 1, ww + 4, 2, balcony)
+            if any(_overlaps((wx - 4, wy - 2, ww + 8, wh + 6), z, 0) for z in avoid):
+                continue
+            draw_window(c, wx, wy, ww, wh, frame_col, glass, wall, shutters, balcony)
             if out is not None:
                 out.append((wx, wy, ww, wh))
 
@@ -107,15 +146,6 @@ def paint_building(c, top, b, season, lights):
             wx = X0 + 22 + i * 34
             win.append((wx + 1, Y0 + 43, 12, 16))
         lights.append(("marquee", X0 + PW // 2, Y0 + PH - 30))
-    elif style == "mairie":
-        facade_mairie(c, X0, Y0 + T, PW, PH - T, season)
-        roof(c, X0, Y0, PW, T + 4, P["blue"], season, "zinc")
-        sign(c, X0 + PW // 2, Y0 + T + 14, "MAIRIE", P["cream"], P["navy"], P["navy"])
-        c.ellipse(X0 + PW // 2, Y0 + 8, 6, 6, P["cream"])
-        c.ellipse(X0 + PW // 2, Y0 + 8, 4, 4, P["white"])
-        c.set(X0 + PW // 2, Y0 + 5, P["ink"])
-        c.set(X0 + PW // 2 + 2, Y0 + 8, P["ink"])
-        windows(c, X0 + 6, Y0 + 2 * T + 14, PW - 12, 2, 5, 12, 14, P["navy"], P["blue"], 6, win)
     elif style == "cafe":
         facade_cafe(c, X0, Y0, PW, PH, season)
         win += [(X0 + 7, Y0 + 43, 28, 32), (X0 + PW - 35, Y0 + 43, 28, 18)]
@@ -123,55 +153,135 @@ def paint_building(c, top, b, season, lights):
         facade_imprimerie(c, X0, Y0, PW, PH, season)
         win.append((X0 + 5, Y0 + 27, PW - 10, 24))
     else:
-        spec = STYLES.get(style, STYLES["shop"])
-        wall, roof_col, roof_style, label, label_bg, label_fg = spec["wall"], spec["roof"], spec["roof_style"], spec.get("sign", b["label"].upper()), spec["sign_bg"], spec["sign_fg"]
-        roof_h = spec.get("roof_h", 22)
-        c.rect(X0, Y0 + roof_h, PW, PH - roof_h, wall)
-        # texture du mur
-        if spec.get("brick"):
-            for yy in range(Y0 + roof_h, Y0 + PH, 5):
-                c.hline(X0, X0 + PW - 1, yy, shade(wall, 0.85))
-                off = 0 if ((yy - Y0) // 5) % 2 == 0 else 5
-                for xx in range(X0 + off, X0 + PW, 10):
-                    c.vline(xx, yy, yy + 4, shade(wall, 0.85))
-        elif spec.get("panels"):
-            for xx in range(X0, X0 + PW, 16):
-                c.vline(xx, Y0 + roof_h, Y0 + PH - 1, shade(wall, 0.9))
-        roof(c, X0, Y0, PW, roof_h, roof_col, season, roof_style)
-        rows = spec.get("rows", max(1, (PH - roof_h - 40) // 22))
-        cols = max(2, PW // spec.get("col_w", 20))
-        windows(c, X0 + 4, Y0 + roof_h + 8, PW - 8, rows, cols, spec.get("win_w", 10), spec.get("win_h", 12),
-                spec.get("frame", P["ink"]), spec.get("glass", P["blue"]), spec.get("gap", 8), win, spec.get("balcony"))
-        if spec.get("shopfront"):
-            sy = Y0 + PH - 24
-            c.rect(X0 + 2, sy, PW - 4, 22, spec.get("front", P["paper"]))
-            for k in range(X0 + 4, X0 + PW - 4, 14):
-                if not (dx - 2 <= k <= dx + dw):
-                    c.rect(k, sy + 3, 10, 14, spec.get("glass", P["sky"]))
-                    win.append((k, sy + 3, 10, 14))
-                    r = rng(k)
-                    for _ in range(3):
-                        c.set(k + r.randrange(10), sy + 8 + r.randrange(8), [P["velvet3"], P["gold2"], P["green1"], P["purple2"]][r.randrange(4)])
-            awning = spec.get("awning")
-            if awning:
-                for i in range(0, PW, 8):
-                    c.rect(X0 + i, sy - 8, 8, 7, awning if (i // 8) % 2 == 0 else P["cream"])
-                    c.set(X0 + i + 4, sy - 1, awning)
-        sign_y = Y0 + roof_h + 1 if not spec.get("shopfront") else Y0 + PH - 24 - 20
-        sign(c, X0 + PW // 2, sign_y, label, label_bg, label_fg, spec.get("sign_frame", P["gold1"]))
-        if spec.get("extra"):
-            spec["extra"](c, X0, Y0, PW, PH, season)
-        # porte(s)
-        door_h = 20
-        if dw >= 2 * T:
-            double_door(c, dx, Y0 + PH - door_h, spec.get("door", P["wood2"]), h=door_h)
-        else:
-            c.rect(dx + 1, Y0 + PH - door_h, T - 2, door_h, P["ink"])
-            c.rect(dx + 2, Y0 + PH - door_h + 1, T - 4, door_h - 1, spec.get("door", P["wood2"]))
-            c.set(dx + T - 5, Y0 + PH - 10, P["gold3"])
-        c.hline(X0, X0 + PW - 1, Y0 + PH - 1, shade(wall, 0.6))
+        paint_generic(c, b, STYLES.get(style, STYLES["shop"]), season, win, lights, dx, dw)
     for wr in win:
         lights.append(("window", wr))
+
+
+def paint_generic(c, b, spec, season, win, lights, dx, dw):
+    """Bâtiment générique, mis en page par zones : toit, bandeau d'enseigne, étages,
+    rez-de-chaussée. Rien ne se chevauche : les fenêtres évitent l'enseigne et la porte,
+    les vitrines restent dans les murs, l'enseigne est posée en dernier."""
+    x, y, w, h = b["rect"]
+    X0, Y0, PW, PH = x * T, y * T, w * T, h * T
+    wall = spec["wall"]
+    label = spec.get("sign", b["label"].upper())
+    roof_h = spec.get("roof_h", 22)
+    door_h = 20
+    shop = bool(spec.get("shopfront"))
+    # Mur : enduit, briques ou panneaux ; pilastres d'angle ; soubassement.
+    c.rect(X0, Y0 + roof_h, PW, PH - roof_h, wall)
+    r = rng(X0 * 3 + Y0)
+    if spec.get("brick"):
+        for yy in range(Y0 + roof_h, Y0 + PH, 5):
+            c.hline(X0, X0 + PW - 1, yy, shade(wall, 0.85))
+            off = 0 if ((yy - Y0) // 5) % 2 == 0 else 5
+            for xx in range(X0 + off, X0 + PW, 10):
+                c.vline(xx, yy, yy + 4, shade(wall, 0.85))
+    elif spec.get("panels"):
+        for xx in range(X0, X0 + PW, 16):
+            c.vline(xx, Y0 + roof_h, Y0 + PH - 1, shade(wall, 0.9))
+    else:
+        for _ in range(PW * (PH - roof_h) // 40):
+            c.set(X0 + r.randrange(PW), Y0 + roof_h + r.randrange(PH - roof_h), shade(wall, r.choice((0.94, 1.05))))
+    c.rect(X0, Y0 + roof_h, 2, PH - roof_h, shade(wall, 0.84))
+    c.rect(X0 + PW - 2, Y0 + roof_h, 2, PH - roof_h, shade(wall, 0.78))
+    c.rect(X0, Y0 + PH - 5, PW, 5, shade(wall, 0.78))
+    c.hline(X0, X0 + PW - 1, Y0 + PH - 5, shade(wall, 1.08))
+    # Toit, ombre du toit et corniche
+    roof(c, X0, Y0, PW, roof_h, spec["roof"], season, spec["roof_style"])
+    c.rect(X0, Y0 + roof_h, PW, 2, shade(wall, 0.66))
+    c.hline(X0, X0 + PW - 1, Y0 + roof_h + 3, shade(wall, 1.1))
+    # Zones réservées : porte, enseigne, devanture
+    door = (dx - 3, Y0 + PH - door_h - 3, dw + 6, door_h + 3)
+    if shop:
+        sy = Y0 + PH - 24
+        sign_y = sy - 21
+    else:
+        sign_y = Y0 + roof_h + 5
+    srect = sign_rect(X0 + PW // 2, sign_y, label)
+    avoid = [door, srect]
+    if shop:
+        avoid.append((X0, sy - 9, PW, 33))
+    # Étages
+    ww, wh, gap = spec.get("win_w", 10), spec.get("win_h", 12), spec.get("gap", 8)
+    top_y = (srect[1] + srect[3] + 7) if not shop else Y0 + roof_h + 8
+    bottom_y = (sy - 12) if shop else (Y0 + PH - door_h - 8)
+    rows = min(spec.get("rows", 9), max(0, (bottom_y - top_y + gap) // (wh + gap)))
+    cols = max(2, PW // spec.get("col_w", 20))
+    if spec.get("extra_first"):
+        spec["extra_first"](c, X0, Y0, PW, PH, season)
+    windows(c, X0 + 4, top_y, PW - 8, rows, cols, ww, wh, spec.get("frame", P["ink"]), spec.get("glass", P["blue"]),
+            gap, win, spec.get("balcony"), wall, avoid, spec.get("shutters"))
+    # Rez-de-chaussée : devanture vitrée, ou fenêtres de part et d'autre de la porte
+    if shop:
+        front = spec.get("front", P["paper"])
+        c.rect(X0 + 3, sy, PW - 6, 22, front)
+        c.rect(X0 + 3, sy, PW - 6, 2, shade(front, 1.2))
+        n = max(1, (PW - 10) // 16)
+        step = (PW - 10) / n
+        for k in range(n):
+            kx = int(X0 + 5 + k * step + (step - 11) / 2)
+            if _overlaps((kx, sy + 3, 11, 15), door, 0):
+                continue
+            g = spec.get("glass", P["sky"])
+            c.rect(kx - 1, sy + 2, 13, 17, shade(front, 0.6))
+            c.rect(kx, sy + 3, 11, 15, g)
+            c.rect(kx, sy + 3, 11, 4, shade(g, 1.15))
+            rr = rng(kx)
+            for _ in range(3):  # marchandises en vitrine
+                c.rect(kx + 1 + rr.randrange(8), sy + 12 + rr.randrange(4), 2, 2,
+                       [P["velvet3"], P["gold2"], P["green1"], P["purple2"], P["blue"]][rr.randrange(5)])
+            win.append((kx, sy + 3, 11, 15))
+        awning = spec.get("awning")
+        if awning:
+            for i in range(0, PW - 2, 8):
+                col = awning if (i // 8) % 2 == 0 else P["cream"]
+                c.rect(X0 + 1 + i, sy - 8, min(8, PW - 2 - i), 6, col)
+                c.set(X0 + 1 + i + 3, sy - 2, col)
+                c.set(X0 + 1 + i + 4, sy - 2, col)
+            c.hline(X0 + 1, X0 + PW - 2, sy - 1, P["ink"], 90)
+    elif spec.get("ground_windows", True):
+        gy = Y0 + PH - door_h - 1
+        for gx in range(X0 + 6, X0 + PW - 14, max(18, spec.get("col_w", 20))):
+            if not any(_overlaps((gx - 4, gy - 2, 18, 18), z, 0) for z in avoid):
+                draw_window(c, gx, gy, 10, 12, spec.get("frame", P["ink"]), spec.get("glass", P["blue"]), wall,
+                            spec.get("shutters"))
+                win.append((gx, gy, 10, 12))
+    if spec.get("extra"):
+        spec["extra"](c, X0, Y0, PW, PH, season)
+    # Porte : encadrement de pierre, marche, applique
+    door_col = spec.get("door", P["wood2"])
+    c.rect(dx - 2, Y0 + PH - door_h - 3, dw + 4, door_h + 3, shade(wall, 0.7))
+    c.hline(dx - 3, dx + dw + 2, Y0 + PH - door_h - 3, shade(wall, 1.15))
+    if dw >= 2 * T:
+        double_door(c, dx, Y0 + PH - door_h, door_col, h=door_h)
+    else:
+        c.rect(dx + 1, Y0 + PH - door_h, T - 2, door_h, P["ink"])
+        c.rect(dx + 2, Y0 + PH - door_h + 1, T - 4, door_h - 1, door_col)
+        c.rect(dx + 4, Y0 + PH - door_h + 3, T - 8, 6, shade(door_col, 1.25))
+        c.set(dx + T - 5, Y0 + PH - 10, P["gold3"])
+    c.rect(dx - 2, Y0 + PH - 2, dw + 4, 2, P["grey3"])
+    if PW >= 8 * T:
+        for lx in (dx - 7, dx + dw + 4):
+            c.rect(lx, Y0 + PH - door_h - 1, 3, 4, P["ink"])
+            c.rect(lx + 1, Y0 + PH - door_h, 1, 2, P["light"])
+            lights.append(("sconce", lx + 1, Y0 + PH - door_h + 1))
+    # Enseigne, toujours au-dessus
+    sign(c, X0 + PW // 2, sign_y, label, spec["sign_bg"], spec["sign_fg"], spec.get("sign_frame", P["gold1"]))
+    c.hline(X0, X0 + PW - 1, Y0 + PH - 1, shade(wall, 0.55))
+
+
+def _mairie_extra(c, x0, y0, w, h, season):
+    # Horloge sur le toit, drapeau tricolore, marches du perron
+    cx = x0 + w // 2
+    c.ellipse(cx, y0 + 9, 7, 7, P["gold1"])
+    c.ellipse(cx, y0 + 9, 5, 5, P["white"])
+    c.vline(cx, y0 + 5, y0 + 9, P["ink"])
+    c.hline(cx, cx + 3, y0 + 9, P["ink"])
+    c.vline(x0 + 6, y0 + 8, y0 + 30, P["grey0"])
+    for i, col in enumerate([(40, 70, 160), P["white"], (200, 40, 50)]):
+        c.rect(x0 + 7 + i * 3, y0 + 9, 3, 7, col)
 
 
 def _cinema_extra(c, x0, y0, w, h, season):
@@ -183,12 +293,13 @@ def _cinema_extra(c, x0, y0, w, h, season):
 
 
 def _conservatoire_extra(c, x0, y0, w, h, season):
-    for i in range(4):
-        cx = x0 + 16 + i * (w - 32) // 3
-        c.rect(cx - 2, y0 + 30, 5, h - 52, P["cream"])
-    for i, nx in enumerate(range(x0 + 20, x0 + w - 20, 24)):
-        c.rect(nx, y0 + 26 + (i % 2) * 2, 2, 6, P["ink"])
-        c.ellipse(nx, y0 + 32 + (i % 2) * 2, 2, 1.5, P["ink"])
+    # Fronton au-dessus de la porte et pilastres aux angles (les fenêtres restent dégagées)
+    cx = x0 + w // 2
+    c.poly([(cx - 22, y0 + h - 25), (cx, y0 + h - 33), (cx + 22, y0 + h - 25)], P["cream"])
+    c.hline(cx - 22, cx + 22, y0 + h - 25, P["grey2"])
+    for px in (x0 + 3, x0 + w - 6):
+        c.rect(px, y0 + 26, 3, h - 31, P["white"])
+        c.vline(px + 2, y0 + 26, y0 + h - 6, P["grey3"])
 
 
 def _ecole_extra(c, x0, y0, w, h, season):
@@ -198,16 +309,14 @@ def _ecole_extra(c, x0, y0, w, h, season):
     motto = "LIBERTE EGALITE FRATERNITE"
     if text_width(motto) > w - 24:
         motto = "LIBERTE EGALITE"
-    text(c, x0 + 8, y0 + h - 40, motto, P["navy"])
+    tw = text_width(motto)
+    c.rect(x0 + w // 2 - tw // 2 - 3, y0 + h - 42, tw + 6, 11, P["cream"])   # bandeau de pierre gravé
+    c.frame(x0 + w // 2 - tw // 2 - 3, y0 + h - 42, tw + 6, 11, shade((196, 120, 90), 0.7))
+    text(c, x0 + w // 2 - tw // 2, y0 + h - 40, motto, P["navy"])
 
 
 def _tour_extra(c, x0, y0, w, h, season):
-    r = rng(x0 + y0)
-    for _ in range(3):
-        bx = x0 + 6 + r.randrange(w - 16)
-        by = y0 + 30 + r.randrange(h - 70)
-        for i in range(6):
-            c.set(bx + i, by, [P["velvet3"], P["sky"], P["gold3"], P["white"]][r.randrange(4)])
+    # Antenne et jardinières colorées sous quelques fenêtres
     c.ellipse(x0 + w - 12, y0 + 8, 4, 3, P["grey3"])
     c.vline(x0 + w - 12, y0 + 8, y0 + 13, P["grey1"])
 
@@ -218,9 +327,10 @@ def _maison_extra(c, x0, y0, w, h, season):
 
 
 def _halle_extra(c, x0, y0, w, h, season):
-    for xx in range(x0 + 8, x0 + w - 4, 24):
-        c.rect(xx, y0 + 24, 3, h - 24, P["navy"])
+    # Poutre métallique sous la verrière
     c.rect(x0, y0 + 24, w, 3, P["navy"])
+    for xx in range(x0 + 4, x0 + w - 2, 12):
+        c.set(xx, y0 + 25, P["grey2"])
 
 
 def _siege_extra(c, x0, y0, w, h, season):
@@ -246,9 +356,10 @@ def _gare_extra(c, x0, y0, w, h, season):
 
 
 STYLES = {
+    "mairie": {"wall": (214, 196, 160), "roof": P["blue"], "roof_style": "zinc", "sign": "MAIRIE", "sign_bg": P["cream"], "sign_fg": P["navy"], "sign_frame": P["navy"], "rows": 2, "col_w": 22, "win_w": 12, "win_h": 16, "frame": P["navy"], "glass": P["blue"], "roof_h": 20, "door": P["wood1"], "extra": _mairie_extra},
     "gare": {"wall": (214, 196, 160), "roof": P["velvet2"], "roof_style": "tiles", "sign": "GARE DE BREVAL", "sign_bg": P["navy"], "sign_fg": P["cream"], "rows": 1, "col_w": 26, "win_w": 14, "win_h": 18, "glass": P["sky"], "extra": _gare_extra, "roof_h": 18},
-    "fabrique": {"wall": (150, 92, 76), "roof": P["grey1"], "roof_style": "zinc", "sign": "LA FABRIQUE", "sign_bg": P["ink"], "sign_fg": P["gold3"], "brick": True, "rows": 0, "extra": _fabrique_extra, "roof_h": 18},
-    "hotel": {"wall": (220, 206, 176), "roof": P["blue"], "roof_style": "zinc", "sign": "HOTEL DU COMMERCE", "sign_bg": P["velvet1"], "sign_fg": P["gold3"], "rows": 2, "col_w": 20, "balcony": P["ink"], "roof_h": 16},
+    "fabrique": {"wall": (150, 92, 76), "roof": P["grey1"], "roof_style": "zinc", "sign": "LA FABRIQUE", "sign_bg": P["ink"], "sign_fg": P["gold3"], "brick": True, "rows": 0, "ground_windows": False, "extra": _fabrique_extra, "roof_h": 18},
+    "hotel": {"wall": (220, 206, 176), "roof": P["blue"], "roof_style": "zinc", "sign": "HOTEL DU COMMERCE", "sign_bg": P["velvet1"], "sign_fg": P["gold3"], "rows": 2, "col_w": 20, "balcony": P["ink"], "roof_h": 16, "shutters": P["green1"], "gap": 6},
     "cinema": {"wall": (120, 46, 60), "roof": P["ink"], "roof_style": "flat", "sign": "CINEMA LE REX", "sign_bg": P["ink"], "sign_fg": P["light"], "rows": 1, "col_w": 26, "extra": _cinema_extra, "sign_frame": P["light"], "door": P["velvet2"]},
     "conservatoire": {"wall": (230, 222, 200), "roof": P["grey1"], "roof_style": "zinc", "sign": "CONSERVATOIRE", "sign_bg": P["navy"], "sign_fg": P["cream"], "rows": 2, "col_w": 24, "win_h": 16, "extra": _conservatoire_extra},
     "boulangerie": {"wall": (230, 214, 180), "roof": P["velvet2"], "roof_style": "tiles", "sign": "BOULANGERIE", "sign_bg": P["gold2"], "sign_fg": P["wood0"], "shopfront": True, "awning": P["gold2"], "front": P["wood3"], "rows": 1, "glass": P["light"]},
@@ -258,11 +369,11 @@ STYLES = {
     "galerie": {"wall": (240, 238, 232), "roof": P["grey2"], "roof_style": "flat", "sign": "GALERIE", "sign_bg": P["white"], "sign_fg": P["ink"], "shopfront": True, "front": P["white"], "rows": 1, "sign_frame": P["ink"]},
     "mediatheque": {"wall": (170, 120, 80), "roof": P["green1"], "roof_style": "flat", "sign": "MEDIATHEQUE", "sign_bg": P["cream"], "sign_fg": P["wood0"], "panels": True, "rows": 2, "col_w": 18, "win_w": 14, "win_h": 18, "glass": P["sky"], "gap": 6},
     "halle": {"wall": (200, 190, 170), "roof": P["teal"], "roof_style": "glass", "sign": "HALLE DU MARCHE", "sign_bg": P["navy"], "sign_fg": P["gold3"], "rows": 1, "col_w": 24, "win_w": 18, "win_h": 30, "glass": P["sky"], "extra": _halle_extra, "roof_h": 24},
-    "ecole": {"wall": (196, 120, 90), "roof": P["velvet2"], "roof_style": "tiles", "sign": "ECOLE DES TILLEULS", "sign_bg": P["cream"], "sign_fg": P["navy"], "brick": True, "rows": 2, "col_w": 18, "win_h": 14, "glass": P["sky"], "extra": _ecole_extra},
-    "college": {"wall": (226, 214, 180), "roof": P["grey1"], "roof_style": "flat", "sign": "COLLEGE DES COTEAUX", "sign_bg": P["navy"], "sign_fg": P["cream"], "rows": 2, "col_w": 16, "win_h": 14, "glass": P["sky"]},
+    "ecole": {"wall": (196, 120, 90), "roof": P["velvet2"], "roof_style": "tiles", "sign": "ECOLE DES TILLEULS", "sign_bg": P["cream"], "sign_fg": P["navy"], "brick": True, "rows": 1, "col_w": 18, "win_h": 14, "glass": P["sky"], "extra": _ecole_extra},
+    "college": {"wall": (226, 214, 180), "roof": P["grey1"], "roof_style": "flat", "sign": "COLLEGE DES COTEAUX", "sign_bg": P["navy"], "sign_fg": P["cream"], "rows": 3, "col_w": 18, "win_h": 12, "glass": P["sky"], "gap": 6},
     "maison": {"wall": (240, 220, 160), "roof": P["orange"], "roof_style": "tiles", "sign": "MAISON DE QUARTIER", "sign_bg": P["teal"], "sign_fg": P["white"], "rows": 1, "col_w": 22, "extra": _maison_extra},
     "siege": {"wall": (120, 160, 200), "roof": P["navy"], "roof_style": "flat", "sign": "ONDINE ENERGIE", "sign_bg": P["navy"], "sign_fg": P["gold3"], "rows": 3, "col_w": 14, "win_w": 12, "win_h": 12, "glass": (170, 210, 240), "gap": 6, "extra": _siege_extra},
-    "tour": {"wall": (206, 200, 190), "roof": P["grey1"], "roof_style": "flat", "sign": "RESIDENCE", "sign_bg": P["grey0"], "sign_fg": P["cream"], "rows": 3, "col_w": 20, "win_w": 10, "win_h": 12, "balcony": P["grey0"], "gap": 10, "extra": _tour_extra},
+    "tour": {"wall": (206, 200, 190), "roof": P["grey1"], "roof_style": "flat", "sign": "RESIDENCE", "sign_bg": P["grey0"], "sign_fg": P["cream"], "rows": 4, "col_w": 20, "win_w": 10, "win_h": 12, "balcony": P["grey0"], "gap": 8, "extra": _tour_extra},
     "shop": {"wall": (210, 200, 180), "roof": P["grey1"], "roof_style": "zinc", "sign_bg": P["cream"], "sign_fg": P["ink"], "shopfront": True, "rows": 1},
 }
 
@@ -283,6 +394,37 @@ def paving(c, x0, y0, gx, gy, season):
             c.set(x0 + r.randrange(T), y0 + r.randrange(T), P["white"])
     if season == "automne" and r.random() < 0.25:
         c.set(x0 + r.randrange(T), y0 + r.randrange(T), FOLIAGE["automne"][1])
+
+
+def alley_paving(c, x0, y0, gx, gy, season, wall_l, wall_r):
+    """Ruelle : petits pavés plus sombres, caniveau central, ombre des murs voisins."""
+    base = (158, 146, 132)
+    c.rect(x0, y0, T, T, base)
+    r = rng(cell_seed(gx, gy, 57))
+    for yy in range(0, T, 3):
+        off = (gy * 5 + yy) % 6
+        c.hline(x0, x0 + T - 1, y0 + yy, shade(base, 0.82))
+        for xx in range(off, T, 6):
+            c.vline(x0 + xx, y0 + yy, y0 + yy + 2, shade(base, 0.82))
+            if r.random() < 0.18:
+                c.set(x0 + xx + 2, y0 + yy + 1, shade(base, 1.12))
+    if wall_l:
+        for k, a in enumerate((110, 70, 35)):
+            c.vline(x0 + k, y0, y0 + T - 1, P["ink"], a)
+    if wall_r:
+        for k, a in enumerate((80, 40)):
+            c.vline(x0 + T - 1 - k, y0, y0 + T - 1, P["ink"], a)
+    if not wall_l and not wall_r:
+        return
+    if season == "hiver":
+        for _ in range(4):
+            c.set(x0 + r.randrange(T), y0 + r.randrange(T), P["white"])
+    elif season == "automne" and r.random() < 0.3:
+        c.set(x0 + r.randrange(T), y0 + r.randrange(T), FOLIAGE["automne"][0])
+    if r.random() < 0.12:  # touffe d'herbe entre les pavés
+        gx_ = x0 + (3 if wall_l else T - 5)
+        c.set(gx_, y0 + 9, (96, 140, 70))
+        c.set(gx_ + 1, y0 + 8, (110, 160, 80))
 
 
 def water(c, x0, y0, gx, gy, season, frozen=False):
@@ -615,6 +757,8 @@ def render(world, season, festive=False):
                 W0.ground(base, x0, y0, k, x, y, season)
             elif k == "+":
                 paving(base, x0, y0, x, y, season)
+            elif k == "a":
+                alley_paving(base, x0, y0, x, y, season, x > 0 and g[y][x - 1] in "HXdD", x + 1 < Wt and g[y][x + 1] in "HXdD")
             elif k == "~":
                 frozen = season == "hiver" and pond and pond[0] <= x < pond[0] + pond[2] and pond[1] <= y < pond[1] + pond[3]
                 water(base, x0, y0, x, y, season, frozen)
@@ -680,6 +824,13 @@ def render(world, season, festive=False):
     # 3. Bâtiments
     for b in m["buildings"]:
         paint_building(base, top, b, season, lights)
+    # Ombre portée au pied des façades (bâtiments et rangées de maisons) : donne du relief.
+    for y in range(1, Ht):
+        for x in range(Wt):
+            above = g[y - 1][x]
+            if g[y][x] not in "HXdD" and above in "HXdD" and gr[y][x] != "~":
+                for k, a in enumerate((90, 55, 25)):
+                    base.hline(x * T, x * T + T - 1, y * T + k, P["ink"], a)
     # 4. Objets
     done = set()
     for y in range(Ht):
@@ -755,6 +906,25 @@ def render(world, season, festive=False):
                 draw_pot(base, top, x0, y0, season)
             elif k == "h":
                 hedge(base, top, x0, y0, season)
+    # Ruelles : fils tendus d'un mur à l'autre avec une lanterne (allumée la nuit).
+    for y in range(Ht):
+        for x in range(1, Wt):
+            if g[y][x] != "a" or g[y][x - 1] not in "HX" or y % 3 != 1 or gr[y][x] != "a":
+                continue
+            w = 0
+            while x + w < Wt and gr[y][x + w] == "a":
+                w += 1
+            if w < 2 or x + w >= Wt or g[y][x + w] not in "HX" or w > 4:
+                continue
+            x0, x1 = x * T, (x + w) * T - 1
+            yy = y * T - 2
+            for xx in range(x0, x1 + 1):
+                sag = int(3 * math.sin(math.pi * (xx - x0) / max(1, x1 - x0)))
+                top.set(xx, yy + sag, P["ink"], 200)
+            cx = (x0 + x1) // 2
+            top.rect(cx - 2, yy + 3, 5, 6, P["wood0"])
+            top.rect(cx - 1, yy + 4, 3, 4, (255, 210, 120))
+            lights.append(("small", cx, yy + 6))
     if season == "hiver":
         r = rng(77)
         for _ in range(900):
@@ -796,12 +966,15 @@ def lights_layer(size, lights):
             glow(L[1], L[2], 30, P["light"], 160)
         elif L[0] == "small":
             glow(L[1], L[2], 14, P["light"], 90)
+        elif L[0] == "sconce":  # applique à côté d'une porte : petit halo chaud
+            glow(L[1], L[2], 9, (255, 214, 140), 110)
         elif L[0] == "marquee":
             glow(L[1], L[2], 40, P["light"], 130)
         elif L[0] == "window":
             wx, wy, ww, wh = L[1]
-            if r.random() < 0.7:
-                c.rect(wx, wy, ww, wh, (255, 214, 140), 210)
+            if r.random() < 0.65:  # une fenêtre sur trois reste éteinte
+                c.rect(wx, wy, ww, wh, (255, 210, 130), 170)
+                c.rect(wx, wy, ww, max(1, wh // 3), (255, 230, 170), 120)
     return c
 
 
@@ -829,7 +1002,7 @@ def water_frames(world, skip_pond=False):
 
 MINI = {"_": (190, 190, 196), "=": (90, 92, 104), "z": (220, 220, 226), "+": (214, 196, 160), ":": (80, 150, 120),
         "~": (70, 120, 180), "P": (170, 150, 120), "g": (110, 160, 90), "X": (70, 60, 80), "H": (150, 80, 70),
-        "r": (110, 104, 100)}
+        "r": (110, 104, 100), "a": (176, 160, 140)}
 
 
 def minimap(world):

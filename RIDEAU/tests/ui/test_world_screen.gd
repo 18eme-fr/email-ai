@@ -187,6 +187,33 @@ func test_click_to_walk_and_doors_lead_somewhere() -> void:
 	assert_str(str(screen._door_towards("bureau").get("to", ""))).is_equal("hall")
 
 
+## On entre dans un commerce par sa porte, et on parle à la patronne par-dessus le comptoir.
+func test_entering_a_shop_and_talking_across_the_counter() -> void:
+	_new_session(3)
+	var runner := scene_runner(WORLD)
+	await runner.simulate_frames(10)
+	var screen := runner.scene() as WorldScreen
+	# Porte du café (62, 29) : on y entre depuis la place.
+	screen.load_map("rue", Vector2i(62, 30), "up")
+	await runner.simulate_frames(5)
+	screen._try_step("up")
+	assert_bool(await _wait(runner, func() -> bool: return screen.map.id == "int_cafe" and not screen._busy)).is_true()
+	assert_bool(screen.npcs.has("patronne_cafe")).is_true()
+	# Devant le comptoir, la patronne est derrière : c'est elle qui répond.
+	screen.player.cell = Vector2i(9, 4)
+	screen.player.face("up")
+	screen.interact()
+	assert_bool(await _wait(runner, func() -> bool: return screen.speech.visible)).is_true()
+	assert_str(screen.speech._name.text).contains("Mado")
+	screen.speech.close()
+	screen._busy = false
+	# Un clic sur elle mène aussi de l'autre côté du comptoir.
+	screen.player.cell = Vector2i(3, 8)
+	screen._click(Vector2(9 * 16 + 8, 2 * 16 + 8))
+	assert_array(screen._path).is_not_empty()
+	assert_int(screen._path[screen._path.size() - 1].y).is_equal(4)
+
+
 func test_city_bus_districts_and_plan() -> void:
 	_new_session(5)
 	var runner := scene_runner(WORLD)

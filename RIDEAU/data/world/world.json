@@ -213,6 +213,34 @@
   "q": {
    "name": "vieux projecteur",
    "walk": false
+  },
+  "a": {
+   "name": "ruelle",
+   "walk": true
+  },
+  "j": {
+   "name": "machine",
+   "walk": false
+  },
+  "Z": {
+   "name": "piano",
+   "walk": false
+  },
+  "l": {
+   "name": "étal ou présentoir",
+   "walk": false
+  },
+  "i": {
+   "name": "pupitre",
+   "walk": false
+  },
+  "y": {
+   "name": "œuvre ou maquette",
+   "walk": false
+  },
+  "O": {
+   "name": "escalier vers les étages",
+   "walk": false
   }
  },
  "start": {
@@ -232,12 +260,12 @@
     "X||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||X",
     "X||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||X",
     "X++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++X",
-    "XX=====================XXX_===_XXXXXXXXXHHHHHHHHHHHHHHHHHHXXXXHHHHHHHHHHHHXXXX_===_XXXHHHHHHHHHHXXXXXXXXXXXXXXXX",
-    "XX=vv=vv====vv=vv=vv=vvXXX_===_XXXXXXXXXHHHHHHHHHHHHHHHHHHXXXXHHHHHHHHHHHHXXXX_===_XXXHHHHHHHHHHXXXXXXXXXXXXXXXX",
-    "XX=====================XXX_===_XXXXXXXXXHHHHHHHHHHHHHHHHHHXXXXHHHHHHHHHHHHXXXX_===_XXXHHHHHHHHHHXXXXXXXXXXXXXXXX",
-    "XX=vv=vv=vv====vv======XXX_===_XXXXXXXXXHHHHHHHHHHHHHHHHHHXXXXHHHHHHHHHHHHXXXX_===_XXXHHHHHHHHHHXXXXXXXXXXXXXXXX",
-    "XX=====================XXX_===_XXXXXXXXXHHHHHHHHddHHHHHHHHXXXXHHHHHddHHHHHXXXX_===_XXXHHHHdHHHHHXXXXXXXXXXXXXXXX",
-    "X___L________T________L____===_T________L___A______________________T________L__===___T________L________T_______X",
+    "XX=====================XXX_===_XXXXXXXXXHHHHHHHHHHHHHHHHHHaaaaHHHHHHHHHHHHaaaa_===_XXXHHHHHHHHHHXXXXXXXXXXXXXXXX",
+    "XX=vv=vv====vv=vv=vv=vvXXX_===_XXXXXXXXXHHHHHHHHHHHHHHHHHHoaaaHHHHHHHHHHHHaaao_===_XXXHHHHHHHHHHXXXXXXXXXXXXXXXX",
+    "XX=====================XXX_===_XXXXXXXXXHHHHHHHHHHHHHHHHHHaaaaHHHHHHHHHHHHVaaa_===_XXXHHHHHHHHHHXXXXXXXXXXXXXXXX",
+    "XX=vv=vv=vv====vv======XXX_===_XXXXXXXXXHHHHHHHHHHHHHHHHHHaaaEHHHHHHHHHHHHaaaa_===_XXXHHHHHHHHHHXXXXXXXXXXXXXXXX",
+    "XX=====================XXX_===_XXXXXXXXXHHHHHHHHDDHHHHHHHHaaaaHHHHHDDHHHHHaaaa_===_XXXHHHHDHHHHHXXXXXXXXXXXXXXXX",
+    "X___L________T________L____===_T________L___A__________________________________===___T________L________T_______X",
     "X=========================_zzz_=================zz============================_zzz_============================X",
     "X=========================_zzz_=================zz============================_zzz_============================X",
     "X=========================_zzz_=================zz============================_zzz_============================X",
@@ -249,40 +277,40 @@
     "X=========================_===_z===================zz=========================_===_============================X",
     "X=========================_===_z===================zz=========================_===_============================X",
     "X=========================_===_z===================zz=========================_===_============================X",
-    "X___L________T______E_L____===__________L________T________L________T__E________===___T________L________T_______X",
-    "Xhhhhhhhhhhhh+hhhhhhhhhhhh_===_XHHHHHHHHHHXXXXHHHHHHHHHHHHXXXXXXXXXXXXXXXXXXXX_===_XHHHHHHHHHHXXHHHHHHHHHHHHXXXX",
-    "Xgggggggggggg+gggggggTgggg_===_XHHHHHHHHHHXXXXHHHHHHHHHHHHXXXXXXXXXXXXXXXXXXXX_===_XHHHHHHHHHHXXHHHHHHHHHHHHXXXX",
-    "Xgg~~~~~~~~gg+gBgggggggggg_===_XHHHHHHHHHHXXXXHHHHHHHHHHHHXXHHHHHHXHHHHHXHHHHH_===_XHHHHHHHHHHXXHHHHHHHHHHHHXXXX",
-    "Xgg~~~~~~~~gg+gBgggggggggg_===_XHHHHHHHHHHXXXXHHHHHHHHHHHHXXHHHHHHXHHHHHXHHHHH_===_XHHHHHHHHHHXXHHHHHHHHHHHHXXXX",
-    "Xgg~~~~~~~~gg+gggQQQgggTgg_===_XHHHHHHHHHHXXXXHHHHHHHHHHHHXXHHHHHHXHHHHHXHHHHH_===_XHHHHHHHHHHXXHHHHHHHHHHHHXXXX",
-    "Xgg~~~~~~~~gg+gggQQQgggggg_===_XHHHHHHHHHHXXXXHHHHHHHHHHHHXXHHHHHHXHHHHHXHHHHH_===_XHHHHHHHHHHXXHHHHHHHHHHHHXXXX",
-    "Xgg~~~~~~~~gg+gggQQQgggggg_===_XHHHHHHHHHHXXXXHHHHHHHHHHHHXXHHHHHHXHHHHHXHHHHH_===_XHHHHHHHHHHXXHHHHHHHHHHHHXXXX",
-    "Xgg~~~~~~~~gg+gggggggggggg_===_XHHHHddHHHHXXXXHHHHHDDHHHHHXXHHdHHHXHHdHHXHHdHH_===_XHHHHddHHHHXXHHHHHddHHHHHXXXX",
+    "X___L________T______E_L____===__________L________T_____________________________===___T_________________T_______X",
+    "Xhhhhhhhhhhhh+hhhhhhhhhhhh_===_XHHHHHHHHHHaaaaHHHHHHHHHHHHaaaaaoaaaaEanaaaaaVa_===_XHHHHHHHHHHaaHHHHHHHHHHHHaaXX",
+    "Xgggggggggggg+gggggggTgggg_===_XHHHHHHHHHHoaaaHHHHHHHHHHHHaaaaaaaaaaaaaaaaaaaa_===_XHHHHHHHHHHaaHHHHHHHHHHHHaaXX",
+    "Xgg~~~~~~~~gg+gBgggggggggg_===_XHHHHHHHHHHaaaVHHHHHHHHHHHHaaHHHHHHaHHHHHaHHHHH_===_XHHHHHHHHHHoaHHHHHHHHHHHHaaXX",
+    "Xgg~~~~~~~~gg+gBgggggggggg_===_XHHHHHHHHHHaaaaHHHHHHHHHHHHaaHHHHHHaHHHHHaHHHHH_===_XHHHHHHHHHHaaHHHHHHHHHHHHaaXX",
+    "Xgg~~~~~~~~gg+gggQQQgggTgg_===_XHHHHHHHHHHEaaaHHHHHHHHHHHHaaHHHHHHaHHHHHaHHHHH_===_XHHHHHHHHHHaaHHHHHHHHHHHHaEXX",
+    "Xgg~~~~~~~~gg+gggQQQgggggg_===_XHHHHHHHHHHaaaaHHHHHHHHHHHHaaHHHHHHaHHHHHaHHHHH_===_XHHHHHHHHHHaaHHHHHHHHHHHHaaXX",
+    "Xgg~~~~~~~~gg+gggQQQgggggg_===_XHHHHHHHHHHaaaoHHHHHHHHHHHHaaHHHHHHaHHHHHaHHHHH_===_XHHHHHHHHHHaaHHHHHHHHHHHHaaXX",
+    "Xgg~~~~~~~~gg+gggggggggggg_===_XHHHHDDHHHHaaaaHHHHHDDHHHHHaaHHDHHHaHHDHHaHHDHH_===_XHHHHDDHHHHaaHHHHHDDHHHHHaaXX",
     "Xgg~~~~~~~~gg+gggggTgggggg_===_L+++++++++++++++++++++++++++++++++++++++++++++L_===_____________________________X",
     "Xgggggggggggg+ggggggggggTg_===_+++++++++++++L++++++++++++++Lt+++t+++++++++++++_===_z===========================X",
     "Xgggggggggggg+ggggggggggggA===_++T++++++K++++T+++++++++++Y++++++++K++++++++T++_===_z===========================X",
     "Xgggggggggggg+ggffggggTggg_===_+++++++++++E+++++++++++++++++++++++++E+++++++++_===_z===========================X",
     "Xggggggggfggg+gggggggggggg_===_o+++++++++++++++++++++FF+++++++++++++++++++++++_===_____________________________X",
-    "Xgggggggggggg+ggggggfggggg_===_++++BB++++++++++++++++FF++++++++++++++++++++++N_===_XHHHHHHXHHHHHXHHHHHHHHHHHHXXX",
-    "XgggggggggBBL+Lggggggggggg_===Ao++++++L+++++++++++++++++++++++++++++++L+++++++_===_XHHHHHHXHHHHHXHHHHHHHHHHHHXXX",
-    "X+++++++++++++++++++++++++_===_++++++++++++++++BB++++++++++BB++++++++++++++++o_===_XHHHHHHXHHHHHXHHHHHHHHHHHHXXX",
-    "XgggggggggggL+LgBBgggggggg_===_++T+++++++++++T+++++++++++++++++T+++++++++++T++_===_XHHHHHHXHHHHHXHHHHHHHHHHHHXXX",
-    "XggggggggTggg+gggggggggggg_===_+++MMMMMMMMMM++++++E+++++++++++++++++++++VV++++_===_XHHHHHHXHHHHHXHHHHHHHHHHHHXXX",
-    "XgTgggfgggggg+gggggggggggg_===_+++++++++++++++++++++++++++++++++++++++++++++++_===_XHHdHHHXHHdHHXHHdHHHHHdHHHXXX",
-    "Xgggggggggggg+gggggYgggggg_____T________L________T________L_________________L________T__VV____L_____A__________X",
+    "Xgggggggggggg+ggggggfggggg_===_++++BB++++++++++++++++FF++++++++++++++++++++++N_===_XHHHHHHaHHHHHaHHHHHHHHHHHHaaX",
+    "XgggggggggBBL+Lggggggggggg_===Ao++++++L+++++++++++++++++++++++++++++++L+++++++_===_XHHHHHHaHHHHHaHHHHHHHHHHHHaaX",
+    "X+++++++++++++++++++++++++_===_++++++++++++++++BB++++++++++BB++++++++++++++++o_===_XHHHHHHaHHHHHaHHHHHHHHHHHHaoX",
+    "XgggggggggggL+LgBBgggggggg_===_++T+++++++++++T+++++++++++++++++T+++++++++++T++_===_XHHHHHHaHHHHHaHHHHHHHHHHHHaaX",
+    "XggggggggTggg+gggggggggggg_===_+++MMMMMMMMMM++++++E+++++++++++++++++++++VV++++_===_XHHHHHHaHHHHHaHHHHHHHHHHHHaaX",
+    "XgTgggfgggggg+gggggggggggg_===_+++++++++++++++++++++++++++++++++++++++++++++++_===_XHHDHHHaHHDHHaHHDHHHHHDHHHaaX",
+    "Xgggggggggggg+gggggYgggggg_____T________L________T________L_________________L___________VV__________A__________X",
     "Xgggggggggggg+gTgggggggggg==========================zz=======================z=================================X",
     "XggJJJJJggggg+ggggggggTggg==========================zz=======================z=================================X",
     "XggJJJJJggggg+gggggggggggg==========================zz=======================z=================================X",
-    "XggJJJJJggggg+gggggggggggg_____T_________________T________L_E______T________L__________________E_______________X",
-    "XggJJJJJggggg+gggggggggggg_===_HHHHHHHHHHHHXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXggggg_===_XXHHHHHHHHHHHHHHHHXXXXXXXXXXX",
-    "XgggggggggTgg+ggTgTggNgggg_===_HHHHHHHHHHHHXXHHHHHHHHHHHHHHXXHHHHHHHHHHHHgTggg_===_XXHHHHHHHHHHHHHHHHX========XX",
-    "Xgggggggggggg+gggggggggTgg_===_HHHHHHHHHHHHXXHHHHHHHHHHHHHHXXHHHHHHHHHHHHggggg_===_XXHHHHHHHHHHHHHHHHX=vv=vv==XX",
-    "XggTgTggggggg+gggggggggggg_===_HHHHHHHHHHHHXXHHHHHHHHHHHHHHXXHHHHHHHHHHHHgggTg_===_XXHHHHHHHHHHHHHHHHX========XX",
-    "XggggggggggBg+ggggggTggggg_===_HHHHHHHHHHHHXXHHHHHHHHHHHHHHXXHHHHHHHHHHHHggBBg_===_XXHHHHHHHHHHHHHHHHX========XX",
-    "XggggggggggBg+ggTgggggTggg_===_HHHHHHHHHHHHXXHHHHHHHHHHHHHHXXHHHHHHHHHHHHggggg_===_XXHHHHHHHHHHHHHHHHX=vv=vv==XX",
-    "XggggggTgTggg+gggggggggggg_===_HHHHHHHHHHHHXXHHHHHHHHHHHHHHXXHHHHHHHHHHHHgTggg_===_XXHHHHHHHHHHHHHHHHX========XX",
-    "Xgggggggggggg+gggggggggggg_===_HHHHHddHHHHHXXHHHHHHddHHHHHHXXHHHHHddHHHHHggggg_===_XXHHHHHHHddHHHHHHHX========XX",
-    "X___L________T________L__________________________T________L________T________L________T________L________T_______X",
+    "XggJJJJJggggg+gggggggggggg_____T_________________T________L________T________L__________________E_______________X",
+    "XggJJJJJggggg+gggggggggggg_===_HHHHHHHHHHHHaaXXXXXXXXXXXXXXaaXXXXXXXXXXXXggggg_===_aaHHHHHHHHHHHHHHHHaXXXXXXXXXX",
+    "XgggggggggTgg+ggTgTggNgggg_===_HHHHHHHHHHHHaaHHHHHHHHHHHHHHaaHHHHHHHHHHHHgTggg_===_aaHHHHHHHHHHHHHHHHa========XX",
+    "Xgggggggggggg+gggggggggTgg_===_HHHHHHHHHHHHoaHHHHHHHHHHHHHHaaHHHHHHHHHHHHggggg_===_aaHHHHHHHHHHHHHHHHa=vv=vv==XX",
+    "XggTgTggggggg+gggggggggggg_===_HHHHHHHHHHHHaaHHHHHHHHHHHHHHaaHHHHHHHHHHHHgggTg_===_aaHHHHHHHHHHHHHHHHa========XX",
+    "XggggggggggBg+ggggggTggggg_===_HHHHHHHHHHHHaaHHHHHHHHHHHHHHaaHHHHHHHHHHHHggBBg_===_VaHHHHHHHHHHHHHHHHa========XX",
+    "XggggggggggBg+ggTgggggTggg_===_HHHHHHHHHHHHaaHHHHHHHHHHHHHHaEHHHHHHHHHHHHggggg_===_aaHHHHHHHHHHHHHHHHa=vv=vv==XX",
+    "XggggggTgTggg+gggggggggggg_===_HHHHHHHHHHHHaaHHHHHHHHHHHHHHaaHHHHHHHHHHHHgTggg_===_aaHHHHHHHHHHHHHHHHa========XX",
+    "Xgggggggggggg+gggggggggggg_===_HHHHHDDHHHHHaaHHHHHHDDHHHHHHaaHHHHHDDHHHHHggggg_===_aaHHHHHHHDDHHHHHHHa========XX",
+    "X___L________T________L__________________________T________L_________________L________T_________________T_______X",
     "X=======================================zz==========================zz=========================================X",
     "X=======================================zz==========================zz=========================================X",
     "X=======================================zz==========================zz=========================================X",
@@ -295,7 +323,7 @@
     "XggHHHHHHHHgggHHHHHHHHggEg_____gHHHHHHHHHHHHHHHHgggHHHHHHHHgggW:::::::::::::Wg_____gggHHHHHHHHggggHHHHHHHHgggggX",
     "XggHHHHHHHHgggHHHHHHHHgggg_____gHHHHHHHHHHHHHHHHgTgHHHHHHHHgggW:::::::::::::Wg_____gggHHHHHHHHggggHHHHHHHHgggggX",
     "XggHHHHHHHHgggHHHHHHHHgBBg_____gHHHHHHHHHHHHHHHHgggHHHHHHHHgggW:::::::::::::Wg_____gggHHHHHHHHggggHHHHHHHHgggggX",
-    "XggHHHdHHHHgggHHHdHHHHgggg_____gHHHHHHHddHHHHHHHgggHHHddHHHgggWWWWWWW::WWWWWWg_____gggHHHdHHHHggggHHHdHHHHgggggX",
+    "XggHHHDHHHHgggHHHDHHHHgggg_____gHHHHHHHDDHHHHHHHgggHHHDDHHHgggWWWWWWW::WWWWWWg_____gggHHHDHHHHggggHHHDHHHHgggggX",
     "X___________L________________________________L______________________________________L___________L______________X",
     "Xggggggggggggggggggggggggg_____ggggggggggggggggggggggggggggggggggggggggggggggg_____gggggggBBgggggggggggggggggggX",
     "XggHHHHHHHHgggHHHHHHHHgggg_____ggggggggggggggggggggggggggggggggggggggggggggggg_____gggHHHHHHHHggggHHHHHHHHgggggX",
@@ -305,7 +333,7 @@
     "XggHHHHHHHHgggHHHHHHHHgggg_____ggggggggggggggggggggJJJJJJggggggggggggTgggggggg_____gggHHHHHHHHggggHHHHHHHHgggggX",
     "XggHHHHHHHHgggHHHHHHHHgggg_____gGGGGGGGGGGGGGGGGgggggggggggggggggggggggggggggg_____gggHHHHHHHHggggHHHHHHHHgggggX",
     "XggHHHHHHHHgggHHHHHHHHgggg_____gGGGGGGGGGGGGGGGGggggggggggBBgggggggggggggggggg_____gggHHHHHHHHggggHHHHHHHHgggggX",
-    "XggHHHdHHHHgggHHHdHHHHgggg_____ggggggggggggggggggEgggggggggggggggggggggggggggg_____EggHHHdHHHHggggHHHdHHHHgggggX",
+    "XggHHHDHHHHgggHHHDHHHHgggg_____ggggggggggggggggggEgggggggggggggggggggggggggggg_____EggHHHDHHHHggggHHHDHHHHgggggX",
     "X___________L_______________________________________________L___________________________________L______________X",
     "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
    ],
@@ -333,100 +361,465 @@
       12
      ],
      "facing": "up"
+    },
+    {
+     "cell": [
+      48,
+      8
+     ],
+     "to": "int_gare",
+     "to_cell": [
+      9,
+      8
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      49,
+      8
+     ],
+     "to": "int_gare",
+     "to_cell": [
+      10,
+      8
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      67,
+      8
+     ],
+     "to": "int_fabrique",
+     "to_cell": [
+      9,
+      9
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      68,
+      8
+     ],
+     "to": "int_fabrique",
+     "to_cell": [
+      10,
+      9
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      90,
+      8
+     ],
+     "to": "int_hotel",
+     "to_cell": [
+      7,
+      8
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      36,
+      29
+     ],
+     "to": "int_mairie",
+     "to_cell": [
+      8,
+      8
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      37,
+      29
+     ],
+     "to": "int_mairie",
+     "to_cell": [
+      9,
+      8
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      62,
+      29
+     ],
+     "to": "int_cafe",
+     "to_cell": [
+      6,
+      8
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      69,
+      29
+     ],
+     "to": "int_imprimerie",
+     "to_cell": [
+      5,
+      8
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      75,
+      29
+     ],
+     "to": "int_boulangerie",
+     "to_cell": [
+      5,
+      7
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      88,
+      29
+     ],
+     "to": "int_cinema",
+     "to_cell": [
+      8,
+      9
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      89,
+      29
+     ],
+     "to": "int_cinema",
+     "to_cell": [
+      9,
+      9
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      101,
+      29
+     ],
+     "to": "int_conservatoire",
+     "to_cell": [
+      8,
+      8
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      102,
+      29
+     ],
+     "to": "int_conservatoire",
+     "to_cell": [
+      9,
+      8
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      86,
+      40
+     ],
+     "to": "int_librairie",
+     "to_cell": [
+      5,
+      7
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      93,
+      40
+     ],
+     "to": "int_fleuriste",
+     "to_cell": [
+      4,
+      7
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      99,
+      40
+     ],
+     "to": "int_disquaire",
+     "to_cell": [
+      5,
+      7
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      105,
+      40
+     ],
+     "to": "int_galerie",
+     "to_cell": [
+      6,
+      7
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      36,
+      53
+     ],
+     "to": "int_mediatheque",
+     "to_cell": [
+      9,
+      9
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      37,
+      53
+     ],
+     "to": "int_mediatheque",
+     "to_cell": [
+      10,
+      9
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      51,
+      53
+     ],
+     "to": "int_halle",
+     "to_cell": [
+      10,
+      8
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      52,
+      53
+     ],
+     "to": "int_halle",
+     "to_cell": [
+      11,
+      8
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      66,
+      53
+     ],
+     "to": "int_ecole",
+     "to_cell": [
+      8,
+      8
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      67,
+      53
+     ],
+     "to": "int_ecole",
+     "to_cell": [
+      9,
+      8
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      92,
+      53
+     ],
+     "to": "int_ondine",
+     "to_cell": [
+      8,
+      8
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      93,
+      53
+     ],
+     "to": "int_ondine",
+     "to_cell": [
+      9,
+      8
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      6,
+      67
+     ],
+     "to": "int_tour_a",
+     "to_cell": [
+      5,
+      7
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      17,
+      67
+     ],
+     "to": "int_tour_b",
+     "to_cell": [
+      5,
+      7
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      6,
+      77
+     ],
+     "to": "int_tour_e",
+     "to_cell": [
+      5,
+      7
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      17,
+      77
+     ],
+     "to": "int_tour_f",
+     "to_cell": [
+      5,
+      7
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      89,
+      67
+     ],
+     "to": "int_tour_c",
+     "to_cell": [
+      5,
+      7
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      101,
+      67
+     ],
+     "to": "int_tour_d",
+     "to_cell": [
+      5,
+      7
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      89,
+      77
+     ],
+     "to": "int_tour_g",
+     "to_cell": [
+      5,
+      7
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      101,
+      77
+     ],
+     "to": "int_tour_h",
+     "to_cell": [
+      5,
+      7
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      39,
+      67
+     ],
+     "to": "int_college",
+     "to_cell": [
+      9,
+      8
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      40,
+      67
+     ],
+     "to": "int_college",
+     "to_cell": [
+      10,
+      8
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      54,
+      67
+     ],
+     "to": "int_maison_quartier",
+     "to_cell": [
+      8,
+      8
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      55,
+      67
+     ],
+     "to": "int_maison_quartier",
+     "to_cell": [
+      9,
+      8
+     ],
+     "facing": "up"
     }
    ],
    "spots": [
-    {
-     "id": "gare",
-     "cells": [
-      [
-       48,
-       8
-      ],
-      [
-       49,
-       8
-      ]
-     ],
-     "label": "Gare de Bréval",
-     "kind": "flavor"
-    },
-    {
-     "id": "fabrique",
-     "cells": [
-      [
-       67,
-       8
-      ],
-      [
-       68,
-       8
-      ]
-     ],
-     "label": "La Fabrique (friche culturelle)",
-     "kind": "flavor"
-    },
-    {
-     "id": "hotel",
-     "cells": [
-      [
-       90,
-       8
-      ]
-     ],
-     "label": "Hôtel du Commerce",
-     "kind": "flavor"
-    },
-    {
-     "id": "mairie",
-     "cells": [
-      [
-       36,
-       29
-      ],
-      [
-       37,
-       29
-      ]
-     ],
-     "label": "Mairie",
-     "kind": "place",
-     "character": "pommier"
-    },
-    {
-     "id": "cafe",
-     "cells": [
-      [
-       62,
-       29
-      ]
-     ],
-     "label": "Café des Artistes",
-     "kind": "flavor"
-    },
-    {
-     "id": "imprimerie",
-     "cells": [
-      [
-       69,
-       29
-      ]
-     ],
-     "label": "Imprimerie Lebrun",
-     "kind": "action",
-     "action": "communication"
-    },
-    {
-     "id": "boulangerie",
-     "cells": [
-      [
-       75,
-       29
-      ]
-     ],
-     "label": "Boulangerie",
-     "kind": "flavor"
-    },
     {
      "id": "facade",
      "cells": [
@@ -442,80 +835,6 @@
      "label": "Façade du théâtre",
      "kind": "upgrade",
      "upgrade": "enseigne"
-    },
-    {
-     "id": "cinema",
-     "cells": [
-      [
-       88,
-       29
-      ],
-      [
-       89,
-       29
-      ]
-     ],
-     "label": "Cinéma Le Rex",
-     "kind": "flavor"
-    },
-    {
-     "id": "conservatoire",
-     "cells": [
-      [
-       101,
-       29
-      ],
-      [
-       102,
-       29
-      ]
-     ],
-     "label": "Conservatoire",
-     "kind": "flavor"
-    },
-    {
-     "id": "librairie",
-     "cells": [
-      [
-       86,
-       40
-      ]
-     ],
-     "label": "Librairie La Plume",
-     "kind": "flavor"
-    },
-    {
-     "id": "fleuriste",
-     "cells": [
-      [
-       93,
-       40
-      ]
-     ],
-     "label": "Fleuriste",
-     "kind": "flavor"
-    },
-    {
-     "id": "disquaire",
-     "cells": [
-      [
-       99,
-       40
-      ]
-     ],
-     "label": "Disquaire",
-     "kind": "flavor"
-    },
-    {
-     "id": "galerie",
-     "cells": [
-      [
-       105,
-       40
-      ]
-     ],
-     "label": "Galerie d'art",
-     "kind": "flavor"
     },
     {
      "id": "fontaine",
@@ -632,66 +951,6 @@
      "kind": "flavor"
     },
     {
-     "id": "mediatheque",
-     "cells": [
-      [
-       36,
-       53
-      ],
-      [
-       37,
-       53
-      ]
-     ],
-     "label": "Médiathèque Louise-Michel",
-     "kind": "flavor"
-    },
-    {
-     "id": "halle",
-     "cells": [
-      [
-       51,
-       53
-      ],
-      [
-       52,
-       53
-      ]
-     ],
-     "label": "Halle du marché",
-     "kind": "flavor"
-    },
-    {
-     "id": "ecole",
-     "cells": [
-      [
-       66,
-       53
-      ],
-      [
-       67,
-       53
-      ]
-     ],
-     "label": "École des Tilleuls",
-     "kind": "flavor"
-    },
-    {
-     "id": "ondine",
-     "cells": [
-      [
-       92,
-       53
-      ],
-      [
-       93,
-       53
-      ]
-     ],
-     "label": "Ondine Énergie (siège)",
-     "kind": "flavor"
-    },
-    {
      "id": "etang",
      "cells": [
       [
@@ -783,132 +1042,6 @@
      "kind": "flavor"
     },
     {
-     "id": "tour_a",
-     "cells": [
-      [
-       6,
-       67
-      ]
-     ],
-     "label": "Résidence des Coteaux",
-     "kind": "flavor",
-     "flavor": "tour"
-    },
-    {
-     "id": "tour_b",
-     "cells": [
-      [
-       17,
-       67
-      ]
-     ],
-     "label": "Résidence des Coteaux",
-     "kind": "flavor",
-     "flavor": "tour"
-    },
-    {
-     "id": "tour_e",
-     "cells": [
-      [
-       6,
-       77
-      ]
-     ],
-     "label": "Résidence des Coteaux",
-     "kind": "flavor",
-     "flavor": "tour"
-    },
-    {
-     "id": "tour_f",
-     "cells": [
-      [
-       17,
-       77
-      ]
-     ],
-     "label": "Résidence des Coteaux",
-     "kind": "flavor",
-     "flavor": "tour"
-    },
-    {
-     "id": "tour_c",
-     "cells": [
-      [
-       89,
-       67
-      ]
-     ],
-     "label": "Résidence des Coteaux",
-     "kind": "flavor",
-     "flavor": "tour"
-    },
-    {
-     "id": "tour_d",
-     "cells": [
-      [
-       101,
-       67
-      ]
-     ],
-     "label": "Résidence des Coteaux",
-     "kind": "flavor",
-     "flavor": "tour"
-    },
-    {
-     "id": "tour_g",
-     "cells": [
-      [
-       89,
-       77
-      ]
-     ],
-     "label": "Résidence des Coteaux",
-     "kind": "flavor",
-     "flavor": "tour"
-    },
-    {
-     "id": "tour_h",
-     "cells": [
-      [
-       101,
-       77
-      ]
-     ],
-     "label": "Résidence des Coteaux",
-     "kind": "flavor",
-     "flavor": "tour"
-    },
-    {
-     "id": "college",
-     "cells": [
-      [
-       39,
-       67
-      ],
-      [
-       40,
-       67
-      ]
-     ],
-     "label": "Collège des Coteaux",
-     "kind": "flavor"
-    },
-    {
-     "id": "maison_quartier",
-     "cells": [
-      [
-       54,
-       67
-      ],
-      [
-       55,
-       67
-      ]
-     ],
-     "label": "Maison de quartier des Coteaux",
-     "kind": "flavor"
-    },
-    {
      "id": "stade",
      "cells": [
       [
@@ -958,6 +1091,17 @@
       ]
      ],
      "label": "Fresque des Coteaux",
+     "kind": "flavor"
+    },
+    {
+     "id": "cour_artisans",
+     "cells": [
+      [
+       70,
+       22
+      ]
+     ],
+     "label": "Cour des artisans",
      "kind": "flavor"
     },
     {
@@ -1296,11 +1440,11 @@
     "XrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrX",
     "XrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrX",
     "X++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++X",
-    "XX=====================XXX_===_XXXXXXXXXHHHHHHHHHHHHHHHHHHXXXXHHHHHHHHHHHHXXXX_===_XXXHHHHHHHHHHXXXXXXXXXXXXXXXX",
-    "XX=====================XXX_===_XXXXXXXXXHHHHHHHHHHHHHHHHHHXXXXHHHHHHHHHHHHXXXX_===_XXXHHHHHHHHHHXXXXXXXXXXXXXXXX",
-    "XX=====================XXX_===_XXXXXXXXXHHHHHHHHHHHHHHHHHHXXXXHHHHHHHHHHHHXXXX_===_XXXHHHHHHHHHHXXXXXXXXXXXXXXXX",
-    "XX=====================XXX_===_XXXXXXXXXHHHHHHHHHHHHHHHHHHXXXXHHHHHHHHHHHHXXXX_===_XXXHHHHHHHHHHXXXXXXXXXXXXXXXX",
-    "XX=====================XXX_===_XXXXXXXXXHHHHHHHHHHHHHHHHHHXXXXHHHHHHHHHHHHXXXX_===_XXXHHHHHHHHHHXXXXXXXXXXXXXXXX",
+    "XX=====================XXX_===_XXXXXXXXXHHHHHHHHHHHHHHHHHHaaaaHHHHHHHHHHHHaaaa_===_XXXHHHHHHHHHHXXXXXXXXXXXXXXXX",
+    "XX=====================XXX_===_XXXXXXXXXHHHHHHHHHHHHHHHHHHaaaaHHHHHHHHHHHHaaaa_===_XXXHHHHHHHHHHXXXXXXXXXXXXXXXX",
+    "XX=====================XXX_===_XXXXXXXXXHHHHHHHHHHHHHHHHHHaaaaHHHHHHHHHHHHaaaa_===_XXXHHHHHHHHHHXXXXXXXXXXXXXXXX",
+    "XX=====================XXX_===_XXXXXXXXXHHHHHHHHHHHHHHHHHHaaaaHHHHHHHHHHHHaaaa_===_XXXHHHHHHHHHHXXXXXXXXXXXXXXXX",
+    "XX=====================XXX_===_XXXXXXXXXHHHHHHHHHHHHHHHHHHaaaaHHHHHHHHHHHHaaaa_===_XXXHHHHHHHHHHXXXXXXXXXXXXXXXX",
     "X__________________________===_________________________________________________===_____________________________X",
     "X=========================_zzz_=================zz============================_zzz_============================X",
     "X=========================_zzz_=================zz============================_zzz_============================X",
@@ -1314,38 +1458,38 @@
     "X=========================_===_z===================zz=========================_===_============================X",
     "X=========================_===_z===================zz=========================_===_============================X",
     "X__________________________===_________________________________________________===_____________________________X",
-    "Xgggggggggggg+gggggggggggg_===_XHHHHHHHHHHXXXXHHHHHHHHHHHHXXXXXXXXXXXXXXXXXXXX_===_XHHHHHHHHHHXXHHHHHHHHHHHHXXXX",
-    "Xgggggggggggg+gggggggggggg_===_XHHHHHHHHHHXXXXHHHHHHHHHHHHXXXXXXXXXXXXXXXXXXXX_===_XHHHHHHHHHHXXHHHHHHHHHHHHXXXX",
-    "Xgg~~~~~~~~gg+gggggggggggg_===_XHHHHHHHHHHXXXXHHHHHHHHHHHHXXHHHHHHXHHHHHXHHHHH_===_XHHHHHHHHHHXXHHHHHHHHHHHHXXXX",
-    "Xgg~~~~~~~~gg+gggggggggggg_===_XHHHHHHHHHHXXXXHHHHHHHHHHHHXXHHHHHHXHHHHHXHHHHH_===_XHHHHHHHHHHXXHHHHHHHHHHHHXXXX",
-    "Xgg~~~~~~~~gg+gggggggggggg_===_XHHHHHHHHHHXXXXHHHHHHHHHHHHXXHHHHHHXHHHHHXHHHHH_===_XHHHHHHHHHHXXHHHHHHHHHHHHXXXX",
-    "Xgg~~~~~~~~gg+gggggggggggg_===_XHHHHHHHHHHXXXXHHHHHHHHHHHHXXHHHHHHXHHHHHXHHHHH_===_XHHHHHHHHHHXXHHHHHHHHHHHHXXXX",
-    "Xgg~~~~~~~~gg+gggggggggggg_===_XHHHHHHHHHHXXXXHHHHHHHHHHHHXXHHHHHHXHHHHHXHHHHH_===_XHHHHHHHHHHXXHHHHHHHHHHHHXXXX",
-    "Xgg~~~~~~~~gg+gggggggggggg_===_XHHHHHHHHHHXXXXHHHHHHHHHHHHXXHHHHHHXHHHHHXHHHHH_===_XHHHHHHHHHHXXHHHHHHHHHHHHXXXX",
+    "Xgggggggggggg+gggggggggggg_===_XHHHHHHHHHHaaaaHHHHHHHHHHHHaaaaaaaaaaaaaaaaaaaa_===_XHHHHHHHHHHaaHHHHHHHHHHHHaaXX",
+    "Xgggggggggggg+gggggggggggg_===_XHHHHHHHHHHaaaaHHHHHHHHHHHHaaaaaaaaaaaaaaaaaaaa_===_XHHHHHHHHHHaaHHHHHHHHHHHHaaXX",
+    "Xgg~~~~~~~~gg+gggggggggggg_===_XHHHHHHHHHHaaaaHHHHHHHHHHHHaaHHHHHHaHHHHHaHHHHH_===_XHHHHHHHHHHaaHHHHHHHHHHHHaaXX",
+    "Xgg~~~~~~~~gg+gggggggggggg_===_XHHHHHHHHHHaaaaHHHHHHHHHHHHaaHHHHHHaHHHHHaHHHHH_===_XHHHHHHHHHHaaHHHHHHHHHHHHaaXX",
+    "Xgg~~~~~~~~gg+gggggggggggg_===_XHHHHHHHHHHaaaaHHHHHHHHHHHHaaHHHHHHaHHHHHaHHHHH_===_XHHHHHHHHHHaaHHHHHHHHHHHHaaXX",
+    "Xgg~~~~~~~~gg+gggggggggggg_===_XHHHHHHHHHHaaaaHHHHHHHHHHHHaaHHHHHHaHHHHHaHHHHH_===_XHHHHHHHHHHaaHHHHHHHHHHHHaaXX",
+    "Xgg~~~~~~~~gg+gggggggggggg_===_XHHHHHHHHHHaaaaHHHHHHHHHHHHaaHHHHHHaHHHHHaHHHHH_===_XHHHHHHHHHHaaHHHHHHHHHHHHaaXX",
+    "Xgg~~~~~~~~gg+gggggggggggg_===_XHHHHHHHHHHaaaaHHHHHHHHHHHHaaHHHHHHaHHHHHaHHHHH_===_XHHHHHHHHHHaaHHHHHHHHHHHHaaXX",
     "Xgg~~~~~~~~gg+gggggggggggg_===_+++++++++++++++++++++++++++++++++++++++++++++++_===_____________________________X",
     "Xgggggggggggg+gggggggggggg_===_+++++++++++++++++++++++++++++++++++++++++++++++_===_z===========================X",
     "Xgggggggggggg+gggggggggggg_===_+++++++++++++++++++++++++++++++++++++++++++++++_===_z===========================X",
     "Xgggggggggggg+gggggggggggg_===_+++++++++++++++++++++++++++++++++++++++++++++++_===_z===========================X",
     "Xgggggggggggg+gggggggggggg_===_+++++++++++++++++++++++++++++++++++++++++++++++_===_____________________________X",
-    "Xgggggggggggg+gggggggggggg_===_+++++++++++++++++++++++++++++++++++++++++++++++_===_XHHHHHHXHHHHHXHHHHHHHHHHHHXXX",
-    "Xgggggggggggg+gggggggggggg_===_+++++++++++++++++++++++++++++++++++++++++++++++_===_XHHHHHHXHHHHHXHHHHHHHHHHHHXXX",
-    "X+++++++++++++++++++++++++_===_+++++++++++++++++++++++++++++++++++++++++++++++_===_XHHHHHHXHHHHHXHHHHHHHHHHHHXXX",
-    "Xgggggggggggg+gggggggggggg_===_+++++++++++++++++++++++++++++++++++++++++++++++_===_XHHHHHHXHHHHHXHHHHHHHHHHHHXXX",
-    "Xgggggggggggg+gggggggggggg_===_+++++++++++++++++++++++++++++++++++++++++++++++_===_XHHHHHHXHHHHHXHHHHHHHHHHHHXXX",
-    "Xgggggggggggg+gggggggggggg_===_+++++++++++++++++++++++++++++++++++++++++++++++_===_XHHHHHHXHHHHHXHHHHHHHHHHHHXXX",
+    "Xgggggggggggg+gggggggggggg_===_+++++++++++++++++++++++++++++++++++++++++++++++_===_XHHHHHHaHHHHHaHHHHHHHHHHHHaaX",
+    "Xgggggggggggg+gggggggggggg_===_+++++++++++++++++++++++++++++++++++++++++++++++_===_XHHHHHHaHHHHHaHHHHHHHHHHHHaaX",
+    "X+++++++++++++++++++++++++_===_+++++++++++++++++++++++++++++++++++++++++++++++_===_XHHHHHHaHHHHHaHHHHHHHHHHHHaaX",
+    "Xgggggggggggg+gggggggggggg_===_+++++++++++++++++++++++++++++++++++++++++++++++_===_XHHHHHHaHHHHHaHHHHHHHHHHHHaaX",
+    "Xgggggggggggg+gggggggggggg_===_+++++++++++++++++++++++++++++++++++++++++++++++_===_XHHHHHHaHHHHHaHHHHHHHHHHHHaaX",
+    "Xgggggggggggg+gggggggggggg_===_+++++++++++++++++++++++++++++++++++++++++++++++_===_XHHHHHHaHHHHHaHHHHHHHHHHHHaaX",
     "Xgggggggggggg+gggggggggggg_____________________________________________________________________________________X",
     "Xgggggggggggg+gggggggggggg==========================zz=======================z=================================X",
     "Xgggggggggggg+gggggggggggg==========================zz=======================z=================================X",
     "Xgggggggggggg+gggggggggggg==========================zz=======================z=================================X",
     "Xgggggggggggg+gggggggggggg_____________________________________________________________________________________X",
-    "Xgggggggggggg+gggggggggggg_===_HHHHHHHHHHHHXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXggggg_===_XXHHHHHHHHHHHHHHHHXXXXXXXXXXX",
-    "Xgggggggggggg+gggggggggggg_===_HHHHHHHHHHHHXXHHHHHHHHHHHHHHXXHHHHHHHHHHHHggggg_===_XXHHHHHHHHHHHHHHHHX========XX",
-    "Xgggggggggggg+gggggggggggg_===_HHHHHHHHHHHHXXHHHHHHHHHHHHHHXXHHHHHHHHHHHHggggg_===_XXHHHHHHHHHHHHHHHHX========XX",
-    "Xgggggggggggg+gggggggggggg_===_HHHHHHHHHHHHXXHHHHHHHHHHHHHHXXHHHHHHHHHHHHggggg_===_XXHHHHHHHHHHHHHHHHX========XX",
-    "Xgggggggggggg+gggggggggggg_===_HHHHHHHHHHHHXXHHHHHHHHHHHHHHXXHHHHHHHHHHHHggggg_===_XXHHHHHHHHHHHHHHHHX========XX",
-    "Xgggggggggggg+gggggggggggg_===_HHHHHHHHHHHHXXHHHHHHHHHHHHHHXXHHHHHHHHHHHHggggg_===_XXHHHHHHHHHHHHHHHHX========XX",
-    "Xgggggggggggg+gggggggggggg_===_HHHHHHHHHHHHXXHHHHHHHHHHHHHHXXHHHHHHHHHHHHggggg_===_XXHHHHHHHHHHHHHHHHX========XX",
-    "Xgggggggggggg+gggggggggggg_===_HHHHHHHHHHHHXXHHHHHHHHHHHHHHXXHHHHHHHHHHHHggggg_===_XXHHHHHHHHHHHHHHHHX========XX",
+    "Xgggggggggggg+gggggggggggg_===_HHHHHHHHHHHHaaXXXXXXXXXXXXXXaaXXXXXXXXXXXXggggg_===_aaHHHHHHHHHHHHHHHHaXXXXXXXXXX",
+    "Xgggggggggggg+gggggggggggg_===_HHHHHHHHHHHHaaHHHHHHHHHHHHHHaaHHHHHHHHHHHHggggg_===_aaHHHHHHHHHHHHHHHHa========XX",
+    "Xgggggggggggg+gggggggggggg_===_HHHHHHHHHHHHaaHHHHHHHHHHHHHHaaHHHHHHHHHHHHggggg_===_aaHHHHHHHHHHHHHHHHa========XX",
+    "Xgggggggggggg+gggggggggggg_===_HHHHHHHHHHHHaaHHHHHHHHHHHHHHaaHHHHHHHHHHHHggggg_===_aaHHHHHHHHHHHHHHHHa========XX",
+    "Xgggggggggggg+gggggggggggg_===_HHHHHHHHHHHHaaHHHHHHHHHHHHHHaaHHHHHHHHHHHHggggg_===_aaHHHHHHHHHHHHHHHHa========XX",
+    "Xgggggggggggg+gggggggggggg_===_HHHHHHHHHHHHaaHHHHHHHHHHHHHHaaHHHHHHHHHHHHggggg_===_aaHHHHHHHHHHHHHHHHa========XX",
+    "Xgggggggggggg+gggggggggggg_===_HHHHHHHHHHHHaaHHHHHHHHHHHHHHaaHHHHHHHHHHHHggggg_===_aaHHHHHHHHHHHHHHHHa========XX",
+    "Xgggggggggggg+gggggggggggg_===_HHHHHHHHHHHHaaHHHHHHHHHHHHHHaaHHHHHHHHHHHHggggg_===_aaHHHHHHHHHHHHHHHHa========XX",
     "X______________________________________________________________________________________________________________X",
     "X=======================================zz==========================zz=========================================X",
     "X=======================================zz==========================zz=========================================X",
@@ -2720,6 +2864,3541 @@
     }
    ],
    "npcs": []
+  },
+  "int_gare": {
+   "name": "Hall de la gare",
+   "outdoor": false,
+   "grid": [
+    "####################",
+    "####################",
+    "#..................#",
+    "#.cccc.......cccc..#",
+    "#..................#",
+    "#..BBB...j...BBB..o#",
+    "#..................#",
+    "#..BBB.......BBB...#",
+    "#o................o#",
+    "#########DD#########"
+   ],
+   "doors": [
+    {
+     "cell": [
+      9,
+      9
+     ],
+     "to": "rue",
+     "to_cell": [
+      48,
+      9
+     ],
+     "facing": "down"
+    },
+    {
+     "cell": [
+      10,
+      9
+     ],
+     "to": "rue",
+     "to_cell": [
+      49,
+      9
+     ],
+     "facing": "down"
+    }
+   ],
+   "spots": [
+    {
+     "id": "gare",
+     "cells": [
+      [
+       9,
+       1
+      ],
+      [
+       10,
+       1
+      ]
+     ],
+     "label": "Tableau des départs",
+     "kind": "flavor"
+    },
+    {
+     "id": "guichet_gare",
+     "cells": [
+      [
+       2,
+       3
+      ],
+      [
+       3,
+       3
+      ],
+      [
+       4,
+       3
+      ],
+      [
+       5,
+       3
+      ],
+      [
+       13,
+       3
+      ],
+      [
+       14,
+       3
+      ],
+      [
+       15,
+       3
+      ],
+      [
+       16,
+       3
+      ]
+     ],
+     "label": "Guichets",
+     "kind": "flavor"
+    },
+    {
+     "id": "distributeur",
+     "cells": [
+      [
+       9,
+       5
+      ]
+     ],
+     "label": "Distributeur de billets",
+     "kind": "flavor"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "guichetiere",
+     "cell": [
+      4,
+      2
+     ],
+     "radius": 0
+    },
+    {
+     "id": "voyageuse",
+     "cell": [
+      8,
+      6
+     ],
+     "radius": 3
+    }
+   ],
+   "style": {
+    "floor": "marble",
+    "walls": "gare",
+    "wall": [
+     [
+      "board",
+      8,
+      4
+     ],
+     [
+      "clock",
+      4
+     ],
+     [
+      "window",
+      13,
+      3
+     ],
+     [
+      "poster",
+      2
+     ]
+    ]
+   },
+   "sound": {
+    "music": "ville_jour",
+    "layers": {
+     "foule": 0.35
+    },
+    "steps": "pierre"
+   }
+  },
+  "int_fabrique": {
+   "name": "La Fabrique",
+   "outdoor": false,
+   "grid": [
+    "####################",
+    "####################",
+    "#x..pppppppppp...R.#",
+    "#x..pppppppppp.....#",
+    "#...eeeeeeeeee..xx.#",
+    "#..................#",
+    "#.ww....t..t....ww.#",
+    "#..................#",
+    "#o..xx.........y...#",
+    "#..................#",
+    "#########DD#########"
+   ],
+   "doors": [
+    {
+     "cell": [
+      9,
+      10
+     ],
+     "to": "rue",
+     "to_cell": [
+      67,
+      9
+     ],
+     "facing": "down"
+    },
+    {
+     "cell": [
+      10,
+      10
+     ],
+     "to": "rue",
+     "to_cell": [
+      68,
+      9
+     ],
+     "facing": "down"
+    }
+   ],
+   "spots": [
+    {
+     "id": "fabrique",
+     "cells": [
+      [
+       16,
+       1
+      ],
+      [
+       17,
+       1
+      ]
+     ],
+     "label": "Programme de la Fabrique",
+     "kind": "flavor"
+    },
+    {
+     "id": "scene_fabrique",
+     "cells": [
+      [
+       4,
+       4
+      ],
+      [
+       5,
+       4
+      ],
+      [
+       6,
+       4
+      ],
+      [
+       7,
+       4
+      ],
+      [
+       8,
+       4
+      ],
+      [
+       9,
+       4
+      ],
+      [
+       10,
+       4
+      ],
+      [
+       11,
+       4
+      ],
+      [
+       12,
+       4
+      ],
+      [
+       13,
+       4
+      ]
+     ],
+     "label": "Petite scène de la Fabrique",
+     "kind": "flavor"
+    },
+    {
+     "id": "oeuvre_fabrique",
+     "cells": [
+      [
+       15,
+       8
+      ]
+     ],
+     "label": "Sculpture en cours",
+     "kind": "flavor"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "artiste_fabrique",
+     "cell": [
+      8,
+      3
+     ],
+     "radius": 2
+    }
+   ],
+   "style": {
+    "floor": "concrete",
+    "walls": "fabrique",
+    "wall": [
+     [
+      "graffiti",
+      2,
+      6
+     ],
+     [
+      "graffiti",
+      10,
+      5
+     ],
+     [
+      "poster",
+      16
+     ],
+     [
+      "poster",
+      17
+     ]
+    ]
+   },
+   "sound": {
+    "music": "ville_jour",
+    "layers": {
+     "coulisses": 0.4
+    },
+    "steps": "beton"
+   }
+  },
+  "int_hotel": {
+   "name": "Hôtel du Commerce",
+   "outdoor": false,
+   "grid": [
+    "################",
+    "################",
+    "#o...........OO#",
+    "#...cccc.....OO#",
+    "#..............#",
+    "#.t.,,,,,,,..t.#",
+    "#...,,,,,,,....#",
+    "#.x.,,,,,,,..o.#",
+    "#o.............#",
+    "#######D########"
+   ],
+   "doors": [
+    {
+     "cell": [
+      7,
+      9
+     ],
+     "to": "rue",
+     "to_cell": [
+      90,
+      9
+     ],
+     "facing": "down"
+    }
+   ],
+   "spots": [
+    {
+     "id": "hotel",
+     "cells": [
+      [
+       4,
+       3
+      ],
+      [
+       5,
+       3
+      ],
+      [
+       6,
+       3
+      ],
+      [
+       7,
+       3
+      ]
+     ],
+     "label": "Réception de l'hôtel",
+     "kind": "flavor"
+    },
+    {
+     "id": "etages_hotel",
+     "cells": [
+      [
+       13,
+       2
+      ],
+      [
+       14,
+       2
+      ],
+      [
+       13,
+       3
+      ],
+      [
+       14,
+       3
+      ]
+     ],
+     "label": "Escalier des chambres",
+     "kind": "flavor"
+    },
+    {
+     "id": "bagages",
+     "cells": [
+      [
+       2,
+       7
+      ]
+     ],
+     "label": "Valises d'une troupe en tournée",
+     "kind": "flavor"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "receptionniste",
+     "cell": [
+      5,
+      2
+     ],
+     "radius": 0
+    }
+   ],
+   "style": {
+    "floor": "parquet",
+    "walls": "hotel",
+    "wall": [
+     [
+      "keys",
+      5,
+      3
+     ],
+     [
+      "frame",
+      9
+     ],
+     [
+      "frame",
+      11
+     ],
+     [
+      "window",
+      1,
+      2
+     ]
+    ]
+   },
+   "sound": {
+    "music": "foyer",
+    "layers": {
+     "bureau": 0.5
+    },
+    "steps": "bois"
+   }
+  },
+  "int_mairie": {
+   "name": "Mairie — hall d'accueil",
+   "outdoor": false,
+   "grid": [
+    "##################",
+    "##################",
+    "#o..............o#",
+    "#..cccccc....n...#",
+    "#................#",
+    "#.BB..,,,,,,..BB.#",
+    "#.....,,,,,,.....#",
+    "#.BB..,,,,,,..BB.#",
+    "#o....,,,,,,....o#",
+    "########DD########"
+   ],
+   "doors": [
+    {
+     "cell": [
+      8,
+      9
+     ],
+     "to": "rue",
+     "to_cell": [
+      36,
+      30
+     ],
+     "facing": "down"
+    },
+    {
+     "cell": [
+      9,
+      9
+     ],
+     "to": "rue",
+     "to_cell": [
+      37,
+      30
+     ],
+     "facing": "down"
+    }
+   ],
+   "spots": [
+    {
+     "id": "mairie",
+     "cells": [
+      [
+       3,
+       3
+      ],
+      [
+       4,
+       3
+      ],
+      [
+       5,
+       3
+      ],
+      [
+       6,
+       3
+      ],
+      [
+       7,
+       3
+      ],
+      [
+       8,
+       3
+      ]
+     ],
+     "label": "Accueil de la mairie",
+     "kind": "flavor"
+    },
+    {
+     "id": "panneau_mairie",
+     "cells": [
+      [
+       13,
+       3
+      ]
+     ],
+     "label": "Panneau d'affichage municipal",
+     "kind": "flavor"
+    },
+    {
+     "id": "marianne",
+     "cells": [
+      [
+       8,
+       1
+      ],
+      [
+       9,
+       1
+      ]
+     ],
+     "label": "Buste de Marianne",
+     "kind": "flavor"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "agent_mairie",
+     "cell": [
+      5,
+      2
+     ],
+     "radius": 0
+    }
+   ],
+   "style": {
+    "floor": "marble",
+    "walls": "mairie",
+    "wall": [
+     [
+      "bust",
+      8
+     ],
+     [
+      "flag",
+      6
+     ],
+     [
+      "flag",
+      11
+     ],
+     [
+      "window",
+      2,
+      2
+     ],
+     [
+      "window",
+      14,
+      2
+     ]
+    ]
+   },
+   "sound": {
+    "music": "foyer",
+    "layers": {
+     "bureau": 0.6
+    },
+    "steps": "pierre"
+   }
+  },
+  "int_cafe": {
+   "name": "Café des Artistes",
+   "outdoor": false,
+   "grid": [
+    "##############",
+    "##############",
+    "#ZZ.........o#",
+    "#......ccccc.#",
+    "#............#",
+    "#.t..t..t....#",
+    "#............#",
+    "#.t..t..t..o.#",
+    "#............#",
+    "######D#######"
+   ],
+   "doors": [
+    {
+     "cell": [
+      6,
+      9
+     ],
+     "to": "rue",
+     "to_cell": [
+      62,
+      30
+     ],
+     "facing": "down"
+    }
+   ],
+   "spots": [
+    {
+     "id": "cafe",
+     "cells": [
+      [
+       7,
+       3
+      ],
+      [
+       8,
+       3
+      ],
+      [
+       9,
+       3
+      ],
+      [
+       10,
+       3
+      ],
+      [
+       11,
+       3
+      ]
+     ],
+     "label": "Comptoir du café",
+     "kind": "flavor"
+    },
+    {
+     "id": "piano_cafe",
+     "cells": [
+      [
+       1,
+       2
+      ],
+      [
+       2,
+       2
+      ]
+     ],
+     "label": "Vieux piano droit",
+     "kind": "flavor"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "patronne_cafe",
+     "cell": [
+      9,
+      2
+     ],
+     "radius": 0
+    },
+    {
+     "id": "client_cafe",
+     "cell": [
+      4,
+      6
+     ],
+     "radius": 1
+    }
+   ],
+   "style": {
+    "floor": "checker",
+    "walls": "cafe",
+    "wall": [
+     [
+      "bottles",
+      7,
+      5
+     ],
+     [
+      "frame",
+      3
+     ],
+     [
+      "frame",
+      5
+     ],
+     [
+      "mirror",
+      11
+     ]
+    ]
+   },
+   "sound": {
+    "music": "foyer",
+    "layers": {
+     "cafe": 0.8
+    },
+    "steps": "pierre"
+   }
+  },
+  "int_imprimerie": {
+   "name": "Imprimerie Lebrun",
+   "outdoor": false,
+   "grid": [
+    "############",
+    "############",
+    "#jj..jj..kk#",
+    "#..........#",
+    "#.xx....xx.#",
+    "#..........#",
+    "#..cccc....#",
+    "#..........#",
+    "#o.........#",
+    "#####D######"
+   ],
+   "doors": [
+    {
+     "cell": [
+      5,
+      9
+     ],
+     "to": "rue",
+     "to_cell": [
+      69,
+      30
+     ],
+     "facing": "down"
+    }
+   ],
+   "spots": [
+    {
+     "id": "imprimerie",
+     "cells": [
+      [
+       3,
+       6
+      ],
+      [
+       4,
+       6
+      ],
+      [
+       5,
+       6
+      ],
+      [
+       6,
+       6
+      ]
+     ],
+     "label": "Comptoir de l'imprimerie",
+     "kind": "action",
+     "action": "communication"
+    },
+    {
+     "id": "presse",
+     "cells": [
+      [
+       1,
+       2
+      ],
+      [
+       2,
+       2
+      ],
+      [
+       5,
+       2
+      ],
+      [
+       6,
+       2
+      ]
+     ],
+     "label": "Presses typographiques",
+     "kind": "flavor"
+    },
+    {
+     "id": "rames",
+     "cells": [
+      [
+       2,
+       4
+      ],
+      [
+       3,
+       4
+      ],
+      [
+       8,
+       4
+      ],
+      [
+       9,
+       4
+      ]
+     ],
+     "label": "Rames de papier",
+     "kind": "flavor"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "lebrun",
+     "cell": [
+      4,
+      5
+     ],
+     "radius": 1
+    }
+   ],
+   "style": {
+    "floor": "planks",
+    "walls": "imprimerie",
+    "wall": [
+     [
+      "posters",
+      3,
+      2
+     ],
+     [
+      "clock",
+      8
+     ]
+    ]
+   },
+   "sound": {
+    "music": "ville_jour",
+    "layers": {
+     "coulisses": 0.5
+    },
+    "steps": "bois"
+   }
+  },
+  "int_boulangerie": {
+   "name": "Boulangerie",
+   "outdoor": false,
+   "grid": [
+    "############",
+    "############",
+    "#llll..jj..#",
+    "#..........#",
+    "#.cccccc...#",
+    "#..........#",
+    "#........o.#",
+    "#..........#",
+    "#####D######"
+   ],
+   "doors": [
+    {
+     "cell": [
+      5,
+      8
+     ],
+     "to": "rue",
+     "to_cell": [
+      75,
+      30
+     ],
+     "facing": "down"
+    }
+   ],
+   "spots": [
+    {
+     "id": "boulangerie",
+     "cells": [
+      [
+       2,
+       4
+      ],
+      [
+       3,
+       4
+      ],
+      [
+       4,
+       4
+      ],
+      [
+       5,
+       4
+      ],
+      [
+       6,
+       4
+      ],
+      [
+       7,
+       4
+      ]
+     ],
+     "label": "Comptoir de la boulangerie",
+     "kind": "flavor"
+    },
+    {
+     "id": "fournil",
+     "cells": [
+      [
+       7,
+       2
+      ],
+      [
+       8,
+       2
+      ]
+     ],
+     "label": "Four à pain",
+     "kind": "flavor"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "boulangere",
+     "cell": [
+      4,
+      3
+     ],
+     "radius": 1
+    }
+   ],
+   "style": {
+    "floor": "checker",
+    "walls": "boulangerie",
+    "wall": [
+     [
+      "slate",
+      9,
+      2
+     ]
+    ]
+   },
+   "sound": {
+    "music": "ville_jour",
+    "layers": {
+     "bureau": 0.4
+    },
+    "steps": "pierre"
+   }
+  },
+  "int_cinema": {
+   "name": "Cinéma Le Rex",
+   "outdoor": false,
+   "grid": [
+    "##################",
+    "##################",
+    "#................#",
+    "#.sssssss..sssss.#",
+    "#................#",
+    "#.sssssss..sssss.#",
+    "#................#",
+    "#................#",
+    "#cccc.........jj.#",
+    "#..............o.#",
+    "########DD########"
+   ],
+   "doors": [
+    {
+     "cell": [
+      8,
+      10
+     ],
+     "to": "rue",
+     "to_cell": [
+      88,
+      30
+     ],
+     "facing": "down"
+    },
+    {
+     "cell": [
+      9,
+      10
+     ],
+     "to": "rue",
+     "to_cell": [
+      89,
+      30
+     ],
+     "facing": "down"
+    }
+   ],
+   "spots": [
+    {
+     "id": "cinema",
+     "cells": [
+      [
+       1,
+       8
+      ],
+      [
+       2,
+       8
+      ],
+      [
+       3,
+       8
+      ],
+      [
+       4,
+       8
+      ]
+     ],
+     "label": "Caisse du Rex",
+     "kind": "flavor"
+    },
+    {
+     "id": "ecran",
+     "cells": [
+      [
+       8,
+       1
+      ],
+      [
+       9,
+       1
+      ]
+     ],
+     "label": "L'écran",
+     "kind": "flavor"
+    },
+    {
+     "id": "popcorn",
+     "cells": [
+      [
+       14,
+       8
+      ],
+      [
+       15,
+       8
+      ]
+     ],
+     "label": "Machine à pop-corn",
+     "kind": "flavor"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "caissiere_rex",
+     "cell": [
+      2,
+      7
+     ],
+     "radius": 0
+    },
+    {
+     "id": "cinephile",
+     "cell": [
+      10,
+      4
+     ],
+     "radius": 2
+    }
+   ],
+   "style": {
+    "floor": "carpet_red",
+    "walls": "cinema",
+    "wall": [
+     [
+      "screen",
+      2,
+      14
+     ]
+    ]
+   },
+   "sound": {
+    "music": "foyer",
+    "layers": {
+     "salle": 0.5
+    },
+    "steps": "tapis"
+   }
+  },
+  "int_conservatoire": {
+   "name": "Conservatoire",
+   "outdoor": false,
+   "grid": [
+    "##################",
+    "##################",
+    "#ZZ....ZZ....kkk.#",
+    "#................#",
+    "#..i..i..i..i....#",
+    "#................#",
+    "#.,,,,,,,,,,,,,,.#",
+    "#.,,,,,,,,,,,,,,.#",
+    "#o..............o#",
+    "########DD########"
+   ],
+   "doors": [
+    {
+     "cell": [
+      8,
+      9
+     ],
+     "to": "rue",
+     "to_cell": [
+      101,
+      30
+     ],
+     "facing": "down"
+    },
+    {
+     "cell": [
+      9,
+      9
+     ],
+     "to": "rue",
+     "to_cell": [
+      102,
+      30
+     ],
+     "facing": "down"
+    }
+   ],
+   "spots": [
+    {
+     "id": "conservatoire",
+     "cells": [
+      [
+       1,
+       2
+      ],
+      [
+       2,
+       2
+      ],
+      [
+       7,
+       2
+      ],
+      [
+       8,
+       2
+      ]
+     ],
+     "label": "Pianos du conservatoire",
+     "kind": "flavor"
+    },
+    {
+     "id": "partitions",
+     "cells": [
+      [
+       13,
+       2
+      ],
+      [
+       14,
+       2
+      ],
+      [
+       15,
+       2
+      ]
+     ],
+     "label": "Armoire à partitions",
+     "kind": "flavor"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "prof_piano",
+     "cell": [
+      4,
+      3
+     ],
+     "radius": 2
+    },
+    {
+     "id": "eleve_conservatoire",
+     "cell": [
+      10,
+      6
+     ],
+     "radius": 2
+    }
+   ],
+   "style": {
+    "floor": "parquet",
+    "walls": "conservatoire",
+    "wall": [
+     [
+      "frame",
+      4
+     ],
+     [
+      "frame",
+      10
+     ],
+     [
+      "window",
+      11,
+      2
+     ],
+     [
+      "staff",
+      3,
+      3
+     ]
+    ]
+   },
+   "sound": {
+    "music": "foyer",
+    "layers": {
+     "salle": 0.3
+    },
+    "steps": "bois"
+   }
+  },
+  "int_librairie": {
+   "name": "Librairie La Plume",
+   "outdoor": false,
+   "grid": [
+    "############",
+    "############",
+    "#bbbb..bbbb#",
+    "#..........#",
+    "#.ll..ll...#",
+    "#..........#",
+    "#t.....cc..#",
+    "#o.........#",
+    "#####D######"
+   ],
+   "doors": [
+    {
+     "cell": [
+      5,
+      8
+     ],
+     "to": "rue",
+     "to_cell": [
+      86,
+      41
+     ],
+     "facing": "down"
+    }
+   ],
+   "spots": [
+    {
+     "id": "librairie",
+     "cells": [
+      [
+       7,
+       6
+      ],
+      [
+       8,
+       6
+      ]
+     ],
+     "label": "Coups de cœur du libraire",
+     "kind": "flavor"
+    },
+    {
+     "id": "rayons",
+     "cells": [
+      [
+       1,
+       2
+      ],
+      [
+       2,
+       2
+      ],
+      [
+       3,
+       2
+      ],
+      [
+       4,
+       2
+      ],
+      [
+       7,
+       2
+      ],
+      [
+       8,
+       2
+      ],
+      [
+       9,
+       2
+      ],
+      [
+       10,
+       2
+      ]
+     ],
+     "label": "Rayon théâtre",
+     "kind": "flavor"
+    },
+    {
+     "id": "tables_livres",
+     "cells": [
+      [
+       2,
+       4
+      ],
+      [
+       3,
+       4
+      ],
+      [
+       6,
+       4
+      ],
+      [
+       7,
+       4
+      ]
+     ],
+     "label": "Tables des nouveautés",
+     "kind": "flavor"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "lectrice",
+     "cell": [
+      3,
+      5
+     ],
+     "radius": 2
+    }
+   ],
+   "style": {
+    "floor": "parquet",
+    "walls": "librairie",
+    "wall": []
+   },
+   "sound": {
+    "music": "foyer",
+    "layers": {
+     "bureau": 0.6
+    },
+    "steps": "bois"
+   }
+  },
+  "int_fleuriste": {
+   "name": "Fleuriste",
+   "outdoor": false,
+   "grid": [
+    "##########",
+    "##########",
+    "#llll.ll.#",
+    "#........#",
+    "#.l...cc.#",
+    "#........#",
+    "#ll....o.#",
+    "#........#",
+    "####D#####"
+   ],
+   "doors": [
+    {
+     "cell": [
+      4,
+      8
+     ],
+     "to": "rue",
+     "to_cell": [
+      93,
+      41
+     ],
+     "facing": "down"
+    }
+   ],
+   "spots": [
+    {
+     "id": "fleuriste",
+     "cells": [
+      [
+       1,
+       2
+      ],
+      [
+       2,
+       2
+      ],
+      [
+       3,
+       2
+      ],
+      [
+       4,
+       2
+      ],
+      [
+       6,
+       2
+      ],
+      [
+       7,
+       2
+      ]
+     ],
+     "label": "Bouquets du jour",
+     "kind": "flavor"
+    },
+    {
+     "id": "comptoir_fleurs",
+     "cells": [
+      [
+       6,
+       4
+      ],
+      [
+       7,
+       4
+      ]
+     ],
+     "label": "Comptoir de la fleuriste",
+     "kind": "flavor"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "fleuriste_pnj",
+     "cell": [
+      7,
+      3
+     ],
+     "radius": 0
+    }
+   ],
+   "style": {
+    "floor": "checker_green",
+    "walls": "fleuriste",
+    "wall": [
+     [
+      "window",
+      1,
+      2
+     ]
+    ]
+   },
+   "sound": {
+    "music": "foyer",
+    "layers": {
+     "oiseaux": 0.15
+    },
+    "steps": "pierre"
+   }
+  },
+  "int_disquaire": {
+   "name": "Disquaire",
+   "outdoor": false,
+   "grid": [
+    "############",
+    "############",
+    "#llll..kk.j#",
+    "#..........#",
+    "#.ll..ll...#",
+    "#..........#",
+    "#.....ccc..#",
+    "#o.........#",
+    "#####D######"
+   ],
+   "doors": [
+    {
+     "cell": [
+      5,
+      8
+     ],
+     "to": "rue",
+     "to_cell": [
+      99,
+      41
+     ],
+     "facing": "down"
+    }
+   ],
+   "spots": [
+    {
+     "id": "disquaire",
+     "cells": [
+      [
+       1,
+       2
+      ],
+      [
+       2,
+       2
+      ],
+      [
+       3,
+       2
+      ],
+      [
+       4,
+       2
+      ],
+      [
+       2,
+       4
+      ],
+      [
+       3,
+       4
+      ],
+      [
+       6,
+       4
+      ],
+      [
+       7,
+       4
+      ]
+     ],
+     "label": "Bacs de vinyles",
+     "kind": "flavor"
+    },
+    {
+     "id": "platine",
+     "cells": [
+      [
+       10,
+       2
+      ]
+     ],
+     "label": "Platine d'écoute",
+     "kind": "flavor"
+    },
+    {
+     "id": "comptoir_disques",
+     "cells": [
+      [
+       6,
+       6
+      ],
+      [
+       7,
+       6
+      ],
+      [
+       8,
+       6
+      ]
+     ],
+     "label": "Comptoir du disquaire",
+     "kind": "flavor"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "disquaire_pnj",
+     "cell": [
+      7,
+      5
+     ],
+     "radius": 1
+    }
+   ],
+   "style": {
+    "floor": "planks",
+    "walls": "disquaire",
+    "wall": [
+     [
+      "records",
+      1,
+      4
+     ],
+     [
+      "poster",
+      8
+     ],
+     [
+      "poster",
+      9
+     ]
+    ]
+   },
+   "sound": {
+    "music": "ville_nuit",
+    "layers": {},
+    "steps": "bois"
+   }
+  },
+  "int_galerie": {
+   "name": "Galerie d'art",
+   "outdoor": false,
+   "grid": [
+    "##############",
+    "##############",
+    "#............#",
+    "#..y....y..y.#",
+    "#............#",
+    "#.....yy.....#",
+    "#.........dd.#",
+    "#o..........o#",
+    "######D#######"
+   ],
+   "doors": [
+    {
+     "cell": [
+      6,
+      8
+     ],
+     "to": "rue",
+     "to_cell": [
+      105,
+      41
+     ],
+     "facing": "down"
+    }
+   ],
+   "spots": [
+    {
+     "id": "galerie",
+     "cells": [
+      [
+       2,
+       1
+      ],
+      [
+       3,
+       1
+      ],
+      [
+       5,
+       1
+      ],
+      [
+       6,
+       1
+      ],
+      [
+       8,
+       1
+      ],
+      [
+       9,
+       1
+      ],
+      [
+       11,
+       1
+      ]
+     ],
+     "label": "Exposition du moment",
+     "kind": "flavor"
+    },
+    {
+     "id": "sculpture",
+     "cells": [
+      [
+       6,
+       5
+      ],
+      [
+       7,
+       5
+      ]
+     ],
+     "label": "Grande sculpture",
+     "kind": "flavor"
+    },
+    {
+     "id": "socles",
+     "cells": [
+      [
+       3,
+       3
+      ],
+      [
+       8,
+       3
+      ],
+      [
+       11,
+       3
+      ]
+     ],
+     "label": "Petites œuvres sur socle",
+     "kind": "flavor"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "galeriste",
+     "cell": [
+      11,
+      7
+     ],
+     "radius": 1
+    }
+   ],
+   "style": {
+    "floor": "concrete_light",
+    "walls": "galerie",
+    "wall": [
+     [
+      "painting",
+      2
+     ],
+     [
+      "painting",
+      5
+     ],
+     [
+      "painting",
+      8
+     ],
+     [
+      "painting",
+      11
+     ]
+    ]
+   },
+   "sound": {
+    "music": "foyer",
+    "layers": {},
+    "steps": "beton"
+   }
+  },
+  "int_mediatheque": {
+   "name": "Médiathèque Louise-Michel",
+   "outdoor": false,
+   "grid": [
+    "####################",
+    "####################",
+    "#bbbbbb....bbbbbbb.#",
+    "#..................#",
+    "#.bbbb..t..t..bbbb.#",
+    "#..................#",
+    "#.bbbb..t..t..bbbb.#",
+    "#..................#",
+    "#.,,,,,..cccc..ddd.#",
+    "#o................o#",
+    "#########DD#########"
+   ],
+   "doors": [
+    {
+     "cell": [
+      9,
+      10
+     ],
+     "to": "rue",
+     "to_cell": [
+      36,
+      54
+     ],
+     "facing": "down"
+    },
+    {
+     "cell": [
+      10,
+      10
+     ],
+     "to": "rue",
+     "to_cell": [
+      37,
+      54
+     ],
+     "facing": "down"
+    }
+   ],
+   "spots": [
+    {
+     "id": "mediatheque",
+     "cells": [
+      [
+       9,
+       8
+      ],
+      [
+       10,
+       8
+      ],
+      [
+       11,
+       8
+      ],
+      [
+       12,
+       8
+      ]
+     ],
+     "label": "Banque de prêt",
+     "kind": "flavor"
+    },
+    {
+     "id": "postes",
+     "cells": [
+      [
+       15,
+       8
+      ],
+      [
+       16,
+       8
+      ],
+      [
+       17,
+       8
+      ]
+     ],
+     "label": "Postes informatiques",
+     "kind": "flavor"
+    },
+    {
+     "id": "rayon_arts",
+     "cells": [
+      [
+       1,
+       2
+      ],
+      [
+       2,
+       2
+      ],
+      [
+       3,
+       2
+      ],
+      [
+       4,
+       2
+      ],
+      [
+       5,
+       2
+      ],
+      [
+       6,
+       2
+      ]
+     ],
+     "label": "Rayon arts du spectacle",
+     "kind": "flavor"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "lecteur",
+     "cell": [
+      9,
+      5
+     ],
+     "radius": 2
+    }
+   ],
+   "style": {
+    "floor": "parquet",
+    "walls": "mediatheque",
+    "wall": [
+     [
+      "window",
+      7,
+      4
+     ]
+    ]
+   },
+   "sound": {
+    "music": "foyer",
+    "layers": {
+     "bureau": 0.5
+    },
+    "steps": "bois"
+   }
+  },
+  "int_halle": {
+   "name": "Halle du marché",
+   "outdoor": false,
+   "grid": [
+    "######################",
+    "######################",
+    "#ll..ll..ll..ll..ll..#",
+    "#....................#",
+    "#.cc..cc..cc..cc..cc.#",
+    "#....................#",
+    "#.ll..ll......ll..ll.#",
+    "#....................#",
+    "#o..................o#",
+    "##########DD##########"
+   ],
+   "doors": [
+    {
+     "cell": [
+      10,
+      9
+     ],
+     "to": "rue",
+     "to_cell": [
+      51,
+      54
+     ],
+     "facing": "down"
+    },
+    {
+     "cell": [
+      11,
+      9
+     ],
+     "to": "rue",
+     "to_cell": [
+      52,
+      54
+     ],
+     "facing": "down"
+    }
+   ],
+   "spots": [
+    {
+     "id": "halle",
+     "cells": [
+      [
+       2,
+       4
+      ],
+      [
+       3,
+       4
+      ],
+      [
+       6,
+       4
+      ],
+      [
+       7,
+       4
+      ],
+      [
+       10,
+       4
+      ],
+      [
+       11,
+       4
+      ],
+      [
+       14,
+       4
+      ],
+      [
+       15,
+       4
+      ],
+      [
+       18,
+       4
+      ],
+      [
+       19,
+       4
+      ]
+     ],
+     "label": "Étals de la halle",
+     "kind": "flavor"
+    },
+    {
+     "id": "primeurs",
+     "cells": [
+      [
+       2,
+       6
+      ],
+      [
+       3,
+       6
+      ],
+      [
+       6,
+       6
+      ],
+      [
+       7,
+       6
+      ],
+      [
+       14,
+       6
+      ],
+      [
+       15,
+       6
+      ],
+      [
+       18,
+       6
+      ],
+      [
+       19,
+       6
+      ]
+     ],
+     "label": "Cagettes de primeurs",
+     "kind": "flavor"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "fromager",
+     "cell": [
+      3,
+      3
+     ],
+     "radius": 1
+    },
+    {
+     "id": "marchande",
+     "cell": [
+      15,
+      5
+     ],
+     "radius": 2
+    }
+   ],
+   "style": {
+    "floor": "concrete",
+    "walls": "halle",
+    "wall": [
+     [
+      "glass",
+      1,
+      20
+     ]
+    ]
+   },
+   "sound": {
+    "music": "ville_jour",
+    "layers": {
+     "marche": 0.7
+    },
+    "steps": "beton"
+   }
+  },
+  "int_ecole": {
+   "name": "École des Tilleuls — salle de classe",
+   "outdoor": false,
+   "grid": [
+    "##################",
+    "##################",
+    "#.....dd.........#",
+    "#................#",
+    "#.ii.ii.ii.ii.ii.#",
+    "#................#",
+    "#.ii.ii.ii.ii.ii.#",
+    "#................#",
+    "#o.kk........kk.o#",
+    "########DD########"
+   ],
+   "doors": [
+    {
+     "cell": [
+      8,
+      9
+     ],
+     "to": "rue",
+     "to_cell": [
+      66,
+      54
+     ],
+     "facing": "down"
+    },
+    {
+     "cell": [
+      9,
+      9
+     ],
+     "to": "rue",
+     "to_cell": [
+      67,
+      54
+     ],
+     "facing": "down"
+    }
+   ],
+   "spots": [
+    {
+     "id": "ecole",
+     "cells": [
+      [
+       9,
+       1
+      ],
+      [
+       10,
+       1
+      ],
+      [
+       11,
+       1
+      ]
+     ],
+     "label": "Tableau noir",
+     "kind": "flavor"
+    },
+    {
+     "id": "dessins",
+     "cells": [
+      [
+       3,
+       8
+      ],
+      [
+       4,
+       8
+      ],
+      [
+       13,
+       8
+      ],
+      [
+       14,
+       8
+      ]
+     ],
+     "label": "Dessins des élèves",
+     "kind": "flavor"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "instituteur",
+     "cell": [
+      8,
+      3
+     ],
+     "radius": 2
+    }
+   ],
+   "style": {
+    "floor": "lino",
+    "walls": "ecole",
+    "wall": [
+     [
+      "blackboard",
+      8,
+      5
+     ],
+     [
+      "map",
+      2,
+      3
+     ],
+     [
+      "window",
+      14,
+      2
+     ]
+    ]
+   },
+   "sound": {
+    "music": "ville_jour",
+    "layers": {
+     "bureau": 0.4
+    },
+    "steps": "beton"
+   }
+  },
+  "int_ondine": {
+   "name": "Ondine Énergie — accueil",
+   "outdoor": false,
+   "grid": [
+    "##################",
+    "##################",
+    "#o..............o#",
+    "#.....cccccc.....#",
+    "#................#",
+    "#.tt..........yy.#",
+    "#................#",
+    "#.tt.,,,,,,,,....#",
+    "#o.......,,.....o#",
+    "########DD########"
+   ],
+   "doors": [
+    {
+     "cell": [
+      8,
+      9
+     ],
+     "to": "rue",
+     "to_cell": [
+      92,
+      54
+     ],
+     "facing": "down"
+    },
+    {
+     "cell": [
+      9,
+      9
+     ],
+     "to": "rue",
+     "to_cell": [
+      93,
+      54
+     ],
+     "facing": "down"
+    }
+   ],
+   "spots": [
+    {
+     "id": "ondine",
+     "cells": [
+      [
+       6,
+       3
+      ],
+      [
+       7,
+       3
+      ],
+      [
+       8,
+       3
+      ],
+      [
+       9,
+       3
+      ],
+      [
+       10,
+       3
+      ],
+      [
+       11,
+       3
+      ]
+     ],
+     "label": "Accueil d'Ondine Énergie",
+     "kind": "flavor"
+    },
+    {
+     "id": "maquette",
+     "cells": [
+      [
+       14,
+       5
+      ],
+      [
+       15,
+       5
+      ]
+     ],
+     "label": "Maquette de l'éco-quartier",
+     "kind": "flavor"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "hotesse_ondine",
+     "cell": [
+      8,
+      2
+     ],
+     "radius": 0
+    }
+   ],
+   "style": {
+    "floor": "marble_dark",
+    "walls": "siege",
+    "wall": [
+     [
+      "logo",
+      7,
+      4
+     ],
+     [
+      "screen_small",
+      2,
+      2
+     ],
+     [
+      "screen_small",
+      13,
+      2
+     ]
+    ]
+   },
+   "sound": {
+    "music": "foyer",
+    "layers": {
+     "bureau": 0.5
+    },
+    "steps": "pierre"
+   }
+  },
+  "int_tour_a": {
+   "name": "Résidence des Coteaux — hall",
+   "outdoor": false,
+   "grid": [
+    "############",
+    "############",
+    "#kkk.....OO#",
+    "#........OO#",
+    "#..........#",
+    "#j.........#",
+    "#.....n....#",
+    "#o........o#",
+    "#####D######"
+   ],
+   "doors": [
+    {
+     "cell": [
+      5,
+      8
+     ],
+     "to": "rue",
+     "to_cell": [
+      6,
+      68
+     ],
+     "facing": "down"
+    }
+   ],
+   "spots": [
+    {
+     "id": "tour",
+     "cells": [
+      [
+       1,
+       2
+      ],
+      [
+       2,
+       2
+      ],
+      [
+       3,
+       2
+      ]
+     ],
+     "label": "Boîtes aux lettres",
+     "kind": "flavor",
+     "flavor": "tour"
+    },
+    {
+     "id": "ascenseur",
+     "cells": [
+      [
+       1,
+       5
+      ]
+     ],
+     "label": "Ascenseur",
+     "kind": "flavor"
+    },
+    {
+     "id": "panneau_tour",
+     "cells": [
+      [
+       6,
+       6
+      ]
+     ],
+     "label": "Panneau de l'amicale des locataires",
+     "kind": "flavor"
+    },
+    {
+     "id": "etages_tour",
+     "cells": [
+      [
+       9,
+       2
+      ],
+      [
+       10,
+       2
+      ],
+      [
+       9,
+       3
+      ],
+      [
+       10,
+       3
+      ]
+     ],
+     "label": "Cage d'escalier",
+     "kind": "flavor"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "gardienne",
+     "cell": [
+      4,
+      5
+     ],
+     "radius": 2
+    }
+   ],
+   "style": {
+    "floor": "tiles_grey",
+    "walls": "tour",
+    "wall": [
+     [
+      "window",
+      5,
+      2
+     ]
+    ]
+   },
+   "sound": {
+    "music": "ville_jour",
+    "layers": {
+     "ville": 0.2
+    },
+    "steps": "pierre"
+   },
+   "art": "int_tour"
+  },
+  "int_tour_b": {
+   "name": "Résidence des Coteaux — hall",
+   "outdoor": false,
+   "grid": [
+    "############",
+    "############",
+    "#kkk.....OO#",
+    "#........OO#",
+    "#..........#",
+    "#j.........#",
+    "#.....n....#",
+    "#o........o#",
+    "#####D######"
+   ],
+   "doors": [
+    {
+     "cell": [
+      5,
+      8
+     ],
+     "to": "rue",
+     "to_cell": [
+      17,
+      68
+     ],
+     "facing": "down"
+    }
+   ],
+   "spots": [
+    {
+     "id": "tour",
+     "cells": [
+      [
+       1,
+       2
+      ],
+      [
+       2,
+       2
+      ],
+      [
+       3,
+       2
+      ]
+     ],
+     "label": "Boîtes aux lettres",
+     "kind": "flavor",
+     "flavor": "tour"
+    },
+    {
+     "id": "ascenseur",
+     "cells": [
+      [
+       1,
+       5
+      ]
+     ],
+     "label": "Ascenseur",
+     "kind": "flavor"
+    },
+    {
+     "id": "panneau_tour",
+     "cells": [
+      [
+       6,
+       6
+      ]
+     ],
+     "label": "Panneau de l'amicale des locataires",
+     "kind": "flavor"
+    },
+    {
+     "id": "etages_tour",
+     "cells": [
+      [
+       9,
+       2
+      ],
+      [
+       10,
+       2
+      ],
+      [
+       9,
+       3
+      ],
+      [
+       10,
+       3
+      ]
+     ],
+     "label": "Cage d'escalier",
+     "kind": "flavor"
+    }
+   ],
+   "npcs": [],
+   "style": {
+    "floor": "tiles_grey",
+    "walls": "tour",
+    "wall": [
+     [
+      "window",
+      5,
+      2
+     ]
+    ]
+   },
+   "sound": {
+    "music": "ville_jour",
+    "layers": {
+     "ville": 0.2
+    },
+    "steps": "pierre"
+   },
+   "art": "int_tour"
+  },
+  "int_tour_e": {
+   "name": "Résidence des Coteaux — hall",
+   "outdoor": false,
+   "grid": [
+    "############",
+    "############",
+    "#kkk.....OO#",
+    "#........OO#",
+    "#..........#",
+    "#j.........#",
+    "#.....n....#",
+    "#o........o#",
+    "#####D######"
+   ],
+   "doors": [
+    {
+     "cell": [
+      5,
+      8
+     ],
+     "to": "rue",
+     "to_cell": [
+      6,
+      78
+     ],
+     "facing": "down"
+    }
+   ],
+   "spots": [
+    {
+     "id": "tour",
+     "cells": [
+      [
+       1,
+       2
+      ],
+      [
+       2,
+       2
+      ],
+      [
+       3,
+       2
+      ]
+     ],
+     "label": "Boîtes aux lettres",
+     "kind": "flavor",
+     "flavor": "tour"
+    },
+    {
+     "id": "ascenseur",
+     "cells": [
+      [
+       1,
+       5
+      ]
+     ],
+     "label": "Ascenseur",
+     "kind": "flavor"
+    },
+    {
+     "id": "panneau_tour",
+     "cells": [
+      [
+       6,
+       6
+      ]
+     ],
+     "label": "Panneau de l'amicale des locataires",
+     "kind": "flavor"
+    },
+    {
+     "id": "etages_tour",
+     "cells": [
+      [
+       9,
+       2
+      ],
+      [
+       10,
+       2
+      ],
+      [
+       9,
+       3
+      ],
+      [
+       10,
+       3
+      ]
+     ],
+     "label": "Cage d'escalier",
+     "kind": "flavor"
+    }
+   ],
+   "npcs": [],
+   "style": {
+    "floor": "tiles_grey",
+    "walls": "tour",
+    "wall": [
+     [
+      "window",
+      5,
+      2
+     ]
+    ]
+   },
+   "sound": {
+    "music": "ville_jour",
+    "layers": {
+     "ville": 0.2
+    },
+    "steps": "pierre"
+   },
+   "art": "int_tour"
+  },
+  "int_tour_f": {
+   "name": "Résidence des Coteaux — hall",
+   "outdoor": false,
+   "grid": [
+    "############",
+    "############",
+    "#kkk.....OO#",
+    "#........OO#",
+    "#..........#",
+    "#j.........#",
+    "#.....n....#",
+    "#o........o#",
+    "#####D######"
+   ],
+   "doors": [
+    {
+     "cell": [
+      5,
+      8
+     ],
+     "to": "rue",
+     "to_cell": [
+      17,
+      78
+     ],
+     "facing": "down"
+    }
+   ],
+   "spots": [
+    {
+     "id": "tour",
+     "cells": [
+      [
+       1,
+       2
+      ],
+      [
+       2,
+       2
+      ],
+      [
+       3,
+       2
+      ]
+     ],
+     "label": "Boîtes aux lettres",
+     "kind": "flavor",
+     "flavor": "tour"
+    },
+    {
+     "id": "ascenseur",
+     "cells": [
+      [
+       1,
+       5
+      ]
+     ],
+     "label": "Ascenseur",
+     "kind": "flavor"
+    },
+    {
+     "id": "panneau_tour",
+     "cells": [
+      [
+       6,
+       6
+      ]
+     ],
+     "label": "Panneau de l'amicale des locataires",
+     "kind": "flavor"
+    },
+    {
+     "id": "etages_tour",
+     "cells": [
+      [
+       9,
+       2
+      ],
+      [
+       10,
+       2
+      ],
+      [
+       9,
+       3
+      ],
+      [
+       10,
+       3
+      ]
+     ],
+     "label": "Cage d'escalier",
+     "kind": "flavor"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "etudiant",
+     "cell": [
+      3,
+      4
+     ],
+     "radius": 1
+    }
+   ],
+   "style": {
+    "floor": "tiles_grey",
+    "walls": "tour",
+    "wall": [
+     [
+      "window",
+      5,
+      2
+     ]
+    ]
+   },
+   "sound": {
+    "music": "ville_jour",
+    "layers": {
+     "ville": 0.2
+    },
+    "steps": "pierre"
+   },
+   "art": "int_tour"
+  },
+  "int_tour_c": {
+   "name": "Résidence des Coteaux — hall",
+   "outdoor": false,
+   "grid": [
+    "############",
+    "############",
+    "#kkk.....OO#",
+    "#........OO#",
+    "#..........#",
+    "#j.........#",
+    "#.....n....#",
+    "#o........o#",
+    "#####D######"
+   ],
+   "doors": [
+    {
+     "cell": [
+      5,
+      8
+     ],
+     "to": "rue",
+     "to_cell": [
+      89,
+      68
+     ],
+     "facing": "down"
+    }
+   ],
+   "spots": [
+    {
+     "id": "tour",
+     "cells": [
+      [
+       1,
+       2
+      ],
+      [
+       2,
+       2
+      ],
+      [
+       3,
+       2
+      ]
+     ],
+     "label": "Boîtes aux lettres",
+     "kind": "flavor",
+     "flavor": "tour"
+    },
+    {
+     "id": "ascenseur",
+     "cells": [
+      [
+       1,
+       5
+      ]
+     ],
+     "label": "Ascenseur",
+     "kind": "flavor"
+    },
+    {
+     "id": "panneau_tour",
+     "cells": [
+      [
+       6,
+       6
+      ]
+     ],
+     "label": "Panneau de l'amicale des locataires",
+     "kind": "flavor"
+    },
+    {
+     "id": "etages_tour",
+     "cells": [
+      [
+       9,
+       2
+      ],
+      [
+       10,
+       2
+      ],
+      [
+       9,
+       3
+      ],
+      [
+       10,
+       3
+      ]
+     ],
+     "label": "Cage d'escalier",
+     "kind": "flavor"
+    }
+   ],
+   "npcs": [],
+   "style": {
+    "floor": "tiles_grey",
+    "walls": "tour",
+    "wall": [
+     [
+      "window",
+      5,
+      2
+     ]
+    ]
+   },
+   "sound": {
+    "music": "ville_jour",
+    "layers": {
+     "ville": 0.2
+    },
+    "steps": "pierre"
+   },
+   "art": "int_tour"
+  },
+  "int_tour_d": {
+   "name": "Résidence des Coteaux — hall",
+   "outdoor": false,
+   "grid": [
+    "############",
+    "############",
+    "#kkk.....OO#",
+    "#........OO#",
+    "#..........#",
+    "#j.........#",
+    "#.....n....#",
+    "#o........o#",
+    "#####D######"
+   ],
+   "doors": [
+    {
+     "cell": [
+      5,
+      8
+     ],
+     "to": "rue",
+     "to_cell": [
+      101,
+      68
+     ],
+     "facing": "down"
+    }
+   ],
+   "spots": [
+    {
+     "id": "tour",
+     "cells": [
+      [
+       1,
+       2
+      ],
+      [
+       2,
+       2
+      ],
+      [
+       3,
+       2
+      ]
+     ],
+     "label": "Boîtes aux lettres",
+     "kind": "flavor",
+     "flavor": "tour"
+    },
+    {
+     "id": "ascenseur",
+     "cells": [
+      [
+       1,
+       5
+      ]
+     ],
+     "label": "Ascenseur",
+     "kind": "flavor"
+    },
+    {
+     "id": "panneau_tour",
+     "cells": [
+      [
+       6,
+       6
+      ]
+     ],
+     "label": "Panneau de l'amicale des locataires",
+     "kind": "flavor"
+    },
+    {
+     "id": "etages_tour",
+     "cells": [
+      [
+       9,
+       2
+      ],
+      [
+       10,
+       2
+      ],
+      [
+       9,
+       3
+      ],
+      [
+       10,
+       3
+      ]
+     ],
+     "label": "Cage d'escalier",
+     "kind": "flavor"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "voisine",
+     "cell": [
+      6,
+      4
+     ],
+     "radius": 2
+    }
+   ],
+   "style": {
+    "floor": "tiles_grey",
+    "walls": "tour",
+    "wall": [
+     [
+      "window",
+      5,
+      2
+     ]
+    ]
+   },
+   "sound": {
+    "music": "ville_jour",
+    "layers": {
+     "ville": 0.2
+    },
+    "steps": "pierre"
+   },
+   "art": "int_tour"
+  },
+  "int_tour_g": {
+   "name": "Résidence des Coteaux — hall",
+   "outdoor": false,
+   "grid": [
+    "############",
+    "############",
+    "#kkk.....OO#",
+    "#........OO#",
+    "#..........#",
+    "#j.........#",
+    "#.....n....#",
+    "#o........o#",
+    "#####D######"
+   ],
+   "doors": [
+    {
+     "cell": [
+      5,
+      8
+     ],
+     "to": "rue",
+     "to_cell": [
+      89,
+      78
+     ],
+     "facing": "down"
+    }
+   ],
+   "spots": [
+    {
+     "id": "tour",
+     "cells": [
+      [
+       1,
+       2
+      ],
+      [
+       2,
+       2
+      ],
+      [
+       3,
+       2
+      ]
+     ],
+     "label": "Boîtes aux lettres",
+     "kind": "flavor",
+     "flavor": "tour"
+    },
+    {
+     "id": "ascenseur",
+     "cells": [
+      [
+       1,
+       5
+      ]
+     ],
+     "label": "Ascenseur",
+     "kind": "flavor"
+    },
+    {
+     "id": "panneau_tour",
+     "cells": [
+      [
+       6,
+       6
+      ]
+     ],
+     "label": "Panneau de l'amicale des locataires",
+     "kind": "flavor"
+    },
+    {
+     "id": "etages_tour",
+     "cells": [
+      [
+       9,
+       2
+      ],
+      [
+       10,
+       2
+      ],
+      [
+       9,
+       3
+      ],
+      [
+       10,
+       3
+      ]
+     ],
+     "label": "Cage d'escalier",
+     "kind": "flavor"
+    }
+   ],
+   "npcs": [],
+   "style": {
+    "floor": "tiles_grey",
+    "walls": "tour",
+    "wall": [
+     [
+      "window",
+      5,
+      2
+     ]
+    ]
+   },
+   "sound": {
+    "music": "ville_jour",
+    "layers": {
+     "ville": 0.2
+    },
+    "steps": "pierre"
+   },
+   "art": "int_tour"
+  },
+  "int_tour_h": {
+   "name": "Résidence des Coteaux — hall",
+   "outdoor": false,
+   "grid": [
+    "############",
+    "############",
+    "#kkk.....OO#",
+    "#........OO#",
+    "#..........#",
+    "#j.........#",
+    "#.....n....#",
+    "#o........o#",
+    "#####D######"
+   ],
+   "doors": [
+    {
+     "cell": [
+      5,
+      8
+     ],
+     "to": "rue",
+     "to_cell": [
+      101,
+      78
+     ],
+     "facing": "down"
+    }
+   ],
+   "spots": [
+    {
+     "id": "tour",
+     "cells": [
+      [
+       1,
+       2
+      ],
+      [
+       2,
+       2
+      ],
+      [
+       3,
+       2
+      ]
+     ],
+     "label": "Boîtes aux lettres",
+     "kind": "flavor",
+     "flavor": "tour"
+    },
+    {
+     "id": "ascenseur",
+     "cells": [
+      [
+       1,
+       5
+      ]
+     ],
+     "label": "Ascenseur",
+     "kind": "flavor"
+    },
+    {
+     "id": "panneau_tour",
+     "cells": [
+      [
+       6,
+       6
+      ]
+     ],
+     "label": "Panneau de l'amicale des locataires",
+     "kind": "flavor"
+    },
+    {
+     "id": "etages_tour",
+     "cells": [
+      [
+       9,
+       2
+      ],
+      [
+       10,
+       2
+      ],
+      [
+       9,
+       3
+      ],
+      [
+       10,
+       3
+      ]
+     ],
+     "label": "Cage d'escalier",
+     "kind": "flavor"
+    }
+   ],
+   "npcs": [],
+   "style": {
+    "floor": "tiles_grey",
+    "walls": "tour",
+    "wall": [
+     [
+      "window",
+      5,
+      2
+     ]
+    ]
+   },
+   "sound": {
+    "music": "ville_jour",
+    "layers": {
+     "ville": 0.2
+    },
+    "steps": "pierre"
+   },
+   "art": "int_tour"
+  },
+  "int_college": {
+   "name": "Collège des Coteaux — préau",
+   "outdoor": false,
+   "grid": [
+    "####################",
+    "####################",
+    "#kkkkkk......kkkkkk#",
+    "#..................#",
+    "#..................#",
+    "#.U..n........t..t.#",
+    "#..................#",
+    "#.BB..........BB...#",
+    "#o................o#",
+    "#########DD#########"
+   ],
+   "doors": [
+    {
+     "cell": [
+      9,
+      9
+     ],
+     "to": "rue",
+     "to_cell": [
+      39,
+      68
+     ],
+     "facing": "down"
+    },
+    {
+     "cell": [
+      10,
+      9
+     ],
+     "to": "rue",
+     "to_cell": [
+      40,
+      68
+     ],
+     "facing": "down"
+    }
+   ],
+   "spots": [
+    {
+     "id": "college",
+     "cells": [
+      [
+       5,
+       5
+      ]
+     ],
+     "label": "Panneau de la vie scolaire",
+     "kind": "flavor"
+    },
+    {
+     "id": "vitrine_trophees",
+     "cells": [
+      [
+       2,
+       5
+      ]
+     ],
+     "label": "Vitrine des trophées",
+     "kind": "flavor"
+    },
+    {
+     "id": "casiers",
+     "cells": [
+      [
+       1,
+       2
+      ],
+      [
+       2,
+       2
+      ],
+      [
+       3,
+       2
+      ],
+      [
+       4,
+       2
+      ],
+      [
+       5,
+       2
+      ],
+      [
+       6,
+       2
+      ],
+      [
+       13,
+       2
+      ],
+      [
+       14,
+       2
+      ],
+      [
+       15,
+       2
+      ],
+      [
+       16,
+       2
+      ],
+      [
+       17,
+       2
+      ],
+      [
+       18,
+       2
+      ]
+     ],
+     "label": "Casiers des élèves",
+     "kind": "flavor"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "cpe",
+     "cell": [
+      9,
+      4
+     ],
+     "radius": 2
+    },
+    {
+     "id": "collegien",
+     "cell": [
+      12,
+      7
+     ],
+     "radius": 2
+    }
+   ],
+   "style": {
+    "floor": "lino",
+    "walls": "college",
+    "wall": [
+     [
+      "window",
+      8,
+      4
+     ],
+     [
+      "clock",
+      13
+     ]
+    ]
+   },
+   "sound": {
+    "music": "ville_jour",
+    "layers": {
+     "foule": 0.2
+    },
+    "steps": "beton"
+   }
+  },
+  "int_maison_quartier": {
+   "name": "Maison de quartier des Coteaux",
+   "outdoor": false,
+   "grid": [
+    "##################",
+    "##################",
+    "#bbb....ZZ.....kk#",
+    "#................#",
+    "#.tt..tt....tt...#",
+    "#................#",
+    "#.tt..tt....,,,,.#",
+    "#...........,,,,.#",
+    "#o..............o#",
+    "########DD########"
+   ],
+   "doors": [
+    {
+     "cell": [
+      8,
+      9
+     ],
+     "to": "rue",
+     "to_cell": [
+      54,
+      68
+     ],
+     "facing": "down"
+    },
+    {
+     "cell": [
+      9,
+      9
+     ],
+     "to": "rue",
+     "to_cell": [
+      55,
+      68
+     ],
+     "facing": "down"
+    }
+   ],
+   "spots": [
+    {
+     "id": "maison_quartier",
+     "cells": [
+      [
+       1,
+       2
+      ],
+      [
+       2,
+       2
+      ],
+      [
+       3,
+       2
+      ]
+     ],
+     "label": "Boîte à livres",
+     "kind": "flavor"
+    },
+    {
+     "id": "piano_mq",
+     "cells": [
+      [
+       8,
+       2
+      ],
+      [
+       9,
+       2
+      ]
+     ],
+     "label": "Piano partagé",
+     "kind": "flavor"
+    },
+    {
+     "id": "jeux_societe",
+     "cells": [
+      [
+       12,
+       4
+      ],
+      [
+       13,
+       4
+      ]
+     ],
+     "label": "Jeux de société",
+     "kind": "flavor"
+    }
+   ],
+   "npcs": [
+    {
+     "id": "benevole",
+     "cell": [
+      4,
+      3
+     ],
+     "radius": 2
+    }
+   ],
+   "style": {
+    "floor": "planks",
+    "walls": "maison",
+    "wall": [
+     [
+      "posters",
+      4,
+      3
+     ],
+     [
+      "garland",
+      1,
+      16
+     ]
+    ]
+   },
+   "sound": {
+    "music": "ville_jour",
+    "layers": {
+     "foule": 0.25
+    },
+    "steps": "bois"
+   }
   }
  },
  "people": {
@@ -2909,6 +6588,146 @@
    "requires": {
     "min_turn": 3
    }
+  },
+  "guichetiere": {
+   "sprite": "guichetiere",
+   "name": "Mme Ferrand, guichetière",
+   "home": "int_gare"
+  },
+  "voyageuse": {
+   "sprite": "passant_e",
+   "name": "Voyageuse",
+   "home": "int_gare"
+  },
+  "artiste_fabrique": {
+   "sprite": "artiste",
+   "name": "Lucie, artiste en résidence",
+   "home": "int_fabrique"
+  },
+  "receptionniste": {
+   "sprite": "receptionniste",
+   "name": "Le réceptionniste",
+   "home": "int_hotel"
+  },
+  "agent_mairie": {
+   "sprite": "agent_mairie",
+   "name": "Agent d'accueil de la mairie",
+   "home": "int_mairie"
+  },
+  "patronne_cafe": {
+   "sprite": "patronne",
+   "name": "Mado, patronne du café",
+   "home": "int_cafe"
+  },
+  "client_cafe": {
+   "sprite": "spectateur_a",
+   "name": "Habituée du café",
+   "home": "int_cafe"
+  },
+  "lebrun": {
+   "sprite": "imprimeur",
+   "name": "M. Lebrun, imprimeur",
+   "home": "int_imprimerie"
+  },
+  "boulangere": {
+   "sprite": "boulangere",
+   "name": "Mme Pain, boulangère",
+   "home": "int_boulangerie"
+  },
+  "caissiere_rex": {
+   "sprite": "caissiere",
+   "name": "Caissière du Rex",
+   "home": "int_cinema"
+  },
+  "cinephile": {
+   "sprite": "spectateur_b",
+   "name": "Cinéphile",
+   "home": "int_cinema"
+  },
+  "prof_piano": {
+   "sprite": "prof_piano",
+   "name": "M. Delattre, professeur de piano",
+   "home": "int_conservatoire"
+  },
+  "eleve_conservatoire": {
+   "sprite": "enfant_a",
+   "name": "Élève du conservatoire",
+   "home": "int_conservatoire"
+  },
+  "lectrice": {
+   "sprite": "passant_a",
+   "name": "Lectrice",
+   "home": "int_librairie"
+  },
+  "fleuriste_pnj": {
+   "sprite": "fleuriste",
+   "name": "Rose, fleuriste",
+   "home": "int_fleuriste"
+  },
+  "disquaire_pnj": {
+   "sprite": "disquaire",
+   "name": "Jo, disquaire",
+   "home": "int_disquaire"
+  },
+  "galeriste": {
+   "sprite": "galeriste",
+   "name": "Mme Nakamura, galeriste",
+   "home": "int_galerie"
+  },
+  "lecteur": {
+   "sprite": "passant_d",
+   "name": "Lecteur assidu",
+   "home": "int_mediatheque"
+  },
+  "fromager": {
+   "sprite": "fromager",
+   "name": "M. Vidal, fromager",
+   "home": "int_halle"
+  },
+  "marchande": {
+   "sprite": "marchande",
+   "name": "Marchande de primeurs",
+   "home": "int_halle"
+  },
+  "instituteur": {
+   "sprite": "instituteur",
+   "name": "M. Benali, instituteur",
+   "home": "int_ecole"
+  },
+  "hotesse_ondine": {
+   "sprite": "hotesse",
+   "name": "Hôtesse d'Ondine Énergie",
+   "home": "int_ondine"
+  },
+  "gardienne": {
+   "sprite": "gardienne",
+   "name": "Mme Lopes, gardienne",
+   "home": "int_tour_a"
+  },
+  "etudiant": {
+   "sprite": "etudiant",
+   "name": "Étudiant du 3e",
+   "home": "int_tour_f"
+  },
+  "voisine": {
+   "sprite": "passant_c",
+   "name": "Voisine du 7e",
+   "home": "int_tour_d"
+  },
+  "cpe": {
+   "sprite": "cpe",
+   "name": "M. Garnier, CPE du collège",
+   "home": "int_college"
+  },
+  "collegien": {
+   "sprite": "enfant_b",
+   "name": "Collégienne",
+   "home": "int_college"
+  },
+  "benevole": {
+   "sprite": "benevole",
+   "name": "Nadia, bénévole",
+   "home": "int_maison_quartier"
   }
  },
  "seasons": {

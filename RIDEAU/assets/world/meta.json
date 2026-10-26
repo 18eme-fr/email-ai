@@ -81,6 +81,26 @@
    "printemps",
    "ete"
   ],
-  "reserve": []
+  "reserve": [],
+  "int_gare": [],
+  "int_fabrique": [],
+  "int_hotel": [],
+  "int_mairie": [],
+  "int_cafe": [],
+  "int_imprimerie": [],
+  "int_boulangerie": [],
+  "int_cinema": [],
+  "int_conservatoire": [],
+  "int_librairie": [],
+  "int_fleuriste": [],
+  "int_disquaire": [],
+  "int_galerie": [],
+  "int_mediatheque": [],
+  "int_halle": [],
+  "int_ecole": [],
+  "int_ondine": [],
+  "int_tour": [],
+  "int_college": [],
+  "int_maison_quartier": []
  }
 }

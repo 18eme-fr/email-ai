@@ -207,6 +207,14 @@ static func soundscape(map: WorldMap, cell: Vector2i, season_id: String, tod: St
 			"reserve":
 				layers["reserve"] = 0.85
 				music = "reserve"
+			_:
+				# Intérieurs de la ville : musique et ambiance décrites dans les données.
+				music = str(map.sound.get("music", music))
+				if night and music == "ville_jour":
+					music = "ville_nuit"
+				var own: Dictionary = map.sound.get("layers", {})
+				for id: String in own:
+					layers[id] = float(own[id])
 		if sky == "pluie":
 			layers["pluie"] = 0.25  # la pluie qu'on entend à travers les murs
 	return {"music": music, "layers": layers}
@@ -224,6 +232,8 @@ static func footstep_surface(map: WorldMap, cell: Vector2i, season_id: String, s
 			return "beton"
 		"bureau":
 			return "bois"
+	if not map.outdoor and map.sound.has("steps"):
+		return str(map.sound["steps"])
 	if g == "P":
 		return "bois"
 	if g in ["g", ":"]:

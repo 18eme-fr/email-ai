@@ -20,6 +20,8 @@ var performance: Dictionary = {}
 var districts: Array = []    ## [{id, name, rect: Rect2i}] (quartiers de la ville)
 var decor: Array = []        ## décors animés : [{kind, rect?, cell?}]
 var ground: PackedStringArray = []  ## sol sous chaque case (ville), pour les bruits de pas
+var art := ""                ## images à utiliser (cartes qui partagent un décor) ; "" : l'identifiant
+var sound: Dictionary = {}   ## intérieurs : {music, layers, steps}
 
 var _astar: AStarGrid2D
 
@@ -55,6 +57,8 @@ static func from_data(world: Dictionary, map_id: String) -> WorldMap:
 		var r: Array = d["rect"]
 		m.districts.append({"id": str(d["id"]), "name": str(d["name"]), "rect": Rect2i(int(r[0]), int(r[1]), int(r[2]), int(r[3]))})
 	m.decor = raw.get("decor", [])
+	m.art = str(raw.get("art", map_id))
+	m.sound = raw.get("sound", {})
 	for line: String in raw.get("ground", []):
 		m.ground.append(line)
 	return m

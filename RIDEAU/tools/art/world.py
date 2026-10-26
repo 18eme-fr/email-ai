@@ -1154,6 +1154,27 @@ PEOPLE = {
     "jardiniere": {"skin": P["skin2"], "hair": P["grey3"], "hair_style": "long", "top": P["green2"], "legs": P["wood1"], "accent": P["gold2"]},
     "libraire": {"skin": P["skin1"], "hair": P["wood0"], "hair_style": "short", "top": P["paper3"], "legs": P["wood1"], "accent": P["velvet3"], "glasses": True, "scarf": True},
     "projectionniste": {"skin": P["skin4"], "hair": P["grey2"], "hair_style": "beanie", "top": P["ink"], "legs": P["grey0"], "accent": P["velvet3"]},
+    # Habitants des intérieurs (interiors_layout.py)
+    "guichetiere": {"skin": P["skin2"], "hair": P["wood1"], "hair_style": "bob", "top": P["navy"], "legs": P["navy"], "accent": P["velvet3"], "scarf": True},
+    "artiste": {"skin": P["skin3"], "hair": P["velvet3"], "hair_style": "swoop", "top": P["teal"], "legs": P["blue"], "accent": P["gold3"], "apron": True, "apron_color": P["grey2"]},
+    "receptionniste": {"skin": P["skin1"], "hair": P["ink"], "hair_style": "short", "top": P["velvet1"], "legs": P["ink"], "accent": P["gold2"], "tie": True},
+    "agent_mairie": {"skin": P["skin4"], "hair": P["ink"], "hair_style": "short", "top": P["blue"], "legs": P["grey0"], "accent": P["cream"], "glasses": True},
+    "patronne": {"skin": P["skin1"], "hair": P["velvet2"], "hair_style": "curly", "top": P["ink"], "legs": P["night"], "accent": P["gold2"], "apron": True, "apron_color": P["cream"]},
+    "imprimeur": {"skin": P["skin1"], "hair": P["grey3"], "hair_style": "bald", "top": P["blue"], "legs": P["navy"], "accent": P["ink"], "apron": True, "apron_color": P["grey1"], "glasses": True, "beard": True},
+    "boulangere": {"skin": P["skin0"], "hair": P["gold1"], "hair_style": "bob", "top": P["white"], "legs": P["grey1"], "accent": P["cream"], "apron": True, "apron_color": P["paper2"]},
+    "caissiere": {"skin": P["skin5"], "hair": P["ink"], "hair_style": "long", "top": P["velvet3"], "legs": P["ink"], "accent": P["gold3"], "tie": True},
+    "prof_piano": {"skin": P["skin0"], "hair": P["grey2"], "hair_style": "swoop", "top": P["ink"], "legs": P["ink"], "accent": P["white"], "tie": True, "glasses": True},
+    "fleuriste": {"skin": P["skin2"], "hair": P["orange"], "hair_style": "long", "top": P["sky"], "legs": P["navy"], "accent": P["green1"], "apron": True, "apron_color": P["green1"]},
+    "disquaire": {"skin": P["skin3"], "hair": P["ink"], "hair_style": "beanie", "top": P["purple1"], "legs": P["blue"], "accent": P["gold3"], "beard": True},
+    "galeriste": {"skin": P["skin0"], "hair": P["ink"], "hair_style": "bob", "top": P["ink"], "legs": P["ink"], "accent": P["velvet4"], "scarf": True, "glasses": True},
+    "fromager": {"skin": P["skin1"], "hair": P["wood1"], "hair_style": "short", "top": P["green0"], "legs": P["wood1"], "accent": P["cream"], "apron": True, "apron_color": P["white"], "beard": True},
+    "marchande": {"skin": P["skin3"], "hair": P["ink"], "hair_style": "curly", "top": P["orange"], "legs": P["green0"], "accent": P["gold2"], "apron": True, "apron_color": P["green2"]},
+    "instituteur": {"skin": P["skin4"], "hair": P["ink"], "hair_style": "short", "top": P["wood3"], "legs": P["navy"], "accent": P["cream"], "glasses": True},
+    "hotesse": {"skin": P["skin1"], "hair": P["gold2"], "hair_style": "long", "top": P["teal"], "legs": P["grey0"], "accent": P["white"], "scarf": True},
+    "gardienne": {"skin": P["skin2"], "hair": P["grey3"], "hair_style": "curly", "top": P["purple0"], "legs": P["blue"], "accent": P["cream"], "apron": True, "apron_color": P["sky"]},
+    "etudiant": {"skin": P["skin4"], "hair": P["wood0"], "hair_style": "beanie", "top": P["green2"], "legs": P["blue"], "accent": P["cream"]},
+    "cpe": {"skin": P["skin1"], "hair": P["wood2"], "hair_style": "short", "top": P["grey1"], "legs": P["navy"], "accent": P["velvet3"], "tie": True},
+    "benevole": {"skin": P["skin3"], "hair": P["ink"], "hair_style": "long", "top": P["gold2"], "legs": P["blue"], "accent": P["velvet3"], "scarf": True},
     "enfant_a": {"skin": P["skin2"], "hair": P["wood1"], "hair_style": "curly", "top": P["gold2"], "legs": P["blue"], "accent": P["cream"], "child": True},
     "enfant_b": {"skin": P["skin0"], "hair": P["gold1"], "hair_style": "bob", "top": P["velvet4"], "legs": P["navy"], "accent": P["cream"], "child": True},
     "touriste": {"skin": P["skin0"], "hair": P["velvet1"], "hair_style": "short", "top": P["white"], "legs": P["wood3"], "accent": P["sky"], "glasses": True},
@@ -1209,6 +1230,13 @@ def person_frame(spec, direction, frame):
     if spec.get("tie") and direction == "down":
         o.rect(7, 11 + y, 2, 1, P["cream"])
         o.rect(7, 12 + y, 2, 5, spec["accent"])
+    if spec.get("apron") and direction != "up":
+        ap = spec.get("apron_color", P["white"])
+        if direction == "down":
+            o.rect(5, 13 + y, 6, 6, ap)
+            o.hline(5, 10, 13 + y, shade(ap, 0.85))
+        else:
+            o.rect(6 if direction == "left" else 5, 13 + y, 5, 6, ap)
     if spec.get("cane") and direction in ("down", "left", "right"):
         cx = 13 if direction != "left" else 2
         o.vline(cx, 13 + y, 23, P["wood1"])
@@ -1514,6 +1542,10 @@ def generate(root, out_dir):
         fest = festive_interior(map_id)
         if fest is not None:
             fest.save(os.path.join(maps_dir, f"{map_id}_festive.png"))
+    # Intérieurs de tous les bâtiments de la ville (interiors.py)
+    import interiors
+    for art in interiors.generate(world, maps_dir):
+        meta["variants"][art] = []
     meta["poster_slots"]["hall"] = [[5 * T + 6, T - 8, 12, 20], [5 * T + 20, T - 8, 12, 20], [5 * T + 34, T - 8, 12, 20],
                                     [15 * T + 4, T - 8, 12, 20], [15 * T + 18, T - 8, 12, 20], [15 * T + 32, T - 8, 12, 20]]
     for (map_id, upgrade_id), canvas in upgrade_overlays(world).items():

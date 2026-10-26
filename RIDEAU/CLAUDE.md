@@ -27,7 +27,10 @@ Contexte pour les prochaines sessions (humaines ou Claude Code).
   `data/world/world.json` : toute modification de grille impose de relancer
   `python3 tools/art/generate_art.py` (le dessin lit les mêmes grilles) et les tests `tests/world`.
   La ville (carte `rue`) est écrite par `python3 tools/art/city_layout.py` (à modifier plutôt que
-  le JSON) et dessinée par `tools/art/city.py`.
+  le JSON) et dessinée par `tools/art/city.py`. Les intérieurs des bâtiments (cartes `int_*`) sont
+  décrits dans `tools/art/interiors_layout.py` (appelé par `city_layout.py`) et dessinés par
+  `tools/art/interiors.py` ; chaque objet et chaque personne doit avoir des répliques
+  (`data/world/barks.json`, vérifié par `tests/world`).
   Les panneaux d'étape doivent continuer à fonctionner dans les deux écrans (contrat `screen` :
   `session`, `advance()`, `refresh_all()`, `toast()`, `theatre`).
 - **Rénovations** : prix en écriture neutre, amortissement en écritures `non_cash` (résultat

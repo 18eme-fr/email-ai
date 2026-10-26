@@ -12,12 +12,14 @@ import os
 import random
 from collections import deque
 
+import interiors_layout as IL
+
 W, H = 112, 80
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
 
 # Caractères praticables de la ville (les autres bloquent).
-WALK = set("_=z+:PgDr")
+WALK = set("_=z+:PgDra")
 
 
 class City:
@@ -37,7 +39,7 @@ class City:
             for x in range(x0, x1 + 1):
                 if 0 <= x < W and 0 <= y < H:
                     self.grid[y][x] = ch
-                    self.ground[y][x] = ground if ground else (ch if ch in "_=z+:~gPXr" else self.ground[y][x])
+                    self.ground[y][x] = ground if ground else (ch if ch in "_=z+:~gPXra" else self.ground[y][x])
 
     def put(self, x, y, ch):
         self.grid[y][x] = ch
@@ -74,6 +76,13 @@ class City:
         s = {"id": sid, "cells": [list(c) for c in cells], "label": label, "kind": kind}
         s.update(extra)
         self.spots.append(s)
+
+    def alley(self, x0, y0, x1, y1):
+        """Ruelle pavée entre deux bâtiments (ou cour arrière)."""
+        for y in range(y0, y1 + 1):
+            for x in range(x0, x1 + 1):
+                assert self.grid[y][x] == "X", ("ruelle sur", x, y, self.grid[y][x])
+        self.fill(x0, y0, x1, y1, "a")
 
     def npc(self, nid, x, y, radius):
         assert self.grid[y][x] in WALK, (nid, x, y, self.grid[y][x])
@@ -264,6 +273,23 @@ def build():
     for (x, y) in [(24, 64), (49, 77), (83, 77)]:
         c.put(x, y, "E")
 
+    # --- Ruelles : on passe entre les bâtiments --------------------------------------------
+    for rect in [(58, 4, 61, 8), (74, 4, 77, 8),                       # gare / Fabrique / avenue
+                 (42, 22, 45, 29), (58, 22, 59, 29), (60, 22, 77, 23),  # derrière la place : cour des artisans
+                 (66, 24, 66, 29), (72, 24, 72, 29),
+                 (94, 22, 95, 29), (108, 22, 109, 29),                  # quartier des Arts
+                 (90, 35, 90, 40), (96, 35, 96, 40), (109, 35, 110, 40),
+                 (43, 46, 44, 53), (59, 46, 60, 53),                    # boulevard Louise-Michel
+                 (83, 46, 84, 53), (101, 46, 101, 53)]:
+        c.alley(*rect)
+    # Un peu de vie dans les ruelles larges : pots de fleurs, poubelles, vélos (un côté seulement).
+    for (x, y, ch) in [(42, 23, "o"), (42, 26, "E"), (45, 24, "V"), (45, 28, "o"), (58, 5, "o"), (61, 7, "E"),
+                       (74, 6, "V"), (77, 5, "o"), (63, 22, "o"), (68, 22, "E"), (76, 22, "V"), (94, 24, "o"),
+                       (109, 26, "E"), (43, 48, "o"), (60, 51, "E"), (83, 50, "V"), (110, 37, "o")]:
+        c.put(x, y, ch)
+    c.spot("cour_artisans", [(70, 22)], "Cour des artisans")
+    c.put(70, 22, "n")
+
     # --- Mobilier urbain des rues ------------------------------------------------------
     for y in (9, 13, 17, 21, 41, 45, 54, 58):
         for x in range(4, W - 4, 9):
@@ -314,10 +340,17 @@ def build():
         ("fernand", 63, 31, 1), ("collectionneur", 92, 9, 1),
     ]:
         c.npc(nid, x, y, rad)
-    # Aucun mobilier (arbre, lampadaire, poubelle) au débouché d'un passage piéton.
+    # Rien (arbre, lampadaire, poubelle) devant une porte de bâtiment.
+    for b in c.buildings:
+        for dx_, dy_ in b["doors"]:
+            for ox in (-1, 0, 1):
+                fx, fy = dx_ + ox, dy_ + 1
+                if 0 <= fx < W and fy < H and c.grid[fy][fx] in "TLE" and c.ground[fy][fx] == "_":
+                    c.grid[fy][fx] = "_"
+    # Aucun mobilier (arbre, lampadaire, poubelle) au débouché d'un passage piéton ou d'une ruelle.
     for y in range(H):
         for x in range(W):
-            if c.grid[y][x] != "z":
+            if c.ground[y][x] not in "za":
                 continue
             for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
                 nx, ny = x + dx, y + dy
@@ -354,7 +387,7 @@ def main():
                               ("A", "arrêt de bus", False), ("Y", "statue", False), ("Q", "kiosque à musique", False),
                               ("J", "jeux d'enfants", False), ("E", "poubelle", False), ("V", "vélos", False),
                               ("W", "clôture ou muret", False), ("G", "potager", False), ("|", "voie ferrée", False),
-                              ("N", "kiosque", False), ("r", "ballast", True)]:
+                              ("N", "kiosque", False), ("r", "ballast", True), ("a", "ruelle", True)]:
         legend[ch] = {"name": name, "walk": walk_ok}
     rue = world["maps"]["rue"]
     rue["name"] = "Bréval-sur-Ondine"
@@ -367,6 +400,31 @@ def main():
     rue["districts"] = c.districts
     rue["doors"] = [{"cell": [51, 29], "to": "hall", "to_cell": [10, 12], "facing": "up"},
                     {"cell": [52, 29], "to": "hall", "to_cell": [11, 12], "facing": "up"}]
+    # Tous les autres bâtiments s'ouvrent sur un intérieur (interiors_layout.py).
+    for mid in [k for k in world["maps"] if k.startswith("int_")]:
+        del world["maps"][mid]
+    for ch, (name, walk_ok) in IL.LEGEND.items():
+        legend[ch] = {"name": name, "walk": walk_ok}
+    inside_ids = set()
+    for b in c.buildings:
+        spec = IL.interior_for(b["id"], b["style"])
+        if not spec:
+            continue
+        mid = "int_" + b["id"]
+        outside = [tuple(d) for d in b["doors"]]
+        imap = IL.to_map(mid, spec, outside)
+        world["maps"][mid] = imap
+        for d, idoor in zip(outside, imap["doors"]):
+            x, y = d
+            row = rue["grid"][y]
+            rue["grid"][y] = row[:x] + "D" + row[x + 1:]
+            rue["doors"].append({"cell": [x, y], "to": mid, "to_cell": [idoor["cell"][0], idoor["cell"][1] - 1], "facing": "up"})
+        inside_ids.add(b["id"])
+        for n in imap["npcs"]:
+            sprite, name = IL.PEOPLE[n["id"]]
+            world["people"][n["id"]] = {"sprite": sprite, "name": name, "home": mid}
+    # Les objets « façade » des bâtiments sont désormais à l'intérieur.
+    rue["spots"] = [sp for sp in rue["spots"] if sp["id"] not in inside_ids]
     for d in world["maps"]["hall"]["doors"]:
         if d["to"] == "rue":
             d["to_cell"] = [51, 30] if d["cell"][0] == 10 else [52, 30]
