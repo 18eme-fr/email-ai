@@ -2,6 +2,19 @@
 
 Format inspiré de « Keep a Changelog ». Versions du jeu (`application/config/version`).
 
+## [0.17.1] — 2026-10-26 — Un vrai bruit de porte, un extérieur sans ruissellement
+
+### Modifié
+- **Nouveau son de porte**, construit comme une vraie porte en bois : la poignée et le pêne (deux
+  clics métalliques), l'air que le battant déplace et un léger frottement de gond, puis le
+  battant qui frappe le chambranle (résonances d'un panneau de bois) et le pêne qui s'enclenche,
+  avec un court écho de pièce. L'ancien son (bourdonnement synthétique) est remplacé.
+- **Plus de bruit d'eau en continu dehors** : la fontaine de la place, la rivière, la pluie, le
+  brouhaha du café et du marché sur la place, et les cigales sont retirés de l'extérieur (bruits
+  filtrés qui sonnaient comme un ruissellement permanent). Dehors restent la musique, les
+  oiseaux, les grillons la nuit, la fanfare du kiosque et les petits sons ponctuels (pigeons,
+  canards, train). La pluie reste visible à l'écran.
+
 ## [0.17.0] — 2026-10-26 — Une création, et Paris
 
 ### Ajouté

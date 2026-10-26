@@ -523,8 +523,11 @@ func test_sound_and_atmosphere_follow_the_world() -> void:
 	for id: String in ["ville", "vent", "salle", "coulisses"]:
 		assert_bool(AudioDirector.ambience_levels().has(id)).override_failure_message("Nappe de bruit : %s" % id).is_false()
 	assert_object(screen._train).is_not_null()
+	# Dehors, aucune source d'eau ou de brouhaha en continu : au plus la fanfare du kiosque.
 	var emitters := screen._map_root.find_children("*", "AudioStreamPlayer2D", true, false)
-	assert_int(emitters.size()).is_greater_equal(2)
+	for e: AudioStreamPlayer2D in emitters:  # (les petits sons ponctuels — pigeons, train — sont permis)
+		var path := e.stream.resource_path
+		assert_bool(path.contains("/ambience/") and not path.contains("fanfare")).override_failure_message("Ambiance continue dehors : %s" % path).is_false()
 	# Le soir, la lumière baisse et la musique de nuit prend le relais.
 	s.state.phase = GameState.PHASE_REPORT
 	screen.load_map("rue", Vector2i(52, 33), "up")

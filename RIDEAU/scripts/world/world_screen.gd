@@ -667,17 +667,16 @@ func _add_sky_life(season: String) -> void:
 			_train_timer = _rng.randf_range(6.0, 14.0) if _train.visible else _rng.randf_range(15.0, 35.0)
 
 
-## Sources sonores localisées : fontaine, café, marché, fanfare du kiosque.
+## Sources sonores localisées dehors : la fanfare du kiosque, le jour. (Pas de fontaine, de café
+## ni de marché en continu : ces bruits filtrés sonnaient comme de l'eau qui ruisselle.)
 func _add_sound_sources() -> void:
 	if not map.outdoor:
 		return
 	var tod := WorldRules.time_of_day(session.state)
 	var season := _season()
-	var sources: Array = [["fontaine", "fontaine", -2.0], ["cafe", "cafe", 0.0]]
-	if tod != "nuit":
-		sources.append(["marche", "marche", 0.0])
-		if season != "hiver" and _sky != "pluie":
-			sources.append(["kiosque", "fanfare", -6.0])
+	var sources: Array = []
+	if tod != "nuit" and season != "hiver" and _sky != "pluie":
+		sources.append(["kiosque", "fanfare", -6.0])
 	for spec: Array in sources:
 		var sp := map.spot(str(spec[0]))
 		if sp.is_empty():

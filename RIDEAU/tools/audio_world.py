@@ -312,28 +312,6 @@ def amb_birds():
     return norm(out, 0.45)
 
 
-def amb_rain():
-    rng = np.random.default_rng(24)
-    n = int(SR * AMB)
-    out = band(noise(n, rng), 400, 2500) * 0.25 + 0.35 * band(noise(n, rng), 100, 600)
-    drops = np.zeros(n)
-    for k in range(500):
-        m = int(SR * 0.012)
-        drop = rng.normal(0, 1, m) * np.exp(-np.arange(m) / (SR * 0.002))
-        place(drops, rng.uniform(0.3, 1.0) * drop, int(rng.uniform(0, n)))
-    out += band(drops, 200, 3000)  # gouttes sourdes, sans grésillement aigu
-    return norm(out, 0.4)
-
-
-def amb_cicadas():
-    rng = np.random.default_rng(25)
-    n = int(SR * AMB)
-    x = np.arange(n) / SR
-    buzz = band(noise(n, rng), 3800, 6500) * (0.5 + 0.5 * np.sign(np.sin(2 * np.pi * 45 * x)))
-    pulse = 0.4 + 0.6 * (0.5 + 0.5 * np.sin(2 * np.pi * (AMB / 4 * 0 + 0.75) * x)) ** 3
-    return norm(buzz * pulse, 0.3)
-
-
 def amb_crickets():
     rng = np.random.default_rng(26)
     n = int(SR * AMB)
@@ -349,24 +327,6 @@ def amb_crickets():
                 place(out, rng.uniform(0.2, 0.4) * np.sin(2 * np.pi * f * x) * np.sin(np.pi * x / d), int(SR * (k + j * 0.04)))
             k += period + rng.uniform(-0.1, 0.1)
     return norm(out, 0.3)
-
-
-def amb_water(kind="river"):
-    rng = np.random.default_rng(27 if kind == "river" else 28)
-    n = int(SR * AMB)
-    if kind == "river":
-        out = band(noise(n, rng), 200, 1500) * (0.7 + 0.3 * _slow(n, rng, (2, 3, 7)))
-        count, lo, hi = 300, 300, 900
-    else:  # fontaine
-        out = band(noise(n, rng), 1200, 6000) * (0.8 + 0.2 * _slow(n, rng, (5, 9)))
-        count, lo, hi = 500, 800, 2400
-    for k in range(count):  # bulles
-        d = rng.uniform(0.02, 0.06)
-        x = secs(d)
-        f = rng.uniform(lo, hi)
-        bub = np.sin(2 * np.pi * f * x * (1 + 2 * x / d)) * np.exp(-x / (d / 3))
-        place(out, rng.uniform(0.1, 0.4) * bub, int(rng.uniform(0, n)))
-    return norm(out, 0.5)
 
 
 def babble(rng, n, density=3.0, lo=250, hi=2200):
@@ -453,15 +413,57 @@ def footsteps():
     return out
 
 
+def _click(rng, partials, amp):
+    """Clic métallique (poignée, pêne) : petit choc bruité et deux résonances qui s'éteignent vite."""
+    x = secs(0.05)
+    hit = band(noise(len(x), rng), 2000, 8000) * np.exp(-x / 0.003)
+    ring = sum(np.sin(2 * np.pi * f * x + rng.uniform(0, 6.3)) * np.exp(-x / 0.014) for f in partials) / len(partials)
+    return amp * (0.6 * hit + 0.5 * ring) * env(len(x), 0.0005, 0.02)
+
+
+def door_sound():
+    """Une porte en bois qu'on ouvre puis qui se referme : la poignée et le pêne (deux clics),
+    l'air que le battant déplace et un léger grincement de gond, puis le battant qui frappe
+    le chambranle (résonances d'un panneau de bois) et le pêne qui s'enclenche."""
+    rng = np.random.default_rng(91)
+    n = int(SR * 1.1)
+    out = np.zeros(n)
+    place(out, _click(rng, (2300, 3700), 0.35), 0, wrap=False)            # on appuie sur la poignée
+    place(out, _click(rng, (2900, 4400), 0.25), int(SR * 0.07), wrap=False)  # le pêne se libère
+    # Le battant pivote : souffle d'air sourd et gond qui frotte à peine.
+    m = int(SR * 0.45)
+    xs = np.arange(m) / SR
+    air = band(noise(m, rng), 70, 450) * np.sin(np.pi * xs / xs[-1]) ** 2 * 0.12
+    rate = 70 + 35 * np.sin(np.pi * xs / xs[-1])
+    phase = np.cumsum(rate) / SR
+    pulses = np.zeros(m)
+    idx = np.nonzero(np.diff(np.floor(phase)) > 0)[0]
+    pulses[idx] = rng.uniform(0.5, 1.0, len(idx))
+    k = np.arange(int(SR * 0.02)) / SR
+    hinge = np.convolve(pulses, sum(np.sin(2 * np.pi * f * k) * np.exp(-k / 0.006) for f in (900, 1450)))[:m]
+    hinge = band(hinge, 600, 2200) * np.sin(np.pi * xs / xs[-1]) * 0.05
+    place(out, air + hinge, int(SR * 0.1), wrap=False)
+    # Le battant frappe le chambranle : choc et modes de vibration du panneau.
+    m = int(SR * 0.45)
+    xs = np.arange(m) / SR
+    hit = band(noise(m, rng), 100, 3000) * np.exp(-xs / 0.008) * 0.9
+    body = np.zeros(m)
+    for f, d, a in ((82, 0.12, 1.0), (131, 0.09, 0.7), (196, 0.07, 0.55), (287, 0.05, 0.4), (415, 0.035, 0.3), (560, 0.025, 0.2)):
+        body += a * np.sin(2 * np.pi * f * xs + rng.uniform(0, 6.3)) * np.exp(-xs / d)
+    slam = (hit + 0.55 * body) * env(m, 0.0005, 0.15)
+    place(out, slam, int(SR * 0.6), wrap=False)
+    place(out, _click(rng, (2500, 3900), 0.45), int(SR * 0.605), wrap=False)  # le pêne s'enclenche
+    place(out, _click(rng, (3100, 4700), 0.15), int(SR * 0.66), wrap=False)   # petit cliquetis
+    out = reverb(np.pad(out, (0, int(SR * 0.35))), 0.35, 0.18, rng, damp=4000)
+    out = band(out, 40, 9000)
+    return norm(out * env(len(out), 0.001, 0.12), 0.7)
+
+
 def oneshots():
     rng = np.random.default_rng(61)
     out = {}
-    # porte : grincement puis choc
-    d = 0.5
-    x = secs(d)
-    creak = band(np.sign(np.sin(2 * np.pi * (220 + 120 * x) * x)), 200, 2000) * np.exp(-x * 3) * 0.3
-    thump = band(noise(len(x), rng), 60, 400) * np.exp(-np.maximum(0, x - 0.35) / 0.03) * (x > 0.35)
-    out["porte"] = norm(creak + thump, 0.6)
+    noise(int(SR * 0.5), rng)  # (tirage de l'ancien son de porte : les sons suivants restent identiques)
+    out["porte"] = door_sound()
     lock = np.zeros(int(SR * 0.35))  # verrou : cliquetis métalliques
     for k in range(4):
         place(lock, 0.5 * bell(rng.uniform(2500, 3500), 0.06, 1), int(SR * k * 0.07), wrap=False)
@@ -531,9 +533,9 @@ def generate(write, music_dir, amb_dir, sfx_dir):
         write(f"{music_dir}/{k}.wav", v)
     # Pas de nappe de bruit continue (ville, vent, salle, coulisses) : sous la musique, on
     # l'entendait comme un grésillement. Restent des sons qui ont une forme (chants, gouttes, voix).
-    amb = {"oiseaux": amb_birds(), "pluie": amb_rain(),
-           "cigales": amb_cicadas(), "grillons": amb_crickets(), "riviere": amb_water("river"),
-           "fontaine": amb_water("fountain"), "cafe": amb_crowd("cafe"), "marche": amb_crowd("market"),
+    # Pas non plus de pluie, de rivière, de fontaine ni de cigales : des bruits filtrés en continu
+    # qui sonnaient comme un ruissellement d'eau. (Le brouhaha du café et du marché reste à l'intérieur.)
+    amb = {"oiseaux": amb_birds(), "grillons": amb_crickets(), "cafe": amb_crowd("cafe"), "marche": amb_crowd("market"),
            "foule": amb_crowd("hall"), "bureau": amb_room("bureau"), "reserve": amb_room("reserve"), "fanfare": music_fanfare()}
     for k, v in amb.items():
         write(f"{amb_dir}/{k}.wav", v)

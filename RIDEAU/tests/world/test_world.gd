@@ -223,9 +223,10 @@ func test_soundscape_follows_place_time_and_weather() -> void:
 	var night := WorldRules.soundscape(city, park, "ete", "nuit", "pluie", false, 2)
 	assert_str(str(night["music"])).is_equal("ville_nuit")
 	var layers: Dictionary = night["layers"]
-	assert_bool(layers.has("grillons") and layers.has("pluie") and layers.has("riviere")).is_true()
+	assert_bool(layers.has("grillons")).is_true()
 	assert_bool(layers.has("oiseaux")).is_false()
-	assert_float(float(layers["riviere"])).is_greater(float(WorldRules.soundscape(city, park, "ete", "nuit", "pluie", false, 6)["layers"]["riviere"]))
+	# Plus de nappe d'eau en continu dehors (pluie, rivière), même au bord de l'eau sous la pluie.
+	assert_bool(layers.has("pluie") or layers.has("riviere")).is_false()
 	assert_str(str(WorldRules.soundscape(city, park, "hiver", "jour", "neige", true)["music"])).is_equal("ville_fetes")
 	assert_str(str(WorldRules.soundscape(world.map("reserve"), Vector2i(7, 3), "ete", "jour", "clair", false)["music"])).is_equal("reserve")
 	var hall: Dictionary = WorldRules.soundscape(world.map("hall"), Vector2i(10, 8), "ete", "jour", "clair", false, 99, 5)["layers"]
@@ -305,7 +306,7 @@ func test_no_background_hiss_anywhere() -> void:
 				for sky: String in ["clair", "pluie"]:
 					var layers: Dictionary = WorldRules.soundscape(m, Vector2i(5, 5), season, tod, sky, false, 4, 3)["layers"]
 					for layer: String in layers:
-						assert_bool(layer in ["ville", "vent", "salle", "coulisses"]).override_failure_message("%s : nappe de bruit %s" % [id, layer]).is_false()
+						assert_bool(layer in ["ville", "vent", "salle", "coulisses", "pluie", "riviere", "fontaine", "cigales"]).override_failure_message("%s : nappe de bruit %s" % [id, layer]).is_false()
 						assert_bool(ResourceLoader.exists("res://assets/audio/ambience/%s.wav" % layer)).override_failure_message("%s : ambiance manquante %s" % [id, layer]).is_true()
 	var prologue: Variant = GameData.read_json("res://data/story/prologue.json")
 	for sc: Dictionary in (prologue as Dictionary)["scenes"]:

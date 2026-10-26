@@ -244,14 +244,10 @@ static func soundscape(map: WorldMap, cell: Vector2i, season_id: String, tod: St
 		var green := district in ["parc", "parc_sud"]
 		if not night and season_id != "hiver" and sky != "pluie":
 			layers["oiseaux"] = 0.9 if green else (0.55 if district == "quais" else 0.3)
-		if season_id == "ete" and not night:
-			layers["cigales"] = 0.3 if green or district == "coteaux" else 0.1
 		if night and season_id in ["ete", "printemps"]:
 			layers["grillons"] = 0.8 if green else 0.35
-		if sky == "pluie":
-			layers["pluie"] = 0.6
-		if water_dist < 9:
-			layers["riviere"] = 0.6 * (1.0 - water_dist / 9.0)
+		# Ni pluie, ni rivière, ni cigales en continu : ces nappes de bruit sonnaient comme un
+		# ruissellement d'eau permanent. Dehors, on entend la musique, les oiseaux et les grillons.
 	else:
 		match map.id:
 			"hall":
