@@ -10,7 +10,9 @@ des saisons. Le jeu fait découvrir, par l'expérience,
 les grandes logiques de l'administration culturelle (budget prévisionnel, billetterie, jauge,
 contrats de cession et de coréalisation, médiation, subventions, mécénat…).
 
-État : **version 0.12.0 jouable de bout en bout** (voir `QA_REPORT.md` et `ROADMAP.md`).
+État : **version 0.13.0 jouable de bout en bout** (voir `QA_REPORT.md` et `ROADMAP.md`).
+Depuis la version 0.13 : **l'Album de Bréval**, 95 cartes à collectionner de partie en partie
+(rencontres, lieux, affiches, trésors cachés) et des tenues à débloquer.
 Depuis la version 0.12 : **toute une ville à explorer** (Bréval-sur-Ondine : 7 quartiers, 28 bâtiments,
 29 habitants, bus et plan de la ville).
 Depuis la version 0.11 : **scénarios-études de cas, missions, dossiers de compétences,
@@ -35,7 +37,7 @@ En ligne de commande :
 ```
 
 Des versions prêtes à jouer pour **Linux, Windows et le Web** ont été produites (archives
-`RIDEAU-0.12.0-*.zip` transmises avec la livraison ; le dossier `exports/` n'est pas versionné).
+`RIDEAU-0.13.0-*.zip` transmises avec la livraison ; le dossier `exports/` n'est pas versionné).
 La version Web se lance en servant le dossier décompressé, par exemple :
 `python3 -m http.server` puis <http://localhost:8000> (l'ouvrir directement en `file://` ne marche pas).
 Vérifier une version exportée : `./RIDEAU.x86_64 --headless -- --smoke-test`.
@@ -51,6 +53,7 @@ Dans le monde explorable (écran par défaut) :
 | Menu, carnet, budget, bilans | boutons en haut à droite | Échap, F1 |
 | Journal de bord (missions, compétences, trophées) | bouton livre | J |
 | Plan de la ville | bouton plan | M |
+| Album de collection et tenues | bouton album | C |
 | Prendre le bus | utiliser un arrêt de bus | Entrée face à l'abribus |
 
 La flèche dorée indique toujours la prochaine étape. Le paramètre « vue tableau de bord » permet de

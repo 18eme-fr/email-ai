@@ -2,6 +2,24 @@
 
 Format inspiré de « Keep a Changelog ». Versions du jeu (`application/config/version`).
 
+## [0.13.0] — 2026-10-26 — L'Album de Bréval : collectionner, revenir
+
+### Ajouté
+- **Album de collection (95 cartes)** conservé d'une partie à l'autre : 20 rencontres (parler
+  aux gens), 43 lieux (les examiner), 20 affiches (programmer chaque spectacle, au fil des
+  parties) et 12 **trésors cachés** dans la ville et le théâtre (étincelles à ramasser) qui
+  racontent l'histoire du théâtre et des politiques culturelles (Vilar, Avignon, Malraux, Jeanne
+  Laurent, Molière, commedia dell'arte, 1 % artistique, intermittence…).
+- Raretés (commune, rare, légendaire), cartes manquantes en silhouette avec un indice, vignette
+  « Nouvelle carte ! » qui glisse à l'écran, pastille des cartes non vues.
+- **6 tenues pour le directeur** débloquées par paliers (8, 20, 35, 55 cartes, tous les trésors).
+- Accès : bouton « album » du monde, touche C, menu pause, menu principal (avec le compteur).
+
+### Modifié
+- **Moins de lecture** : 36 répliques raccourcies à une idée (120 caractères au plus), nom de la
+  personne plus répété dans sa bulle, annonce des missions réduite à une ligne. Les notions
+  détaillées passent dans les cartes de l'album, à lire quand on veut.
+
 ## [0.12.0] — 2026-10-26 — Bréval-sur-Ondine, une grande ville à explorer
 
 ### Ajouté

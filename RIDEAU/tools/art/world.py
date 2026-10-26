@@ -1060,6 +1060,17 @@ PEOPLE = {
     "passant_b": {"skin": P["skin3"], "hair": P["ink"], "hair_style": "short", "top": P["orange"], "legs": P["grey0"], "accent": P["cream"]},
     "passant_c": {"skin": P["skin5"], "hair": P["ink"], "hair_style": "curly", "top": P["purple1"], "legs": P["wood1"], "accent": P["gold3"]},
     "passant_d": {"skin": P["skin1"], "hair": P["grey3"], "hair_style": "bald", "top": P["green1"], "legs": P["wood1"], "accent": P["cream"], "cane": True},
+    # Tenues du directeur débloquées par l'album de collection
+    "directeur_echarpe": {"skin": P["skin1"], "hair": P["wood1"], "hair_style": "short", "top": P["navy"], "legs": P["night"],
+                          "accent": P["velvet4"], "scarf": True},
+    "directeur_festival": {"skin": P["skin1"], "hair": P["wood1"], "hair_style": "short", "top": P["teal"], "legs": P["wood3"],
+                           "accent": P["gold3"], "scarf": True},
+    "directeur_beret": {"skin": P["skin1"], "hair": P["velvet2"], "hair_style": "beanie", "top": P["ink"], "legs": P["night"],
+                        "accent": P["velvet4"], "scarf": True},
+    "directeur_gala": {"skin": P["skin1"], "hair": P["wood1"], "hair_style": "short", "top": P["ink"], "legs": P["ink"],
+                       "accent": P["velvet3"], "tie": True},
+    "directeur_lanterne": {"skin": P["skin1"], "hair": P["wood1"], "hair_style": "short", "top": P["gold2"], "legs": P["velvet1"],
+                           "accent": P["velvet3"], "scarf": True, "glasses": True},
     "spectateur_a": {"skin": P["skin2"], "hair": P["velvet1"], "hair_style": "long", "top": P["gold1"], "legs": P["night"], "accent": P["cream"]},
     "spectateur_b": {"skin": P["skin4"], "hair": P["ink"], "hair_style": "short", "top": P["blue"], "legs": P["night"], "accent": P["cream"]},
     "spectateur_c": {"skin": P["skin0"], "hair": P["wood2"], "hair_style": "bob", "top": P["green0"], "legs": P["grey1"], "accent": P["gold3"]},
@@ -1272,6 +1283,93 @@ def seated_audience():
 
 # --- Effets et interface ---------------------------------------------------------------
 
+def treasure_icons():
+    """Petites icônes 16×16 des trésors cachés (album)."""
+    def ic(draw):
+        c = Canvas(16, 16)
+        draw(c)
+        c.outline(P["ink"])
+        return c
+
+    def ticket(c):
+        c.rect(1, 4, 14, 8, P["gold2"])
+        c.vline(5, 4, 11, P["gold0"])
+        c.rect(7, 6, 6, 1, P["velvet3"])
+        c.rect(7, 8, 4, 1, P["velvet3"])
+
+    def programme(c):
+        c.rect(3, 1, 10, 14, P["paper"])
+        c.rect(5, 3, 6, 4, P["velvet3"])
+        for y in (9, 11, 13):
+            c.hline(5, 10, y, P["paper3"])
+
+    def scroll(c):
+        c.rect(3, 3, 10, 10, P["cream"])
+        c.rect(2, 2, 12, 2, P["paper3"])
+        c.rect(2, 12, 12, 2, P["paper3"])
+        for y in (6, 8, 10):
+            c.hline(5, 11, y, P["grey1"])
+
+    def notebook(c):
+        c.rect(3, 2, 10, 12, P["green1"])
+        c.vline(4, 2, 13, P["green0"])
+        c.rect(6, 5, 5, 3, P["cream"])
+
+    def note(c):
+        c.ellipse(5, 12, 2.5, 2, P["purple2"])
+        c.vline(7, 3, 12, P["purple2"])
+        c.rect(7, 3, 5, 2, P["purple2"])
+        c.vline(11, 3, 8, P["purple2"])
+
+    def mask(c):
+        # Demi-masque d'Arlequin : losanges rouges et verts, yeux découpés, ruban doré
+        c.ellipse(8, 7, 6.5, 4.5, P["velvet3"])
+        for (x, y) in [(4, 5), (8, 4), (12, 5), (6, 9), (10, 9)]:
+            c.set(x, y, P["green1"])
+            c.set(x + 1, y, P["green1"])
+        c.ellipse(5, 7, 1.8, 1.2, P["ink"])
+        c.ellipse(11, 7, 1.8, 1.2, P["ink"])
+        c.set(8, 10, P["ink"])
+        c.hline(0, 1, 6, P["gold2"])
+        c.hline(14, 15, 6, P["gold2"])
+
+    def quill(c):
+        c.line(3, 14, 12, 2, P["grey1"])
+        for i in range(7):
+            c.hline(6 + i // 2, 11, 3 + i, P["white"])
+
+    def staff(c):
+        c.rect(7, 1, 3, 14, P["wood2"])
+        c.rect(6, 1, 5, 2, P["gold2"])
+        c.rect(6, 13, 5, 2, P["velvet3"])
+
+    def key(c):
+        c.ellipse(5, 6, 3.5, 3.5, P["gold2"])
+        c.ellipse(5, 6, 1.5, 1.5, P["ink"])
+        c.hline(8, 14, 6, P["gold2"])
+        c.vline(12, 6, 9, P["gold2"])
+        c.vline(14, 6, 8, P["gold2"])
+
+    def statue(c):
+        c.rect(4, 12, 8, 3, P["grey2"])
+        c.ellipse(8, 4, 2.5, 2.5, P["teal"])
+        c.rect(6, 6, 4, 6, P["teal"])
+
+    def card(c):
+        c.rect(1, 3, 14, 10, P["cream"])
+        c.rect(2, 4, 4, 5, P["sky"])
+        for y in (5, 7, 9, 11):
+            c.hline(7, 13, y, P["grey1"])
+
+    def rope(c):
+        for i in range(12):
+            c.rect(3 + (i % 2) * 2 + i // 2, 2 + i, 3, 1, P["wood3"] if i % 2 else P["wood4"])
+        c.ellipse(11, 12, 3, 2, P["wood3"])
+    return {n: ic(f) for n, f in [("ticket", ticket), ("programme", programme), ("scroll", scroll), ("notebook", notebook),
+                                  ("note", note), ("mask", mask), ("quill", quill), ("staff", staff), ("key", key),
+                                  ("statue", statue), ("card", card), ("rope", rope)]}
+
+
 def fx_assets():
     out = {}
     leaf = Canvas(5, 4)
@@ -1357,6 +1455,21 @@ def fx_assets():
         pigeon.set(5, 6, P["velvet4"])
         pigeon.outline(P["ink"])
         out["pigeon_%d" % f] = pigeon
+
+    # Étincelle des trésors cachés (2 images) et icônes des 12 trésors de l'album
+    for f in range(2):
+        sp = Canvas(11, 11)
+        r = 5 if f == 0 else 3
+        sp.vline(5, 5 - r, 5 + r, P["gold3"])
+        sp.hline(5 - r, 5 + r, 5, P["gold3"])
+        sp.set(5, 5, P["white"])
+        if f == 0:
+            for d in (2, -2):
+                sp.set(5 + d, 5 + d, P["light"])
+                sp.set(5 + d, 5 - d, P["light"])
+        out["sparkle_%d" % f] = sp
+    for name, canvas in treasure_icons().items():
+        out["tresor_" + name] = canvas
 
     shadow = Canvas(14, 5)
     shadow.ellipse(7, 2.5, 6, 2, P["ink"], 110)

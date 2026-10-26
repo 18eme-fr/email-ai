@@ -1,0 +1,1208 @@
+{
+ "_doc": "Album de collection, conservé d'une partie à l'autre (user://album.json). Catégories : rencontres (parler à la personne : 'sprite'), lieux (examiner l'objet : 'map', 'cell' pour l'image, 'keys' = clés de spots), affiches (programmer le spectacle 'show'), tresors (ramasser l'objet caché sur 'map' à 'cell'). 'outfits' : tenues du directeur débloquées par le nombre de cartes ('cards_min') ou de trésors ('tresors_min').",
+ "categories": [
+  {
+   "id": "rencontres",
+   "label": "Rencontres",
+   "hint": "Parlez à tout le monde."
+  },
+  {
+   "id": "lieux",
+   "label": "Lieux",
+   "hint": "Examinez les lieux de la ville et du théâtre."
+  },
+  {
+   "id": "affiches",
+   "label": "Affiches",
+   "hint": "Programmez ce spectacle (au fil des parties)."
+  },
+  {
+   "id": "tresors",
+   "label": "Trésors",
+   "hint": "Cherchez les étincelles cachées dans la ville."
+  }
+ ],
+ "outfits": [
+  {
+   "id": "",
+   "label": "Tenue de directeur",
+   "cards_min": 0,
+   "sprite": "directeur"
+  },
+  {
+   "id": "echarpe",
+   "label": "Écharpe rouge",
+   "cards_min": 8,
+   "sprite": "directeur_echarpe"
+  },
+  {
+   "id": "festival",
+   "label": "Tenue de festival",
+   "cards_min": 20,
+   "sprite": "directeur_festival"
+  },
+  {
+   "id": "beret",
+   "label": "Béret d'artiste",
+   "cards_min": 35,
+   "sprite": "directeur_beret"
+  },
+  {
+   "id": "gala",
+   "label": "Costume de gala",
+   "cards_min": 55,
+   "sprite": "directeur_gala"
+  },
+  {
+   "id": "lanterne",
+   "label": "Habit de la Lanterne",
+   "tresors_min": 12,
+   "sprite": "directeur_lanterne"
+  }
+ ],
+ "cards": [
+  {
+   "id": "p_helene",
+   "category": "rencontres",
+   "title": "Hélène Marchal",
+   "text": "Administratrice. Elle veille sur le budget : le résultat d'un côté, la trésorerie de l'autre.",
+   "rarity": "rare",
+   "sprite": "helene"
+  },
+  {
+   "id": "p_bastien",
+   "category": "rencontres",
+   "title": "Bastien Koné",
+   "text": "Régisseur général. Sécurité, matériel, montages : rien ne se joue sans lui.",
+   "rarity": "rare",
+   "sprite": "bastien"
+  },
+  {
+   "id": "p_ines",
+   "category": "rencontres",
+   "title": "Inès Belkacem",
+   "text": "Chargée des publics. Scolaires, ateliers, tarifs : elle fait venir ceux qui ne venaient pas.",
+   "rarity": "rare",
+   "sprite": "ines"
+  },
+  {
+   "id": "p_pommier",
+   "category": "rencontres",
+   "title": "Gérard Pommier",
+   "text": "Adjoint à la culture. La Ville subventionne le théâtre et suit la convention de près.",
+   "rarity": "rare",
+   "sprite": "pommier"
+  },
+  {
+   "id": "p_louison",
+   "category": "rencontres",
+   "title": "Louison Vasseur",
+   "text": "Artiste associé·e. Une résidence au long cours pour créer avec le théâtre et le territoire.",
+   "rarity": "rare",
+   "sprite": "louison"
+  },
+  {
+   "id": "p_accueil",
+   "category": "rencontres",
+   "title": "Rémi",
+   "text": "Agent d'accueil. Le premier visage du théâtre : billets, plan de salle, sourire.",
+   "rarity": "commune",
+   "sprite": "accueil"
+  },
+  {
+   "id": "p_principale",
+   "category": "rencontres",
+   "title": "Mme Diallo",
+   "text": "Principale du collège. Une alliée pour l'éducation artistique et culturelle.",
+   "rarity": "commune",
+   "sprite": "principale"
+  },
+  {
+   "id": "p_animateur",
+   "category": "rencontres",
+   "title": "Karim",
+   "text": "Animateur de la maison de quartier. Le relais idéal vers les publics éloignés.",
+   "rarity": "commune",
+   "sprite": "animateur"
+  },
+  {
+   "id": "p_directrice",
+   "category": "rencontres",
+   "title": "Mme Roux",
+   "text": "Directrice d'Ondine Énergie. Une mécène possible… si le projet a du sens.",
+   "rarity": "commune",
+   "sprite": "directrice"
+  },
+  {
+   "id": "p_chef_gare",
+   "category": "rencontres",
+   "title": "Le chef de gare",
+   "text": "Il connaît les horaires par cœur. Un spectacle trop tardif, et le public rate son train.",
+   "rarity": "commune",
+   "sprite": "chef_gare"
+  },
+  {
+   "id": "p_maraichere",
+   "category": "rencontres",
+   "title": "Josiane",
+   "text": "Maraîchère. Elle distribue vos programmes au marché : la communication de proximité.",
+   "rarity": "commune",
+   "sprite": "maraichere"
+  },
+  {
+   "id": "p_musicien",
+   "category": "rencontres",
+   "title": "Le musicien",
+   "text": "Fanfare municipale. La pratique amateur, cœur battant de la vie culturelle.",
+   "rarity": "commune",
+   "sprite": "musicien"
+  },
+  {
+   "id": "p_bibliothecaire",
+   "category": "rencontres",
+   "title": "La bibliothécaire",
+   "text": "Médiathèque Louise-Michel. Lectures, rencontres : un partenaire tout trouvé.",
+   "rarity": "commune",
+   "sprite": "bibliothecaire"
+  },
+  {
+   "id": "p_pecheur",
+   "category": "rencontres",
+   "title": "Le pêcheur",
+   "text": "Trente ans au bord de l'Ondine. Il a vu passer trois directeurs de théâtre.",
+   "rarity": "commune",
+   "sprite": "pecheur"
+  },
+  {
+   "id": "p_libraire",
+   "category": "rencontres",
+   "title": "La libraire",
+   "text": "Librairie La Plume. Elle vend les textes des pièces que vous programmez.",
+   "rarity": "commune",
+   "sprite": "libraire"
+  },
+  {
+   "id": "p_projectionniste",
+   "category": "rencontres",
+   "title": "Le programmateur du Rex",
+   "text": "Cinéma Art et Essai. Un voisin, pas un concurrent : pensez aux tarifs croisés.",
+   "rarity": "commune",
+   "sprite": "projectionniste"
+  },
+  {
+   "id": "p_jardiniere",
+   "category": "rencontres",
+   "title": "La jardinière",
+   "text": "Jardins partagés. Un théâtre aussi peut être un bien commun.",
+   "rarity": "commune",
+   "sprite": "jardiniere"
+  },
+  {
+   "id": "p_touriste",
+   "category": "rencontres",
+   "title": "La touriste",
+   "text": "De passage deux jours. Le rayonnement, c'est aussi attirer les visiteurs.",
+   "rarity": "commune",
+   "sprite": "touriste"
+  },
+  {
+   "id": "p_enfant",
+   "category": "rencontres",
+   "title": "Les enfants",
+   "text": "Le public de demain. Leur première sortie au théâtre compte double.",
+   "rarity": "commune",
+   "sprite": "enfant_a"
+  },
+  {
+   "id": "p_footballeur",
+   "category": "rencontres",
+   "title": "Les footballeurs",
+   "text": "Équipe, public, trac : le sport et le théâtre se ressemblent plus qu'on ne croit.",
+   "rarity": "commune",
+   "sprite": "sportif_a"
+  },
+  {
+   "id": "l_gare",
+   "category": "lieux",
+   "title": "Gare de Bréval",
+   "text": "La mobilité des publics se joue aussi aux horaires du dernier train.",
+   "rarity": "commune",
+   "map": "rue",
+   "cell": [
+    49,
+    8
+   ],
+   "keys": [
+    "gare"
+   ]
+  },
+  {
+   "id": "l_fabrique",
+   "category": "lieux",
+   "title": "La Fabrique",
+   "text": "Friche industrielle devenue tiers-lieu : ateliers, répétitions, résidences.",
+   "rarity": "commune",
+   "map": "rue",
+   "cell": [
+    68,
+    8
+   ],
+   "keys": [
+    "fabrique"
+   ]
+  },
+  {
+   "id": "l_hotel",
+   "category": "lieux",
+   "title": "Hôtel du Commerce",
+   "text": "Loger les artistes en tournée : des « frais d'accueil » à prévoir au contrat.",
+   "rarity": "commune",
+   "map": "rue",
+   "cell": [
+    90,
+    8
+   ],
+   "keys": [
+    "hotel"
+   ]
+  },
+  {
+   "id": "l_mairie",
+   "category": "lieux",
+   "title": "Mairie",
+   "text": "La Ville, premier financeur de la plupart des théâtres municipaux.",
+   "rarity": "commune",
+   "map": "rue",
+   "cell": [
+    37,
+    29
+   ],
+   "keys": [
+    "mairie"
+   ]
+  },
+  {
+   "id": "l_cafe",
+   "category": "lieux",
+   "title": "Café des Artistes",
+   "text": "Après la première, tout le monde s'y retrouve. Le spectacle continue.",
+   "rarity": "commune",
+   "map": "rue",
+   "cell": [
+    62,
+    29
+   ],
+   "keys": [
+    "cafe"
+   ]
+  },
+  {
+   "id": "l_imprimerie",
+   "category": "lieux",
+   "title": "Imprimerie Lebrun",
+   "text": "Affiches, programmes, flyers : la communication imprimée reste efficace.",
+   "rarity": "commune",
+   "map": "rue",
+   "cell": [
+    69,
+    29
+   ],
+   "keys": [
+    "imprimerie"
+   ]
+  },
+  {
+   "id": "l_boulangerie",
+   "category": "lieux",
+   "title": "Boulangerie",
+   "text": "Des programmes près de la caisse : chaque commerçant peut devenir relais.",
+   "rarity": "commune",
+   "map": "rue",
+   "cell": [
+    75,
+    29
+   ],
+   "keys": [
+    "boulangerie"
+   ]
+  },
+  {
+   "id": "l_facade",
+   "category": "lieux",
+   "title": "Façade du théâtre",
+   "text": "La vitrine du théâtre. Une enseigne lumineuse se voit de loin.",
+   "rarity": "commune",
+   "map": "rue",
+   "cell": [
+    53,
+    29
+   ],
+   "keys": [
+    "facade"
+   ]
+  },
+  {
+   "id": "l_cinema",
+   "category": "lieux",
+   "title": "Cinéma Le Rex",
+   "text": "Classé Art et Essai : un label du CNC qui soutient les salles exigeantes.",
+   "rarity": "commune",
+   "map": "rue",
+   "cell": [
+    89,
+    29
+   ],
+   "keys": [
+    "cinema"
+   ]
+  },
+  {
+   "id": "l_conservatoire",
+   "category": "lieux",
+   "title": "Conservatoire",
+   "text": "Enseignement de la musique, de la danse et du théâtre, classé par l'État.",
+   "rarity": "commune",
+   "map": "rue",
+   "cell": [
+    102,
+    29
+   ],
+   "keys": [
+    "conservatoire"
+   ]
+  },
+  {
+   "id": "l_librairie",
+   "category": "lieux",
+   "title": "Librairie La Plume",
+   "text": "Prix unique du livre (loi de 1981) : il protège les petites librairies.",
+   "rarity": "commune",
+   "map": "rue",
+   "cell": [
+    86,
+    40
+   ],
+   "keys": [
+    "librairie"
+   ]
+  },
+  {
+   "id": "l_fleuriste",
+   "category": "lieux",
+   "title": "Fleuriste",
+   "text": "Un bouquet pour les saluts : la tradition des soirs de première.",
+   "rarity": "commune",
+   "map": "rue",
+   "cell": [
+    93,
+    40
+   ],
+   "keys": [
+    "fleuriste"
+   ]
+  },
+  {
+   "id": "l_disquaire",
+   "category": "lieux",
+   "title": "Disquaire",
+   "text": "Vinyles et concerts en boutique : les petits lieux font vivre la scène locale.",
+   "rarity": "commune",
+   "map": "rue",
+   "cell": [
+    99,
+    40
+   ],
+   "keys": [
+    "disquaire"
+   ]
+  },
+  {
+   "id": "l_galerie",
+   "category": "lieux",
+   "title": "Galerie d'art",
+   "text": "Une galerie vend les œuvres ; un centre d'art les montre, souvent sur fonds publics.",
+   "rarity": "commune",
+   "map": "rue",
+   "cell": [
+    105,
+    40
+   ],
+   "keys": [
+    "galerie"
+   ]
+  },
+  {
+   "id": "l_fontaine",
+   "category": "lieux",
+   "title": "Fontaine d'Ondine",
+   "text": "Quelqu'un y a oublié un ticket de spectacle de 1987.",
+   "rarity": "commune",
+   "map": "rue",
+   "cell": [
+    53,
+    35
+   ],
+   "keys": [
+    "fontaine"
+   ]
+  },
+  {
+   "id": "l_colonne",
+   "category": "lieux",
+   "title": "Colonne Morris",
+   "text": "Inventée à Paris au XIXᵉ siècle pour afficher les spectacles.",
+   "rarity": "commune",
+   "map": "rue",
+   "cell": [
+    40,
+    32
+   ],
+   "keys": [
+    "colonne",
+    "colonne_est",
+    "affiches"
+   ]
+  },
+  {
+   "id": "l_marche",
+   "category": "lieux",
+   "title": "Marché du samedi",
+   "text": "Tout le quartier est là : l'endroit rêvé pour parler du théâtre.",
+   "rarity": "commune",
+   "map": "rue",
+   "cell": [
+    39,
+    39
+   ],
+   "keys": [
+    "marche"
+   ]
+  },
+  {
+   "id": "l_kiosque_presse",
+   "category": "lieux",
+   "title": "Kiosque à journaux",
+   "text": "Une bonne critique dans la presse locale remplit une salle.",
+   "rarity": "commune",
+   "map": "rue",
+   "cell": [
+    77,
+    35
+   ],
+   "keys": [
+    "kiosque_presse"
+   ]
+  },
+  {
+   "id": "l_statue_place",
+   "category": "lieux",
+   "title": "Statue du poète",
+   "text": "Anselme Brévalois, poète local. Une figure inventée… mais très fière.",
+   "rarity": "commune",
+   "map": "rue",
+   "cell": [
+    57,
+    32
+   ],
+   "keys": [
+    "statue_place"
+   ]
+  },
+  {
+   "id": "l_mediatheque",
+   "category": "lieux",
+   "title": "Médiathèque",
+   "text": "Les bibliothèques : l'équipement culturel le plus fréquenté de France.",
+   "rarity": "commune",
+   "map": "rue",
+   "cell": [
+    37,
+    53
+   ],
+   "keys": [
+    "mediatheque"
+   ]
+  },
+  {
+   "id": "l_halle",
+   "category": "lieux",
+   "title": "Halle du marché",
+   "text": "Jouer « hors les murs » : aller vers ceux qui n'entrent pas au théâtre.",
+   "rarity": "commune",
+   "map": "rue",
+   "cell": [
+    52,
+    53
+   ],
+   "keys": [
+    "halle"
+   ]
+  },
+  {
+   "id": "l_ecole",
+   "category": "lieux",
+   "title": "École des Tilleuls",
+   "text": "Une sortie au spectacle coûte un car : la médiation lève aussi ces freins.",
+   "rarity": "commune",
+   "map": "rue",
+   "cell": [
+    67,
+    53
+   ],
+   "keys": [
+    "ecole"
+   ]
+  },
+  {
+   "id": "l_ondine",
+   "category": "lieux",
+   "title": "Ondine Énergie",
+   "text": "Mécénat : l'entreprise déduit 60 % de son don de ses impôts, dans certaines limites.",
+   "rarity": "commune",
+   "map": "rue",
+   "cell": [
+    93,
+    53
+   ],
+   "keys": [
+    "ondine"
+   ]
+  },
+  {
+   "id": "l_etang",
+   "category": "lieux",
+   "title": "Étang du parc",
+   "text": "Canards l'été, glace l'hiver. Le pêcheur n'y attrape jamais rien.",
+   "rarity": "commune",
+   "map": "rue",
+   "cell": [
+    7,
+    31
+   ],
+   "keys": [
+    "etang"
+   ]
+  },
+  {
+   "id": "l_kiosque",
+   "category": "lieux",
+   "title": "Kiosque à musique",
+   "text": "Le dimanche, la fanfare joue. Gratuit, en plein air, pour tous.",
+   "rarity": "commune",
+   "map": "rue",
+   "cell": [
+    18,
+    28
+   ],
+   "keys": [
+    "kiosque"
+   ]
+  },
+  {
+   "id": "l_jeux_parc",
+   "category": "lieux",
+   "title": "Aire de jeux",
+   "text": "Les parents discutent : « Il y a des spectacles pour les petits ? »",
+   "rarity": "commune",
+   "map": "rue",
+   "cell": [
+    5,
+    46
+   ],
+   "keys": [
+    "jeux_parc"
+   ]
+  },
+  {
+   "id": "l_statue_parc",
+   "category": "lieux",
+   "title": "Statue d'Ondine",
+   "text": "La rivière qui a donné son nom à la ville.",
+   "rarity": "commune",
+   "map": "rue",
+   "cell": [
+    19,
+    41
+   ],
+   "keys": [
+    "statue_parc"
+   ]
+  },
+  {
+   "id": "l_buvette",
+   "category": "lieux",
+   "title": "Buvette du parc",
+   "text": "Concerts gratuits l'été : la programmation hors les murs.",
+   "rarity": "commune",
+   "map": "rue",
+   "cell": [
+    21,
+    47
+   ],
+   "keys": [
+    "buvette"
+   ]
+  },
+  {
+   "id": "l_tour",
+   "category": "lieux",
+   "title": "Résidences des Coteaux",
+   "text": "Pour toucher les habitants, les associations valent mieux que les prospectus.",
+   "rarity": "commune",
+   "map": "rue",
+   "cell": [
+    6,
+    67
+   ],
+   "keys": [
+    "tour"
+   ]
+  },
+  {
+   "id": "l_college",
+   "category": "lieux",
+   "title": "Collège des Coteaux",
+   "text": "Chaque élève suit un parcours d'éducation artistique et culturelle (PEAC).",
+   "rarity": "commune",
+   "map": "rue",
+   "cell": [
+    40,
+    67
+   ],
+   "keys": [
+    "college"
+   ]
+  },
+  {
+   "id": "l_maison_quartier",
+   "category": "lieux",
+   "title": "Maison de quartier",
+   "text": "Éducation populaire : faire avec les habitants, pas seulement pour eux.",
+   "rarity": "commune",
+   "map": "rue",
+   "cell": [
+    55,
+    67
+   ],
+   "keys": [
+    "maison_quartier"
+   ]
+  },
+  {
+   "id": "l_stade",
+   "category": "lieux",
+   "title": "City stade",
+   "text": "Et si on jouait un jour un spectacle ici, en plein air ?",
+   "rarity": "commune",
+   "map": "rue",
+   "cell": [
+    62,
+    63
+   ],
+   "keys": [
+    "stade"
+   ]
+  },
+  {
+   "id": "l_jardins",
+   "category": "lieux",
+   "title": "Jardins partagés",
+   "text": "Chaque parcelle a son jardinier, et chaque jardinier son avis.",
+   "rarity": "commune",
+   "map": "rue",
+   "cell": [
+    39,
+    73
+   ],
+   "keys": [
+    "jardins"
+   ]
+  },
+  {
+   "id": "l_jeux_coteaux",
+   "category": "lieux",
+   "title": "Aire de jeux des Coteaux",
+   "text": "Un drap entre deux poteaux : les enfants y inventent des spectacles.",
+   "rarity": "commune",
+   "map": "rue",
+   "cell": [
+    53,
+    74
+   ],
+   "keys": [
+    "jeux_coteaux"
+   ]
+  },
+  {
+   "id": "l_fresque",
+   "category": "lieux",
+   "title": "Fresque des Coteaux",
+   "text": "Peinte avec les habitants. Les droits culturels : chacun a une culture.",
+   "rarity": "commune",
+   "map": "rue",
+   "cell": [
+    68,
+    71
+   ],
+   "keys": [
+    "fresque"
+   ]
+  },
+  {
+   "id": "l_guichet",
+   "category": "lieux",
+   "title": "Billetterie",
+   "text": "Prix, jauge, réductions : chaque billet vendu est une recette… et une donnée.",
+   "rarity": "commune",
+   "map": "hall",
+   "cell": [
+    4,
+    3
+   ],
+   "keys": [
+    "guichet"
+   ]
+  },
+  {
+   "id": "l_bar",
+   "category": "lieux",
+   "title": "Bar du foyer",
+   "text": "Le bar fait vivre le hall et rapporte un peu. Un vrai lieu de rencontre.",
+   "rarity": "commune",
+   "map": "hall",
+   "cell": [
+    17,
+    3
+   ],
+   "keys": [
+    "bar"
+   ]
+  },
+  {
+   "id": "l_panneau",
+   "category": "lieux",
+   "title": "Projet accessibilité",
+   "text": "Accueillir tous les publics, y compris en situation de handicap : une obligation.",
+   "rarity": "commune",
+   "map": "hall",
+   "cell": [
+    7,
+    12
+   ],
+   "keys": [
+    "panneau"
+   ]
+  },
+  {
+   "id": "l_projecteurs",
+   "category": "lieux",
+   "title": "Rampe de projecteurs",
+   "text": "Des LED : moins de consommation, plus de couleurs, moins de pannes.",
+   "rarity": "commune",
+   "map": "salle",
+   "cell": [
+    14,
+    1
+   ],
+   "keys": [
+    "projecteurs"
+   ]
+  },
+  {
+   "id": "l_regie",
+   "category": "lieux",
+   "title": "Régie son et lumière",
+   "text": "D'ici, on « envoie » chaque effet au bon moment : les tops de la conduite.",
+   "rarity": "commune",
+   "map": "salle",
+   "cell": [
+    17,
+    14
+   ],
+   "keys": [
+    "regie"
+   ]
+  },
+  {
+   "id": "l_loges",
+   "category": "lieux",
+   "title": "Loges",
+   "text": "Miroirs entourés d'ampoules : on s'y maquille, on y a le trac.",
+   "rarity": "commune",
+   "map": "coulisses",
+   "cell": [
+    4,
+    2
+   ],
+   "keys": [
+    "loges"
+   ]
+  },
+  {
+   "id": "l_costumes",
+   "category": "lieux",
+   "title": "Portant de costumes",
+   "text": "Chaque costume est réparé, lavé, numéroté : un vrai métier, l'habillage.",
+   "rarity": "commune",
+   "map": "coulisses",
+   "cell": [
+    3,
+    8
+   ],
+   "keys": [
+    "costumes"
+   ]
+  },
+  {
+   "id": "l_etabli",
+   "category": "lieux",
+   "title": "Atelier de construction",
+   "text": "On y fabrique et répare les décors. Les métiers techniques du spectacle.",
+   "rarity": "commune",
+   "map": "coulisses",
+   "cell": [
+    12,
+    2
+   ],
+   "keys": [
+    "etabli"
+   ]
+  },
+  {
+   "id": "a_comedie_diner",
+   "category": "affiches",
+   "title": "Le Dîner des quiproquos",
+   "text": "Un boulevard efficace qui remplit les salles.",
+   "rarity": "commune",
+   "show": "comedie_diner",
+   "subtitle": "Comédie populaire — Cie Les Joyeux Fâcheux"
+  },
+  {
+   "id": "a_humour_banquier",
+   "category": "affiches",
+   "title": "Mon banquier, ma bataille",
+   "text": "Un humoriste en tournée, une soirée qui affiche complet.",
+   "rarity": "commune",
+   "show": "humour_banquier",
+   "subtitle": "Humour / seul-en-scène — Production Rires & Agios"
+  },
+  {
+   "id": "a_contemporain_heures",
+   "category": "affiches",
+   "title": "Les Heures blanches",
+   "text": "Une écriture d'aujourd'hui, saluée par la profession.",
+   "rarity": "rare",
+   "show": "contemporain_heures",
+   "subtitle": "Théâtre contemporain — Collectif Insomnie"
+  },
+  {
+   "id": "a_familial_pipo",
+   "category": "affiches",
+   "title": "Le Grand Voyage de Pipo",
+   "text": "Théâtre d'objets pour toute la famille, idéal pendant les fêtes.",
+   "rarity": "commune",
+   "show": "familial_pipo",
+   "subtitle": "Spectacle familial — Théâtre de la Valise"
+  },
+  {
+   "id": "a_jeune_ourse",
+   "category": "affiches",
+   "title": "Petite Ourse ne dort pas",
+   "text": "Une séance scolaire et une séance familiale : le jeune public au cœur.",
+   "rarity": "commune",
+   "show": "jeune_ourse",
+   "subtitle": "Théâtre jeune public — Cie Pas Sage"
+  },
+  {
+   "id": "a_lecture_voix",
+   "category": "affiches",
+   "title": "Voix d'elles",
+   "text": "Une lecture au foyer, légère à organiser.",
+   "rarity": "commune",
+   "show": "lecture_voix",
+   "subtitle": "Lecture théâtralisée — Lectures Vagabondes"
+  },
+  {
+   "id": "a_rencontre_ecrire",
+   "category": "affiches",
+   "title": "Écrire le théâtre aujourd'hui",
+   "text": "Entrée libre : on ne gagne rien, on gagne des liens.",
+   "rarity": "commune",
+   "show": "rencontre_ecrire",
+   "subtitle": "Rencontre avec des artistes — Rencontre animée par l'équipe"
+  },
+  {
+   "id": "a_atelier_amateur",
+   "category": "affiches",
+   "title": "Atelier du samedi",
+   "text": "Seize participants, une pratique artistique partagée.",
+   "rarity": "commune",
+   "show": "atelier_amateur",
+   "subtitle": "Atelier de pratique — Intervenant : Cie Pas Sage"
+  },
+  {
+   "id": "a_creation_machine",
+   "category": "affiches",
+   "title": "Machine Ø",
+   "text": "La création de votre artiste associé·e. Un pari audacieux.",
+   "rarity": "rare",
+   "show": "creation_machine",
+   "subtitle": "Création expérimentale — Louison Vasseur, artiste associé·e"
+  },
+  {
+   "id": "a_musique_chansons",
+   "category": "affiches",
+   "title": "Chansons d'en face",
+   "text": "Un concert-spectacle qui fait chanter la salle.",
+   "rarity": "commune",
+   "show": "musique_chansons",
+   "subtitle": "Concert-spectacle — Trio Palier"
+  },
+  {
+   "id": "a_classique_malade",
+   "category": "affiches",
+   "title": "Le Malade (presque) imaginaire",
+   "text": "Molière revisité, apprécié des collèges comme des habitués.",
+   "rarity": "commune",
+   "show": "classique_malade",
+   "subtitle": "Classique revisité — Cie du Grand Siècle Court"
+  },
+  {
+   "id": "a_danse_lignes",
+   "category": "affiches",
+   "title": "Lignes de fuite",
+   "text": "Une danse contemporaine remarquée, peu connue du grand public.",
+   "rarity": "rare",
+   "show": "danse_lignes",
+   "subtitle": "Danse contemporaine — Cie Diagonale"
+  },
+  {
+   "id": "a_cirque_bascule",
+   "category": "affiches",
+   "title": "Bascule",
+   "text": "Du cirque contemporain qui plaît à tous, mais qui coûte cher.",
+   "rarity": "rare",
+   "show": "cirque_bascule",
+   "subtitle": "Cirque contemporain — Collectif Contrepoids"
+  },
+  {
+   "id": "a_impro_match",
+   "category": "affiches",
+   "title": "Match d'impro : Bretelles contre Chaussettes",
+   "text": "Une soirée festive avec la troupe locale.",
+   "rarity": "commune",
+   "show": "impro_match",
+   "subtitle": "Humour / seul-en-scène — Ligue d'improvisation de l'Ondine"
+  },
+  {
+   "id": "a_documentaire_terres",
+   "category": "affiches",
+   "title": "Terres rares",
+   "text": "Théâtre documentaire sur ce que cachent nos téléphones.",
+   "rarity": "rare",
+   "show": "documentaire_terres",
+   "subtitle": "Théâtre contemporain — Cie L'Enquête"
+  },
+  {
+   "id": "a_conte_veillee",
+   "category": "affiches",
+   "title": "Veillée de contes",
+   "text": "Une veillée chaleureuse au foyer, pour petits et grands.",
+   "rarity": "commune",
+   "show": "conte_veillee",
+   "subtitle": "Lecture théâtralisée — Mélusine Fortin, conteuse"
+  },
+  {
+   "id": "a_residence_fil",
+   "category": "affiches",
+   "title": "Résidence : la Compagnie du Fil",
+   "text": "Prêter le plateau à une équipe en création, avec une sortie publique.",
+   "rarity": "rare",
+   "show": "residence_fil",
+   "subtitle": "Résidence de création — Compagnie du Fil"
+  },
+  {
+   "id": "a_boulevard_reveillon",
+   "category": "affiches",
+   "title": "Réveillon chez les Morel",
+   "text": "La comédie de fin d'année, taillée pour les fêtes.",
+   "rarity": "commune",
+   "show": "boulevard_reveillon",
+   "subtitle": "Comédie populaire — Les Tréteaux du Dimanche"
+  },
+  {
+   "id": "a_hamlet_express",
+   "category": "affiches",
+   "title": "Hamlet en 45 minutes",
+   "text": "Shakespeare au pas de course pour les lycéens.",
+   "rarity": "commune",
+   "show": "hamlet_express",
+   "subtitle": "Classique revisité — Cie Tempête dans un verre"
+  },
+  {
+   "id": "a_marionnette_fils",
+   "category": "affiches",
+   "title": "Les Fils invisibles",
+   "text": "Une marionnette pour adultes, troublante et remarquée.",
+   "rarity": "rare",
+   "show": "marionnette_fils",
+   "subtitle": "Marionnette pour adultes — Théâtre Manivelle"
+  },
+  {
+   "id": "t_ticket_avignon",
+   "category": "tresors",
+   "title": "Billet d'Avignon, 1947",
+   "text": "En 1947, Jean Vilar crée à Avignon une « Semaine d'art » : le début du Festival.",
+   "rarity": "legendaire",
+   "icon": "ticket",
+   "map": "rue",
+   "cell": [
+    8,
+    20
+   ]
+  },
+  {
+   "id": "t_programme_tnp",
+   "category": "tresors",
+   "title": "Programme du TNP",
+   "text": "Jean Vilar dirige le Théâtre national populaire de 1951 à 1963 : le théâtre comme service public.",
+   "rarity": "legendaire",
+   "icon": "programme",
+   "map": "rue",
+   "cell": [
+    104,
+    30
+   ]
+  },
+  {
+   "id": "t_discours_malraux",
+   "category": "tresors",
+   "title": "Discours de 1959",
+   "text": "1959 : création du ministère des Affaires culturelles, confié à André Malraux.",
+   "rarity": "legendaire",
+   "icon": "scroll",
+   "map": "rue",
+   "cell": [
+    70,
+    3
+   ]
+  },
+  {
+   "id": "t_decentralisation",
+   "category": "tresors",
+   "title": "Carnet de tournée",
+   "text": "Dès 1946, Jeanne Laurent lance la décentralisation : des centres dramatiques en région.",
+   "rarity": "legendaire",
+   "icon": "notebook",
+   "map": "rue",
+   "cell": [
+    97,
+    17
+   ]
+  },
+  {
+   "id": "t_fete_musique",
+   "category": "tresors",
+   "title": "Sifflet de la Fête",
+   "text": "La Fête de la musique est créée en 1982, avec Jack Lang et Maurice Fleuret.",
+   "rarity": "legendaire",
+   "icon": "note",
+   "map": "rue",
+   "cell": [
+    14,
+    48
+   ]
+  },
+  {
+   "id": "t_masque",
+   "category": "tresors",
+   "title": "Masque d'Arlequin",
+   "text": "Commedia dell'arte, Italie, XVIᵉ siècle : des personnages types et beaucoup d'improvisation.",
+   "rarity": "legendaire",
+   "icon": "mask",
+   "map": "rue",
+   "cell": [
+    108,
+    64
+   ]
+  },
+  {
+   "id": "t_plume_moliere",
+   "category": "tresors",
+   "title": "Plume de Molière",
+   "text": "Molière meurt en 1673, quelques heures après la 4ᵉ représentation du Malade imaginaire.",
+   "rarity": "legendaire",
+   "icon": "quill",
+   "map": "rue",
+   "cell": [
+    2,
+    76
+   ]
+  },
+  {
+   "id": "t_brigadier",
+   "category": "tresors",
+   "title": "Le brigadier",
+   "text": "Un bâton dont on frappe les trois coups avant le lever du rideau.",
+   "rarity": "legendaire",
+   "icon": "staff",
+   "map": "salle",
+   "cell": [
+    20,
+    12
+   ]
+  },
+  {
+   "id": "t_patrimoine",
+   "category": "tresors",
+   "title": "Clé du patrimoine",
+   "text": "Les Journées du patrimoine sont nées en France en 1984.",
+   "rarity": "legendaire",
+   "icon": "key",
+   "map": "rue",
+   "cell": [
+    48,
+    60
+   ]
+  },
+  {
+   "id": "t_un_pour_cent",
+   "category": "tresors",
+   "title": "Maquette du 1 %",
+   "text": "Depuis 1951, environ 1 % du coût d'un bâtiment public finance une œuvre d'art.",
+   "rarity": "legendaire",
+   "icon": "statue",
+   "map": "rue",
+   "cell": [
+    78,
+    57
+   ]
+  },
+  {
+   "id": "t_intermittence",
+   "category": "tresors",
+   "title": "Fiche de paie",
+   "text": "Les intermittents du spectacle ont un régime d'assurance chômage propre (annexes 8 et 10).",
+   "rarity": "legendaire",
+   "icon": "card",
+   "map": "coulisses",
+   "cell": [
+    16,
+    10
+   ]
+  },
+  {
+   "id": "t_corde",
+   "category": "tresors",
+   "title": "Bout de corde",
+   "text": "Superstition : sur un plateau, on ne prononce pas le mot « corde ». On dit « guinde ».",
+   "rarity": "legendaire",
+   "icon": "rope",
+   "map": "rue",
+   "cell": [
+    33,
+    73
+   ]
+  }
+ ]
+}

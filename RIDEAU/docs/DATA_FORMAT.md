@@ -71,6 +71,15 @@ Les grilles servent à la fois aux collisions (jeu) et au dessin (`tools/art/wor
 après modification, relancer `python3 tools/art/generate_art.py`. Les tests
 `tests/world/test_world.gd` vérifient que tout reste accessible à pied.
 
+## `data/progression/album.json` — album de collection
+
+`categories` (`id`, `label`, `hint` = indice pour les cartes manquantes), `outfits` (tenues :
+`id`, `label`, `sprite`, `cards_min` ou `tresors_min`), `cards` : `id` (préfixe `p_` personne,
+`l_` lieu, `a_` affiche, `t_` trésor), `category`, `title`, `text` (140 caractères au plus),
+`rarity` (commune, rare, legendaire) ; selon la catégorie `sprite`, `map` + `cell` + `keys`
+(clés de spots qui donnent la carte), `show`, ou `icon` + `map` + `cell` (case du trésor caché).
+La collection du joueur est enregistrée à part, dans `user://album.json` (classe `Album`).
+
 ## `data/world/barks.json` — répliques
 
 `who` (personne, `passant`, ou identifiant d'objet), `text`, `when` (conditions au format

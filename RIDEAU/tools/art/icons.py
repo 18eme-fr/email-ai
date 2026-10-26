@@ -13,6 +13,23 @@ LEGEND = {
 }
 
 ICONS = {
+"album": [
+"................",
+"..kkkkkkkkkkkk..",
+".kVrrrrrrrrrrrk.",
+".kVrkkkkkkkkrrk.",
+".kVrkwwwwwwkrrk.",
+".kVrkwGGGGwkrrk.",
+".kVrkwGLLGwkrrk.",
+".kVrkwGGGGwkrrk.",
+".kVrkwwwwwwkrrk.",
+".kVrkkkkkkkkrrk.",
+".kVrrrrrrrrrrrk.",
+".kVrrrgggggrrrk.",
+".kVrrrrrrrrrrrk.",
+"..kkkkkkkkkkkk..",
+"................",
+"................"],
 "map": [
 "................",
 "................",

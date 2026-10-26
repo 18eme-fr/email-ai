@@ -78,6 +78,13 @@ ville sert de « terrain » au cours. Un bus relie les quartiers ; le plan (touc
 retrouver. Explorer reste facultatif : aucune décision de gestion n'y est cachée hors des lieux
 déjà connus (place, théâtre).
 
+**L'Album de Bréval (depuis la version 0.13)** : une collection de 95 cartes qui se garde d'une
+partie à l'autre, pour donner envie de revenir. On l'enrichit en parlant aux habitants, en
+examinant les lieux, en programmant des spectacles (il faut plusieurs saisons pour toutes les
+affiches) et en trouvant 12 trésors cachés. Chaque carte tient en une phrase : la notion est là
+pour qui veut la lire, sans interrompre le jeu. Les paliers débloquent des tenues pour le
+directeur, purement décoratives : l'album n'influe jamais sur la gestion ni sur l'évaluation.
+
 ### Rénovations (investissements)
 
 Cinq travaux, une fois chacun, à décider sur place avant l'événement de la période : projecteurs

@@ -46,6 +46,10 @@ que la rentabilité ») ne réussit.
   réponse est corrigée avec son calcul. Mode **entraînement** sans enjeu dans le journal de bord.
 - **Compétences** (gestion financière, programmation, publics, partenariats, technique) : elles
   progressent avec les missions et les dossiers et débloquent des avantages.
+- **Album de Bréval** : 95 cartes d'une phrase (habitants, lieux culturels, spectacles, trésors
+  d'histoire du théâtre et des politiques culturelles) qui se collectionnent d'une partie à
+  l'autre. Il peut servir de point de départ à un exercice (« choisissez trois cartes et
+  développez »), mais il n'entre pas dans l'évaluation du jeu.
 - **Trophées** : douze objectifs facultatifs (salle comble, sans faute, jamais dans le rouge…).
 - **Bilans expliqués** à chaque période : résultat ≠ trésorerie, « pourquoi ces résultats ? ».
 

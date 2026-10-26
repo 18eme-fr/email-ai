@@ -86,6 +86,19 @@ func _do_action(action: String) -> void:
 			scene.open_journal()
 		"plan":
 			scene.open_city_plan()
+		"album":
+			scene.open_album()
+		"albumdemo":
+			# Album partiellement rempli, pour la capture (profil de capture séparé).
+			var album = load("res://scripts/progression/album.gd").new("user://capture_album.json")
+			album.reset()
+			for c in album.cards.slice(0, 40):
+				album.collect(c["id"])
+			album.set_outfit("festival")
+			root.get_node("Game").album = album
+			scene._reload_here()
+		"cardpop":
+			root.get_node("Game").collect_card("t_masque")
 		"case":
 			load("res://scripts/ui/case_study.gd").open(scene.overlay, root.get_node("Game").session)
 		"dossier":

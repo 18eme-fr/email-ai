@@ -10,9 +10,13 @@ func before_test() -> void:
 	Game.saves.delete()
 	Settings.values["show_tutorial"] = false
 	Settings.values["reduce_motion"] = true
+	Game.album = Album.new("user://test_world_album.json")
+	Game.album.reset()
 
 
 func after_test() -> void:
+	Game.album.reset()
+	Game.album = Album.new()
 	Game.saves.delete()
 	Game.saves = SaveSystem.new()
 	Game.session = null
@@ -349,3 +353,52 @@ func test_journal_tabs_and_season_report() -> void:
 	assert_str(report).contains("Rapport de saison")
 	assert_str(report).contains(str(s.scenario()["title"]))
 	assert_str(report).contains("Questions pour le débriefing")
+
+
+func test_album_cards_from_talking_examining_and_treasures() -> void:
+	var s := _new_session(6)
+	var runner := scene_runner(WORLD)
+	await runner.simulate_frames(10)
+	var screen := runner.scene() as WorldScreen
+	# Parler à quelqu'un : sa carte rejoint l'album et une vignette s'affiche.
+	screen.load_map("rue", Vector2i(51, 31), "down")
+	await runner.simulate_frames(5)
+	screen.talk_to(screen.npcs["principale"])
+	await runner.simulate_frames(3)
+	assert_bool(Game.album.has("p_principale")).is_true()
+	assert_bool(screen.hud._card_pop.visible).is_true()
+	while screen.speech.visible:
+		await _answer(runner, screen, 0)
+	await _wait(runner, func() -> bool: return not screen._busy)
+	# Examiner un lieu.
+	screen.use_spot(screen.map.spot("cinema"))
+	await runner.simulate_frames(3)
+	assert_bool(Game.album.has("l_cinema")).is_true()
+	while screen.speech.visible:
+		await _answer(runner, screen, 0)
+	await _wait(runner, func() -> bool: return not screen._busy)
+	# Marcher sur l'étincelle d'un trésor le ramasse, et elle disparaît.
+	var t: Dictionary = Game.album.hidden_treasures("rue")[0]
+	var cell: Vector2i = t["cell"]
+	assert_bool(screen._treasures.has(cell)).is_true()
+	var start := cell + Vector2i(0, 1) if screen.map.is_walkable(cell + Vector2i(0, 1)) else cell + Vector2i(0, -1)
+	screen.load_map("rue", start, "up")
+	await runner.simulate_frames(5)
+	screen._walk_then([cell], Callable())
+	assert_bool(await _wait(runner, func() -> bool: return Game.album.has(str(t["id"])))).is_true()
+	assert_bool(screen._treasures.has(cell)).is_false()
+	# Les spectacles joués rejoignent les affiches à la sauvegarde.
+	s.state.played_shows.append(str(data_show(s)))
+	Game.autosave()
+	assert_bool(Game.album.has("a_" + data_show(s))).is_true()
+	# L'album s'ouvre, avec ses onglets, puis se referme.
+	screen.open_album()
+	await runner.simulate_frames(3)
+	assert_int(screen.overlay.get_child_count()).is_equal(1)
+	(screen.overlay.get_child(0) as Modal).close_modal()
+	await runner.simulate_frames(3)
+	assert_array(Game.album.unseen).is_empty()
+
+
+func data_show(s: GameSession) -> String:
+	return str(s.data.shows.keys()[0])

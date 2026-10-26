@@ -9,6 +9,7 @@ signal budget_pressed
 signal reports_pressed
 signal journal_pressed
 signal plan_pressed
+signal album_pressed
 
 var _period: Label
 var _place: Label
@@ -22,6 +23,12 @@ var _hint: Label
 var _missions_panel: PanelContainer
 var _missions_list: VBoxContainer
 var _place_banner: Label
+var _card_pop: PanelContainer
+var _card_pic: TextureRect
+var _card_title: Label
+var _card_kind: Label
+var _card_tween: Tween
+var _album_badge: Label
 var _place_tween: Tween
 
 
@@ -43,9 +50,9 @@ func _init() -> void:
 	col.add_child(_chips)
 	# Objectif, en haut au centre-droit.
 	_objective_panel = UiKit.panel("PaperPanel")
-	_objective_panel.position = Vector2(1280 - 12 - 470 - 290, 10)
-	_objective_panel.custom_minimum_size = Vector2(470, 0)
-	_objective_panel.size = Vector2(470, 0)
+	_objective_panel.position = Vector2(498, 10)
+	_objective_panel.custom_minimum_size = Vector2(440, 0)
+	_objective_panel.size = Vector2(440, 0)
 	_objective_panel.mouse_filter = Control.MOUSE_FILTER_PASS
 	add_child(_objective_panel)
 	var orow := UiKit.hbox([UiKit.icon_rect("star", 24)], 8)
@@ -65,8 +72,8 @@ func _init() -> void:
 	add_child(_missions_panel)
 	_missions_list = UiKit.vbox([], 0)
 	_missions_panel.add_child(_missions_list)
-	buttons.position.x -= 92
-	for spec: Array in [["map", "Plan de la ville (M)", plan_pressed], ["book", "Journal de bord : missions, compétences, trophées (J)", journal_pressed], ["question", "Carnet du directeur (F1)", glossary_pressed], ["cash", "Budget et trésorerie", budget_pressed],
+	buttons.position.x -= 138
+	for spec: Array in [["album", "Album de Bréval : vos cartes et tenues (C)", album_pressed], ["map", "Plan de la ville (M)", plan_pressed], ["book", "Journal de bord : missions, compétences, trophées (J)", journal_pressed], ["question", "Carnet du directeur (F1)", glossary_pressed], ["cash", "Budget et trésorerie", budget_pressed],
 			["chart", "Bilans des périodes", reports_pressed], ["gear", "Menu (Échap)", menu_pressed]]:
 		var b := Button.new()
 		b.tooltip_text = spec[1]
@@ -91,6 +98,14 @@ func _init() -> void:
 			AudioDirector.play_sfx("click")
 			sig.emit())
 		buttons.add_child(b)
+		if spec[0] == "album":
+			_album_badge = UiKit.label("", "SmallLabel")
+			_album_badge.add_theme_color_override("font_color", UiKit.GOLD)
+			_album_badge.add_theme_color_override("font_outline_color", Color(0.09, 0.06, 0.12))
+			_album_badge.add_theme_constant_override("outline_size", 5)
+			_album_badge.position = Vector2(26, 26)
+			_album_badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			b.add_child(_album_badge)
 	# Aide aux commandes, en bas à gauche.
 	_hint = UiKit.label("Flèches ou ZQSD : marcher   ·   Entrée / E : parler, utiliser   ·   Clic : aller   ·   M : plan   ·   Échap : menu", "SmallLabel")
 	_hint.position = Vector2(14, 720 - 30)
@@ -108,6 +123,31 @@ func _init() -> void:
 	_place_banner.add_theme_constant_override("outline_size", 8)
 	_place_banner.visible = false
 	add_child(_place_banner)
+	# Nouvelle carte d'album : vignette qui glisse depuis la droite.
+	_card_pop = UiKit.panel("WoodPanel")
+	_card_pop.position = Vector2(1280, 132)
+	_card_pop.custom_minimum_size = Vector2(330, 0)
+	_card_pop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_card_pop.visible = false
+	add_child(_card_pop)
+	var crow := UiKit.hbox([], 10)
+	_card_pop.add_child(crow)
+	_card_pic = TextureRect.new()
+	_card_pic.custom_minimum_size = Vector2(72, 54)
+	_card_pic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_card_pic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	_card_pic.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	crow.add_child(_card_pic)
+	var ccol := UiKit.vbox([], 0)
+	ccol.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	crow.add_child(ccol)
+	_card_kind = UiKit.label("", "SmallLabel")
+	_card_kind.add_theme_color_override("font_color", UiKit.GOLD)
+	ccol.add_child(_card_kind)
+	ccol.alignment = BoxContainer.ALIGNMENT_CENTER
+	_card_title = UiKit.label("", "SubHeaderLabel", true)
+	_card_title.custom_minimum_size = Vector2(220, 0)
+	ccol.add_child(_card_title)
 	# Message éphémère.
 	_toast = UiKit.panel("InsetPanel")
 	_toast.visible = false
@@ -206,3 +246,31 @@ func announce_place(name: String) -> void:
 	_place_tween.tween_interval(1.6)
 	_place_tween.tween_property(_place_banner, "modulate:a", 0.0, 0.5)
 	_place_tween.tween_callback(func() -> void: _place_banner.visible = false)
+
+
+## Annonce une nouvelle carte d'album (et la tenue qu'elle débloque, le cas échéant).
+func show_card(card: Dictionary, picture: Texture2D, outfit: Dictionary = {}) -> void:
+	var kind: String = {"legendaire": "★ Trésor trouvé !", "rare": "Nouvelle carte rare !"}.get(str(card.get("rarity", "")), "Nouvelle carte !")
+	_card_kind.text = kind if outfit.is_empty() else "%s  + tenue « %s »" % [kind, outfit["label"]]
+	_card_title.text = str(card.get("title", ""))
+	_card_pic.texture = picture
+	_card_pop.visible = true
+	_card_pop.reset_size()
+	if _card_tween:
+		_card_tween.kill()
+	var shown := Vector2(1280 - 12 - 330, 132)
+	if Settings.reduce_motion():
+		_card_pop.position = shown
+		_card_tween = create_tween()
+		_card_tween.tween_interval(3.0)
+	else:
+		_card_pop.position = Vector2(1290, 132)
+		_card_tween = create_tween()
+		_card_tween.tween_property(_card_pop, "position", shown, 0.3).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		_card_tween.tween_interval(2.8)
+		_card_tween.tween_property(_card_pop, "position", Vector2(1290, 132), 0.3)
+	_card_tween.tween_callback(func() -> void: _card_pop.visible = false)
+
+
+func set_album_badge(n: int) -> void:
+	_album_badge.text = "%d" % n if n > 0 else ""
