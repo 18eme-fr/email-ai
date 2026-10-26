@@ -129,7 +129,12 @@ func submit_dossier(dossier: Dictionary, answers: Dictionary) -> Dictionary:
 
 ## Messages en attente (missions, niveaux, trophées) ; la liste est vidée.
 func take_notices() -> Array:
-	var out := state.notices.duplicate(true)
+	var out: Array = []
+	for n: Dictionary in state.notices:
+		# Une proposition qui n'est plus d'actualité (expirée, acceptée, refusée) n'est plus annoncée.
+		if n.get("kind", "") == "mission_offered" and MissionSystem.status(state, str(n["mission"])) != "offered":
+			continue
+		out.append(n.duplicate(true))
 	state.notices.clear()
 	return out
 

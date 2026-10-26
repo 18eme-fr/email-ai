@@ -18,7 +18,7 @@ func _ready() -> void:
 	_tabs = UiKit.hbox([], 4)
 	add_child(_tabs)
 	var group := ButtonGroup.new()
-	for tab: Array in [["synthese", "Synthèse"], ["finances", "Finances"], ["spectacles", "Spectacles"], ["indicateurs", "Indicateurs"]]:
+	for tab: Array in [["synthese", "Synthèse"], ["missions", "Missions"], ["finances", "Finances"], ["spectacles", "Spectacles"], ["indicateurs", "Indicateurs"]]:
 		var b := UiKit.button(tab[1], "SecondaryButton")
 		b.toggle_mode = true
 		b.button_group = group
@@ -26,6 +26,9 @@ func _ready() -> void:
 		var id: String = tab[0]
 		b.pressed.connect(func() -> void: _show(id))
 		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		# Cinq onglets dans la colonne de droite : texte un peu plus petit pour tenir en 1280 px.
+		b.add_theme_font_size_override("font_size", 14)
+		b.add_theme_constant_override("h_separation", 2)
 		_tabs.add_child(b)
 	var scroll := ScrollContainer.new()
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -60,8 +63,47 @@ func _show(tab: String) -> void:
 			_finances()
 		"spectacles":
 			_spectacles()
+		"missions":
+			_missions()
 		_:
 			_indicateurs()
+
+
+## Missions terminées pendant la période (avec ce qu'il faut retenir) et trophées.
+func _missions() -> void:
+	var outcomes: Array = report.get("missions", [])
+	if outcomes.is_empty():
+		_content.add_child(UiKit.label("Aucune mission n'est arrivée à son terme cette période.", "", true))
+	for o: Dictionary in outcomes:
+		var p := UiKit.panel("PaperPanel")
+		var row := UiKit.hbox([], 10)
+		p.add_child(row)
+		var portrait := TextureRect.new()
+		portrait.texture = UiKit.portrait(str(o["giver"]), "happy" if o["success"] else "worried")
+		portrait.custom_minimum_size = Vector2(56, 56)
+		portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		portrait.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+		row.add_child(portrait)
+		var col := UiKit.vbox([], 2)
+		col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(col)
+		col.add_child(UiKit.label("%s « %s »" % ["Mission réussie :" if o["success"] else "Mission échouée :", o["title"]], "PaperTitleLabel", true))
+		col.add_child(UiKit.label("%s%s" % [o["text"], (" (%s)" % o["reward"]) if str(o["reward"]) != "" else ""], "PaperLabel", true))
+		var take := UiKit.rich("[b]À retenir.[/b] %s" % o["takeaway"])
+		take.theme_type_variation = "PaperRichText"
+		col.add_child(take)
+		_content.add_child(p)
+	var won: Array = report.get("achievements", [])
+	if not won.is_empty():
+		_content.add_child(UiKit.label("Trophées obtenus", "SubHeaderLabel"))
+		for a: Dictionary in won:
+			_content.add_child(UiKit.hbox([UiKit.icon_rect("star", 24), UiKit.label("%s — %s" % [a["title"], a["text"]], "", true)]))
+	var active := MissionSystem.with_status(session.state, "active")
+	if not active.is_empty():
+		var names: Array = []
+		for id: String in active:
+			names.append("« %s » (%s)" % [session.data.missions[id]["title"], MissionSystem.progress(session.data, session.state, id)["text"]])
+		_content.add_child(UiKit.label("Toujours en cours : " + ", ".join(names), "SmallLabel", true))
 
 
 func _synthese() -> void:

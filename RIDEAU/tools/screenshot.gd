@@ -25,7 +25,13 @@ func _run() -> void:
 	if scenario.begins_with("game:"):
 		var parts := scenario.split(":")
 		game.session = GameSession.new()
-		game.session.new_game(int(parts[1]), "standard")
+		# game:<graine>:<étapes>[:<scénario>][:tuto]
+		var scenario := "premiere_saison"
+		if parts.size() > 3 and parts[3] != "tuto":
+			scenario = parts[3]
+		game.session.new_game(int(parts[1]), "standard", scenario)
+		if not scenario_string_has_case(scenario):
+			game.session.state.tutorial_seen["case"] = true
 		var steps := int(parts[2]) if parts.size() > 2 else 0
 		ScreenshotScenario.advance(game.session, steps)
 	root.get_node("Settings").values["show_tutorial"] = scenario.contains(":tuto")
@@ -45,6 +51,11 @@ func _run() -> void:
 	img.save_png(out_path)
 	print("Capture enregistrée : ", out_path, " ", img.get_size())
 	quit()
+
+
+## L'étude de cas ne s'ouvre d'elle-même que si l'on capture précisément cet écran.
+func scenario_string_has_case(_scenario: String) -> bool:
+	return OS.get_cmdline_user_args().size() > 3 and OS.get_cmdline_user_args()[3] == "startcase"
 
 
 ## Ouvre une fenêtre ou un onglet avant la capture (QA visuelle).
@@ -71,6 +82,12 @@ func _do_action(action: String) -> void:
 			scene.open_phase_window()
 		"talk":
 			scene.interact()
+		"journal":
+			scene.open_journal()
+		"case":
+			load("res://scripts/ui/case_study.gd").open(scene.overlay, root.get_node("Game").session)
+		"dossier":
+			load("res://scripts/ui/dossier_panel.gd").open(scene.overlay, root.get_node("Game").session, "seuil", false)
 		"status":
 			load("res://scripts/ui/theatre_status.gd").open(scene.overlay, root.get_node("Game").session)
 		"evening":

@@ -7,6 +7,7 @@ signal menu_pressed
 signal glossary_pressed
 signal budget_pressed
 signal reports_pressed
+signal journal_pressed
 
 var _period: Label
 var _place: Label
@@ -17,6 +18,8 @@ var _toast: PanelContainer
 var _toast_text: Label
 var _toast_tween: Tween
 var _hint: Label
+var _missions_panel: PanelContainer
+var _missions_list: VBoxContainer
 
 
 func _init() -> void:
@@ -37,7 +40,7 @@ func _init() -> void:
 	col.add_child(_chips)
 	# Objectif, en haut au centre-droit.
 	_objective_panel = UiKit.panel("PaperPanel")
-	_objective_panel.position = Vector2(1280 - 12 - 470 - 196, 10)
+	_objective_panel.position = Vector2(1280 - 12 - 470 - 242, 10)
 	_objective_panel.custom_minimum_size = Vector2(470, 0)
 	_objective_panel.size = Vector2(470, 0)
 	_objective_panel.mouse_filter = Control.MOUSE_FILTER_PASS
@@ -50,7 +53,17 @@ func _init() -> void:
 	var buttons := UiKit.hbox([], 4)
 	buttons.position = Vector2(1280 - 12 - 180, 12)
 	add_child(buttons)
-	for spec: Array in [["question", "Carnet du directeur (F1)", glossary_pressed], ["cash", "Budget et trésorerie", budget_pressed],
+	# Missions en cours, sous la carte de la période.
+	_missions_panel = UiKit.panel("InsetPanel")
+	_missions_panel.position = Vector2(12, 132)
+	_missions_panel.custom_minimum_size = Vector2(460, 0)
+	_missions_panel.mouse_filter = Control.MOUSE_FILTER_PASS
+	_missions_panel.modulate.a = 0.94
+	add_child(_missions_panel)
+	_missions_list = UiKit.vbox([], 0)
+	_missions_panel.add_child(_missions_list)
+	buttons.position.x -= 46
+	for spec: Array in [["book", "Journal de bord : missions, compétences, trophées (J)", journal_pressed], ["question", "Carnet du directeur (F1)", glossary_pressed], ["cash", "Budget et trésorerie", budget_pressed],
 			["chart", "Bilans des périodes", reports_pressed], ["gear", "Menu (Échap)", menu_pressed]]:
 		var b := Button.new()
 		b.icon = UiKit.icon(spec[0])
@@ -97,6 +110,36 @@ func refresh(session: GameSession, place: String, season_label: String, objectiv
 		"Rayonnement : réputation artistique, relations avec les partenaires et diversité des publics."))
 	_objective.text = objective
 	_hint.visible = s.turn <= 2
+
+
+## Missions en cours et propositions en attente.
+func set_missions(session: GameSession) -> void:
+	UiKit.clear(_missions_list)
+	var data := session.data
+	var s := session.state
+	var active := MissionSystem.with_status(s, "active")
+	var offered := MissionSystem.with_status(s, "offered")
+	_missions_panel.visible = not (active.is_empty() and offered.is_empty())
+	if active.is_empty() and offered.is_empty():
+		return
+	_missions_list.add_child(UiKit.label("Missions (J : journal)", "SmallLabel"))
+	for id: String in active:
+		var def: Dictionary = data.missions[id]
+		var prog := MissionSystem.progress(data, s, id)
+		var left := int(s.missions[id]["deadline"]) - s.turn
+		var when := "dernière période" if left <= 0 else "%d périodes" % (left + 1)
+		var l := UiKit.label("• %s — %s (%s)" % [def["title"], prog["text"], when], "", true)
+		l.add_theme_font_size_override("font_size", 15)
+		_missions_list.add_child(l)
+	if not offered.is_empty():
+		var names: Array = []
+		for id: String in offered:
+			var first := data.character_name(str(data.missions[id]["giver"])).split(" ")[0]
+			if not first in names:
+				names.append(first)
+		var l := UiKit.label("? Proposées par %s" % ", ".join(names), "SmallLabel", true)
+		l.add_theme_color_override("font_color", UiKit.GOLD)
+		_missions_list.add_child(l)
 
 
 func _chip(icon_name: String, value: String, color: Color, tip: String) -> Control:

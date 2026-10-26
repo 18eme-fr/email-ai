@@ -1,5 +1,5 @@
 {
-  "_doc": "Scénarios (études de cas). 'start' remplace les valeurs de départ de balance.json (cash, stats) ; 'ledger' ajoute des écritures au départ (dettes, avances) au format des effets ; 'objectives' remplace les objectifs de la convention (même format que balance.objectives ; une métrique peut être un indicateur) ; 'renewal_rule' facultatif ; 'missions' liste les missions proposées (voir data/missions/missions.json) ; 'learning' : notions travaillées. Le texte 'context' est présenté comme une étude de cas.",
+  "_doc": "Scénarios (études de cas). 'start' remplace les valeurs de départ de balance.json (cash, stats) ; 'ledger' ajoute des écritures au départ (dettes, avances) au format des effets ; 'objectives' remplace les objectifs de la convention (même format que balance.objectives ; une métrique peut être un indicateur) ; 'renewal_rule' facultatif ; 'missions' liste les missions proposées (voir data/missions/missions.json) ; 'learning' : notions travaillées. Le texte 'context' est présenté comme une étude de cas. 'debrief' : questions de retour réflexif, reprises dans le rapport de saison.",
   "order": [
     "premiere_saison",
     "redressement",
@@ -31,6 +31,11 @@
         "mecenat",
         "tarif_solidaire",
         "creation_machine"
+      ],
+      "debrief": [
+        "Quels arbitrages avez-vous faits entre recettes de billetterie et missions de service public ? Lesquels referiez-vous ?",
+        "À quel moment résultat et trésorerie ont-ils le plus divergé, et pourquoi ?",
+        "Quels indicateurs de la convention vous paraissent pertinents pour évaluer un théâtre ? Lesquels manquent ?"
       ]
     },
     "redressement": {
@@ -115,6 +120,11 @@
         "seuil_rentabilite",
         "mecenat",
         "frequentation_mi_saison"
+      ],
+      "debrief": [
+        "Quelles dépenses avez-vous réduites, et quelles ont été les conséquences sur l'équipe et les publics ?",
+        "Comment avez-vous anticipé les creux de trésorerie (dettes, avance à rembourser) ?",
+        "Comment présenteriez-vous votre plan de redressement au conseil d'administration et à la Ville ?"
       ]
     },
     "territoire": {
@@ -178,6 +188,11 @@
         "mecenat",
         "contrat_negociation",
         "frequentation_mi_saison"
+      ],
+      "debrief": [
+        "Quels leviers (tarifs, médiation, programmation, partenariats) ont le plus fait évoluer la diversité des publics ?",
+        "La diversité des publics peut-elle se mesurer avec un seul indicateur ? Que proposeriez-vous ?",
+        "Comment financer durablement des actions qui ne rapportent pas de billetterie ?"
       ]
     },
     "creation": {
@@ -241,6 +256,11 @@
         "budget_saison",
         "commission_securite",
         "parcours_eac"
+      ],
+      "debrief": [
+        "Comment avez-vous financé la création et les œuvres exigeantes que la billetterie ne couvrait pas ?",
+        "Quels risques avez-vous pris, et comment les avez-vous partagés (coréalisation, coproduction, mécénat) ?",
+        "Quel serait le projet artistique et culturel de la Lanterne dans trois ans ?"
       ]
     }
   }

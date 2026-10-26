@@ -45,7 +45,7 @@ func _ready() -> void:
 	vrow.add_child(p)
 	var vt := UiKit.rich("[b]%s[/b]  %s\n[color=#5a4636]%s[/color]" % [
 		"Convention renouvelée !" if e.get("renewed", false) else ("Faillite." if s.bankrupt else "Convention non renouvelée."),
-		e.get("text", ""), "Saison jouée en mode %s, graine %d." % [session.data.difficulty(s.difficulty).get("label", s.difficulty), s.game_seed]])
+		e.get("text", ""), "Scénario « %s », mode %s, graine %d." % [session.scenario().get("title", ""), session.data.difficulty(s.difficulty).get("label", s.difficulty), s.game_seed]])
 	vt.theme_type_variation = "PaperRichText"
 	vt.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	vrow.add_child(vt)
@@ -99,6 +99,26 @@ func _ready() -> void:
 	for d: Dictionary in _key_decisions(s):
 		right.add_child(UiKit.label("Période %d · %s" % [int(d["turn"]), d["text"]], "SmallLabel", true))
 	right.add_child(HSeparator.new())
+	var done := MissionSystem.with_status(s, "done").size()
+	var failed := MissionSystem.with_status(s, "failed").size()
+	right.add_child(UiKit.label("Missions, compétences, trophées", "SubHeaderLabel"))
+	right.add_child(UiKit.label("Missions réussies : %d · échouées : %d · trophées : %d / %d" % [done, failed, s.achievements.size(), session.data.achievements.size()], "", true))
+	var skills: Array = []
+	for skill: String in session.data.skill_order:
+		skills.append("%s %d" % [session.data.skills[skill]["label"], SkillSystem.level(session.data, s, skill)])
+	right.add_child(UiKit.label("Niveaux : " + ", ".join(skills), "SmallLabel", true))
+	var report_b := UiKit.button("Télécharger le rapport de saison", "", "save")
+	report_b.tooltip_text = "Rapport complet (Markdown) : verdict, périodes, missions, dossiers, compétences, notions, questions de débriefing. À remettre à votre enseignant·e."
+	var report_msg := UiKit.label("", "SmallLabel", true)
+	report_b.pressed.connect(func() -> void:
+		report_msg.text = Game.export_report()
+		_show_report_text())
+	right.add_child(report_b)
+	right.add_child(report_msg)
+	var journal := UiKit.button("Journal de bord", "SecondaryButton", "book")
+	journal.pressed.connect(func() -> void: JournalPanel.open(self, session, Callable(), "trophees"))
+	right.add_child(journal)
+	right.add_child(HSeparator.new())
 	right.add_child(UiKit.label("Ce que cette saison vous a appris", "SubHeaderLabel"))
 	for lesson: String in e.get("lessons", []):
 		right.add_child(UiKit.label("• " + lesson, "", true))
@@ -112,13 +132,29 @@ func _ready() -> void:
 	footer.add_child(UiKit.spacer())
 	var same := UiKit.button("Rejouer la même saison", "SecondaryButton")
 	same.tooltip_text = "Même graine : mêmes propositions et mêmes imprévus, pour tester une autre stratégie."
-	same.pressed.connect(func() -> void: Game.new_game(s.difficulty, s.game_seed))
+	same.pressed.connect(func() -> void: Game.new_game(s.difficulty, s.game_seed, s.scenario))
 	footer.add_child(same)
 	var again := UiKit.primary("Nouvelle saison")
-	again.pressed.connect(func() -> void: Game.new_game(s.difficulty))
+	again.pressed.connect(func() -> void: Game.new_game(s.difficulty, -1, s.scenario))
 	footer.add_child(again)
 	_rows.add_child(footer)
 	again.grab_focus.call_deferred()
+
+
+## Le rapport affiché en clair, sélectionnable (pour le copier si le téléchargement est bloqué).
+func _show_report_text() -> void:
+	var m := Modal.open(self, "Rapport de saison", 980, 640)
+	var edit := TextEdit.new()
+	edit.text = SeasonReport.markdown(session)
+	edit.editable = false
+	edit.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
+	edit.custom_minimum_size = Vector2(920, 470)
+	m.content.add_child(edit)
+	var copy := UiKit.button("Copier le texte", "", "save")
+	copy.pressed.connect(func() -> void:
+		DisplayServer.clipboard_set(edit.text)
+		copy.text = "Copié !")
+	m.content.add_child(copy)
 
 
 ## Les choix d'événements, plus le meilleur et le pire spectacle de la saison.

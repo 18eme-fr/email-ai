@@ -39,7 +39,15 @@ func _ready() -> void:
 	items.get_node("Budget").pressed.connect(func() -> void: BudgetPanel.open(overlay, session))
 	items.get_node("Reports").pressed.connect(func() -> void: ReportsHistory.open(overlay, session))
 	items.get_node("Menu").pressed.connect(open_pause)
-	for b: Button in [items.get_node("Glossary"), items.get_node("Budget"), items.get_node("Reports"), items.get_node("Menu")]:
+	var journal := Button.new()
+	journal.name = "Journal"
+	journal.text = "Journal"
+	journal.tooltip_text = "Missions, compétences, trophées (J)"
+	journal.icon = UiKit.icon("book")
+	journal.pressed.connect(open_journal)
+	items.add_child(journal)
+	items.move_child(journal, items.get_node("Glossary").get_index())
+	for b: Button in [journal, items.get_node("Glossary"), items.get_node("Budget"), items.get_node("Reports"), items.get_node("Menu")]:
 		b.pressed.connect(func() -> void: AudioDirector.play_sfx("click"))
 		# Boutons compacts : icône seule, le libellé reste dans l'infobulle et pour les lecteurs d'écran.
 		b.tooltip_text = "%s — %s" % [b.text, b.tooltip_text]
@@ -52,6 +60,27 @@ func _ready() -> void:
 	var pending := Game.take_pending_notice()
 	if pending != "":
 		toast(pending, "warning")
+	var s := session.state
+	if s.turn == 1 and s.phase == GameState.PHASE_SITUATION and not s.tutorial_seen.has("case"):
+		s.tutorial_seen["case"] = true
+		CaseStudy.open.call_deferred(overlay, session)
+	_show_notices()
+
+
+func open_journal() -> void:
+	JournalPanel.open(overlay, session, func() -> void:
+		Game.autosave()
+		refresh_all()
+		_show_notices())
+
+
+## Messages des missions, niveaux et trophées.
+func _show_notices() -> void:
+	var texts: Array = []
+	for n: Dictionary in session.take_notices():
+		texts.append(str(n["text"]))
+	if not texts.is_empty():
+		toast("\n".join(texts.slice(0, 3)), "warning")
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -63,6 +92,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("rideau_glossary"):
 		get_viewport().set_input_as_handled()
 		GlossaryPanel.open(overlay)
+	elif event.is_action_pressed("rideau_journal"):
+		get_viewport().set_input_as_handled()
+		open_journal()
 
 
 # --- Rafraîchissement ---------------------------------------------------------
@@ -236,6 +268,7 @@ func advance() -> void:
 	Game.autosave()
 	refresh_all()
 	show_phase()
+	_show_notices()
 
 
 func toast(message: String, kind: String = "info") -> void:

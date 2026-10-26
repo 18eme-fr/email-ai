@@ -26,6 +26,7 @@ func after_test() -> void:
 func _new_session(game_seed: int = 5) -> void:
 	Game.session = GameSession.new()
 	Game.session.new_game(game_seed, "standard")
+	Game.session.state.tutorial_seen["case"] = true
 
 
 func _buttons(root: Node) -> Array[Button]:

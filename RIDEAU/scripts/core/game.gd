@@ -66,11 +66,11 @@ func state() -> GameState:
 	return session.state if has_game() else null
 
 
-func new_game(difficulty: String, game_seed: int = -1) -> void:
+func new_game(difficulty: String, game_seed: int = -1, scenario: String = GameData.DEFAULT_SCENARIO) -> void:
 	if game_seed < 0:
 		game_seed = randi() % 1_000_000
 	session = GameSession.new(data)
-	session.new_game(game_seed, difficulty)
+	session.new_game(game_seed, difficulty, scenario)
 	autosave()
 	get_tree().change_scene_to_file(play_scene())
 
@@ -107,6 +107,32 @@ func go_to_menu() -> void:
 
 func go_to_end() -> void:
 	get_tree().change_scene_to_file(END_SCREEN)
+
+
+## Exporte le rapport de saison (Markdown). Retourne un message pour le joueur.
+## Navigateur : la page d'accueil du jeu propose le fichier (window.rideauExportReport),
+## sinon téléchargement direct. Ordinateur : fichier dans le dossier des données du jeu.
+func export_report() -> String:
+	if not has_game():
+		return ""
+	var text := SeasonReport.markdown(session)
+	var file := SeasonReport.file_name(session)
+	if OS.has_feature("web"):
+		var hook: Variant = JavaScriptBridge.eval("typeof window.rideauExportReport === 'function'", true)
+		if hook == true:
+			JavaScriptBridge.eval("window.rideauExportReport(%s, %s)" % [JSON.stringify(file), JSON.stringify(text)], true)
+		else:
+			JavaScriptBridge.download_buffer(text.to_utf8_buffer(), file, "text/markdown")
+		return "Rapport « %s » proposé au téléchargement. Il est aussi affiché ci-dessous pour être copié." % file
+	DirAccess.make_dir_recursive_absolute("user://rapports")
+	var path := "user://rapports/" + file
+	var f := FileAccess.open(path, FileAccess.WRITE)
+	if f == null:
+		return "Impossible d'écrire le rapport (%s)." % error_string(FileAccess.get_open_error())
+	f.store_string(text)
+	f.close()
+	OS.shell_open(ProjectSettings.globalize_path("user://rapports"))
+	return "Rapport enregistré : %s" % ProjectSettings.globalize_path(path)
 
 
 ## Renvoie et efface le message en attente.

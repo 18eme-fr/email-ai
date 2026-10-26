@@ -21,6 +21,7 @@ func after_test() -> void:
 func _new_session(game_seed: int) -> GameSession:
 	Game.session = GameSession.new()
 	Game.session.new_game(game_seed, "standard")
+	Game.session.state.tutorial_seen["case"] = true
 	return Game.session
 
 
@@ -86,8 +87,10 @@ func test_a_full_period_on_foot() -> void:
 	await runner.simulate_frames(10)
 	assert_str(s.state.phase).is_equal(GameState.PHASE_MANAGEMENT)
 	assert_bool(screen.window.is_open()).is_false()
-	# 3. Parler à Hélène : elle propose de former l'équipe.
+	# 3. Parler à Hélène : elle propose de former l'équipe (missions écartées pour ce test).
 	await _wait(runner, func() -> bool: return not screen._busy)
+	for id: String in MissionSystem.with_status(s.state, "offered"):
+		s.decline_mission(id)
 	screen.talk_to(screen.npcs["helene"])
 	await _answer(runner, screen, 0)
 	await _answer(runner, screen, 0)
@@ -223,3 +226,98 @@ func test_a_whole_season_goes_through_the_world() -> void:
 	assert_bool(s.state.finished).is_true()
 	assert_int(seasons_seen.size()).is_equal(4)
 	assert_object(_find_button(screen, "Voir le bilan de la saison")).is_not_null()
+
+
+func test_case_study_opens_on_a_new_game() -> void:
+	var s := _new_session(12)
+	s.state.tutorial_seen.erase("case")
+	var runner := scene_runner(WORLD)
+	await runner.simulate_frames(10)
+	var screen := runner.scene() as WorldScreen
+	assert_int(screen.overlay.get_child_count()).is_equal(1)
+	assert_object(_find_button(screen, "Prendre mes fonctions")).is_not_null()
+	_find_button(screen, "Prendre mes fonctions").pressed.emit()
+	await runner.simulate_frames(10)
+	assert_bool(s.state.tutorial_seen.has("case")).is_true()
+
+
+func test_accepting_a_mission_by_talking_and_doing_the_dossier() -> void:
+	var s := _new_session(21)
+	var runner := scene_runner(WORLD)
+	await runner.simulate_frames(10)
+	var screen := runner.scene() as WorldScreen
+	assert_str(MissionSystem.status(s.state, "budget_saison")).is_equal("offered")
+	assert_str(screen._mission_of("helene")).is_equal("budget_saison")
+	screen.talk_to(screen.npcs["helene"])
+	await _answer(runner, screen, 0)   # présentation
+	await _answer(runner, screen, 0)   # « J'accepte »
+	assert_str(MissionSystem.status(s.state, "budget_saison")).is_equal("active")
+	await _answer(runner, screen, 0)   # « Ouvrir le dossier »
+	assert_bool(await _wait(runner, func() -> bool: return screen.overlay.get_child_count() > 0)).is_true()
+	# Répondre juste à toutes les questions, puis rendre le dossier.
+	var dossier := s.open_dossier("budget")
+	for item: Dictionary in dossier["items"]:
+		pass
+	var modal := screen.overlay.get_child(0)
+	var boxes := modal.find_children("*", "CheckBox", true, false)
+	assert_int(boxes.size()).is_greater(0)
+	# Cocher la bonne réponse de chaque question à partir de la correction attendue.
+	var answers := Dossiers.auto_answers(dossier, RandomNumberGenerator.new(), 1.0)
+	var result := s.submit_dossier(dossier, answers)
+	assert_float(float(result["score"])).is_equal(1.0)
+	assert_str(MissionSystem.status(s.state, "budget_saison")).is_equal("done")
+	(modal as Modal).close_modal()
+	await runner.simulate_frames(5)
+	screen._show_notices()
+	await runner.simulate_frames(5)
+	assert_str(screen._mission_of("helene")).is_equal("")
+
+
+func test_dossier_window_grades_the_answers() -> void:
+	var s := _new_session(5)
+	var runner := scene_runner(WORLD)
+	await runner.simulate_frames(10)
+	var screen := runner.scene() as WorldScreen
+	var m := DossierPanel.open(screen.overlay, s, "tresorerie", true)
+	await runner.simulate_frames(5)
+	# Rendre sans répondre : refusé.
+	_find_button(m, "Rendre le dossier").pressed.emit()
+	await runner.simulate_frames(3)
+	assert_object(_find_button(m, "Rendre le dossier")).is_not_null()
+	# Répondre à tout (premières propositions) puis rendre : la correction s'affiche.
+	var groups := {}
+	for cb in m.find_children("*", "CheckBox", true, false):
+		var g: ButtonGroup = (cb as CheckBox).button_group
+		if g != null and not groups.has(g):
+			groups[g] = true
+			(cb as CheckBox).button_pressed = true
+	await runner.simulate_frames(3)
+	_find_button(m, "Rendre le dossier").pressed.emit()
+	await runner.simulate_frames(5)
+	assert_object(_find_button(m, "Rendre le dossier")).is_null()
+	var texts := ""
+	for l in m.find_children("*", "Label", true, false):
+		texts += (l as Label).text + "\n"
+	assert_str(texts).contains("Score")
+	assert_int(s.state.dossiers.size()).is_equal(1)
+	assert_bool(s.state.dossiers[0]["practice"]).is_true()
+
+
+func test_journal_tabs_and_season_report() -> void:
+	var s := _new_session(6)
+	var runner := scene_runner(WORLD)
+	await runner.simulate_frames(10)
+	var screen := runner.scene() as WorldScreen
+	screen.open_journal()
+	await runner.simulate_frames(5)
+	var j := screen.overlay.get_child(0)
+	_find_button(j, "Accepter").pressed.emit()
+	await runner.simulate_frames(5)
+	assert_int(MissionSystem.with_status(s.state, "active").size()).is_equal(1)
+	for tab: String in ["Compétences", "Trophées", "La saison", "Missions"]:
+		_find_button(j, tab).pressed.emit()
+		await runner.simulate_frames(3)
+	var report := SeasonReport.markdown(s)
+	assert_str(report).contains("Rapport de saison")
+	assert_str(report).contains(str(s.scenario()["title"]))
+	assert_str(report).contains("Questions pour le débriefing")

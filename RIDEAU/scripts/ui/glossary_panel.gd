@@ -26,14 +26,24 @@ static func open(parent: Node, notion_id: String = "") -> Modal:
 	for id: String in ids:
 		var b := UiKit.button(str(data.glossary[id]["title"]), "FlatButton")
 		b.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		b.pressed.connect(func() -> void: text.text = notion_bbcode(data, id))
+		b.pressed.connect(func() -> void:
+			text.text = notion_bbcode(data, id)
+			_record(id))
 		list.add_child(b)
 		if id == notion_id or (notion_id == "" and first == null):
 			first = b
 			text.text = notion_bbcode(data, id)
+			if id == notion_id:
+				_record(id)
 	if first:
 		first.grab_focus.call_deferred()
 	return m
+
+
+## Note la notion consultée (rapport de saison).
+static func _record(id: String) -> void:
+	if Game.has_game():
+		Game.session.record_notion(id)
 
 
 static func notion_bbcode(data: GameData, id: String) -> String:

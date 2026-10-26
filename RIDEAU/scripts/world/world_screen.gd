@@ -48,6 +48,7 @@ var _prev_phase := ""
 var _rng := RandomNumberGenerator.new()
 var _performing := false
 var _spot_markers: Array[Sprite2D] = []
+var _debrief: Array = []          ## missions terminées à commenter en début de période
 
 
 func _ready() -> void:
@@ -95,6 +96,7 @@ func _build() -> void:
 	hud.glossary_pressed.connect(func() -> void: GlossaryPanel.open(overlay))
 	hud.budget_pressed.connect(func() -> void: BudgetPanel.open(overlay, session))
 	hud.reports_pressed.connect(func() -> void: ReportsHistory.open(overlay, session))
+	hud.journal_pressed.connect(open_journal)
 	root.add_child(hud)
 	speech = SpeechBox.new()
 	speech.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
@@ -314,6 +316,7 @@ func refresh_all() -> void:
 	elif str(obj["map"]) != map.id:
 		text += "\n→ Direction : %s." % world.map(str(obj["map"])).name
 	hud.refresh(session, map.name, WorldRules.SEASON_LABELS.get(_season(), ""), text)
+	hud.set_missions(session)
 	_refresh_markers(obj)
 
 
@@ -344,6 +347,15 @@ func _refresh_markers(obj: Dictionary) -> void:
 	for sp: Dictionary in map.spots:
 		if sp.get("kind", "") == "upgrade" and session.upgrade_block_reason(str(sp["upgrade"])) == "":
 			_spot_marker(str(sp["id"]), "build")
+	# Missions : « ? » pour une proposition, « … » pour un dossier à rendre.
+	for id: String in MissionSystem.with_status(s, "active"):
+		var giver := str(session.data.missions[id]["giver"])
+		if session.data.missions[id]["goal"]["kind"] == "dossier" and npcs.has(giver):
+			(npcs[giver] as WorldActor).set_bubble("dots")
+	for id: String in MissionSystem.with_status(s, "offered"):
+		var giver := str(session.data.missions[id]["giver"])
+		if npcs.has(giver):
+			(npcs[giver] as WorldActor).set_bubble("question")
 	if event_who != "" and npcs.has(event_who):
 		(npcs[event_who] as WorldActor).set_bubble("alert")
 	# Flèche dorée vers l'objectif (ou vers la porte qui y mène).
@@ -433,6 +445,54 @@ func advance() -> void:
 	elif window.is_open():
 		open_phase_window()
 	refresh_all()
+	_show_notices()
+
+
+## Messages de la partie : niveaux, trophées, missions proposées (bandeau) ;
+## missions terminées en fin de période (commentées au début de la suivante).
+func _show_notices() -> void:
+	var texts: Array = []
+	var offers: Array = []
+	for n: Dictionary in session.take_notices():
+		match str(n["kind"]):
+			"mission_offered":
+				offers.append("« %s »" % session.data.missions[n["mission"]]["title"])
+			"mission_done", "mission_failed":
+				if n.has("outcome") and session.state.phase in [GameState.PHASE_REPORT, GameState.PHASE_FINISHED]:
+					_debrief.append(n["outcome"])
+				else:
+					texts.append(str(n["text"]))
+			"level_up", "achievement":
+				AudioDirector.play_sfx("coins")
+				texts.append(str(n["text"]))
+			_:
+				texts.append(str(n["text"]))
+	if not offers.is_empty():
+		texts.append("Nouvelles missions : %s. Parlez aux personnes qui ont une bulle « ? »." % ", ".join(offers))
+	if not texts.is_empty():
+		toast("\n".join(texts.slice(0, 3)), "warning")
+	refresh_all()
+
+
+func open_journal() -> void:
+	JournalPanel.open(overlay, session, func() -> void:
+		Game.autosave()
+		_show_notices())
+
+
+## Les personnes qui ont confié une mission terminée la commentent.
+func _play_debrief() -> void:
+	if _debrief.is_empty():
+		return
+	_busy = true
+	for o: Dictionary in _debrief.slice(0, 4):
+		var who := str(o["giver"])
+		var head := "Mission réussie : « %s » !" % o["title"] if o["success"] else "Mission échouée : « %s »." % o["title"]
+		await speech.say(_speaker_name(who), UiKit.portrait(who, "happy" if o["success"] else "worried"), "%s %s" % [head, o["text"]])
+		await speech.say(_speaker_name(who), _portrait(who), "À retenir : %s" % o["takeaway"])
+	_debrief.clear()
+	speech.close()
+	_busy = false
 
 
 func open_phase_window() -> void:
@@ -468,8 +528,16 @@ func _resume() -> void:
 		_start_event()
 	elif s.phase in [GameState.PHASE_REPORT, GameState.PHASE_FINISHED]:
 		open_phase_window()
-	elif s.turn == 1 and s.phase == GameState.PHASE_SITUATION and not s.tutorial_seen.has("world") and bool(Settings.get_value("show_tutorial")):
-		await _intro()
+	elif s.turn == 1 and s.phase == GameState.PHASE_SITUATION:
+		if not s.tutorial_seen.has("case"):
+			s.tutorial_seen["case"] = true
+			_busy = true
+			var m := CaseStudy.open(overlay, session)
+			await m.closed
+			_busy = false
+		if not s.tutorial_seen.has("world") and bool(Settings.get_value("show_tutorial")):
+			await _intro()
+	_show_notices()
 
 
 func _intro() -> void:
@@ -479,7 +547,8 @@ func _intro() -> void:
 		"Bienvenue à la direction du Théâtre de la Lanterne ! Je suis Hélène, l'administratrice.",
 		"Pour vous déplacer : les flèches ou Z Q S D. Vous pouvez aussi cliquer là où vous voulez aller.",
 		"Pour parler à quelqu'un ou utiliser un objet : placez-vous devant et appuyez sur Entrée ou E. Un clic marche aussi.",
-		"Tout se décide ici, à votre bureau. La flèche dorée vous indique toujours la prochaine étape. On verra au bilan !",
+		"Tout se décide ici, à votre bureau. La flèche dorée vous indique toujours la prochaine étape.",
+		"Les personnes avec une bulle « ? » ont une mission à vous confier : objectifs, échéance, récompense. Le journal de bord (touche J) les rassemble. On verra au bilan !",
 	]
 	for line: String in lines:
 		await speech.say(_speaker_name(who), _portrait(who), line)
@@ -630,7 +699,9 @@ func _new_period() -> void:
 	_banner.visible = false
 	await _fade_to(0.0)
 	_busy = false
+	await _play_debrief()
 	toast("Nouvelle période : %s. Le cahier vous attend sur votre bureau." % session.period_name())
+	_show_notices.call_deferred()
 
 
 func _fade_to(alpha: float) -> void:
@@ -763,6 +834,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("rideau_glossary"):
 		get_viewport().set_input_as_handled()
 		GlossaryPanel.open(overlay)
+	elif event.is_action_pressed("rideau_journal"):
+		get_viewport().set_input_as_handled()
+		open_journal()
 	elif event.is_action_pressed("ui_accept") or event.is_action_pressed("rideau_interact"):
 		get_viewport().set_input_as_handled()
 		if not player.moving:
@@ -857,6 +931,10 @@ func talk_to(npc: WorldActor) -> void:
 	if who == WorldRules.event_character(session):
 		open_phase_window()
 		return
+	var mission := _mission_of(who)
+	if mission != "":
+		await _talk_mission(who, mission)
+		return
 	_busy = true
 	var person: Dictionary = world.people.get(who, {})
 	var action := str(person.get("action", ""))
@@ -872,6 +950,58 @@ func talk_to(npc: WorldActor) -> void:
 	speech.close()
 	_busy = false
 	refresh_all()
+
+
+## Mission à évoquer avec cette personne : une proposition, ou un dossier à rendre.
+func _mission_of(who: String) -> String:
+	for id: String in MissionSystem.with_status(session.state, "offered"):
+		if session.data.missions[id]["giver"] == who:
+			return id
+	for id: String in MissionSystem.with_status(session.state, "active"):
+		var def: Dictionary = session.data.missions[id]
+		if def["giver"] == who and def["goal"]["kind"] == "dossier":
+			return id
+	return ""
+
+
+func _talk_mission(who: String, mission_id: String) -> void:
+	_busy = true
+	var def: Dictionary = session.data.missions[mission_id]
+	var name := _speaker_name(who)
+	var portrait := _portrait(who)
+	var open_dossier := ""
+	if MissionSystem.status(session.state, mission_id) == "offered":
+		var delay := "jusqu'à la période %d" % int(def["deadline_turn"]) if def.has("deadline_turn") else "%d période(s)" % int(def["duration"])
+		await speech.say(name, portrait, str(def["pitch"]))
+		var pick := await speech.ask(name, portrait, "Mission « %s »\nObjectif : %s · délai : %s\nRécompense : %s" % [def["title"], def["goal"].get("text", ""), delay, MissionSystem.reward_text(session.data, def.get("reward", {}))],
+			["J'accepte", "Plus tard", "Non merci"])
+		if pick == 0:
+			var err := session.accept_mission(mission_id)
+			if err != "":
+				await speech.say(name, portrait, err)
+			else:
+				AudioDirector.play_sfx("confirm")
+				Game.autosave()
+				if def["goal"]["kind"] == "dossier":
+					var now := await speech.ask(name, portrait, "Merci ! Le dossier est prêt, on s'y met tout de suite ?", ["Ouvrir le dossier", "Plus tard"])
+					if now == 0:
+						open_dossier = str(def["goal"]["dossier"])
+				else:
+					await speech.say(name, portrait, "Merci ! Je compte sur vous. Vous suivrez l'avancement dans le journal de bord (touche J).")
+		elif pick == 2:
+			session.decline_mission(mission_id)
+			await speech.say(name, portrait, "Tant pis… Une autre fois, peut-être.")
+	else:
+		var go := await speech.ask(name, portrait, "Le dossier « %s » vous attend. On s'y met ?" % Dossiers.CATALOG[def["goal"]["dossier"]]["title"], ["Ouvrir le dossier", "Plus tard"])
+		if go == 0:
+			open_dossier = str(def["goal"]["dossier"])
+	speech.close()
+	_busy = false
+	refresh_all()
+	if open_dossier != "":
+		DossierPanel.open(overlay, session, open_dossier, false, func(_r: Dictionary) -> void:
+			Game.autosave()
+			_show_notices())
 
 
 func _offer_action(speaker: String, portrait: Texture2D, action: String) -> void:
@@ -975,12 +1105,13 @@ func _offer_upgrade(spot: Dictionary) -> void:
 # --- Menu ------------------------------------------------------------------------------
 
 func open_menu() -> void:
-	var m := Modal.open(overlay, "Menu", 460, 690)
+	var m := Modal.open(overlay, "Menu", 460, 700)
 	var items: Array = [
 		["Reprendre", "GoldButton", "play", m.close_modal],
 		["Cahier de la période", "", "book", func() -> void:
 			m.close_modal()
 			open_phase_window()],
+		["Journal de bord", "SecondaryButton", "star", func() -> void: open_journal()],
 		["Carnet du directeur", "SecondaryButton", "question", func() -> void: GlossaryPanel.open(overlay)],
 		["Budget et trésorerie", "SecondaryButton", "cash", func() -> void: BudgetPanel.open(overlay, session)],
 		["Bilans des périodes", "SecondaryButton", "chart", func() -> void: ReportsHistory.open(overlay, session)],
