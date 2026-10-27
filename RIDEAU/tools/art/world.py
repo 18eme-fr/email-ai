@@ -496,11 +496,8 @@ def interior(world, map_id):
         for vx in (3, 17):
             draw_showcase(base, top, vx * T, 9 * T, 3)
         draw_sign(base, 7 * T, 12 * T)
-        # Porte de l'étage de la direction (cage d'escalier), avec sa plaque
+        # Porte de l'étage de la direction (cage d'escalier), sans plaque
         base.rect(21 * T - 2, 6 * T - 10, 2, 2 * T + 10, P["gold1"])
-        base.rect(20 * T - 4, 5 * T + 1, 34, 9, P["gold2"])
-        base.frame(20 * T - 4, 5 * T + 1, 34, 9, P["gold0"])
-        text(base, 20 * T + 13 - text_width("ETAGE") // 2, 5 * T + 3, "ETAGE", P["wood0"])
         # Cadres d'affiches au mur (remplis dans le jeu)
         for fx in (5 * T + 6, 15 * T + 4):
             base.rect(fx - 2, T - 10, 44, 24, P["gold1"])

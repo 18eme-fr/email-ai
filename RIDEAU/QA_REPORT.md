@@ -1,6 +1,6 @@
-# Rapport d'assurance qualité — RIDEAU ! v0.17.4
+# Rapport d'assurance qualité — RIDEAU ! v0.17.5
 
-Date : 27 octobre 2026 (v0.17.4 : bilans « en bref », étage de la direction, redingote ; v0.17.3 : bandeau allégé, étapes numérotées, escalier ; v0.17.2 : Paris redessiné ; v0.17.1 : son de porte, extérieur sans ruissellement ; v0.17.0 : metteur en scène, voyage à Paris ; v0.16.2 : son de porte d'origine, plus de grésillement ; v0.16.0 : intérieurs, ruelles, façades ; v0.15.0 : son, ambiance, prologue ; v0.14.0 : collection de 50 objets ; v0.13.0 : album de collection ; v0.12.0 : grande ville ; v0.11.0 : scénarios, missions, dossiers, compétences ; v0.10.0 : monde explorable ; v0.9.0 le 25 octobre). Environnement : conteneur Linux, **Godot 4.7.2-stable compilé depuis les
+Date : 27 octobre 2026 (v0.17.5 : plaque du hall retirée ; v0.17.4 : bilans « en bref », étage de la direction, redingote ; v0.17.3 : bandeau allégé, étapes numérotées, escalier ; v0.17.2 : Paris redessiné ; v0.17.1 : son de porte, extérieur sans ruissellement ; v0.17.0 : metteur en scène, voyage à Paris ; v0.16.2 : son de porte d'origine, plus de grésillement ; v0.16.0 : intérieurs, ruelles, façades ; v0.15.0 : son, ambiance, prologue ; v0.14.0 : collection de 50 objets ; v0.13.0 : album de collection ; v0.12.0 : grande ville ; v0.11.0 : scénarios, missions, dossiers, compétences ; v0.10.0 : monde explorable ; v0.9.0 le 25 octobre). Environnement : conteneur Linux, **Godot 4.7.2-stable compilé depuis les
 sources**, rendu réel OpenGL (Mesa llvmpipe) sous Xvfb, Chromium (Playwright) pour la version Web.
 **Tout ce qui est indiqué « réussi » a été réellement exécuté.**
 
@@ -68,6 +68,7 @@ Aucune stratégie triviale ne gagne. « La première saison » est volontairemen
 - Captures réelles de chaque écran (`docs/screenshots/`), relues une à une, dont le monde
   explorable : bureau, hall, place en automne et en hiver (fêtes, enseigne), coulisses, dialogue
   avec réponses, fenêtre d'étape, soirée dans la salle, menu.
+- v0.17.5 : capture du hall relue (porte de l'étage sans plaque) ; 184 tests verts.
 - v0.17.4 : captures relues (bilan « En bref » à la période 1 et 5, hall, cage d'escalier,
   couloir, toilettes, archives, sprite de la redingote). Défauts trouvés et corrigés : conseil du
   bilan coupé sous le bouton (ligne d'événement en double retirée, espacements resserrés),
@@ -132,8 +133,8 @@ Aucune stratégie triviale ne gagne. « La première saison » est volontairemen
 
 | Plateforme | Produit | Vérification réelle |
 |---|---|---|
-| Linux x86_64 | `RIDEAU.x86_64` (93 Mo) | **Autotest** (`-- --smoke-test`) : données, dialogue, **monde (38 cartes, création et première, décors de chaque intérieur, scène)**, collection (51 objets), saison complète avec missions et dossiers, sauvegarde → SUCCÈS (v0.17.4) |
-| Web (WebGL 2, sans threads) | `index.html` + `.wasm` + `.pck` | Chargé dans Chromium (v0.17.4) : menu, choix du scénario, monde ; (v0.11.0) transmission du rapport de saison à la page — **0 erreur console** ; publié en lien privé (moteur découpé en 3 morceaux de moins de 15 Mo, réassemblés au chargement) |
+| Linux x86_64 | `RIDEAU.x86_64` (93 Mo) | **Autotest** (`-- --smoke-test`) : données, dialogue, **monde (38 cartes, création et première, décors de chaque intérieur, scène)**, collection (51 objets), saison complète avec missions et dossiers, sauvegarde → SUCCÈS (v0.17.5) |
+| Web (WebGL 2, sans threads) | `index.html` + `.wasm` + `.pck` | Chargé dans Chromium (v0.17.5) : menu, choix du scénario, monde ; (v0.11.0) transmission du rapport de saison à la page — **0 erreur console** ; publié en lien privé (moteur découpé en 3 morceaux de moins de 15 Mo, réassemblés au chargement) |
 | Windows x86_64 | `RIDEAU.exe` (86 Mo) | Export sans erreur. **Non lancé** : pas de Windows dans l'environnement |
 | macOS | préréglage fourni | **Non produit** : nécessite un Mac (modèles et signature Apple) |
 

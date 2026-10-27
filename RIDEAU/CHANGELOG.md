@@ -2,6 +2,12 @@
 
 Format inspiré de « Keep a Changelog ». Versions du jeu (`application/config/version`).
 
+## [0.17.5] — 2026-10-27 — Hall sans écriteau
+
+### Modifié
+- **La plaque « ÉTAGE » du hall est retirée** : la porte de la cage d'escalier n'a plus
+  d'écriteau, comme les portes du couloir.
+
 ## [0.17.4] — 2026-10-27 — Des bilans clairs, un étage pour la direction
 
 ### Modifié
@@ -13,7 +19,7 @@ Format inspiré de « Keep a Changelog ». Versions du jeu (`application/config/
   même montant (sommes réglées plus tard), et un seul conseil pour la période suivante.
   Le détail des écritures reste dans l'onglet « Comptes ».
 - **L'escalier du hall est retiré** : le hall retrouve son plan d'origine, avec une porte
-  « ÉTAGE » à droite.
+  à droite vers l'étage.
 
 ### Ajouté
 - **L'étage de la direction**, entre le hall et le bureau : une **cage d'escalier** (escalier
