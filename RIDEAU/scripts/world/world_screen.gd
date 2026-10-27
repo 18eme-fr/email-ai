@@ -815,7 +815,7 @@ func refresh_all() -> void:
 	if obj.get("kind", "") == "npc" and npcs.has(str(obj["id"])):
 		pass
 	elif str(obj["map"]) != map.id and world.map(str(obj["map"])) != null:
-		text += "\n→ Direction : %s." % world.map(str(obj["map"])).name
+		text += "  → %s" % world.map(str(obj["map"])).name
 	hud.refresh(session, _place_name(), WorldRules.SEASON_LABELS.get(_season(), ""), text)
 	var quests: Array = []
 	for q: Dictionary in Game.collection.active_quests():

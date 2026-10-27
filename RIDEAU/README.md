@@ -10,7 +10,7 @@ des saisons. Le jeu fait découvrir, par l'expérience,
 les grandes logiques de l'administration culturelle (budget prévisionnel, billetterie, jauge,
 contrats de cession et de coréalisation, médiation, subventions, mécénat…).
 
-État : **version 0.17.2 jouable de bout en bout** (voir `QA_REPORT.md` et `ROADMAP.md`).
+État : **version 0.17.3 jouable de bout en bout** (voir `QA_REPORT.md` et `ROADMAP.md`).
 Depuis la version 0.17 : **une création avec le metteur en scène Victor Lazare** (un choix par mois,
 il change d'endroit à chaque fois), le bandeau **« Prochaines étapes »**, et en fin de saison le
 **voyage en train à Paris** : un quartier parisien à explorer et la première au Théâtre des Lumières.
@@ -45,7 +45,7 @@ En ligne de commande :
 ```
 
 Des versions prêtes à jouer pour **Linux, Windows et le Web** ont été produites (archives
-`RIDEAU-0.17.2-*.zip` transmises avec la livraison ; le dossier `exports/` n'est pas versionné).
+`RIDEAU-0.17.3-*.zip` transmises avec la livraison ; le dossier `exports/` n'est pas versionné).
 La version Web se lance en servant le dossier décompressé, par exemple :
 `python3 -m http.server` puis <http://localhost:8000> (l'ouvrir directement en `file://` ne marche pas).
 Vérifier une version exportée : `./RIDEAU.x86_64 --headless -- --smoke-test`.

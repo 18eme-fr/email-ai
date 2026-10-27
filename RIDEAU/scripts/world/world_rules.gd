@@ -32,24 +32,40 @@ static func event_character(session: GameSession) -> String:
 	return str(session.current_event().get("character", ""))
 
 
+## Les quatre étapes de chaque période, pour que le joueur sache toujours où il en est.
+const STEPS := {
+	GameState.PHASE_SITUATION: 1, GameState.PHASE_PROGRAMMING: 1, GameState.PHASE_MANAGEMENT: 2,
+	GameState.PHASE_EVENT: 3, GameState.PHASE_REPORT: 4,
+}
+
+
 ## Objectif affiché en haut de l'écran : {text, map, kind ("spot"|"npc"), id}.
+## Pendant la saison, il commence par « Étape n/4 » (programmer, agir, la soirée, le bilan).
 static func objective(session: GameSession) -> Dictionary:
+	var obj := _objective(session)
+	var n := int(STEPS.get(session.state.phase, 0))
+	if n > 0 and not session.state.finished:
+		obj["text"] = "Étape %d/4 · %s" % [n, obj["text"]]
+	return obj
+
+
+static func _objective(session: GameSession) -> Dictionary:
 	var s := session.state
 	var desk := {"map": "bureau", "kind": "spot", "id": "cahier"}
 	match s.phase:
 		GameState.PHASE_SITUATION, GameState.PHASE_PROGRAMMING:
-			return _with(desk, "Montez au bureau : la programmation de %s vous attend." % session.period_name().to_lower())
+			return _with(desk, "Au bureau : choisissez les spectacles de %s." % session.period_name().to_lower())
 		GameState.PHASE_MANAGEMENT:
-			return _with(desk, "Décidez des actions auprès de l'équipe et des partenaires (%d / %d), puis signez la feuille de route à votre bureau." % [s.actions.size(), session.action_capacity()])
+			return _with(desk, "Parlez à l'équipe (« ! ») pour choisir vos actions (%d / %d), puis signez au bureau." % [s.actions.size(), session.action_capacity()])
 		GameState.PHASE_EVENT:
 			var who := event_character(session)
 			if who != "":
 				var world := WorldData.get_default()
 				return {"text": "%s a besoin de vous parler !" % session.data.character_name(who),
 						"map": world.home_of(who), "kind": "npc", "id": who}
-			return _with(desk, "Tout est prêt : lancez la soirée depuis votre bureau.")
+			return _with(desk, "Tout est prêt : lancez la soirée depuis le bureau.")
 		GameState.PHASE_REPORT:
-			return _with(desk, "La soirée est finie. Lisez le bilan de la période à votre bureau.")
+			return _with(desk, "La soirée est finie : lisez le bilan au bureau.")
 	# Fin de saison : le bilan, puis le voyage à Paris avec la troupe.
 	var c := s.creation
 	if bool(c.get("departed", false)) and c.get("paris", {}).is_empty():
@@ -274,7 +290,7 @@ static func footstep_surface(map: WorldMap, cell: Vector2i, season_id: String, s
 	var g := map.ground_at(cell)
 	match map.id:
 		"hall":
-			return "tapis" if g == "," else "pierre"
+			return "tapis" if g in [",", "S"] else "pierre"
 		"salle":
 			return "bois" if g in ["p", "r"] else "tapis"
 		"coulisses", "reserve":

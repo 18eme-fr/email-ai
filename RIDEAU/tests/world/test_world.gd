@@ -312,3 +312,16 @@ func test_no_background_hiss_anywhere() -> void:
 	for sc: Dictionary in (prologue as Dictionary)["scenes"]:
 		for layer: String in sc.get("ambience", {}):
 			assert_bool(ResourceLoader.exists("res://assets/audio/ambience/%s.wav" % layer)).override_failure_message("prologue : ambiance manquante %s" % layer).is_true()
+
+
+## Un escalier mène au bureau de la direction : on le monte à pied, sur un tapis.
+func test_hall_has_a_staircase_to_the_office() -> void:
+	var hall := world.map("hall")
+	var stairs := 0
+	for y in hall.size.y:
+		for x in hall.size.x:
+			if hall.char_at(Vector2i(x, y)) == "S":
+				stairs += 1
+	assert_int(stairs).is_greater(10)
+	assert_array(hall.find_path(Vector2i(15, 6), Vector2i(21, 6))).is_not_empty()
+	assert_str(WorldRules.footstep_surface(hall, Vector2i(19, 6), "ete", "clair")).is_equal("tapis")

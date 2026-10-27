@@ -1,7 +1,7 @@
 class_name WorldHud
 extends Control
-## Informations permanentes du monde explorable : période et saison,
-## trésorerie, publics, rayonnement, objectif en cours, raccourcis.
+## Informations permanentes du monde explorable : l'étape en cours (et, en petit, la
+## suivante), la période, le lieu et les raccourcis.
 
 signal menu_pressed
 signal glossary_pressed
@@ -13,7 +13,6 @@ signal album_pressed
 
 var _period: Label
 var _place: Label
-var _chips: HBoxContainer
 var _objective: Label
 var _objective_panel: PanelContainer
 var _toast: PanelContainer
@@ -35,41 +34,33 @@ var _place_tween: Tween
 func _init() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
-	# En haut à gauche : période, lieu, chiffres clés.
-	var card := UiKit.panel("WoodPanel")
-	card.position = Vector2(12, 10)
-	card.mouse_filter = Control.MOUSE_FILTER_PASS
-	add_child(card)
-	var col := UiKit.vbox([], 2)
-	card.add_child(col)
-	_period = UiKit.label("", "SubHeaderLabel")
-	col.add_child(_period)
-	_place = UiKit.label("", "SmallLabel")
-	col.add_child(_place)
-	_chips = UiKit.hbox([], 14)
-	col.add_child(_chips)
-	# Prochaines étapes, en haut au centre-droit : l'étape en cours (étoile), puis le
-	# rendez-vous avec le metteur en scène, les missions et les enquêtes.
-	_objective_panel = UiKit.panel("PaperPanel")
-	_objective_panel.position = Vector2(484, 8)
-	_objective_panel.custom_minimum_size = Vector2(462, 0)
-	_objective_panel.size = Vector2(462, 0)
+	# En haut à gauche, un bandeau discret : l'étape en cours (étoile), au plus une autre
+	# chose à faire en petit, puis la période et le lieu. Le reste est dans le journal (J).
+	_objective_panel = UiKit.panel("InsetPanel")
+	_objective_panel.position = Vector2(10, 8)
+	_objective_panel.custom_minimum_size = Vector2(0, 0)
 	_objective_panel.mouse_filter = Control.MOUSE_FILTER_PASS
+	_objective_panel.modulate.a = 0.92
 	add_child(_objective_panel)
-	var ocol := UiKit.vbox([], 2)
+	var ocol := UiKit.vbox([], 1)
 	_objective_panel.add_child(ocol)
-	var head := UiKit.label("PROCHAINES ÉTAPES", "SmallLabel")
-	head.add_theme_color_override("font_color", Color("8a5a2b"))
-	head.add_theme_font_size_override("font_size", 13)
-	ocol.add_child(head)
-	var orow := UiKit.hbox([UiKit.icon_rect("star", 22)], 6)
+	var orow := UiKit.hbox([UiKit.icon_rect("star", 18)], 6)
 	ocol.add_child(orow)
-	_objective = UiKit.label("", "PaperLabel", true)
-	_objective.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_objective.add_theme_font_size_override("font_size", 16)
+	_objective = UiKit.label("", "", true)
+	_objective.custom_minimum_size = Vector2(430, 0)
+	_objective.add_theme_font_size_override("font_size", 15)
+	_objective.add_theme_color_override("font_color", UiKit.CREAM)
 	orow.add_child(_objective)
-	_guide_list = UiKit.vbox([], 1)
+	_guide_list = UiKit.vbox([], 0)
 	ocol.add_child(_guide_list)
+	var info := UiKit.hbox([], 6)
+	ocol.add_child(info)
+	_period = UiKit.label("", "SmallLabel")
+	_period.add_theme_font_size_override("font_size", 12)
+	info.add_child(_period)
+	_place = UiKit.label("", "SmallLabel")
+	_place.add_theme_font_size_override("font_size", 12)
+	info.add_child(_place)
 	# Raccourcis, en haut à droite.
 	var buttons := UiKit.hbox([], 4)
 	buttons.position = Vector2(1280 - 12 - 180, 12)
@@ -166,43 +157,26 @@ func _init() -> void:
 
 func refresh(session: GameSession, place: String, season_label: String, objective: String) -> void:
 	var s := session.state
-	_period.text = "Période %d / %d — %s · %s" % [s.turn, session.data.turns(), session.period_name(), season_label]
-	_place.text = place
-	UiKit.clear(_chips)
-	var recv := Ledger.outstanding_total(s, Ledger.INCOME)
-	var pay := Ledger.outstanding_total(s, Ledger.EXPENSE)
-	_chips.add_child(_chip("cash", Format.money(s.cash), UiKit.CREAM if s.cash >= 0 else UiKit.BAD,
-		"Trésorerie : l'argent disponible sur le compte.\nÀ recevoir plus tard : %s\nÀ payer plus tard : %s" % [Format.money(recv), Format.money(pay)]))
-	_chips.add_child(_chip("people", "%d" % roundi(s.stat("fidelite")), UiKit.CREAM,
-		"Fidélité des publics : %d / 100.\nSpectateurs depuis le début de la saison : %s." % [roundi(s.stat("fidelite")), Format.thousands(int(s.totals["attendance_total"]))]))
-	_chips.add_child(_chip("star", "%d" % roundi(session.rayonnement()), UiKit.GOLD,
-		"Rayonnement : réputation artistique, relations avec les partenaires et diversité des publics."))
+	_period.text = "Période %d / %d · %s" % [s.turn, session.data.turns(), season_label]
+	_place.text = "· " + place
 	_objective.text = objective
 	_hint.visible = s.turn <= 2
 
 
 ## Guide « Prochaines étapes » (WorldRules.guide) : la première entrée est l'étape en
-## cours, déjà affichée en gros ; les suivantes s'ajoutent dessous, plus discrètes.
+## cours, déjà affichée ; on n'ajoute dessous que la suivante, en petit, pour rester discret.
 func set_guide(entries: Array) -> void:
 	UiKit.clear(_guide_list)
-	for e: Dictionary in entries.slice(1, 6):
-		var row := UiKit.hbox([UiKit.icon_rect(str(e["icon"]), 18)], 6)
-		var l := UiKit.label(str(e["text"]), "PaperLabel", true)
-		l.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		l.add_theme_font_size_override("font_size", 14)
-		l.add_theme_color_override("font_color", Color("6a2a34") if e["tone"] == "todo" else Color("6b5a4a"))
+	for e: Dictionary in entries.slice(1, 2):
+		if e["tone"] == "info":
+			continue
+		var row := UiKit.hbox([UiKit.icon_rect(str(e["icon"]), 14)], 6)
+		var l := UiKit.label(str(e["text"]), "SmallLabel", true)
+		l.custom_minimum_size = Vector2(430, 0)
+		l.add_theme_font_size_override("font_size", 13)
+		l.add_theme_color_override("font_color", UiKit.GOLD)
 		row.add_child(l)
 		_guide_list.add_child(row)
-
-
-func _chip(icon_name: String, value: String, color: Color, tip: String) -> Control:
-	var box := UiKit.hbox([UiKit.icon_rect(icon_name, 24)], 4)
-	var v := UiKit.label(value, "NumberLabel")
-	v.add_theme_color_override("font_color", color)
-	box.add_child(v)
-	box.tooltip_text = tip
-	box.mouse_filter = Control.MOUSE_FILTER_STOP
-	return box
 
 
 func toast(message: String, kind: String = "info") -> void:
@@ -220,7 +194,7 @@ func toast(message: String, kind: String = "info") -> void:
 
 
 func set_place(place: String) -> void:
-	_place.text = place
+	_place.text = "· " + place
 
 
 ## Bandeau éphémère au nom du quartier où l'on entre.

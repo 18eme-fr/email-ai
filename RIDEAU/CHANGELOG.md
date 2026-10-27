@@ -2,6 +2,23 @@
 
 Format inspiré de « Keep a Changelog ». Versions du jeu (`application/config/version`).
 
+## [0.17.3] — 2026-10-27 — Un écran plus léger, une ligne directrice, un escalier
+
+### Modifié
+- **Le haut de l'écran est allégé** : l'encadré « Prochaines étapes » devient un petit bandeau
+  sombre en haut à gauche — l'étape en cours, au plus une autre chose à faire en petit (le
+  metteur en scène ou une mission), puis la période et le lieu. Le reste est dans le journal (J).
+- **La carte en haut à gauche (trésorerie, publics, rayonnement) est retirée** : ses chiffres
+  restaient obscurs. Ils restent accessibles par les boutons Budget et Bilans.
+- **Ligne directrice** : chaque période se déroule en 4 étapes numérotées dans le bandeau
+  (« Étape 1/4 » choisir les spectacles, « 2/4 » choisir les actions avec l'équipe, « 3/4 » la
+  soirée, « 4/4 » le bilan), avec des phrases plus courtes.
+
+### Ajouté
+- **Un escalier d'honneur monte au bureau de la direction** depuis le hall : marches de chêne,
+  tapis rouge à tringles dorées, rampes en laiton, plaque « BUREAU » ; en haut, l'arrivée de
+  l'escalier devant la porte du bureau. On y marche sur le tapis.
+
 ## [0.17.2] — 2026-10-27 — Un vrai Paris
 
 ### Modifié

@@ -248,6 +248,7 @@ func test_objective_and_hud_are_shown() -> void:
 	await runner.simulate_frames(10)
 	var screen := runner.scene() as WorldScreen
 	assert_str(screen.hud._objective.text).contains("bureau")
+	assert_str(screen.hud._objective.text).starts_with("Étape 1/4")  # la ligne directrice de la période
 	assert_str(screen.hud._period.text).contains("Période 1")
 	assert_str(screen.hud._period.text).contains("Automne")
 
