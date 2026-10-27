@@ -166,7 +166,7 @@ func test_full_turn_through_the_interface() -> void:
 	assert_str(s.state.phase).is_equal(GameState.PHASE_REPORT)
 	assert_object(_find_button(screen, "Période suivante")).is_not_null()
 	# Onglets du bilan
-	for tab: String in ["Finances", "Spectacles", "Indicateurs", "Synthèse"]:
+	for tab: String in ["Comptes", "Spectacles", "Indicateurs", "En bref"]:
 		_find_button(screen, tab).pressed.emit()
 		await runner.simulate_frames(2)
 	# 6. Période suivante

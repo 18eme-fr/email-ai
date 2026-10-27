@@ -138,6 +138,21 @@ def costume(c):
     c.rect(7, 3, 2, 2, P["cream"])
 
 
+def redingote(c):
+    c.rect(4, 4, 8, 9, P["velvet3"])                 # redingote de velours
+    c.rect(4, 12, 3, 3, P["velvet2"])                # basques
+    c.rect(9, 12, 3, 3, P["velvet2"])
+    c.rect(1, 5, 3, 6, P["velvet2"])
+    c.rect(12, 5, 3, 6, P["velvet2"])
+    c.rect(6, 4, 4, 4, P["cream"])                   # plastron et nœud
+    c.rect(7, 5, 2, 1, P["ink"])
+    for y in (9, 11):
+        c.set(6, y, P["gold3"])
+        c.set(9, y, P["gold3"])
+    c.rect(5, 0, 6, 3, P["ink"])                     # haut-de-forme posé dessus
+    c.hline(4, 11, 3, P["ink"])
+
+
 def crown(c):
     c.rect(2, 8, 12, 5, P["gold2"])
     for x in (2, 6, 10, 13):
@@ -404,7 +419,7 @@ def lantern(c):
 
 ICONS = {f.__name__: f for f in [
     programme, programme_blue, newspaper, ticket, book, plaque, contract, ledger, poster_old, photo,
-    mask, gloves, fan, nose, hat, costume, crown, shoes, cape, mask_venice,
+    mask, gloves, fan, nose, hat, costume, redingote, crown, shoes, cape, mask_venice,
     maquette, brush, flower, miniature, canvas, miniature_orange, sign_complet, forest, letters, sketch,
     gel, wrench, register, talkie, microphone, par, registry, pulley, projector, console,
     book_signed, bouquet, glass, rose, frontpage, medal, notebook, letter, staff, lantern]}

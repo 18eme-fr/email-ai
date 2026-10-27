@@ -1,6 +1,6 @@
 class_name CollectionPanel
 extends RefCounted
-## Fenêtre de la collection : les cinq familles (10 objets chacune), les
+## Fenêtre de la collection : les cinq familles (10 objets, 11 pour les costumes), les
 ## enquêtes et indices, l'exposition dans les vitrines du hall et les
 ## récompenses (tenues, distinctions). Les objets manquants apparaissent en
 ## silhouette, avec des indices qui se dévoilent progressivement.

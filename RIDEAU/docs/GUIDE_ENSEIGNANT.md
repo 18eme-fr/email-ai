@@ -46,7 +46,7 @@ que la rentabilité ») ne réussit.
   réponse est corrigée avec son calcul. Mode **entraînement** sans enjeu dans le journal de bord.
 - **Compétences** (gestion financière, programmation, publics, partenariats, technique) : elles
   progressent avec les missions et les dossiers et débloquent des avantages.
-- **Collection de la Lanterne** : 50 objets d'histoire du spectacle (Vilar et Avignon, le TNP,
+- **Collection de la Lanterne** : 51 objets d'histoire du spectacle (Vilar et Avignon, le TNP,
   Malraux, la décentralisation, la commedia dell'arte, les métiers disparus comme le souffleur…)
   gardés d'une partie à l'autre. Elle peut servir de point de départ à un exercice (« choisissez
   trois objets et développez »), mais elle n'entre pas dans l'évaluation du jeu et ne change

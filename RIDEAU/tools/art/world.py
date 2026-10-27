@@ -405,35 +405,6 @@ def double_door(c, x0, y0, wood=P["wood2"], h=16):
 
 # --- Cartes intérieures ----------------------------------------------------------
 
-def draw_grand_stairs(base, top, x0, y0, w, h):
-    """Escalier d'honneur qui monte vers la droite (bureau de la direction) : marches de
-    chêne de plus en plus claires, tapis rouge et tringles dorées, rampes en laiton."""
-    steps = w // 6
-    for i in range(steps):
-        sx = x0 + i * 6
-        wood = shade(P["wood3"], 0.78 + i * 0.05)
-        base.rect(sx, y0, 6, h, wood)
-        base.vline(sx, y0, y0 + h - 1, shade(wood, 0.7))          # contremarche
-        base.vline(sx + 1, y0, y0 + h - 1, shade(wood, 1.15))     # nez de marche
-        base.rect(sx, y0 + 12, 6, h - 24, shade(P["velvet2"], 0.85 + i * 0.03))  # tapis rouge
-        base.hline(sx, sx + 5, y0 + 12, P["gold2"])
-        base.hline(sx, sx + 5, y0 + h - 13, P["gold2"])
-        base.vline(sx, y0 + 12, y0 + h - 13, shade(P["velvet2"], 0.6))       # ombre de la contremarche
-        base.vline(sx + 1, y0 + 13, y0 + h - 14, shade(P["velvet3"], 1.1))   # nez de marche sous le tapis
-        base.vline(sx + 2, y0 + 13, y0 + h - 14, P["gold2"])                 # tringle dorée
-    base.rect(x0 + w - 2, y0, 2, h, shade(P["wood3"], 1.25))       # palier
-    # Rampes : barreaux et main courante dorée (celle du bas passe devant les personnages)
-    for rail_y, canvas in ((y0 + 2, base), (y0 + h - 3, top)):
-        for i in range(steps + 1):
-            px = x0 + i * 6
-            canvas.vline(px, rail_y - 7, rail_y, P["wood1"])
-        canvas.line(x0, rail_y - 6, x0 + w - 1, rail_y - 12, P["gold2"])
-        canvas.line(x0, rail_y - 5, x0 + w - 1, rail_y - 11, P["gold1"])
-    for py in (y0 + 2, y0 + h - 3):  # pilastre de départ avec sa boule dorée
-        top.rect(x0 - 3, py - 10, 4, 12, P["wood0"])
-        top.ellipse(x0 - 1, py - 11, 2, 2, P["gold3"])
-
-
 def interior(world, map_id):
     m = world["maps"][map_id]
     g = m["grid"]
@@ -525,11 +496,11 @@ def interior(world, map_id):
         for vx in (3, 17):
             draw_showcase(base, top, vx * T, 9 * T, 3)
         draw_sign(base, 7 * T, 12 * T)
-        # Escalier d'honneur vers le bureau de la direction, et sa plaque de laiton
-        draw_grand_stairs(base, top, 18 * T, 5 * T, 3 * T, 4 * T)
-        base.rect(18 * T + 2, T + 1, 44, 10, P["gold2"])
-        base.frame(18 * T + 2, T + 1, 44, 10, P["gold0"])
-        text(base, 18 * T + 24 - text_width("BUREAU") // 2, T + 3, "BUREAU", P["wood0"])
+        # Porte de l'étage de la direction (cage d'escalier), avec sa plaque
+        base.rect(21 * T - 2, 6 * T - 10, 2, 2 * T + 10, P["gold1"])
+        base.rect(20 * T - 4, 5 * T + 1, 34, 9, P["gold2"])
+        base.frame(20 * T - 4, 5 * T + 1, 34, 9, P["gold0"])
+        text(base, 20 * T + 13 - text_width("ETAGE") // 2, 5 * T + 3, "ETAGE", P["wood0"])
         # Cadres d'affiches au mur (remplis dans le jeu)
         for fx in (5 * T + 6, 15 * T + 4):
             base.rect(fx - 2, T - 10, 44, 24, P["gold1"])
@@ -599,18 +570,6 @@ def interior(world, map_id):
         for _ in range(120):
             base.set(T + r.randrange(14 * T), 3 * T + r.randrange(6 * T), P["grey1"], 60)
     elif map_id == "bureau":
-        # Arrivée de l'escalier : les dernières marches, tapis rouge et rampe dorée
-        sx, sy = 5 * T, 9 * T
-        for i in range(4):
-            col = shade(P["wood3"], 1.15 - i * 0.12)
-            base.rect(sx, sy + i * 4, 3 * T, 4, col)
-            base.hline(sx, sx + 3 * T - 1, sy + i * 4, shade(col, 1.15))
-            base.rect(sx + 12, sy + i * 4, 3 * T - 24, 4, shade(P["velvet2"], 1.0 - i * 0.08))
-            base.set(sx + 12, sy + i * 4, P["gold3"])
-            base.set(sx + 3 * T - 13, sy + i * 4, P["gold3"])
-        for rx in (sx + 2, sx + 3 * T - 4):
-            top.rect(rx, sy - 8, 2, 24, P["gold2"])
-            top.ellipse(rx + 1, sy - 9, 2, 2, P["gold3"])
         draw_desk(base, 5 * T, 4 * T, 3 * T, [("book", 14), ("lamp", 36), ("paper", 3), ("mug", 28)])
         draw_desk(base, 9 * T, 6 * T, 2 * T, [("computer", 4), ("paper", 20)])
         draw_bookshelf(base, 1 * T, 2 * T, 3 * T)
@@ -1174,6 +1133,8 @@ PEOPLE = {
                            "accent": P["velvet3"], "scarf": True, "glasses": True},
     "directeur_archiviste": {"skin": P["skin1"], "hair": P["wood1"], "hair_style": "short", "top": P["wood3"], "legs": P["navy"],
                              "accent": P["green1"], "glasses": True, "scarf": True},
+    "directeur_redingote": {"skin": P["skin1"], "hair": P["wood1"], "hair_style": "short", "top": P["velvet3"], "legs": P["ink"],
+                            "accent": P["gold2"], "tophat": True, "frock": True},
     "directeur_regie": {"skin": P["skin1"], "hair": P["wood1"], "hair_style": "beanie", "top": P["ink"], "legs": P["grey0"],
                         "accent": P["gold2"]},
     "fernand": {"skin": P["skin1"], "hair": P["white"], "hair_style": "bald", "top": P["grey1"], "legs": P["navy"],
@@ -1290,6 +1251,15 @@ def person_frame(spec, direction, frame):
             o.hline(5, 10, 13 + y, shade(ap, 0.85))
         else:
             o.rect(6 if direction == "left" else 5, 13 + y, 5, 6, ap)
+    if spec.get("frock"):  # redingote : basques sur les cuisses, boutons dorés, plastron
+        o.rect(4, 18 + y, 8, 3, shade(top_c, 0.85))
+        if direction == "down":
+            o.vline(7, 18 + y, 20 + y, shade(top_c, 0.6))
+            o.rect(6, 11 + y, 4, 3, P["cream"])
+            o.hline(7, 8, 11 + y, P["ink"])
+            for by in (15, 17):
+                o.set(5, by + y, spec["accent"])
+                o.set(10, by + y, spec["accent"])
     if spec.get("cane") and direction in ("down", "left", "right"):
         cx = 13 if direction != "left" else 2
         o.vline(cx, 13 + y, 23, P["wood1"])
@@ -1378,6 +1348,11 @@ def person_frame(spec, direction, frame):
             o.rect(11, hy + 3, 2, 3, hair)
             if spec.get("tie"):
                 o.hline(6, 9, hy + 7, hd)  # moustache
+    if spec.get("tophat"):  # haut-de-forme noir à ruban rouge, posé sur le front
+        o.rect(5, 0, 6, hy + 2, P["ink"])
+        o.hline(6, 6, 0, P["grey0"])
+        o.hline(5, 10, hy + 1, P["velvet3"])
+        o.hline(3, 12, hy + 2, P["ink"])
     o.outline(P["ink"])
     if spec.get("child"):
         return _shrink_child(o)
@@ -1605,6 +1580,10 @@ def generate(root, out_dir):
     # Intérieurs de tous les bâtiments de la ville (interiors.py)
     import interiors
     for art in interiors.generate(world, maps_dir):
+        meta["variants"][art] = []
+    # L'étage de la direction : escalier, couloir, toilettes, archives (theatre_upstairs.py)
+    import theatre_upstairs
+    for art in theatre_upstairs.generate(world, maps_dir):
         meta["variants"][art] = []
     # Le quartier parisien de la fin de saison (paris.py)
     import paris

@@ -71,7 +71,7 @@ Les grilles servent à la fois aux collisions (jeu) et au dessin (`tools/art/wor
 après modification, relancer `python3 tools/art/generate_art.py`. Les tests
 `tests/world/test_world.gd` vérifient que tout reste accessible à pied.
 
-## `data/progression/collection.json` — collection permanente (50 objets)
+## `data/progression/collection.json` — collection permanente (51 objets)
 
 Registre lisible : `docs/COLLECTION.md`, régénéré et vérifié (quotas) par
 `python3 tools/collection_registry.py`. Classe : `Collection` (`scripts/progression/collection.gd`).

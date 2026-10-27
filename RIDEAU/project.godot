@@ -12,7 +12,7 @@ config_version=5
 
 config/name="RIDEAU !"
 config/description="À vous de diriger le spectacle. Jeu de gestion d'un petit théâtre français."
-config/version="0.17.3"
+config/version="0.17.4"
 run/main_scene="res://scenes/menus/main_menu.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 boot_splash/bg_color=Color(0.086, 0.063, 0.118, 1)

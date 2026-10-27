@@ -12,7 +12,7 @@ func before() -> void:
 
 
 func test_maps_are_rectangular_and_use_the_legend() -> void:
-	assert_int(world.maps.size()).is_equal(34)  # ville, 5 salles du théâtre, 27 intérieurs, Paris
+	assert_int(world.maps.size()).is_equal(38)  # ville, 9 pièces du théâtre, 27 intérieurs, Paris
 	for id: String in world.maps:
 		var m: WorldMap = world.maps[id]
 		for y in m.size.y:
@@ -314,14 +314,21 @@ func test_no_background_hiss_anywhere() -> void:
 			assert_bool(ResourceLoader.exists("res://assets/audio/ambience/%s.wav" % layer)).override_failure_message("prologue : ambiance manquante %s" % layer).is_true()
 
 
-## Un escalier mène au bureau de la direction : on le monte à pied, sur un tapis.
-func test_hall_has_a_staircase_to_the_office() -> void:
+## Entre le hall et le bureau : une cage d'escalier, puis un couloir à trois portes
+## (bureau, toilettes, archives). La malle des archives cache la redingote de 1923.
+func test_office_floor_is_reached_by_a_stairwell() -> void:
 	var hall := world.map("hall")
-	var stairs := 0
 	for y in hall.size.y:
 		for x in hall.size.x:
-			if hall.char_at(Vector2i(x, y)) == "S":
-				stairs += 1
-	assert_int(stairs).is_greater(10)
-	assert_array(hall.find_path(Vector2i(15, 6), Vector2i(21, 6))).is_not_empty()
-	assert_str(WorldRules.footstep_surface(hall, Vector2i(19, 6), "ete", "clair")).is_equal("tapis")
+			assert_str(hall.char_at(Vector2i(x, y))).override_failure_message("plus d'escalier dans le hall").is_not_equal("S")
+	var to := func(m: WorldMap) -> Array:
+		return m.doors.map(func(d: Dictionary) -> String: return str(d["to"]))
+	assert_array(to.call(hall)).contains(["escalier"])
+	assert_array(to.call(world.map("escalier"))).contains(["hall", "couloir"])
+	assert_array(to.call(world.map("couloir"))).contains(["bureau", "toilettes", "archives", "escalier"])
+	assert_array(to.call(world.map("bureau"))).contains_exactly(["couloir"])
+	var stairs := world.map("escalier")
+	assert_array(stairs.find_path(Vector2i(5, 7), Vector2i(5, 2))).is_not_empty()
+	var archives := world.map("archives")
+	assert_bool(archives.spot("malle_archives").is_empty()).is_false()
+	assert_str(WorldRules.footstep_surface(stairs, Vector2i(5, 3), "ete", "clair")).is_equal("tapis")

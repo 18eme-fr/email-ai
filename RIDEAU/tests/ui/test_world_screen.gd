@@ -100,9 +100,10 @@ func test_a_full_period_on_foot() -> void:
 	await _answer(runner, screen, 0)
 	assert_array(s.state.actions).contains(["formation"])
 	await _wait(runner, func() -> bool: return not screen._busy)
-	# 4. Descendre au hall par la porte du bureau.
-	screen._walk_then([Vector2i(6, 9)], Callable())
-	assert_bool(await _wait(runner, func() -> bool: return screen.map.id == "hall" and not screen._busy)).is_true()
+	# 4. Descendre au hall : bureau → couloir → cage d'escalier → hall.
+	for hop: Array in [[Vector2i(6, 9), "couloir"], [Vector2i(9, 5), "escalier"], [Vector2i(5, 8), "hall"]]:
+		screen._walk_then([hop[0]], Callable())
+		assert_bool(await _wait(runner, func() -> bool: return screen.map.id == hop[1] and not screen._busy)).is_true()
 	assert_bool(screen.npcs.has("ines")).is_true()
 	# 5. Signer la feuille de route : l'événement arrive, quelqu'un vient vous voir.
 	screen.open_phase_window()

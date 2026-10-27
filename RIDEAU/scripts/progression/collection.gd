@@ -1,6 +1,6 @@
 class_name Collection
 extends RefCounted
-## Collection permanente de la Lanterne : 50 objets en 5 familles
+## Collection permanente de la Lanterne : 51 objets en 5 familles
 ## (data/progression/collection.json), conservés d'une partie à l'autre dans
 ## user://collection.json. Toute acquisition se décide ici, côté logique :
 ## l'écran du monde se contente de signaler ce que fait le joueur (parler,
@@ -416,6 +416,8 @@ func reward_unlocked(r: Dictionary) -> bool:
 		return false
 	if when.has("family") and count(str(when["family"])) < total(str(when["family"])):
 		return false
+	if when.has("item") and not has(str(when["item"])):
+		return false
 	return true
 
 
@@ -434,6 +436,8 @@ func reward_condition(r: Dictionary) -> String:
 	var when: Dictionary = r.get("when", {})
 	if when.has("family"):
 		return "Famille « %s » complète" % family_info(str(when["family"]))["label"]
+	if when.has("item"):
+		return "Trouver « %s »" % object(str(when["item"])).get("name", "?")
 	return "%d objets" % int(when.get("total", 0))
 
 

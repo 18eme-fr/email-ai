@@ -44,10 +44,10 @@ func _count_by(col: Collection, key: String) -> Dictionary:
 
 func test_catalog_respects_the_quotas() -> void:
 	var col := _fresh()
-	assert_int(col.total()).is_equal(50)
-	assert_dict(_count_by(col, "family")).is_equal({"archives": 10, "costumes": 10, "decors": 10, "technique": 10, "legendes": 10})
-	assert_dict(_count_by(col, "rarity")).is_equal({"commun": 20, "peu_commun": 15, "rare": 10, "legendaire": 4, "mythique": 1})
-	assert_dict(_count_by(col, "method")).is_equal({"exploration": 14, "mission": 12, "pnj": 8, "secret": 6, "progression": 5, "evenement": 5})
+	assert_int(col.total()).is_equal(51)
+	assert_dict(_count_by(col, "family")).is_equal({"archives": 10, "costumes": 11, "decors": 10, "technique": 10, "legendes": 10})
+	assert_dict(_count_by(col, "rarity")).is_equal({"commun": 20, "peu_commun": 16, "rare": 10, "legendaire": 4, "mythique": 1})
+	assert_dict(_count_by(col, "method")).is_equal({"exploration": 15, "mission": 12, "pnj": 8, "secret": 6, "progression": 5, "evenement": 5})
 	var ids := {}
 	var icons := {}
 	for o: Dictionary in col.objects:
@@ -57,7 +57,7 @@ func test_catalog_respects_the_quotas() -> void:
 		for key: String in ["name", "description", "hint2", "hint3"]:
 			assert_str(str(o[key])).override_failure_message("%s : %s vide" % [o["id"], key]).is_not_empty()
 		assert_bool(ResourceLoader.exists("res://assets/collection/%s.png" % o["icon"])).override_failure_message("Icône manquante : %s" % o["icon"]).is_true()
-	assert_int(icons.size()).override_failure_message("Chaque objet doit avoir sa propre illustration").is_equal(50)
+	assert_int(icons.size()).override_failure_message("Chaque objet doit avoir sa propre illustration").is_equal(51)
 
 
 func test_every_reference_exists_in_the_game() -> void:
@@ -194,7 +194,7 @@ func test_all_fifty_objects_can_really_be_obtained() -> void:
 		if not col.has(o["id"]):
 			missing.append(o["id"])
 	assert_array(missing).override_failure_message("Objets impossibles à obtenir : %s" % [missing]).is_empty()
-	assert_int(col.count()).is_equal(50)
+	assert_int(col.count()).is_equal(51)
 	for q: Dictionary in col.quests:
 		assert_str(col.quest_status(q["id"])).is_equal("done")
 	# La collection ne touche jamais à la gestion.
@@ -393,3 +393,15 @@ func test_a_whole_season_with_the_collection() -> void:
 	assert_int(col.count()).is_greater(0)
 	for id: String in col.owned:
 		assert_str(str(col.object(id)["trigger"]["type"])).is_equal("state")
+
+
+## La redingote de 1923, dans la malle des archives, débloque aussitôt sa tenue.
+func test_archive_costume_unlocks_its_outfit() -> void:
+	var col := _fresh()
+	var s := _session()
+	assert_bool(col.has_reward("redingote")).is_false()
+	assert_bool(col.set_outfit("redingote")).is_false()
+	col.on_examine(s, "malle_archives")
+	assert_bool(col.has("redingote_1923")).is_true()
+	assert_bool(col.set_outfit("redingote")).is_true()
+	assert_str(col.outfit_sprite()).is_equal("directeur_redingote")

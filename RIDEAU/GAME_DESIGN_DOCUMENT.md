@@ -78,7 +78,7 @@ ville sert de « terrain » au cours. Un bus relie les quartiers ; le plan (touc
 retrouver. Explorer reste facultatif : aucune décision de gestion n'y est cachée hors des lieux
 déjà connus (place, théâtre).
 
-**La collection de la Lanterne (depuis la version 0.14)** : 50 objets d'histoire du spectacle,
+**La collection de la Lanterne (depuis la version 0.14)** : 51 objets d'histoire du spectacle,
 en cinq familles de dix (archives, costumes et accessoires, décors et scénographie, trésors
 techniques, légendes du spectacle vivant), gardés d'une partie à l'autre. C'est une mécanique
 secondaire : elle récompense l'exploration et la curiosité sans jamais toucher à la gestion.

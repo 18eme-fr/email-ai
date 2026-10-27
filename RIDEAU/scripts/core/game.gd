@@ -59,7 +59,7 @@ func _smoke_test() -> void:
 	ok = ok and world_ok
 	var col := Collection.new("user://autotest_collection.json", "")
 	col.reset()
-	var col_ok := col.total() == 50 and not col.on_talk(null, "touriste").is_empty() and col.has("miniature_lanterne") \
+	var col_ok := col.total() == 51 and not col.on_talk(null, "touriste").is_empty() and col.has("miniature_lanterne") \
 			and load("res://assets/collection/miniature.png") != null
 	col.reset()
 	print("[autotest] collection : %d objets, %s" % [col.total(), "OK" if col_ok else "ÉCHEC"])

@@ -13,12 +13,14 @@ from collections import Counter
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 QUOTAS = {
-    "family": {"archives": 10, "costumes": 10, "decors": 10, "technique": 10, "legendes": 10},
-    "rarity": {"commun": 20, "peu_commun": 15, "rare": 10, "legendaire": 4, "mythique": 1},
-    "method": {"exploration": 14, "mission": 12, "pnj": 8, "secret": 6, "progression": 5, "evenement": 5},
+    "family": {"archives": 10, "costumes": 11, "decors": 10, "technique": 10, "legendes": 10},
+    "rarity": {"commun": 20, "peu_commun": 16, "rare": 10, "legendaire": 4, "mythique": 1},
+    "method": {"exploration": 15, "mission": 12, "pnj": 8, "secret": 6, "progression": 5, "evenement": 5},
 }
 MAPS = {"rue": "la ville", "hall": "le hall", "salle": "la salle", "coulisses": "les coulisses", "bureau": "le bureau",
-        "reserve": "la réserve"}
+        "reserve": "la réserve",
+        "escalier": "la cage d'escalier", "couloir": "le couloir de la direction", "toilettes": "les toilettes",
+        "archives": "les archives"}
 
 
 def load():
@@ -122,7 +124,7 @@ def main():
     out = ["# Registre de la collection de la Lanterne", "",
            "*Généré par `python3 tools/collection_registry.py` à partir de `data/progression/collection.json` : "
            "ne pas modifier à la main.*", "",
-           "50 objets, conservés d'une partie à l'autre (`user://collection.json`). Aucun objet ne donne d'avantage "
+           "51 objets, conservés d'une partie à l'autre (`user://collection.json`). Aucun objet ne donne d'avantage "
            "de gestion ; les récompenses sont décoratives (tenues, guirlande du hall, distinctions).", "",
            "## Répartition (vérifiée par le script et par `tests/progression/test_collection.gd`)", "",
            "| | " + " | ".join(rar[r] for r in QUOTAS["rarity"]) + " | Total |", "|---|" + "---|" * 6]
@@ -131,7 +133,7 @@ def main():
         c = Counter(o["rarity"] for o in objs)
         out.append("| %s | %s | %d |" % (f["title"], " | ".join(str(c.get(r, 0)) for r in QUOTAS["rarity"]), len(objs)))
     c = Counter(o["rarity"] for o in col["objects"])
-    out.append("| **Total** | %s | **50** |" % " | ".join("**%d**" % c[r] for r in QUOTAS["rarity"]))
+    out.append("| **Total** | %s | **51** |" % " | ".join("**%d**" % c[r] for r in QUOTAS["rarity"]))
     out += ["", "| Mode d'obtention principal | Objets |", "|---|---|"]
     m = Counter(o["method"] for o in col["objects"])
     for k in QUOTAS["method"]:
@@ -180,7 +182,8 @@ def main():
             "## Récompenses", "", "| Palier | Récompense | Type |", "|---|---|---|"]
     for r in col["rewards"]:
         when = r["when"]
-        palier = ("%d objets" % when["total"]) if "total" in when else "famille « %s » complète" % when["family"]
+        palier = ("%d objets" % when["total"]) if "total" in when else (
+            "famille « %s » complète" % when["family"] if "family" in when else "trouver « %s »" % when["item"])
         out.append("| %s | %s | %s |" % (palier, r["label"], {"outfit": "tenue", "decor": "décor du hall", "title": "distinction"}[r["kind"]]))
     path = os.path.join(ROOT, "docs", "COLLECTION.md")
     with open(path, "w", encoding="utf-8") as f:

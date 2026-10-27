@@ -159,6 +159,12 @@ func _do_action(action: String) -> void:
 				# map:<carte>:<x>:<y>:<direction>
 				var p := action.split(":")
 				scene.load_map(p[1], Vector2i(int(p[2]), int(p[3])), p[4] if p.size() > 4 else "down")
+			elif action.begins_with("discover:"):
+				# discover:<objet> : la fenêtre de découverte, puis la collection sur sa famille
+				var game = root.get_node("Game")
+				var oid := action.substr(9)
+				game.collection.owned.erase(oid)
+				game.collection_event([{"kind": "object", "id": oid, "object": game.collection.object(oid), "text": ""}])
 			elif action.begins_with("upgrade:"):
 				root.get_node("Game").session.buy_upgrade(action.substr(8))
 				scene._reload_here()

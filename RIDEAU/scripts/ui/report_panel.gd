@@ -18,7 +18,7 @@ func _ready() -> void:
 	_tabs = UiKit.hbox([], 4)
 	add_child(_tabs)
 	var group := ButtonGroup.new()
-	for tab: Array in [["synthese", "Synthèse"], ["missions", "Missions"], ["finances", "Finances"], ["spectacles", "Spectacles"], ["indicateurs", "Indicateurs"]]:
+	for tab: Array in [["synthese", "En bref"], ["missions", "Missions"], ["finances", "Comptes"], ["spectacles", "Spectacles"], ["indicateurs", "Indicateurs"]]:
 		var b := UiKit.button(tab[1], "SecondaryButton")
 		b.toggle_mode = true
 		b.button_group = group
@@ -110,44 +110,65 @@ func _missions() -> void:
 		_content.add_child(UiKit.label("Toujours en cours : " + ", ".join(names), "SmallLabel", true))
 
 
+## « En bref » : un verdict, trois chiffres, les postes qui expliquent le gain ou la perte,
+## et un seul conseil. Le détail des écritures reste dans l'onglet « Comptes ».
 func _synthese() -> void:
-	var fin: Dictionary = report["finance"]
+	var d := ReportDigest.digest(session, report)
+	var good: bool = d["tone"] == "good"
+	var verdict := UiKit.label(str(d["verdict"]), "SubHeaderLabel", true)
+	verdict.add_theme_font_size_override("font_size", 22)
+	verdict.add_theme_color_override("font_color", UiKit.GOOD if good else UiKit.BAD)
+	_content.add_child(verdict)
 	var row := UiKit.hbox([], 8)
-	row.add_child(_big_number("Résultat de la période", fin["resultat"], "Produits − charges engagés pendant la période.", "tresorerie_resultat"))
-	row.add_child(_big_number("Variation de trésorerie", fin["variation"], "Argent réellement entré − argent réellement sorti.", "tresorerie_resultat"))
+	for f: Dictionary in d["figures"]:
+		row.add_child(_figure(f))
 	_content.add_child(row)
-	var att := UiKit.rich("Entrées de la période : [b]%s[/b]   ·   Trésorerie : [b]%s[/b]" % [Format.thousands(int(report["attendance"])), Format.money(int(fin["cash_after"]))])
-	_content.add_child(att)
+	var box := UiKit.panel("PaperPanel")
+	var col := UiKit.vbox([], 1)
+	box.add_child(col)
+	col.add_child(UiKit.hbox([UiKit.label("D'où vient ce résultat ?", "PaperTitleLabel"), UiKit.spacer(), UiKit.notion_link("tresorerie_resultat")]))
+	for line: Dictionary in d["lines"]:
+		col.add_child(_money_line(str(line["label"]), int(line["amount"]), false))
+	col.add_child(HSeparator.new())
+	col.add_child(_money_line("Résultat de la période", int(report["finance"]["resultat"]), true))
+	if str(d["account"]) != "":
+		col.add_child(UiKit.label(str(d["account"]), "PaperLabel", true))
+	_content.add_child(box)
 	for w: String in report.get("warnings", []):
 		var l := UiKit.label("⚠ " + w, "", true)
 		l.add_theme_color_override("font_color", UiKit.BAD)
 		_content.add_child(l)
-	if not report.get("event", {}).is_empty():
-		var ev: Dictionary = report["event"]
-		_content.add_child(UiKit.rich("[color=#c9a24b]Événement :[/color] %s — %s" % [ev["title"], ev["choice"]]))
-	var box := UiKit.panel("PaperPanel")
-	var col := UiKit.vbox([], 4)
-	box.add_child(col)
-	col.add_child(UiKit.label("Pourquoi ces résultats ?", "PaperTitleLabel"))
-	for line: String in report.get("explanations", []):
-		var r := UiKit.rich("• " + line)
-		r.theme_type_variation = "PaperRichText"
-		col.add_child(r)
-	_content.add_child(box)
+	_content.add_child(UiKit.hbox([UiKit.icon_rect("star", 20), UiKit.label("Conseil : " + str(d["tip"]), "", true)], 6))
 
 
-func _big_number(title: String, value: int, help: String, notion: String) -> Control:
+func _figure(f: Dictionary) -> Control:
 	var p := UiKit.panel("InsetPanel")
 	p.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	var col := UiKit.vbox([], 0)
 	p.add_child(col)
-	col.add_child(UiKit.hbox([UiKit.label(title, "SmallLabel"), UiKit.spacer(), UiKit.notion_link(notion)]))
-	var v := UiKit.label(Format.signed_money(value), "NumberLabel")
-	v.add_theme_font_size_override("font_size", 40)
-	v.add_theme_color_override("font_color", UiKit.GOOD if value >= 0 else UiKit.BAD)
+	col.add_child(UiKit.label(str(f["label"]), "SmallLabel"))
+	var v := UiKit.label(str(f["value"]), "NumberLabel")
+	v.add_theme_font_size_override("font_size", 26)
 	col.add_child(v)
-	col.add_child(UiKit.label(help, "SmallLabel", true))
+	var delta := UiKit.label(str(f["delta"]), "SmallLabel")
+	var txt := str(f["delta"])
+	if txt.begins_with("+"):
+		delta.add_theme_color_override("font_color", UiKit.GOOD)
+	elif txt.begins_with("−") or txt.begins_with("-"):
+		delta.add_theme_color_override("font_color", UiKit.BAD)
+	col.add_child(delta)
 	return p
+
+
+func _money_line(label: String, amount: int, bold: bool) -> Control:
+	var line := UiKit.hbox()
+	var name := UiKit.label(label, "PaperTitleLabel" if bold else "PaperLabel", true)
+	name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	line.add_child(name)
+	var v := UiKit.label(Format.signed_money(amount), "PaperTitleLabel" if bold else "PaperLabel")
+	v.add_theme_color_override("font_color", Color("2f6b33") if amount >= 0 else Color("9a2a2a"))
+	line.add_child(v)
+	return line
 
 
 func _finances() -> void:

@@ -2,6 +2,29 @@
 
 Format inspiré de « Keep a Changelog ». Versions du jeu (`application/config/version`).
 
+## [0.17.4] — 2026-10-27 — Des bilans clairs, un étage pour la direction
+
+### Modifié
+- **Le bilan de chaque période se lit en un coup d'œil** (onglet « En bref ») : une phrase
+  (« Vous avez gagné / perdu X € cette période »), trois chiffres (l'argent sur le compte,
+  les spectateurs et le remplissage, l'image du théâtre), puis « D'où vient ce résultat ? » :
+  au plus six lignes (billets vendus, aides, spectacles, frais fixes, actions, imprévus…) dont
+  la somme donne le résultat. Une seule phrase explique pourquoi le compte n'a pas bougé du
+  même montant (sommes réglées plus tard), et un seul conseil pour la période suivante.
+  Le détail des écritures reste dans l'onglet « Comptes ».
+- **L'escalier du hall est retiré** : le hall retrouve son plan d'origine, avec une porte
+  « ÉTAGE » à droite.
+
+### Ajouté
+- **L'étage de la direction**, entre le hall et le bureau : une **cage d'escalier** (escalier
+  à tapis rouge, portraits des anciens directeurs, plan de l'étage), puis un **couloir** à trois
+  portes : le **bureau de la direction**, les **toilettes** (cabines, lavabos) et les
+  **archives** (bureau de l'archiviste, registres, fichier des spectacles, malle aux costumes).
+  Les portes n'ont pas d'écriteau ; la flèche dorée montre toujours le chemin du bureau.
+- **Un nouvel objet de collection** dans la malle des archives : la **redingote du premier
+  directeur** (1923). La trouver débloque une **nouvelle tenue** pour le personnage
+  (redingote rouge et haut-de-forme). La collection passe à 51 objets.
+
 ## [0.17.3] — 2026-10-27 — Un écran plus léger, une ligne directrice, un escalier
 
 ### Modifié

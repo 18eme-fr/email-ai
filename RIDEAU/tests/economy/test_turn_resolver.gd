@@ -126,3 +126,21 @@ func test_report_explains_results() -> void:
 	assert_array(report["explanations"]).is_not_empty()
 	assert_str(str(report["explanations"][0])).contains("Résultat de la période")
 	assert_dict(report["stat_changes"]).contains_keys(["diversite"])
+
+
+func test_digest_explains_the_result_in_a_few_lines() -> void:
+	var session := _session()
+	var report := _play_turn(session, [{"show_id": session.state.offers[0], "price_level": "normal"}], ["communication"])
+	var d := ReportDigest.digest(session, report)
+	var total := 0
+	for line: Dictionary in d["lines"]:
+		total += int(line["amount"])
+	assert_int(total).is_equal(int(report["finance"]["resultat"]))
+	assert_int((d["lines"] as Array).size()).is_less_equal(9)
+	assert_int((d["figures"] as Array).size()).is_equal(3)
+	assert_str(str(d["verdict"])).contains("cette période")
+	assert_str(str(d["tip"])).is_not_empty()
+	# Relâche : le conseil invite à programmer.
+	var idle := _session(12)
+	var empty := _play_turn(idle, [], [])
+	assert_str(str(ReportDigest.digest(idle, empty)["tip"])).contains("programmez")

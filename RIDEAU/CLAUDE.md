@@ -46,6 +46,10 @@ Contexte pour les prochaines sessions (humaines ou Claude Code).
   `Collection.on_*` ou `check_state` (jamais par l'interface) et ne donne aucun avantage de gestion.
   Après modification du catalogue : `python3 tools/collection_registry.py` (quotas + registre
   `docs/COLLECTION.md`) et les tests `tests/progression/test_collection.gd`.
+- **Étage de la direction** (cartes `escalier`, `couloir`, `toilettes`, `archives`) : écrit et
+  dessiné par `tools/art/theatre_upstairs.py` (appelé par `city_layout.py` et `world.py`).
+- **Bilan « en bref »** : `scripts/economy/report_digest.gd` (logique, testée) ; l'onglet détaillé
+  « Comptes » reste dans `ReportPanel`.
 - **Création et Paris** (`scripts/progression/creation.gd`, `data/story/creation.json`) : une
   étape par période avec le metteur en scène (lieu par mois dans `locations`), aucun effet sur la
   gestion. État dans `GameState.creation` (sauvegarde v4). Le quartier parisien est écrit par

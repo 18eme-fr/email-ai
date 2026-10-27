@@ -1,5 +1,5 @@
 {
- "_doc": "Collection permanente de la Lanterne (50 objets). Voir docs/COLLECTION.md (registre généré par tools/collection_registry.py) et docs/DATA_FORMAT.md.",
+ "_doc": "Collection permanente de la Lanterne (51 objets). Voir docs/COLLECTION.md (registre généré par tools/collection_registry.py) et docs/DATA_FORMAT.md.",
  "families": [
   {
    "id": "archives",
@@ -516,6 +516,23 @@
    "hint2": "Un mystérieux amateur d'objets rares.",
    "hint3": "Le collectionneur loge à l'Hôtel du Commerce à partir de la 3ᵉ période.",
    "exhibit": "vitrine"
+  },
+  {
+   "id": "redingote_1923",
+   "family": "costumes",
+   "rarity": "peu_commun",
+   "name": "Redingote du premier directeur",
+   "description": "Velours rouge, boutons dorés et haut-de-forme assorti. Le fondateur de la Lanterne la portait les soirs de première, en 1923.",
+   "icon": "redingote",
+   "method": "exploration",
+   "trigger": {
+    "type": "examine",
+    "spot": "malle_archives"
+   },
+   "hint2": "À l'étage de la direction.",
+   "hint3": "Fouillez la malle aux costumes, dans les archives.",
+   "exhibit": "vitrine",
+   "say": "Au fond de la malle, sous des tissus : une redingote rouge et son haut-de-forme. Elle est à votre taille ! (Nouvelle tenue dans la collection.)"
   },
   {
    "id": "maquette_carton",
@@ -1601,6 +1618,15 @@
    }
   },
   {
+   "id": "redingote",
+   "kind": "outfit",
+   "label": "Redingote de 1923",
+   "sprite": "directeur_redingote",
+   "when": {
+    "item": "redingote_1923"
+   }
+  },
+  {
    "id": "beret",
    "kind": "outfit",
    "label": "Béret d'artiste",
@@ -1632,7 +1658,7 @@
    "kind": "title",
    "label": "Gardien·ne de la Lanterne",
    "when": {
-    "total": 50
+    "total": 51
    }
   }
  ],

@@ -2,22 +2,22 @@
 
 *Généré par `python3 tools/collection_registry.py` à partir de `data/progression/collection.json` : ne pas modifier à la main.*
 
-50 objets, conservés d'une partie à l'autre (`user://collection.json`). Aucun objet ne donne d'avantage de gestion ; les récompenses sont décoratives (tenues, guirlande du hall, distinctions).
+51 objets, conservés d'une partie à l'autre (`user://collection.json`). Aucun objet ne donne d'avantage de gestion ; les récompenses sont décoratives (tenues, guirlande du hall, distinctions).
 
 ## Répartition (vérifiée par le script et par `tests/progression/test_collection.gd`)
 
 | | Commun | Peu commun | Rare | Légendaire | Mythique | Total |
 |---|---|---|---|---|---|---|
 | Les archives du théâtre | 5 | 3 | 2 | 0 | 0 | 10 |
-| Costumes et accessoires | 4 | 3 | 2 | 1 | 0 | 10 |
+| Costumes et accessoires | 4 | 4 | 2 | 1 | 0 | 11 |
 | Décors et scénographie | 4 | 3 | 2 | 1 | 0 | 10 |
 | Les trésors techniques | 4 | 4 | 2 | 0 | 0 | 10 |
 | Les légendes du spectacle vivant | 3 | 2 | 2 | 2 | 1 | 10 |
-| **Total** | **20** | **15** | **10** | **4** | **1** | **50** |
+| **Total** | **20** | **16** | **10** | **4** | **1** | **51** |
 
 | Mode d'obtention principal | Objets |
 |---|---|
-| Exploration | 14 |
+| Exploration | 15 |
 | Mission | 12 |
 | Rencontre | 8 |
 | Énigme ou secret | 6 |
@@ -64,6 +64,7 @@
 | 8 | `escarpins_lys` | Escarpins de Mlle Lys | Rare | Énigme ou secret | Fouiller (Entrée) dans les coulisses, case (4, 2) | indice(s) escarpins | — | vitrines du hall |
 | 9 | `cape_cid` | Cape de velours du Cid | Rare | Développement du théâtre | Vérifié après chaque étape : rénovation « loges » | aucune | — | vitrines du hall |
 | 10 | `masque_bauta` | Masque vénitien de la Bauta | Légendaire | Mission | Terminer l'enquête « collectionneur » | aucune | — | vitrines du hall |
+| 11 | `redingote_1923` | Redingote du premier directeur | Peu commun | Exploration | Examiner : Malle aux costumes (les archives) | aucune | — | vitrines du hall |
 
 - **Masque d'Arlequin** — Commedia dell'arte, Italie, XVIᵉ siècle : des personnages types, et beaucoup d'improvisation. *Indices : Dans la ville, loin du centre. / Au bout du quartier des Coteaux, côté est.*
 - **Gants de l'habilleuse** — Brodés « L. » au poignet. Dans un gant, un billet : « Il manque les escarpins de Mlle Lys. » *Indices : Dans les coulisses. / Fouillez le portant de costumes des coulisses.*
@@ -75,6 +76,7 @@
 - **Escarpins de Mlle Lys** — Satin rose usé jusqu'à la trame. Mlle Lys, danseuse de la Lanterne, les cachait pour qu'on ne les lui vole pas. *Indices : Quelqu'un les a cachés il y a longtemps. / La coiffeuse du milieu, dans les coulisses. Rémi, à l'accueil, connaît l'histoire.*
 - **Cape de velours du Cid** — Velours grenat, doublure dorée. Portée pour « Le Cid » en 1931, oubliée dans un placard des loges. *Indices : Elle dort dans un vieux placard. / Rénovez les loges et l'atelier des coulisses.*
 - **Masque vénitien de la Bauta** — Un masque de carnaval vénitien du XVIIIᵉ siècle, cédé par un collectionneur qui ne le confiait qu'aux connaisseurs. *Indices : Un mystérieux amateur d'objets rares. / Le collectionneur loge à l'Hôtel du Commerce à partir de la 3ᵉ période.*
+- **Redingote du premier directeur** — Velours rouge, boutons dorés et haut-de-forme assorti. Le fondateur de la Lanterne la portait les soirs de première, en 1923. *Indices : À l'étage de la direction. / Fouillez la malle aux costumes, dans les archives.*
 
 ## Décors et scénographie
 
@@ -82,7 +84,7 @@
 |---|---|---|---|---|---|---|---|---|
 | 1 | `maquette_carton` | Maquette de décor en carton | Commun | Exploration | Examiner : Établi de l'atelier (les coulisses) | aucune | — | vitrines du hall |
 | 2 | `pinceau_decorateur` | Pinceau de peintre-décorateur | Commun | Exploration | Ramasser (Entrée face à l'objet) dans la ville, case (71, 9) | aucune | — | vitrines du hall |
-| 3 | `fleur_tissu` | Fleur en tissu de décor | Commun | Exploration | Examiner : Fleuriste (la ville) | aucune | — | vitrines du hall |
+| 3 | `fleur_tissu` | Fleur en tissu de décor | Commun | Exploration | Examiner : Bouquets du jour (int_fleuriste) | aucune | — | vitrines du hall |
 | 4 | `miniature_lanterne` | Miniature de la Lanterne | Commun | Rencontre | Parler à « Touriste » | aucune | — | vitrines du hall |
 | 5 | `toile_etoilee` | Toile peinte du ciel étoilé | Peu commun | Exploration | Ramasser (Entrée face à l'objet) dans la réserve, case (3, 7) | aucune | — | vitrines du hall |
 | 6 | `miniature_orange` | Maquette du théâtre antique d'Orange | Peu commun | Mission | Vérifié après chaque étape : mission « mecenat » réussie OU dossier « mecenat » ≥ 80 % | aucune | Le dossier « Une proposition de mécénat » réussi à 80 % la donne aussi. | vitrines du hall |
@@ -169,8 +171,8 @@ Commence avec Bastien.
 
 1. Examiner le vieux projecteur de la réserve. *(Examiner : Vieux projecteur (la réserve))*
 2. En parler à Bastien. *(Parler à « Bastien »)*
-3. Trouver une lentille de Fresnel (disquaire). *(Examiner : Disquaire (la ville))*
-4. Trouver une lampe d'époque (La Fabrique). *(Examiner : La Fabrique (friche culturelle) (la ville))*
+3. Trouver une lentille de Fresnel (disquaire). *(Examiner : Bacs de vinyles (int_disquaire))*
+4. Trouver une lampe d'époque (La Fabrique). *(Examiner : Programme de la Fabrique (int_fabrique))*
 5. Rapporter les pièces à Bastien. *(Parler à « Bastien »)*
 
 ### Le collectionneur mystérieux — récompense : Masque vénitien de la Bauta (Légendaire)
@@ -185,7 +187,7 @@ Commence avec Karim, condition : période ≥ 3.
 
 1. Écouter Karim, à la maison de quartier. *(Parler à « Karim » — condition : période ≥ 3)*
 2. Examiner la fresque des Coteaux. *(Examiner : Fresque des Coteaux (la ville))*
-3. Convaincre le galeriste (3 objets exposés dans le hall). *(Examiner : Galerie d'art (la ville) — condition : 3 objets exposés)*
+3. Convaincre le galeriste (3 objets exposés dans le hall). *(Examiner : Exposition du moment (int_galerie) — condition : 3 objets exposés)*
 4. Rapporter l'esquisse à Karim. *(Parler à « Karim »)*
 
 ### La représentation perdue — récompense : La Lanterne d'Ondine (Mythique)
@@ -228,7 +230,8 @@ Commence avec Louison, condition : posséder affiche_1924.
 | 25 objets | Collectionneur·se de la Lanterne | distinction |
 | famille « archives » complète | Gilet d'archiviste | tenue |
 | famille « costumes » complète | Costume de gala | tenue |
+| trouver « redingote_1923 » | Redingote de 1923 | tenue |
 | famille « decors » complète | Béret d'artiste | tenue |
 | famille « technique » complète | Tenue de régie | tenue |
 | famille « legendes » complète | Habit de la Lanterne | tenue |
-| 50 objets | Gardien·ne de la Lanterne | distinction |
+| 51 objets | Gardien·ne de la Lanterne | distinction |

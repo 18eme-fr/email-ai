@@ -102,6 +102,10 @@
   "int_tour": [],
   "int_college": [],
   "int_maison_quartier": [],
+  "escalier": [],
+  "couloir": [],
+  "toilettes": [],
+  "archives": [],
   "paris": []
  }
 }

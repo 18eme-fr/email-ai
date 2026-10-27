@@ -245,6 +245,10 @@
   "u": {
    "name": "boîte de bouquiniste",
    "walk": false
+  },
+  "I": {
+   "name": "meuble",
+   "walk": false
   }
  },
  "start": {
@@ -2180,10 +2184,10 @@
     "#o.......,,,,.......o#",
     "#.ccccc..,,,,..ccccc.#",
     "#........,,,,........#",
-    "#........,,,,.....SSS#",
-    "#........,,,,.....SSSS",
-    "#........,,,,.....SSSS",
-    "#........,,,,.....SSS#",
+    "#........,,,,........#",
+    "#........,,,,........D",
+    "#........,,,,........D",
+    "#........,,,,........#",
     "#..UUU...,,,,....UUU.#",
     "#........,,,,........#",
     "#........,,,,........#",
@@ -2244,10 +2248,10 @@
       21,
       6
      ],
-     "to": "bureau",
+     "to": "escalier",
      "to_cell": [
-      6,
-      8
+      5,
+      7
      ],
      "facing": "up"
     },
@@ -2256,10 +2260,10 @@
       21,
       7
      ],
-     "to": "bureau",
+     "to": "escalier",
      "to_cell": [
       6,
-      8
+      7
      ],
      "facing": "up"
     }
@@ -2709,12 +2713,12 @@
       6,
       9
      ],
-     "to": "hall",
+     "to": "couloir",
      "to_cell": [
-      20,
-      6
+      3,
+      2
      ],
-     "facing": "left"
+     "facing": "down"
     }
    ],
    "spots": [
@@ -7250,6 +7254,480 @@
     "music": "ville_jour",
     "layers": {
      "foule": 0.25
+    },
+    "steps": "bois"
+   }
+  },
+  "escalier": {
+   "name": "Cage d'escalier",
+   "outdoor": false,
+   "grid": [
+    "############",
+    "#####DD#####",
+    "#o..SSSS..o#",
+    "#...SSSS...#",
+    "#...SSSS...#",
+    "#..........#",
+    "#B........x#",
+    "#o.........#",
+    "#####DD#####"
+   ],
+   "doors": [
+    {
+     "cell": [
+      5,
+      1
+     ],
+     "to": "couloir",
+     "to_cell": [
+      9,
+      4
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      6,
+      1
+     ],
+     "to": "couloir",
+     "to_cell": [
+      10,
+      4
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      5,
+      8
+     ],
+     "to": "hall",
+     "to_cell": [
+      20,
+      6
+     ],
+     "facing": "left"
+    },
+    {
+     "cell": [
+      6,
+      8
+     ],
+     "to": "hall",
+     "to_cell": [
+      20,
+      7
+     ],
+     "facing": "left"
+    }
+   ],
+   "spots": [
+    {
+     "id": "portraits",
+     "cells": [
+      [
+       2,
+       1
+      ],
+      [
+       3,
+       1
+      ],
+      [
+       8,
+       1
+      ],
+      [
+       9,
+       1
+      ]
+     ],
+     "label": "Portraits des anciens directeurs",
+     "kind": "flavor"
+    },
+    {
+     "id": "plan_etage",
+     "cells": [
+      [
+       10,
+       6
+      ]
+     ],
+     "label": "Plan de l'étage",
+     "kind": "flavor"
+    }
+   ],
+   "npcs": [],
+   "style": {
+    "floor": "marble",
+    "walls": "lanterne",
+    "wall": [
+     [
+      "frame",
+      2
+     ],
+     [
+      "frame",
+      3
+     ],
+     [
+      "frame",
+      8
+     ],
+     [
+      "frame",
+      9
+     ]
+    ]
+   },
+   "sound": {
+    "music": "foyer",
+    "layers": {},
+    "steps": "tapis"
+   }
+  },
+  "couloir": {
+   "name": "Couloir de la direction",
+   "outdoor": false,
+   "grid": [
+    "####################",
+    "###D#####D######D###",
+    "#o................o#",
+    "#,,,,,,,,,,,,,,,,,,#",
+    "#..................#",
+    "#########DD#########"
+   ],
+   "doors": [
+    {
+     "cell": [
+      3,
+      1
+     ],
+     "to": "bureau",
+     "to_cell": [
+      6,
+      8
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      9,
+      1
+     ],
+     "to": "toilettes",
+     "to_cell": [
+      4,
+      4
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      16,
+      1
+     ],
+     "to": "archives",
+     "to_cell": [
+      6,
+      8
+     ],
+     "facing": "up"
+    },
+    {
+     "cell": [
+      9,
+      5
+     ],
+     "to": "escalier",
+     "to_cell": [
+      5,
+      2
+     ],
+     "facing": "down"
+    },
+    {
+     "cell": [
+      10,
+      5
+     ],
+     "to": "escalier",
+     "to_cell": [
+      6,
+      2
+     ],
+     "facing": "down"
+    }
+   ],
+   "spots": [
+    {
+     "id": "affiches_couloir",
+     "cells": [
+      [
+       6,
+       1
+      ],
+      [
+       12,
+       1
+      ]
+     ],
+     "label": "Affiches des saisons passées",
+     "kind": "flavor"
+    }
+   ],
+   "npcs": [],
+   "style": {
+    "floor": "parquet",
+    "walls": "lanterne",
+    "wall": [
+     [
+      "poster",
+      6
+     ],
+     [
+      "poster",
+      12
+     ],
+     [
+      "clock",
+      14
+     ]
+    ]
+   },
+   "sound": {
+    "music": "foyer",
+    "layers": {
+     "bureau": 0.3
+    },
+    "steps": "bois"
+   }
+  },
+  "toilettes": {
+   "name": "Toilettes",
+   "outdoor": false,
+   "grid": [
+    "##########",
+    "##########",
+    "#IIII..II#",
+    "#........#",
+    "#o.......#",
+    "####D#####"
+   ],
+   "doors": [
+    {
+     "cell": [
+      4,
+      5
+     ],
+     "to": "couloir",
+     "to_cell": [
+      9,
+      2
+     ],
+     "facing": "down"
+    }
+   ],
+   "spots": [
+    {
+     "id": "cabines",
+     "cells": [
+      [
+       1,
+       2
+      ],
+      [
+       2,
+       2
+      ],
+      [
+       3,
+       2
+      ],
+      [
+       4,
+       2
+      ]
+     ],
+     "label": "Cabines",
+     "kind": "flavor"
+    },
+    {
+     "id": "lavabos",
+     "cells": [
+      [
+       7,
+       2
+      ],
+      [
+       8,
+       2
+      ]
+     ],
+     "label": "Lavabos",
+     "kind": "flavor"
+    }
+   ],
+   "npcs": [],
+   "style": {
+    "floor": "checker",
+    "walls": "carrelage",
+    "wall": []
+   },
+   "sound": {
+    "music": "foyer",
+    "layers": {},
+    "steps": "pierre"
+   }
+  },
+  "archives": {
+   "name": "Archives du théâtre",
+   "outdoor": false,
+   "grid": [
+    "##############",
+    "##############",
+    "#bbbb.kk.bbbb#",
+    "#............#",
+    "#.ddd....IIII#",
+    "#............#",
+    "#x...........#",
+    "#xx....,,,...#",
+    "#o.....,,,..o#",
+    "######D#######"
+   ],
+   "doors": [
+    {
+     "cell": [
+      6,
+      9
+     ],
+     "to": "couloir",
+     "to_cell": [
+      16,
+      2
+     ],
+     "facing": "down"
+    }
+   ],
+   "spots": [
+    {
+     "id": "bureau_archives",
+     "cells": [
+      [
+       2,
+       4
+      ],
+      [
+       3,
+       4
+      ],
+      [
+       4,
+       4
+      ]
+     ],
+     "label": "Bureau de l'archiviste",
+     "kind": "flavor"
+    },
+    {
+     "id": "registres",
+     "cells": [
+      [
+       1,
+       2
+      ],
+      [
+       2,
+       2
+      ],
+      [
+       3,
+       2
+      ],
+      [
+       4,
+       2
+      ],
+      [
+       9,
+       2
+      ],
+      [
+       10,
+       2
+      ],
+      [
+       11,
+       2
+      ],
+      [
+       12,
+       2
+      ]
+     ],
+     "label": "Registres des saisons",
+     "kind": "flavor"
+    },
+    {
+     "id": "fichier_archives",
+     "cells": [
+      [
+       6,
+       2
+      ],
+      [
+       7,
+       2
+      ]
+     ],
+     "label": "Fichier des spectacles",
+     "kind": "flavor"
+    },
+    {
+     "id": "malle_archives",
+     "cells": [
+      [
+       9,
+       4
+      ],
+      [
+       10,
+       4
+      ],
+      [
+       11,
+       4
+      ],
+      [
+       12,
+       4
+      ]
+     ],
+     "label": "Malle aux costumes",
+     "kind": "flavor"
+    }
+   ],
+   "npcs": [],
+   "style": {
+    "floor": "parquet",
+    "walls": "archives",
+    "wall": [
+     [
+      "window",
+      6,
+      2
+     ],
+     [
+      "map",
+      2
+     ]
+    ]
+   },
+   "sound": {
+    "music": "reserve",
+    "layers": {
+     "reserve": 0.4
     },
     "steps": "bois"
    }

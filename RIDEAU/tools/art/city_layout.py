@@ -450,6 +450,9 @@ def main():
             people[pid]["bark"] = pid[:-2]  # répliques communes (enfant, footballeur)
     for pid in ("passant_1", "passant_2", "passant_3", "passant_4"):
         people[pid]["home"] = "rue"
+    # L'étage de la direction, entre le hall et le bureau (theatre_upstairs.py).
+    import theatre_upstairs
+    print("étage :", ", ".join(theatre_upstairs.write(world)))
     # Le quartier parisien de la fin de saison (paris_layout.py).
     import paris_layout
     print("paris :", paris_layout.write(world), "cases praticables")
