@@ -229,10 +229,10 @@ func test_soundscape_follows_place_time_and_weather() -> void:
 	assert_bool(layers.has("pluie") or layers.has("riviere")).is_false()
 	assert_str(str(WorldRules.soundscape(city, park, "hiver", "jour", "neige", true)["music"])).is_equal("ville_fetes")
 	assert_str(str(WorldRules.soundscape(world.map("reserve"), Vector2i(7, 3), "ete", "jour", "clair", false)["music"])).is_equal("reserve")
-	var hall: Dictionary = WorldRules.soundscape(world.map("hall"), Vector2i(10, 8), "ete", "jour", "clair", false, 99, 5)["layers"]
-	assert_float(float(hall["foule"])).is_greater(0.0)
-	# Hall vide : pas de brouhaha.
-	assert_bool((WorldRules.soundscape(world.map("hall"), Vector2i(10, 8), "ete", "jour", "clair", false, 99, 0)["layers"] as Dictionary).has("foule")).is_false()
+	# Hall : la musique seule, sans brouhaha de foule, même plein de monde.
+	var hall: Dictionary = WorldRules.soundscape(world.map("hall"), Vector2i(10, 8), "ete", "jour", "clair", false, 99, 5)
+	assert_bool((hall["layers"] as Dictionary).is_empty()).is_true()
+	assert_str(str(hall["music"])).is_equal("foyer")
 
 
 func test_footstep_surfaces() -> void:

@@ -267,8 +267,7 @@ static func soundscape(map: WorldMap, cell: Vector2i, season_id: String, tod: St
 	else:
 		match map.id:
 			"hall":
-				if crowd > 0:  # hall vide : silence, pas de brouhaha
-					layers["foule"] = clampf(0.1 + crowd * 0.1, 0.0, 0.7)
+				pass  # la musique seule : le brouhaha de foule faisait un bruit de fond désagréable
 			"bureau":
 				layers["bureau"] = 0.8
 			"reserve":

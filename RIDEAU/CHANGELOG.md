@@ -2,6 +2,13 @@
 
 Format inspiré de « Keep a Changelog ». Versions du jeu (`application/config/version`).
 
+## [0.17.6] — 2026-10-27 — Hall sans bruit de fond
+
+### Modifié
+- **Le brouhaha de foule du hall d'entrée est supprimé** : on n'y entend plus que la musique
+  (le murmure de foule, qui grossissait avec le public attendu, faisait un bruit de fond
+  désagréable).
+
 ## [0.17.5] — 2026-10-27 — Hall sans écriteau
 
 ### Modifié
