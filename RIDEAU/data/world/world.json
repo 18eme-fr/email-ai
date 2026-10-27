@@ -2873,128 +2873,375 @@
    "name": "Paris",
    "outdoor": true,
    "grid": [
-    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-    "XXHHHHHHHHHHHHHHXHHHHHHHHHXHHHHHHHHHHHHHHHHXHHHHHHHXHHHHHHHX",
-    "XXHHHHHHHHHHHHHHXHHHHHHHHHXHHHHHHHHHHHHHHHHXHHHHHHHXHHHHHHHX",
-    "XXHHHHHHHHHHHHHHXHHHHHHHHHXHHHHHHHHHHHHHHHHXHHHHHHHXHHHHHHHX",
-    "XXHHHHHHHHHHHHHHXHHHHHHHHHXHHHHHHHHHHHHHHHHXHHHHHHHXHHHHHHHX",
-    "XXHHHHHHHHHHHHHHXHHHHHHHHHXHHHHHHHHHHHHHHHHXHHHHHHHXHHHHHHHX",
-    "XXHHHHHHHHHHHHHHXHHHHHHHHHXHHHHHHHHHHHHHHHHXHHHHHHHXHHHHHHHX",
-    "XXHHHHHHHHHHHHHHXHHHHHHHHHXHHHHHHHHHHHHHHHHXHHHHHHHXHHHHHHHX",
-    "XXHHHHHHddHHHHHHXHHHHdHHHHXHHHHHHHddHHHHHHHXHHHdHHHXHHHdHHHX",
-    "X__________________________________________________________X",
-    "X========zz=======================zz=======================X",
-    "X========zz=======================zz=======================X",
-    "X========zz=======================zz=======================X",
-    "X__________________________________________________________X",
-    "X++++VV+++++L++++++t++t++t++++xL+++++R+++++++++++L+++++++++X",
-    "X++++++K+++++++++++++++++++++++x++++++mm++++++N++++++++++++X",
-    "X++T++++++++++++++++++++++++++++++++++++++++++++++++++++T++X",
-    "X++++++++++++QQQ+++++++++++f++f++++++++++++++++++++++++++++X",
-    "X++++++++++++QQQ++++++++BBf+FF+++++++++++++++++++++++++++++X",
-    "XL+++++++++++QQQ++++++++++++FF+f+++++++++++++++++++++y++++LX",
-    "X++++++++++++++++++++++++++f++f++++++++++++++++++++++++++++X",
-    "X++++++++++++++++++++T++++++++++++++T++++++++++++++++++++++X",
-    "X+++++++++++++++++++++++++++++++++++++++++++++++++++K++++++X",
-    "X++T+++++++++++++BB+++++++++++++++++++++BB++++++++++++++T++X",
-    "X+++++++++T+++++++++++++++++++++++++++++++++T+++++MM+++++++X",
-    "X+++++++++++L++++++++++++++++++L+++++++++++++++++L+++++++++X",
-    "X__________________________________________________________X",
-    "X============================zz============================X",
-    "X============================zz============================X",
-    "X============================zz============================X",
-    "X__________________________________________________________X",
-    "XHHHHHHHHHHHHaaHHHHHHHHHHHHaaaaHHHHHHHHHHHHaaHHHHHHHHHHHHHHX",
-    "XHHHHHHHHHHHHaaHHHHHHHHHHHHaaaaHHHHHHHHHHHHaaHHHHHHHHHHHHHHX",
-    "XHHHHHHHHHHHHaaHHHHHHHHHHHHaoaaHHHHHHHHHHHHaaHHHHHHHHHHHHHHX",
-    "XHHHHHHHHHHHHaaHHHHHHHHHHHHaaaaHHHHHHHHHHHHaaHHHHHHHHHHHHHHX",
-    "XHHHHHHHHHHHHaaHHHHHHHHHHHHaaaaHHHHHHHHHHHHaaHHHHHHHHHHHHHHX",
-    "XHHHHHHHHHHHHEaHHHHHHHHHHHHaaaaHHHHHHHHHHHHaaHHHHHHHHHHHHHHX",
-    "XHHHHHHHHHHHHaaHHHHHHHHHHHHaaaaHHHHHHHHHHHHaaHHHHHHHHHHHHHHX",
-    "XHHHHHdHHHHHHaaHHHHHdHHHHHHaaaaHHHHHdHHHHHHaaHHHHHHddHHHHHHX",
-    "X++++++++++++++++++++++++++++++++++++++++++++++++++++++++++X",
-    "XWWWuuWWWWWuuWWWWWuuWWWWWuuWWWWWuuWWWWWuuWWWWWuuWWWWWuuWWWWX",
-    "X~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~X",
-    "X~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~X",
-    "X~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~X",
-    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "X~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~PPPP~~~~~~~~~~~~~~~~~~~X",
+    "X~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~PPPP~~~~~~~~~~~~~~~~~~~X",
+    "X~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~PPPP~~~~~~~~~~~~~~~~~~~X",
+    "X~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~PPPP~~~~~~~~~~~~~~~~~~~X",
+    "XWWuuWWWWuuWWWWuuWWWWuuWWWWuuWWWWuuWWWWWPPPPWWuuWWWWuuWWWWuuWWWX",
+    "X+++T+++++++T+++++++T+++++++T+++++++T+++++++++++++++T+++++++T++X",
+    "X+++++++L+++++++++++++++L+++++++++++++L++++++L++++++++++++L++++X",
+    "X=========zz=============================zz====================X",
+    "X=========zz=============================zz====================X",
+    "X=========zz=============================zz====================X",
+    "X=========zz=============================zz====================X",
+    "X______________________________________________________________X",
+    "X______________________________________________________________X",
+    "XHHHHHHHHHHHHHaaHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHaaHHHHHHX",
+    "XHHHHHHHHHHHHHaaHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHaaHHHHHHX",
+    "XHHHHHHHHHHHHHaaHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHaaHHHHHHX",
+    "XHHHHHHHHHHHHHaaHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHaaHHHHHHX",
+    "XHHHHHHHHHHHHHaaHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHaaHHHHHHX",
+    "XHHHHHHHHHHHHHaaHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHaaHHHHHHX",
+    "XHHHHHHHHHHHHHaaHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHaaHHHHHHX",
+    "XHHHHHHHHHHHHHaaHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHaaHHHHHHX",
+    "XHHHHHHHHHHHHHaaHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHaaHHHHHHX",
+    "XHHHHHHHHHHHHHaaHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHaaHHHHHHX",
+    "XHHHHHHddHHHHHaaHHHHHdHHHHHHHHHHHHHHddHHHHHHHHHHHHdHHHHaaHHdHHHX",
+    "X__VV____________t_t___t_t_______R______xx_____________________X",
+    "X_L__T___L__TK____________mm_T__L________L__NT___L___T___L___T_X",
+    "X=======zz==========================zz=================zz======X",
+    "X=======zz==========================zz=================zz======X",
+    "X=======zz==========================zz=================zz======X",
+    "X=======zz==========================zz=================zz======X",
+    "X______________________________________________________________X",
+    "X___L___________L___________L__________________L___________L___X",
+    "X++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++X",
+    "X++++T+++++++++++++++T++++++L++++++L+++++++T++++++++++++++T++++X",
+    "X+++++++++QQQ++++++++++++BB+++++++++++BB++++++++++++L+MM+++++++X",
+    "X+++++++++QQQ+++++++++++++++++FFFF+++++++++++++++++++++++++++++X",
+    "X+++++++++QQQ++++++++++++++++fFFFFf++++++++++++++++++++++++++++X",
+    "X+++++++++++++++++++++++++++++FFFF+++++++++++++++++++++++++++++X",
+    "X+++++++++++++++++++++++++++++++++++++++++++++++++Y++++++++++++X",
+    "X+++++++++++++++BB++++++y++++++++++++++++++++++++++++++++++++++X",
+    "X+++++++++++L+++++++++++++++++++++++++++K+++++BB+++++++++++++++X",
+    "X++++T+++++++++++++++T++++++L++++++L+++++++T++++++++++++++T++++X",
+    "X++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++X",
+    "X______________________________________________________________X",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
    ],
    "ground": [
-    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-    "XXHHHHHHHHHHHHHHXHHHHHHHHHXHHHHHHHHHHHHHHHHXHHHHHHHXHHHHHHHX",
-    "XXHHHHHHHHHHHHHHXHHHHHHHHHXHHHHHHHHHHHHHHHHXHHHHHHHXHHHHHHHX",
-    "XXHHHHHHHHHHHHHHXHHHHHHHHHXHHHHHHHHHHHHHHHHXHHHHHHHXHHHHHHHX",
-    "XXHHHHHHHHHHHHHHXHHHHHHHHHXHHHHHHHHHHHHHHHHXHHHHHHHXHHHHHHHX",
-    "XXHHHHHHHHHHHHHHXHHHHHHHHHXHHHHHHHHHHHHHHHHXHHHHHHHXHHHHHHHX",
-    "XXHHHHHHHHHHHHHHXHHHHHHHHHXHHHHHHHHHHHHHHHHXHHHHHHHXHHHHHHHX",
-    "XXHHHHHHHHHHHHHHXHHHHHHHHHXHHHHHHHHHHHHHHHHXHHHHHHHXHHHHHHHX",
-    "XXHHHHHHHHHHHHHHXHHHHHHHHHXHHHHHHHHHHHHHHHHXHHHHHHHXHHHHHHHX",
-    "X__________________________________________________________X",
-    "X========zz=======================zz=======================X",
-    "X========zz=======================zz=======================X",
-    "X========zz=======================zz=======================X",
-    "X__________________________________________________________X",
-    "X++++++++++++++++++++++++++++++++++++++++++++++++++++++++++X",
-    "X++++++++++++++++++++++++++++++++++++++++++++++++++++++++++X",
-    "X++++++++++++++++++++++++++++++++++++++++++++++++++++++++++X",
-    "X++++++++++++++++++++++++++++++++++++++++++++++++++++++++++X",
-    "X++++++++++++++++++++++++++++++++++++++++++++++++++++++++++X",
-    "X++++++++++++++++++++++++++++++++++++++++++++++++++++++++++X",
-    "X++++++++++++++++++++++++++++++++++++++++++++++++++++++++++X",
-    "X++++++++++++++++++++++++++++++++++++++++++++++++++++++++++X",
-    "X++++++++++++++++++++++++++++++++++++++++++++++++++++++++++X",
-    "X++++++++++++++++++++++++++++++++++++++++++++++++++++++++++X",
-    "X++++++++++++++++++++++++++++++++++++++++++++++++++++++++++X",
-    "X++++++++++++++++++++++++++++++++++++++++++++++++++++++++++X",
-    "X__________________________________________________________X",
-    "X============================zz============================X",
-    "X============================zz============================X",
-    "X============================zz============================X",
-    "X__________________________________________________________X",
-    "XHHHHHHHHHHHHaaHHHHHHHHHHHHaaaaHHHHHHHHHHHHaaHHHHHHHHHHHHHHX",
-    "XHHHHHHHHHHHHaaHHHHHHHHHHHHaaaaHHHHHHHHHHHHaaHHHHHHHHHHHHHHX",
-    "XHHHHHHHHHHHHaaHHHHHHHHHHHHaaaaHHHHHHHHHHHHaaHHHHHHHHHHHHHHX",
-    "XHHHHHHHHHHHHaaHHHHHHHHHHHHaaaaHHHHHHHHHHHHaaHHHHHHHHHHHHHHX",
-    "XHHHHHHHHHHHHaaHHHHHHHHHHHHaaaaHHHHHHHHHHHHaaHHHHHHHHHHHHHHX",
-    "XHHHHHHHHHHHHaaHHHHHHHHHHHHaaaaHHHHHHHHHHHHaaHHHHHHHHHHHHHHX",
-    "XHHHHHHHHHHHHaaHHHHHHHHHHHHaaaaHHHHHHHHHHHHaaHHHHHHHHHHHHHHX",
-    "XHHHHHHHHHHHHaaHHHHHHHHHHHHaaaaHHHHHHHHHHHHaaHHHHHHHHHHHHHHX",
-    "X++++++++++++++++++++++++++++++++++++++++++++++++++++++++++X",
-    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-    "X~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~X",
-    "X~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~X",
-    "X~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~X",
-    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "X~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~PPPP~~~~~~~~~~~~~~~~~~~X",
+    "X~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~PPPP~~~~~~~~~~~~~~~~~~~X",
+    "X~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~PPPP~~~~~~~~~~~~~~~~~~~X",
+    "X~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~PPPP~~~~~~~~~~~~~~~~~~~X",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXPPPPXXXXXXXXXXXXXXXXXXXX",
+    "X++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++X",
+    "X++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++X",
+    "X=========zz=============================zz====================X",
+    "X=========zz=============================zz====================X",
+    "X=========zz=============================zz====================X",
+    "X=========zz=============================zz====================X",
+    "X______________________________________________________________X",
+    "X______________________________________________________________X",
+    "XHHHHHHHHHHHHHaaHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHaaHHHHHHX",
+    "XHHHHHHHHHHHHHaaHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHaaHHHHHHX",
+    "XHHHHHHHHHHHHHaaHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHaaHHHHHHX",
+    "XHHHHHHHHHHHHHaaHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHaaHHHHHHX",
+    "XHHHHHHHHHHHHHaaHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHaaHHHHHHX",
+    "XHHHHHHHHHHHHHaaHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHaaHHHHHHX",
+    "XHHHHHHHHHHHHHaaHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHaaHHHHHHX",
+    "XHHHHHHHHHHHHHaaHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHaaHHHHHHX",
+    "XHHHHHHHHHHHHHaaHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHaaHHHHHHX",
+    "XHHHHHHHHHHHHHaaHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHaaHHHHHHX",
+    "XHHHHHHHHHHHHHaaHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHaaHHHHHHX",
+    "X______________________________________________________________X",
+    "X______________________________________________________________X",
+    "X=======zz==========================zz=================zz======X",
+    "X=======zz==========================zz=================zz======X",
+    "X=======zz==========================zz=================zz======X",
+    "X=======zz==========================zz=================zz======X",
+    "X______________________________________________________________X",
+    "X______________________________________________________________X",
+    "X++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++X",
+    "X++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++X",
+    "X++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++X",
+    "X++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++X",
+    "X++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++X",
+    "X++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++X",
+    "X++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++X",
+    "X++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++X",
+    "X++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++X",
+    "X++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++X",
+    "X++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++X",
+    "X______________________________________________________________X",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
    ],
    "doors": [],
    "spots": [
     {
-     "id": "gare_paris",
+     "id": "belvedere",
      "cells": [
       [
-       8,
-       11
+       41,
+       12
+      ],
+      [
+       42,
+       12
+      ]
+     ],
+     "label": "Vue sur la tour Eiffel",
+     "kind": "flavor",
+     "flavor": "tour_eiffel"
+    },
+    {
+     "id": "bouquinistes",
+     "cells": [
+      [
+       3,
+       17
       ],
       [
        9,
-       11
+       17
+      ],
+      [
+       15,
+       17
+      ],
+      [
+       21,
+       17
+      ],
+      [
+       27,
+       17
+      ],
+      [
+       33,
+       17
+      ],
+      [
+       46,
+       17
+      ],
+      [
+       52,
+       17
+      ],
+      [
+       58,
+       17
       ]
      ],
-     "label": "Gare de Paris-Est",
+     "label": "Boîtes des bouquinistes",
+     "kind": "flavor"
+    },
+    {
+     "id": "seine",
+     "cells": [
+      [
+       1,
+       17
+      ],
+      [
+       2,
+       17
+      ],
+      [
+       5,
+       17
+      ],
+      [
+       6,
+       17
+      ],
+      [
+       7,
+       17
+      ],
+      [
+       8,
+       17
+      ],
+      [
+       11,
+       17
+      ],
+      [
+       12,
+       17
+      ],
+      [
+       13,
+       17
+      ],
+      [
+       14,
+       17
+      ],
+      [
+       17,
+       17
+      ],
+      [
+       18,
+       17
+      ],
+      [
+       19,
+       17
+      ],
+      [
+       20,
+       17
+      ],
+      [
+       23,
+       17
+      ],
+      [
+       24,
+       17
+      ],
+      [
+       25,
+       17
+      ],
+      [
+       26,
+       17
+      ],
+      [
+       29,
+       17
+      ],
+      [
+       30,
+       17
+      ],
+      [
+       31,
+       17
+      ],
+      [
+       32,
+       17
+      ],
+      [
+       35,
+       17
+      ],
+      [
+       36,
+       17
+      ],
+      [
+       37,
+       17
+      ],
+      [
+       38,
+       17
+      ],
+      [
+       39,
+       17
+      ],
+      [
+       44,
+       17
+      ],
+      [
+       45,
+       17
+      ],
+      [
+       48,
+       17
+      ],
+      [
+       49,
+       17
+      ],
+      [
+       50,
+       17
+      ],
+      [
+       51,
+       17
+      ],
+      [
+       54,
+       17
+      ],
+      [
+       55,
+       17
+      ],
+      [
+       56,
+       17
+      ],
+      [
+       57,
+       17
+      ],
+      [
+       60,
+       17
+      ],
+      [
+       61,
+       17
+      ],
+      [
+       62,
+       17
+      ]
+     ],
+     "label": "Parapet de la Seine",
+     "kind": "flavor",
+     "flavor": "seine"
+    },
+    {
+     "id": "gare_paris",
+     "cells": [
+      [
+       7,
+       36
+      ],
+      [
+       8,
+       36
+      ]
+     ],
+     "label": "Gare de l'Est",
      "kind": "flavor"
     },
     {
@@ -3002,7 +3249,7 @@
      "cells": [
       [
        21,
-       11
+       36
       ]
      ],
      "label": "Café de la Comédie",
@@ -3013,12 +3260,12 @@
      "id": "theatre_lumieres",
      "cells": [
       [
-       34,
-       11
+       36,
+       36
       ],
       [
-       35,
-       11
+       37,
+       36
       ]
      ],
      "label": "Théâtre des Lumières",
@@ -3028,8 +3275,8 @@
      "id": "boulangerie_paris",
      "cells": [
       [
-       47,
-       11
+       50,
+       36
       ]
      ],
      "label": "Boulangerie Au Pain Doré",
@@ -3039,62 +3286,43 @@
      "id": "librairie_paris",
      "cells": [
       [
-       55,
-       11
+       59,
+       36
       ]
      ],
      "label": "Librairie des Planches",
      "kind": "flavor"
     },
     {
-     "id": "fontaine",
+     "id": "terrasse",
      "cells": [
       [
-       28,
-       21
+       17,
+       37
       ],
       [
-       29,
-       21
+       19,
+       37
       ],
       [
-       28,
-       22
+       23,
+       37
       ],
       [
-       29,
-       22
+       25,
+       37
       ]
      ],
-     "label": "Fontaine Wallace",
+     "label": "Terrasse du Café de la Comédie",
      "kind": "flavor",
-     "flavor": "fontaine_wallace"
-    },
-    {
-     "id": "manege",
-     "cells": [
-      [
-       13,
-       22
-      ],
-      [
-       14,
-       22
-      ],
-      [
-       15,
-       22
-      ]
-     ],
-     "label": "Manège de la place",
-     "kind": "flavor"
+     "flavor": "terrasse_paris"
     },
     {
      "id": "kiosque_paris",
      "cells": [
       [
-       46,
-       18
+       44,
+       38
       ]
      ],
      "label": "Kiosque à journaux",
@@ -3104,62 +3332,124 @@
      "id": "metro",
      "cells": [
       [
-       38,
-       18
+       26,
+       38
       ],
       [
-       39,
-       18
+       27,
+       38
       ]
      ],
      "label": "Entrée du métro",
      "kind": "flavor"
     },
     {
-     "id": "affiche_paris",
+     "id": "velos_paris",
      "cells": [
       [
-       7,
-       18
+       3,
+       37
       ],
       [
-       52,
-       25
+       4,
+       37
       ]
      ],
-     "label": "Colonne Morris",
-     "kind": "affiche_creation"
+     "label": "Vélos en libre-service",
+     "kind": "flavor"
     },
     {
-     "id": "terrasse",
+     "id": "decor_troupe",
      "cells": [
       [
-       19,
-       17
+       40,
+       37
       ],
       [
-       22,
-       17
+       41,
+       37
       ],
       [
-       25,
-       17
+       33,
+       37
       ]
      ],
-     "label": "Terrasse du Café de la Comédie",
+     "label": "Le décor et les costumes de la troupe",
+     "kind": "flavor"
+    },
+    {
+     "id": "fontaine",
+     "cells": [
+      [
+       30,
+       50
+      ],
+      [
+       31,
+       50
+      ],
+      [
+       32,
+       50
+      ],
+      [
+       33,
+       50
+      ],
+      [
+       30,
+       48
+      ],
+      [
+       33,
+       48
+      ]
+     ],
+     "label": "Fontaine des Lumières",
      "kind": "flavor",
-     "flavor": "terrasse_paris"
+     "flavor": "fontaine_lumieres"
+    },
+    {
+     "id": "manege",
+     "cells": [
+      [
+       10,
+       49
+      ],
+      [
+       11,
+       49
+      ],
+      [
+       12,
+       49
+      ]
+     ],
+     "label": "Manège de la place",
+     "kind": "flavor"
+    },
+    {
+     "id": "wallace",
+     "cells": [
+      [
+       50,
+       51
+      ]
+     ],
+     "label": "Fontaine Wallace",
+     "kind": "flavor",
+     "flavor": "fontaine_wallace"
     },
     {
      "id": "fleurs_paris",
      "cells": [
       [
-       50,
-       27
+       54,
+       47
       ],
       [
-       51,
-       27
+       55,
+       47
       ]
      ],
      "label": "Marchande de fleurs",
@@ -3169,405 +3459,131 @@
      "id": "chevalet",
      "cells": [
       [
-       53,
-       22
+       24,
+       52
       ]
      ],
      "label": "Chevalet du peintre",
      "kind": "flavor"
     },
     {
-     "id": "decor_troupe",
+     "id": "affiche_paris",
      "cells": [
-      [
-       30,
-       17
-      ],
-      [
-       31,
-       18
-      ],
-      [
-       37,
-       17
-      ]
-     ],
-     "label": "Le décor et les costumes de la troupe",
-     "kind": "flavor"
-    },
-    {
-     "id": "velos_paris",
-     "cells": [
-      [
-       5,
-       17
-      ],
-      [
-       6,
-       17
-      ]
-     ],
-     "label": "Vélos en libre-service",
-     "kind": "flavor"
-    },
-    {
-     "id": "brasserie",
-     "cells": [
-      [
-       6,
-       41
-      ]
-     ],
-     "label": "Brasserie Le Rideau Rouge",
-     "kind": "flavor"
-    },
-    {
-     "id": "galerie_paris",
-     "cells": [
-      [
-       20,
-       41
-      ]
-     ],
-     "label": "Galerie du Pont-Neuf",
-     "kind": "flavor"
-    },
-    {
-     "id": "immeuble_paris",
-     "cells": [
-      [
-       36,
-       41
-      ]
-     ],
-     "label": "Immeuble haussmannien",
-     "kind": "flavor"
-    },
-    {
-     "id": "hotel_paris",
-     "cells": [
-      [
-       51,
-       41
-      ],
-      [
-       52,
-       41
-      ]
-     ],
-     "label": "Hôtel des Artistes",
-     "kind": "flavor"
-    },
-    {
-     "id": "bouquinistes",
-     "cells": [
-      [
-       4,
-       43
-      ],
-      [
-       11,
-       43
-      ],
-      [
-       18,
-       43
-      ],
-      [
-       25,
-       43
-      ],
-      [
-       32,
-       43
-      ],
-      [
-       39,
-       43
-      ],
-      [
-       46,
-       43
-      ],
-      [
-       53,
-       43
-      ]
-     ],
-     "label": "Boîtes des bouquinistes",
-     "kind": "flavor"
-    },
-    {
-     "id": "seine",
-     "cells": [
-      [
-       2,
-       43
-      ],
-      [
-       3,
-       43
-      ],
-      [
-       6,
-       43
-      ],
-      [
-       7,
-       43
-      ],
-      [
-       8,
-       43
-      ],
-      [
-       9,
-       43
-      ],
-      [
-       10,
-       43
-      ],
       [
        13,
-       43
+       38
       ],
       [
-       14,
-       43
-      ],
-      [
-       15,
-       43
-      ],
-      [
-       16,
-       43
-      ],
-      [
-       17,
-       43
-      ],
-      [
-       20,
-       43
-      ],
-      [
-       21,
-       43
-      ],
-      [
-       22,
-       43
-      ],
-      [
-       23,
-       43
-      ],
-      [
-       24,
-       43
-      ],
-      [
-       27,
-       43
-      ],
-      [
-       28,
-       43
-      ],
-      [
-       29,
-       43
-      ],
-      [
-       30,
-       43
-      ],
-      [
-       31,
-       43
-      ],
-      [
-       34,
-       43
-      ],
-      [
-       35,
-       43
-      ],
-      [
-       36,
-       43
-      ],
-      [
-       37,
-       43
-      ],
-      [
-       38,
-       43
-      ],
-      [
-       41,
-       43
-      ],
-      [
-       42,
-       43
-      ],
-      [
-       43,
-       43
-      ],
-      [
-       44,
-       43
-      ],
-      [
-       45,
-       43
-      ],
-      [
-       48,
-       43
-      ],
-      [
-       49,
-       43
-      ],
-      [
-       50,
-       43
-      ],
-      [
-       51,
-       43
-      ],
-      [
-       52,
-       43
-      ],
-      [
-       55,
-       43
-      ],
-      [
-       56,
-       43
-      ],
-      [
-       57,
-       43
+       40,
+       53
       ]
      ],
-     "label": "Parapet de la Seine",
-     "kind": "flavor",
-     "flavor": "seine"
+     "label": "Colonne Morris",
+     "kind": "affiche_creation"
     }
    ],
    "npcs": [
     {
      "id": "lazare_paris",
      "cell": [
-      37,
-      12
+      38,
+      37
      ],
      "radius": 0
     },
     {
      "id": "helene_paris",
      "cell": [
-      23,
-      18
+      21,
+      38
      ],
      "radius": 1
     },
     {
      "id": "bastien_paris",
      "cell": [
-      32,
-      17
+      42,
+      38
      ],
      "radius": 1
     },
     {
      "id": "louison_paris",
      "cell": [
-      36,
-      17
+      34,
+      38
      ],
      "radius": 0
     },
     {
      "id": "ines_paris",
      "cell": [
-      44,
-      19
+      30,
+      44
      ],
      "radius": 2
     },
     {
      "id": "serveur_paris",
      "cell": [
-      21,
-      18
+      19,
+      38
      ],
      "radius": 2
     },
     {
      "id": "critique",
      "cell": [
-      41,
-      22
+      34,
+      47
      ],
      "radius": 1
     },
     {
      "id": "accordeoniste",
      "cell": [
-      31,
-      21
+      36,
+      52
      ],
      "radius": 0
     },
     {
      "id": "touriste_paris",
      "cell": [
-      26,
-      25
+      47,
+      50
      ],
      "radius": 4
     },
     {
      "id": "peintre",
      "cell": [
-      54,
-      22
+      25,
+      52
      ],
      "radius": 0
     },
     {
      "id": "bouquiniste",
      "cell": [
-      19,
-      42
+      22,
+      19
      ],
      "radius": 2
     },
     {
      "id": "parisienne",
      "cell": [
-      8,
-      24
+      15,
+      46
      ],
      "radius": 5
     },
     {
      "id": "enfant_paris",
      "cell": [
-      16,
-      23
+      11,
+      50
      ],
      "radius": 1
     }
@@ -3577,20 +3593,20 @@
      "id": "gare_paris",
      "style": "paris_gare",
      "rect": [
-      2,
-      4,
-      14,
-      8
+      1,
+      26,
+      13,
+      11
      ],
-     "label": "Gare de Paris-Est",
+     "label": "Gare de l'Est",
      "doors": [
       [
-       8,
-       11
+       7,
+       36
       ],
       [
-       9,
-       11
+       8,
+       36
       ]
      ]
     },
@@ -3598,37 +3614,37 @@
      "id": "cafe",
      "style": "paris_cafe",
      "rect": [
-      17,
-      4,
-      9,
-      8
+      16,
+      26,
+      11,
+      11
      ],
      "label": "Café de la Comédie",
      "doors": [
       [
        21,
-       11
+       36
       ]
      ]
     },
     {
      "id": "theatre_lumieres",
-     "style": "paris_theatre",
+     "style": "paris_opera",
      "rect": [
       27,
-      4,
-      16,
-      8
+      26,
+      20,
+      11
      ],
      "label": "Théâtre des Lumières",
      "doors": [
       [
-       34,
-       11
+       36,
+       36
       ],
       [
-       35,
-       11
+       37,
+       36
       ]
      ]
     },
@@ -3636,16 +3652,16 @@
      "id": "boulangerie_paris",
      "style": "paris_boulangerie",
      "rect": [
-      44,
-      4,
-      7,
-      8
+      47,
+      26,
+      8,
+      11
      ],
      "label": "Boulangerie Au Pain Doré",
      "doors": [
       [
-       47,
-       11
+       50,
+       36
       ]
      ]
     },
@@ -3653,127 +3669,72 @@
      "id": "librairie_paris",
      "style": "paris_librairie",
      "rect": [
-      52,
-      4,
-      7,
-      8
+      57,
+      26,
+      6,
+      11
      ],
      "label": "Librairie des Planches",
      "doors": [
       [
-       55,
-       11
-      ]
-     ]
-    },
-    {
-     "id": "brasserie",
-     "style": "paris_brasserie",
-     "rect": [
-      1,
-      34,
-      12,
-      8
-     ],
-     "label": "Brasserie Le Rideau Rouge",
-     "doors": [
-      [
-       6,
-       41
-      ]
-     ]
-    },
-    {
-     "id": "galerie_paris",
-     "style": "paris_galerie",
-     "rect": [
-      15,
-      34,
-      12,
-      8
-     ],
-     "label": "Galerie du Pont-Neuf",
-     "doors": [
-      [
-       20,
-       41
-      ]
-     ]
-    },
-    {
-     "id": "immeuble_paris",
-     "style": "paris_immeuble",
-     "rect": [
-      31,
-      34,
-      12,
-      8
-     ],
-     "label": "Immeuble haussmannien",
-     "doors": [
-      [
-       36,
-       41
-      ]
-     ]
-    },
-    {
-     "id": "hotel_paris",
-     "style": "paris_hotel",
-     "rect": [
-      45,
-      34,
-      14,
-      8
-     ],
-     "label": "Hôtel des Artistes",
-     "doors": [
-      [
-       51,
-       41
-      ],
-      [
-       52,
-       41
+       59,
+       36
       ]
      ]
     }
    ],
    "decor": [
     {
-     "kind": "boat",
+     "kind": "peniche",
      "cell": [
-      40,
-      45
+      6,
+      14
+     ]
+    },
+    {
+     "kind": "bateau_mouche",
+     "cell": [
+      50,
+      15
      ]
     }
    ],
    "districts": [
     {
-     "id": "paris_place",
-     "name": "Place des Lumières",
-     "rect": [
-      0,
-      0,
-      60,
-      29
-     ]
-    },
-    {
      "id": "paris_quais",
      "name": "Quais de Seine",
      "rect": [
       0,
-      29,
-      60,
-      23
+      0,
+      64,
+      26
+     ]
+    },
+    {
+     "id": "paris_boulevard",
+     "name": "Boulevard des Lumières",
+     "rect": [
+      0,
+      26,
+      64,
+      19
+     ]
+    },
+    {
+     "id": "paris_place",
+     "name": "Place des Lumières",
+     "rect": [
+      0,
+      45,
+      64,
+      17
      ]
     }
    ],
    "arrival": {
     "cell": [
-     9,
-     13
+     7,
+     37
     ],
     "facing": "down"
    },

@@ -2,6 +2,26 @@
 
 Format inspiré de « Keep a Changelog ». Versions du jeu (`application/config/version`).
 
+## [0.17.2] — 2026-10-27 — Un vrai Paris
+
+### Modifié
+- **Le quartier parisien est entièrement redessiné**, avec une architecture qui ne ressemble
+  plus à Bréval :
+  - une grande rangée d'**immeubles haussmanniens** de six niveaux (deux fois plus hauts qu'à
+    Bréval) : pierre de taille crème, balcons filants en fer forgé aux 2e et 5e étages,
+    frontons sur l'étage noble, entresol, rez-de-chaussée à bossages, **toits de zinc à la
+    Mansard** avec lucarnes et rangées de pots de cheminée orange ;
+  - le **Théâtre des Lumières façon Opéra Garnier** (arcades, colonnes jumelées, bustes et
+    groupes dorés, dôme de cuivre vert) et la **gare de l'Est** et sa grande verrière ;
+  - la **Seine** avec ses quais de pierre, un pont, une péniche et un bateau-mouche ; sur
+    l'autre rive, les toits, **Notre-Dame**, le **Sacré-Cœur** et une grande **tour Eiffel**
+    sous un ciel de fin de journée ;
+  - des **boulevards d'asphalte** avec marquage au sol, des **pavés de granit en éventail**,
+    des trottoirs gris, des **platanes** sur grilles de fonte, des **candélabres** à deux
+    lanternes, des bancs verts, un kiosque vert à dôme, la terrasse aux chaises en rotin, une
+    fontaine Wallace, le métro Guimard, une grande fontaine dorée, et **les toits de Paris** au
+    fond de la place ; deux rues pavées traversent la rangée vers les quais.
+
 ## [0.17.1] — 2026-10-26 — Un vrai bruit de porte, un extérieur sans ruissellement
 
 ### Modifié

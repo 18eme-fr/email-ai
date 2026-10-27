@@ -292,6 +292,10 @@
     {"who": "lazare", "text": "Une création, c'est 80 % de doute et 20 % d'émerveillement. Les bons jours, l'inverse.", "when": {}},
     {"who": "lazare", "text": "Je cherche, je cherche… Revenez le mois prochain, j'aurai une nouvelle question pour vous.", "when": {}},
     {"who": "lazare", "text": "Votre ville est un décor à elle seule. Regardez les ruelles derrière la place, la nuit !", "when": {}},
-    {"who": "lazare", "text": "Un directeur qui s'intéresse à la création, c'est rare. Merci de jouer le jeu.", "when": {}}
+    {"who": "lazare", "text": "Un directeur qui s'intéresse à la création, c'est rare. Merci de jouer le jeu.", "when": {}},
+    {"who": "fontaine_lumieres", "text": "La Fontaine des Lumières : un groupe de bronze doré, une muse qui lève une lyre au-dessus des jets d'eau.", "when": {}},
+    {"who": "fontaine_lumieres", "text": "On dit qu'un comédien qui y jette une pièce avant sa première joue à guichets fermés. Lazare en a jeté trois.", "when": {}},
+    {"who": "tour_eiffel", "text": "De l'autre côté de la Seine, la tour Eiffel s'allume. Toutes les heures, elle scintille pendant cinq minutes.", "when": {}},
+    {"who": "tour_eiffel", "text": "Notre-Dame à gauche, le Sacré-Cœur sur sa butte, la tour Eiffel à droite : tout Paris en un regard.", "when": {}}
   ]
 }

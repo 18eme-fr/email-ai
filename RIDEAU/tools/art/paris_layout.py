@@ -1,16 +1,19 @@
-"""Plan du petit quartier parisien où la troupe joue sa création, en fin de saison :
-la place des Lumières, son théâtre, la gare d'arrivée, un boulevard, des ruelles et
-les quais de Seine avec les bouquinistes (la tour Eiffel sur l'autre rive).
+"""Plan du quartier parisien où la troupe joue sa création, en fin de saison.
+
+Du nord au sud : l'autre rive (toits de Paris, Sacré-Cœur, tour Eiffel), la Seine et son
+pont, le quai des bouquinistes, le quai routier, la grande rangée haussmannienne avec la
+gare de l'Est, le Café de la Comédie, le Théâtre des Lumières (façon Opéra) et des
+boutiques, le boulevard, puis la place des Lumières et, au fond, les toits de Paris.
 
 Écrit la carte « paris » de data/world/world.json (grille, sol, bâtiments, objets,
 habitants) et ses personnages. Appelé par city_layout.py ; dessiné par paris.py.
 """
 from collections import deque
 
-W, H = 60, 52
+W, H = 64, 62
 WALK = set("_=z+aP")
 
-# Personnes du quartier : sprite, nom, réplique (clé de barks.json = identifiant).
+# Personnes du quartier : sprite, nom (répliques : data/world/barks.json, clé = identifiant).
 PEOPLE = {
     "lazare_paris": ("lazare", "Victor Lazare, metteur en scène"),
     "helene_paris": ("helene", "Hélène, administratrice"),
@@ -27,6 +30,17 @@ PEOPLE = {
     "enfant_paris": ("enfant_b", "Enfant sur le manège"),
 }
 
+# Rangée nord : (identifiant, style, x, largeur, libellé, portes (x), objet).
+NORTH_ROW = [
+    ("gare_paris", "paris_gare", 1, 13, "Gare de l'Est", (7, 8), {}),
+    ("cafe", "paris_cafe", 16, 11, "Café de la Comédie", (21,), {"flavor": "cafe_comedie"}),
+    ("theatre_lumieres", "paris_opera", 27, 20, "Théâtre des Lumières", (36, 37), {"kind": "premiere"}),
+    ("boulangerie_paris", "paris_boulangerie", 47, 8, "Boulangerie Au Pain Doré", (50,), {}),
+    ("librairie_paris", "paris_librairie", 57, 6, "Librairie des Planches", (59,), {}),
+]
+STREETS = [(14, 15), (55, 56)]   ## rues pavées qui traversent la rangée vers les quais
+ROW_Y, ROW_H = 26, 11
+
 
 class Quarter:
     def __init__(self):
@@ -40,7 +54,7 @@ class Quarter:
         for y in range(y0, y1 + 1):
             for x in range(x0, x1 + 1):
                 self.grid[y][x] = ch
-                self.ground[y][x] = ground or (ch if ch in "_=z+a~XH" else self.ground[y][x])
+                self.ground[y][x] = ground or (ch if ch in "_=z+a~XHP" else self.ground[y][x])
 
     def put(self, x, y, ch):
         self.grid[y][x] = ch
@@ -55,6 +69,8 @@ class Quarter:
         self.spots.append(s)
 
     def spot(self, sid, cells, label, kind="flavor", **extra):
+        for (x, y) in cells:
+            assert self.grid[y][x] not in WALK, (sid, x, y, self.grid[y][x])
         s = {"id": sid, "cells": [list(c) for c in cells], "label": label, "kind": kind}
         s.update(extra)
         self.spots.append(s)
@@ -66,96 +82,104 @@ class Quarter:
 
 def build():
     q = Quarter()
-    # Rangée nord (façades sur le boulevard) : gare, café, théâtre, boulangerie, librairie.
-    q.building("gare_paris", "paris_gare", 2, 4, 14, 8, "Gare de Paris-Est", [(8, 11), (9, 11)], {})
-    q.building("cafe", "paris_cafe", 17, 4, 9, 8, "Café de la Comédie", [(21, 11)], {"flavor": "cafe_comedie"})
-    q.building("theatre_lumieres", "paris_theatre", 27, 4, 16, 8, "Théâtre des Lumières", [(34, 11), (35, 11)], {"kind": "premiere"})
-    q.building("boulangerie_paris", "paris_boulangerie", 44, 4, 7, 8, "Boulangerie Au Pain Doré", [(47, 11)], {})
-    q.building("librairie_paris", "paris_librairie", 52, 4, 7, 8, "Librairie des Planches", [(55, 11)], {})
-    for x0, x1 in ((16, 16), (26, 26), (43, 43), (51, 51)):
-        q.fill(x0, 4, x1, 11, "X")
+    # L'autre rive (rangées 0 à 12) reste un décor ; la Seine et son pont.
+    q.fill(1, 13, W - 2, 16, "~")
+    q.fill(40, 13, 43, 17, "P")
+    q.spot("belvedere", [(41, 12), (42, 12)], "Vue sur la tour Eiffel", flavor="tour_eiffel")
+    # Parapet et boîtes des bouquinistes, quai haut planté de platanes.
+    q.fill(1, 17, 39, 17, "W")
+    q.fill(44, 17, W - 2, 17, "W")
+    boxes = []
+    for x in list(range(3, 37, 6)) + list(range(46, W - 3, 6)):
+        q.put(x, 17, "u")
+        q.put(x + 1, 17, "u")
+        boxes.append((x, 17))
+    q.spot("bouquinistes", boxes, "Boîtes des bouquinistes")
+    q.spot("seine", [(x, 17) for x in range(1, W - 1) if q.grid[17][x] == "W"], "Parapet de la Seine", flavor="seine")
+    q.fill(1, 18, W - 2, 19, "+")
+    for x in range(4, W - 3, 8):
+        if not 39 <= x <= 44:
+            q.put(x, 18, "T")
+    for x in (8, 24, 38, 45, 58):
+        q.put(x, 19, "L")
+    # Quai routier
+    q.fill(1, 20, W - 2, 23, "=")
+    for x in (10, 11, 41, 42):
+        for y in range(20, 24):
+            q.put(x, y, "z")
+            q.ground[y][x] = "z"
+    q.fill(1, 24, W - 2, 25, "_")
+    # La grande rangée haussmannienne
+    for bid, style, x, w, label, doors, spot in NORTH_ROW:
+        q.building(bid, style, x, ROW_Y, w, ROW_H, label, [(d, ROW_Y + ROW_H - 1) for d in doors], spot)
+    for x0, x1 in STREETS:
+        q.fill(x0, ROW_Y, x1, ROW_Y + ROW_H - 1, "a")
+    # Trottoir du boulevard : terrasse, platanes, candélabres, colonne Morris, kiosque, métro, vélos.
+    q.fill(1, 37, W - 2, 38, "_")
+    for x in (17, 19, 23, 25):
+        q.put(x, 37, "t")
+    q.spot("terrasse", [(17, 37), (19, 37), (23, 37), (25, 37)], "Terrasse du Café de la Comédie", flavor="terrasse_paris")
+    for x in (5, 12, 29, 45, 53, 61):
+        q.put(x, 38, "T")
+    for x in (2, 9, 32, 41, 49, 57):
+        q.put(x, 38, "L")
+    q.put(13, 38, "K")
+    q.put(44, 38, "N")
+    q.spot("kiosque_paris", [(44, 38)], "Kiosque à journaux")
+    q.put(26, 38, "m")
+    q.put(27, 38, "m")
+    q.spot("metro", [(26, 38), (27, 38)], "Entrée du métro")
+    q.put(3, 37, "V")
+    q.put(4, 37, "V")
+    q.spot("velos_paris", [(3, 37), (4, 37)], "Vélos en libre-service")
+    q.put(40, 37, "x")
+    q.put(41, 37, "x")
+    q.put(33, 37, "R")
+    q.spot("decor_troupe", [(40, 37), (41, 37), (33, 37)], "Le décor et les costumes de la troupe")
     # Boulevard
-    q.fill(1, 12, W - 2, 12, "_")
-    q.fill(1, 13, W - 2, 15, "=")
-    q.fill(1, 16, W - 2, 16, "_")
-    for x in (9, 10, 34, 35):
-        for y in (13, 14, 15):
+    q.fill(1, 39, W - 2, 42, "=")
+    for x in (8, 9, 36, 37, 55, 56):
+        for y in range(39, 43):
             q.put(x, y, "z")
             q.ground[y][x] = "z"
+    q.fill(1, 43, W - 2, 44, "_")
+    for x in (4, 16, 28, 47, 59):
+        q.put(x, 44, "L")
     # Place des Lumières
-    q.fill(1, 17, W - 2, 28, "+")
-    q.fill(28, 21, 29, 22, "F")
-    q.spot("fontaine", [(28, 21), (29, 21), (28, 22), (29, 22)], "Fontaine Wallace", flavor="fontaine_wallace")
-    for (x, y) in [(27, 20), (30, 20), (27, 23), (30, 23), (26, 21), (31, 22)]:
-        q.put(x, y, "f")
-    q.fill(13, 20, 15, 22, "Q")
-    q.spot("manege", [(13, 22), (14, 22), (15, 22)], "Manège de la place")
-    q.put(46, 18, "N")
-    q.spot("kiosque_paris", [(46, 18)], "Kiosque à journaux")
-    q.put(38, 18, "m")
-    q.put(39, 18, "m")
-    q.spot("metro", [(38, 18), (39, 18)], "Entrée du métro")
-    for (x, y) in [(7, 18), (52, 25)]:
-        q.put(x, y, "K")
-    q.spot("affiche_paris", [(7, 18), (52, 25)], "Colonne Morris", "affiche_creation")
-    for x in (19, 22, 25):
-        q.put(x, 17, "t")
-    q.spot("terrasse", [(19, 17), (22, 17), (25, 17)], "Terrasse du Café de la Comédie", flavor="terrasse_paris")
-    for (x, y) in [(3, 19), (3, 26), (21, 24), (36, 24), (56, 19), (56, 26), (44, 27), (10, 27)]:
+    q.fill(1, 45, W - 2, 55, "+")
+    q.fill(30, 48, 33, 50, "F")
+    q.spot("fontaine", [(x, 50) for x in range(30, 34)] + [(29 + 1, 48), (33, 48)], "Fontaine des Lumières", flavor="fontaine_lumieres")
+    q.fill(10, 47, 12, 49, "Q")
+    q.spot("manege", [(10, 49), (11, 49), (12, 49)], "Manège de la place")
+    q.put(50, 51, "Y")
+    q.spot("wallace", [(50, 51)], "Fontaine Wallace", flavor="fontaine_wallace")
+    for (x, y) in [(5, 46), (21, 46), (43, 46), (58, 46), (5, 54), (21, 54), (43, 54), (58, 54)]:
         q.put(x, y, "T")
-    for (x, y) in [(17, 26), (18, 26), (40, 26), (41, 26), (24, 21), (25, 21)]:
+    for (x, y) in [(16, 52), (17, 52), (38, 47), (39, 47), (25, 47), (26, 47), (46, 53), (47, 53)]:
         q.put(x, y, "B")
-    for (x, y) in [(12, 17), (31, 17), (49, 17), (1, 22), (58, 22), (31, 28), (12, 28), (49, 28)]:
+    for (x, y) in [(28, 46), (35, 46), (28, 54), (35, 54), (12, 53), (52, 47)]:
         q.put(x, y, "L")
-    q.put(50, 27, "M")
-    q.put(51, 27, "M")
-    q.spot("fleurs_paris", [(50, 27), (51, 27)], "Marchande de fleurs")
-    q.put(53, 22, "y")
-    q.spot("chevalet", [(53, 22)], "Chevalet du peintre")
-    q.put(30, 17, "x")
-    q.put(31, 18, "x")
-    q.put(37, 17, "R")
-    q.spot("decor_troupe", [(30, 17), (31, 18), (37, 17)], "Le décor et les costumes de la troupe")
-    for (x, y) in [(5, 17), (6, 17)]:
-        q.put(x, y, "V")
-    q.spot("velos_paris", [(5, 17), (6, 17)], "Vélos en libre-service")
-    # Rue sud et rangée de façades sur les quais (on y passe par des ruelles).
-    q.fill(1, 29, W - 2, 29, "_")
-    q.fill(1, 30, W - 2, 32, "=")
-    q.fill(1, 33, W - 2, 33, "_")
-    for x in (29, 30):
-        for y in (30, 31, 32):
-            q.put(x, y, "z")
-            q.ground[y][x] = "z"
-    q.building("brasserie", "paris_brasserie", 1, 34, 12, 8, "Brasserie Le Rideau Rouge", [(6, 41)], {})
-    q.building("galerie_paris", "paris_galerie", 15, 34, 12, 8, "Galerie du Pont-Neuf", [(20, 41)], {})
-    q.building("immeuble_paris", "paris_immeuble", 31, 34, 12, 8, "Immeuble haussmannien", [(36, 41)], {})
-    q.building("hotel_paris", "paris_hotel", 45, 34, 14, 8, "Hôtel des Artistes", [(51, 41), (52, 41)], {})
-    for x0, x1 in ((13, 14), (27, 30), (43, 44)):
-        q.fill(x0, 34, x1, 41, "a")
-    q.put(28, 36, "o")
-    q.put(13, 39, "E")
-    # Quai, parapet et bouquinistes, la Seine, l'autre rive (tour Eiffel).
-    q.fill(1, 42, W - 2, 42, "+")
-    q.fill(1, 43, W - 2, 43, "W")
-    for x in range(4, W - 4, 7):
-        q.put(x, 43, "u")
-        q.put(x + 1, 43, "u")
-    q.spot("bouquinistes", [(x, 43) for x in range(4, W - 4, 7)], "Boîtes des bouquinistes")
-    q.spot("seine", [(x, 43) for x in range(2, W - 2) if q.grid[43][x] == "W"], "Parapet de la Seine", flavor="seine")
-    q.fill(1, 44, W - 2, 46, "~")
-    q.fill(1, 47, W - 2, 50, "X")
-    # Bordures
+    for (x, y) in [(29, 49), (34, 49)]:
+        q.put(x, y, "f")
+    q.put(54, 47, "M")
+    q.put(55, 47, "M")
+    q.spot("fleurs_paris", [(54, 47), (55, 47)], "Marchande de fleurs")
+    q.put(24, 52, "y")
+    q.spot("chevalet", [(24, 52)], "Chevalet du peintre")
+    q.put(40, 53, "K")
+    q.spot("affiche_paris", [(13, 38), (40, 53)], "Colonne Morris", "affiche_creation")
+    q.fill(1, 56, W - 2, 56, "_")
+    # Les toits de Paris au fond (rangées 57 à 60), bordures.
     for x in range(W):
         q.grid[0][x] = q.grid[H - 1][x] = "X"
     for y in range(H):
         q.grid[y][0] = q.grid[y][W - 1] = "X"
-    # Habitants : la troupe et des Parisiens.
-    for nid, x, y, r in [("lazare_paris", 37, 12, 0), ("helene_paris", 23, 18, 1), ("bastien_paris", 32, 17, 1),
-                         ("louison_paris", 36, 17, 0), ("ines_paris", 44, 19, 2), ("serveur_paris", 21, 18, 2),
-                         ("critique", 41, 22, 1), ("accordeoniste", 31, 21, 0), ("touriste_paris", 26, 25, 4),
-                         ("peintre", 54, 22, 0), ("bouquiniste", 19, 42, 2), ("parisienne", 8, 24, 5),
-                         ("enfant_paris", 16, 23, 1)]:
+    # La troupe et les Parisiens
+    for nid, x, y, r in [("lazare_paris", 38, 37, 0), ("helene_paris", 21, 38, 1), ("bastien_paris", 42, 38, 1),
+                         ("louison_paris", 34, 38, 0), ("ines_paris", 30, 44, 2), ("serveur_paris", 19, 38, 2),
+                         ("critique", 34, 47, 1), ("accordeoniste", 36, 52, 0), ("touriste_paris", 47, 50, 4),
+                         ("peintre", 25, 52, 0), ("bouquiniste", 22, 19, 2), ("parisienne", 15, 46, 5),
+                         ("enfant_paris", 11, 50, 1)]:
         q.npc(nid, x, y, r)
     return q
 
@@ -175,8 +199,9 @@ def reachable(q, start):
 
 def write(world):
     q = build()
+    arrival = (7, 37)
     walk = {(x, y) for y in range(H) for x in range(W) if q.grid[y][x] in WALK}
-    lost = walk - reachable(q, (9, 13))
+    lost = walk - reachable(q, arrival)
     assert not lost, ("cases inaccessibles à Paris", sorted(lost)[:10])
     legend = world["legend"]
     for ch, name, ok in [("m", "entrée de métro", False), ("u", "boîte de bouquiniste", False)]:
@@ -184,10 +209,12 @@ def write(world):
     world["maps"]["paris"] = {
         "name": "Paris", "outdoor": True,
         "grid": ["".join(r) for r in q.grid], "ground": ["".join(r) for r in q.ground],
-        "doors": [], "spots": q.spots, "npcs": q.npcs, "buildings": q.buildings, "decor": [{"kind": "boat", "cell": [40, 45]}],
-        "districts": [{"id": "paris_place", "name": "Place des Lumières", "rect": [0, 0, W, 29]},
-                      {"id": "paris_quais", "name": "Quais de Seine", "rect": [0, 29, W, H - 29]}],
-        "arrival": {"cell": [9, 13], "facing": "down"},
+        "doors": [], "spots": q.spots, "npcs": q.npcs, "buildings": q.buildings,
+        "decor": [{"kind": "peniche", "cell": [6, 14]}, {"kind": "bateau_mouche", "cell": [50, 15]}],
+        "districts": [{"id": "paris_quais", "name": "Quais de Seine", "rect": [0, 0, W, 26]},
+                      {"id": "paris_boulevard", "name": "Boulevard des Lumières", "rect": [0, 26, W, 19]},
+                      {"id": "paris_place", "name": "Place des Lumières", "rect": [0, 45, W, H - 45]}],
+        "arrival": {"cell": list(arrival), "facing": "down"},
         "sound": {"music": "paris", "layers": {}},
     }
     for pid, (sprite, name) in PEOPLE.items():
